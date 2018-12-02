@@ -1,0 +1,177 @@
+DOCUMENTATION
+
+
+"VIEW"
+- view = one window (not part of another window)
+- contains handlers for loading and logic
+
+
+
+SYSTEM-ARCHITECTURE
+
+- "heavy-module-system"
+	-> everything is a module / object
+	-> e.g. menubar-functions (open >open-new, open->open_recent, preferences->settings->general, ...) are functions
+		-> defined in classes
+		-> to add new function:	- new class extending "MenuFunction"
+								- set parameters, define functions
+								- add to Menu directly of load with classloader (if external file / plugin)
+								
+	=> goal: make everything extendable, plugin-friendly (loadable with classloader)
+		
+
+- "divide ui and logic"
+
+	-> package "ui" / frontend
+		-> view
+			-> controller: handles ui; recieves events; changes layout
+			-> service: direct ui-logic only! (e.g.: sort lists) ; reads/writes data from LogicInterface
+
+	-> package "logic" / backend
+		-> handles, works on data data
+		-> LogicInterface: interface between back and frontend
+			-> add LogicServices to LogicInterface
+
+
+
+
+
+
+MAIN-VIEW
+
+- menu-bar
+	- file
+		X new project
+		- open project
+		- open remote project
+		- open recent
+		- save
+		X close project
+		- exit
+	- preferences
+		- settings
+		- key-bindings
+	- about
+
+- tab-pane
+	- select task-view (shows all lists with all cards)
+	- select dashboard-view (shows stats, diagrams)
+	- select documentation-view (text editor)
+	(- timeline (shows a timeline of all actions) )
+
+
+
+
+TASK-VIEW
+
+- header
+	- filter
+		- save filter as favourites for later use
+	X add new list
+	- change layout/view
+		- tall / small cards (height)
+		- narrow / long lists (width)
+	- sort cards (all lists)
+	- show hidden list > list names
+
+- on list
+	X rename
+	X move
+	X delete
+	X change color / flag
+	- add card
+	- sort cards
+	- hide list
+
+- on card
+	X change text
+	X change flag
+	- change tags
+	X move card to other list
+	X delete card
+	- select card
+
+- click on tag
+	-> set filter to =tag
+
+- sidebar (shows selected card -> edit card) (hidden by default)
+	- hide/show sidebar (splitpane with only one anchorpane "tasks", show sidebar -> add second anchorpane "sidebar" to splitpane; have long button on side of "task"-pane)
+	- shows/edit all infos on card
+	- add comments
+	- attach images
+	- view history of card
+	
+	
+ARCHIVE-VIEW
+- list of all archived cards
+- cards can be deleted or recovered -> moved to active list
+	
+	
+	
+MULTIPLE USERS
+- sync via git api + remote repo
+
+
+
+
+
+
+
+
+TASKVIEW.ACTIONS
+- add list:
+	adds a new list at the beginning and scrolls to the list; list has default name and color
+	
+- sort task by xy
+	sorts all tasks in all lists by the value xy
+
+- appearance
+	> simple: lists are shown like in "cards"; cards are not as tall, only show the flag, id and the (shortened) text, 
+	> cards: default;
+	> list: all tasks in single "list-view", tasklists can be shown as seperators, but are removed when sorting tasks; tasks can now be sorted by list -> shows headers/seperators
+	
+- show hidden list > all / chosen list
+	shows/unhides the hidden list(s). hidden list are still in the regular order and are shown as normal
+	
+	
+	
+
+TASKLIST.ACTIONS
+- add task:
+	adds a new task at the beginning of the list and scrolls to the task; task has default/empty values
+
+- move all tasks
+	moves all tasks to the specified list; the lists is empty afterwards
+
+- move:
+	list can be moved to first,last place or after/before another list; if no other list exists, this option does not exist (grayed out)
+
+- hide
+	hides the list (with all tasks); hidden lists do remain at their position, but do not appear in any menu
+
+- delete:
+	deletes the list after asking for confirmation/warning; all of its tasks get deleted or archived (specifiy in confirmation/warning)
+
+- change color:
+	changes the color of the list
+
+- sort tasks
+	sorts all of its tasks by the specified attribute
+
+
+
+
+TASKCARD.ACTIONS
+
+- move
+	moves the card to a specified list
+
+- archive
+	moves the card to the archive
+
+- delete
+	deletes the card after a confirmation/warning
+
+- change flag
+	sets the flag of the card
+

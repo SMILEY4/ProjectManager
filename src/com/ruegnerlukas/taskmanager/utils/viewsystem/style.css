@@ -1,0 +1,235 @@
+
+.root {
+	-primary-0: #29323c;
+	-primary-1: #2f3c48;
+	-primary-2: #3e4d59;
+
+	-secondary: #6f7f8c;
+	-info: #5c8f94;
+	-danger: #cc330d;
+	-success: #3e4d59;
+	-warning: #6e9fa5;
+	-light: #eceeec;
+	-dark: #1e2b37;
+
+	-gray-dark: #b9b9b9;
+	-gray-mid: #cccccc;
+	-gray-light: #ededed;
+	
+	-text-light-0: #b9b9b9;
+	-text-light-1: white;
+	
+}
+
+
+
+
+/* MAIN VIEW */
+
+/* menubar*/
+ #menuBar {
+ 	-fx-background-color: -primary-0;
+ }
+ #menuBar > * > .menu {
+ 	-fx-background-color: -primary-0;
+ }
+ #menuBar > * > .menu:pressed {
+ 	-fx-effect: null;
+ }
+ #menuBar > * > .menu > .label {
+ 	-fx-text-fill: -text-light-0;
+ }
+ #menuBar > * > .menu > .label:hover {
+ 	-fx-text-fill: -text-light-1;
+ }
+ 
+ 
+ /* tabpane */
+ #tabPane .tab-header-area .tab-header-background {
+ 	-fx-background-color: -primary-1;
+ }
+ #tabPane .tab {
+ 	-fx-background-color: -primary-1;
+ }
+ #tabPane .tab .tab-label {
+ 	-fx-text-fill: -text-light-0;
+ }
+ 
+ #tabPane .tab .tab-label:hover{
+ 	-fx-text-fill: -text-light-1;
+ }
+ 
+ #tabPane .tab:selected .tab-label {
+ 	-fx-text-fill: -text-light-1;
+ }
+ #tabPane .tab:selected {
+ 	-fx-background-color: -primary-2;
+ 	-fx-border-color: transparent;
+ }
+ 
+ 
+ /* info bar */
+ #paneInfobar {
+ 	-fx-background-color: -secondary;
+ }
+ #paneInfobar > #labelInfobar{
+ 	-fx-text-fill: -text-light-1;
+ }
+ 
+ 
+ /* TASK VIEW */
+ 
+ /* header */
+ #rootTaskView > #paneHeader {
+ 	-fx-background-color: -primary-2;
+ }
+ 
+ 
+ /* "Filter:"-label */
+ #rootTaskView > #paneHeader > HBox > HBox > .label {
+ 	-fx-text-fill: -text-light-1;
+ }
+ 
+ 
+ /* Autocomplete-textfield */
+ #rootTaskView > #paneHeader > HBox > HBox > #paneFilterBar > * {
+ 	-fx-background-color: -primary-2;
+ 	-fx-text-fill: -text-light-1;
+ 	-fx-prompt-text-fill: -text-light-0;
+ }
+ 
+ 
+ /* "clearFilters"-button */
+ #rootTaskView > #paneHeader > HBox > HBox > Button {
+ 	-fx-border-color: transparent;
+ 	-fx-background-color: transparent;
+ }
+ #rootTaskView > #paneHeader > HBox > HBox > Button > SVGPath {
+ 	-fx-fill: -text-light-1;
+ }
+  #rootTaskView > #paneHeader > HBox > HBox > Button:hover > SVGPath{
+ 	-fx-fill: -text-light-0;
+ }
+
+
+ /* taskview-header hamburger-button */
+  #rootTaskView > #paneHeader > HBox > Button {
+ 	-fx-border-color: transparent;
+ 	-fx-background-color: transparent;
+ }
+ #rootTaskView > #paneHeader > HBox > Button > SVGPath {
+ 	-fx-fill: -text-light-1;
+ }
+  #rootTaskView > #paneHeader > HBox > Button:hover > SVGPath {
+ 	-fx-fill: -text-light-0;
+ }
+ 
+ 
+ /* removes border between header and content */
+ #rootTaskView > SplitPane > * > AnchorPane > ScrollPane {
+	-fx-padding: 0;
+ }
+ #splitContent {
+ 	-fx-padding: 0;
+ }
+ 
+ 
+ /* task-view background (of lists) */
+ #paneContent > ScrollPane > .viewport {
+ 	-fx-background-color: -gray-light;
+ }
+
+
+
+ 
+ 
+ 
+ /* TASK LIST */
+ 
+ /* tasklist header*/
+ #rootTasklist > #paneHeader {
+ 	-fx-background-color: -primary-0;
+ 	-fx-border-color: -primary-2;
+ 	-fx-border-width: 0 1 0 1;
+ }
+ 
+ /*tasklist title */
+ #rootTasklist > #paneHeader > * > Label {
+ 	-fx-text-fill: -text-light-1;
+ 	-fx-font-weight: bold;
+ }
+  #rootTasklist > #paneHeader > * > TextField {
+ 	-fx-text-fill: -text-light-1;
+ 	-fx-font-weight: bold;
+ 	-fx-background-color: -primary-1;
+ 	-fx-border-color: transparent;
+ }
+ 
+ 
+ /* tasklist header hamburger-menu-button */
+ #rootTasklist > #paneHeader > Button {
+ 	-fx-border-color: transparent;
+ 	-fx-background-color: transparent;
+ }
+ #rootTasklist > #paneHeader > Button > SVGPath {
+ 	-fx-fill: -text-light-1;
+ }
+  #rootTasklist > #paneHeader > Button:hover > SVGPath {
+ 	-fx-fill: -text-light-0;
+ }
+ 
+ 
+ /* border between tasklists */
+ #rootTasklist > ScrollPane {
+  	-fx-border-width: 0 1 0 1;
+  	-fx-border-color: -gray-dark;
+ }
+ 
+ 
+ /* tasklist content background */
+ #rootTasklist > * > * > * > #boxContent {
+ 	-fx-background-color: -gray-light;
+ }
+ 
+ 
+ 
+ 
+ 
+ 
+  /* TASK CARD */
+  
+  /* background + dropshadow */
+  #rootTaskCard > #paneBackground {
+  	-fx-background-color: white;
+  	-fx-effect: dropshadow(gaussian, #0000009b, 13, 0.0, 0, 0);
+  }
+  
+  
+  /* label id */
+  #rootTaskCard > VBox > HBox > #labelID {
+  	-fx-text-fill: -info;
+  }
+  
+  /* button actions */
+  #rootTaskCard > VBox > HBox > #btnActions {
+ 	-fx-border-color: transparent;
+ 	-fx-background-color: transparent;
+  }
+  #rootTaskCard > VBox > HBox > #btnActions > SVGPath {
+ 	-fx-fill: -dark;
+  }
+  #rootTaskCard > VBox > HBox > #btnActions:hover > SVGPath {
+ 	-fx-fill: black;
+  }
+ 
+ 
+  /* tags */
+  #rootTaskCard > #boxTags > Label{
+  	-fx-background-radius: 8;
+  	-fx-background-color: -gray-mid;
+  	-fx-padding: 0 5 0 5;
+  }
+ 
+ 
+ 
+ 
