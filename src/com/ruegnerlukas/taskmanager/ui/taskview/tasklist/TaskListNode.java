@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.utils.uielements.tasklist;
+package com.ruegnerlukas.taskmanager.ui.taskview.tasklist;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -24,13 +24,13 @@ import com.ruegnerlukas.taskmanager.logic.eventsystem.events.TaskDeletedEvent;
 import com.ruegnerlukas.taskmanager.logic.eventsystem.events.TaskMovedEvent;
 import com.ruegnerlukas.taskmanager.logic.services.DataService;
 import com.ruegnerlukas.taskmanager.logic.services.ListService.ListDeleteBehavior;
+import com.ruegnerlukas.taskmanager.ui.taskview.taskcard.TaskCardNode;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabel.EditableLabel;
 import com.ruegnerlukas.taskmanager.utils.uielements.menu.ColorMenuFunction;
 import com.ruegnerlukas.taskmanager.utils.uielements.menu.MenuFunction;
-import com.ruegnerlukas.taskmanager.utils.uielements.taskcard.TaskCardNode;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
 
 import javafx.beans.value.ChangeListener;

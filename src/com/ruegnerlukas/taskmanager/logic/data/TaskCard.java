@@ -13,6 +13,7 @@ public class TaskCard {
 	public List<String> tags = new ArrayList<String>();
 	
 	
+	
 	public TaskCard(int id, TaskFlag flag) {
 		this.id = id;
 		this.flag = flag;

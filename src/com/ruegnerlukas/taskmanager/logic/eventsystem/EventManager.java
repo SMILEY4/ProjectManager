@@ -95,6 +95,7 @@ public class EventManager {
 	
 	
 	public static void fireEvent(Event event) {
+		System.out.println("FIRE: " + event);
 		ArrayList<EventListener> listeners = listenerMap.get(event.getClass());
 		if(listeners != null) {
 			for(int i=0; i<listeners.size(); i++) {

@@ -1,9 +1,12 @@
 package com.ruegnerlukas.taskmanager.logic.data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ruegnerlukas.taskmanager.logic.data.TaskFlag.FlagColor;
+import com.ruegnerlukas.taskmanager.logic.data.taskattribs.CustomAttribute;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Project {
 	
@@ -20,6 +23,9 @@ public class Project {
 	public int taskIdCounter = 0;
 	public List<TaskList> lists = new ArrayList<TaskList>();
 	public List<Integer> listOrder = new ArrayList<Integer>();
+	
+	// custom task attributes
+	public Map<String,CustomAttribute> customAttributes = new HashMap<String,CustomAttribute>();
 	
 	
 	

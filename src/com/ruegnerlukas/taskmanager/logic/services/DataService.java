@@ -8,5 +8,6 @@ public class DataService {
 	public static final IDService id = new IDService();
 	public static final ListService lists = new ListService();
 	public static final TaskService tasks = new TaskService();
+	public static final CustomAttributeService customAttributes = new CustomAttributeService();
 
 }

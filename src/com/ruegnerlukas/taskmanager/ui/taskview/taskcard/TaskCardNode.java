@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.utils.uielements.taskcard;
+package com.ruegnerlukas.taskmanager.ui.taskview.taskcard;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ import com.ruegnerlukas.taskmanager.logic.eventsystem.events.ListCreatedEvent;
 import com.ruegnerlukas.taskmanager.logic.eventsystem.events.ListDeletedEvent;
 import com.ruegnerlukas.taskmanager.logic.eventsystem.events.TaskChangedFlagEvent;
 import com.ruegnerlukas.taskmanager.logic.eventsystem.events.TaskChangedTextEvent;
+import com.ruegnerlukas.taskmanager.logic.eventsystem.events.TaskSelectedEvent;
 import com.ruegnerlukas.taskmanager.logic.services.DataService;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -39,9 +40,11 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class TaskCardNode extends AnchorPane {
@@ -49,9 +52,11 @@ public class TaskCardNode extends AnchorPane {
 	public final TaskCard card;
 	
 	@FXML private Pane paneFlag;
+	@FXML private Pane paneBackground;
 	@FXML private Label labelID;
 	@FXML private Button btnActions;
 	@FXML private AnchorPane paneText;
+	@FXML private VBox boxContent;
 	@FXML private HBox boxTags;
 	private EditableAreaLabel labelText;
 	
@@ -70,7 +75,6 @@ public class TaskCardNode extends AnchorPane {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-			
 	}
 	
 	
@@ -79,7 +83,7 @@ public class TaskCardNode extends AnchorPane {
 	
 	
 	private void loadFromFXML() throws IOException {
-		final String PATH = "taskcard.fxml";
+		final String PATH = "taskcard_cards.fxml";
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(PATH));
 		loader.setController(this);
@@ -147,6 +151,18 @@ public class TaskCardNode extends AnchorPane {
 			boxTags.getChildren().add(new Label(tag));
 		}
 	
+		
+		// selectable
+		EventHandler<MouseEvent> selectHandler = new EventHandler<MouseEvent>() {
+			@Override public void handle(MouseEvent event) {
+				EventManager.fireEvent(new TaskSelectedEvent(card, this));
+			}
+		};
+		paneFlag.setOnMouseClicked(selectHandler);
+		paneBackground.setOnMouseClicked(selectHandler);
+		labelID.setOnMouseClicked(selectHandler);
+		boxTags.setOnMouseClicked(selectHandler);
+		boxContent.setOnMouseClicked(selectHandler);
 	}
 	
 	
@@ -232,14 +248,14 @@ public class TaskCardNode extends AnchorPane {
 		// add tag
 		actionFunctions.add(new MenuFunction("Add Tag") {
 			@Override public void onAction() {
-				
+				System.out.println("TODO: add tag");
 			}
 		});
 		
 		// delete
 		actionFunctions.add(new MenuFunction("Delete") {
 			@Override public void onAction() {
-				System.out.println("TODO: delete task");
+				DataService.tasks.deleteTask(card);
 			}
 		});
 		

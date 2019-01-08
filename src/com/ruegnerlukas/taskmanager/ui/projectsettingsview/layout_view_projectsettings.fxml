@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
@@ -12,19 +20,197 @@
       <AnchorPane fx:id="paneHeader" prefHeight="52.0" style="-fx-border-color: lightgray;" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <ScrollPane fitToWidth="true" hbarPolicy="NEVER" layoutX="128.0" layoutY="205.0" prefHeight="720.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="52.0">
         <content>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="1278.0">
                <children>
                   <VBox spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label text="Flags:">
+                        <Label text="Tasks - Flags:">
                            <font>
                               <Font name="System Bold" size="15.0" />
                            </font>
                         </Label>
-                        <VBox fx:id="boxFlags" spacing="3.0">
+                        <VBox fx:id="boxFlags" minHeight="0.0" spacing="3.0" />
+                        <Separator prefWidth="200.0" visible="false">
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
                            <padding>
-                              <Insets bottom="200.0" />
-                           </padding></VBox>
+                              <Insets bottom="20.0" top="20.0" />
+                           </padding>
+                        </Separator>
+                        <Label text="Tasks - Custom Attributes:">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                        <VBox>
+                           <children>
+                              <VBox fx:id="boxCustomAttribs">
+                                 <padding>
+                                    <Insets bottom="5.0" top="5.0" />
+                                 </padding>
+                                 <children>
+                                    <HBox prefHeight="32.0" style="-fx-border-color: #dddddd; -fx-border-radius: 4;">
+                                       <children>
+                                          <Button maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" text="X" />
+                                          <TextField maxHeight="32.0" maxWidth="200.0" minHeight="32.0" minWidth="200.0" prefHeight="32.0" prefWidth="200.0" text="Default" />
+                                          <ChoiceBox maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="100.0" prefHeight="32.0" prefWidth="100.0" />
+                                          <Separator maxHeight="32.0" minHeight="32.0" orientation="VERTICAL" prefHeight="32.0" visible="false">
+                                             <HBox.margin>
+                                                <Insets />
+                                             </HBox.margin>
+                                             <padding>
+                                                <Insets left="5.0" right="5.0" />
+                                             </padding>
+                                          </Separator>
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox prefHeight="32.0" style="-fx-border-color: #dddddd; -fx-border-radius: 4;">
+                                       <children>
+                                          <Button maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" text="X" />
+                                          <TextField maxHeight="32.0" maxWidth="200.0" minHeight="32.0" minWidth="200.0" prefHeight="32.0" prefWidth="200.0" text="Text" />
+                                          <ChoiceBox maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="100.0" prefHeight="32.0" prefWidth="100.0" />
+                                          <Separator maxHeight="32.0" minHeight="32.0" orientation="VERTICAL" prefHeight="32.0" visible="false">
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                             <padding>
+                                                <Insets left="5.0" right="5.0" />
+                                             </padding>
+                                          </Separator>
+                                          <Label minWidth="80.0" text="Char Limit:" />
+                                          <Spinner maxHeight="32.0" maxWidth="80.0" minHeight="32.0" minWidth="80.0" prefHeight="32.0" prefWidth="80.0" />
+                                          <Separator maxHeight="32.0" minHeight="32.0" orientation="VERTICAL" prefHeight="32.0" visible="false">
+                                             <padding>
+                                                <Insets left="5.0" right="5.0" />
+                                             </padding>
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                          </Separator>
+                                          <CheckBox contentDisplay="CENTER" minWidth="80.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="70.0" text="Default:" />
+                                          <TextField minWidth="0.0" prefHeight="33.0" prefWidth="100000.0" />
+                                       </children>
+                                       <VBox.margin>
+                                          <Insets />
+                                       </VBox.margin>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox prefHeight="32.0" style="-fx-border-color: #dddddd; -fx-border-radius: 4;">
+                                       <children>
+                                          <Button maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" text="X" />
+                                          <TextField maxHeight="32.0" maxWidth="200.0" minHeight="32.0" minWidth="200.0" prefHeight="32.0" prefWidth="200.0" text="Number" />
+                                          <ChoiceBox maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="100.0" prefHeight="32.0" prefWidth="100.0" />
+                                          <Separator maxHeight="32.0" minHeight="32.0" orientation="VERTICAL" prefHeight="32.0" visible="false">
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                             <padding>
+                                                <Insets left="5.0" right="5.0" />
+                                             </padding>
+                                          </Separator>
+                                          <Label maxHeight="32.0" maxWidth="35.0" minHeight="32.0" minWidth="35.0" prefHeight="32.0" prefWidth="35.0" text="Min:" />
+                                          <Spinner maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="65.0" prefHeight="32.0" prefWidth="100.0">
+                                             <HBox.margin>
+                                                <Insets right="5.0" />
+                                             </HBox.margin>
+                                          </Spinner>
+                                          <Label maxHeight="32.0" maxWidth="35.0" minHeight="32.0" minWidth="35.0" prefHeight="32.0" prefWidth="35.0" text="Max:" />
+                                          <Spinner maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="65.0" prefHeight="32.0" prefWidth="100.0" />
+                                          <Separator maxHeight="32.0" minHeight="32.0" orientation="VERTICAL" prefHeight="32.0" visible="false">
+                                             <padding>
+                                                <Insets left="5.0" right="5.0" />
+                                             </padding>
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                          </Separator>
+                                          <CheckBox contentDisplay="CENTER" minWidth="80.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="68.0" text="Default:" />
+                                          <Spinner maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="65.0" prefHeight="32.0" prefWidth="100.0" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox prefHeight="32.0" style="-fx-border-color: #dddddd; -fx-border-radius: 4;">
+                                       <children>
+                                          <Button maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" text="X" />
+                                          <TextField maxHeight="32.0" maxWidth="200.0" minHeight="32.0" minWidth="200.0" prefHeight="32.0" prefWidth="200.0" text="Boolean" />
+                                          <ChoiceBox maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="100.0" prefHeight="32.0" prefWidth="100.0" />
+                                          <Separator maxHeight="32.0" minHeight="32.0" orientation="VERTICAL" prefHeight="32.0" visible="false">
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                             <padding>
+                                                <Insets left="5.0" right="5.0" />
+                                             </padding>
+                                          </Separator>
+                                          <CheckBox contentDisplay="CENTER" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="80.0" text="Default:" />
+                                          <ChoiceBox maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="65.0" prefHeight="32.0" prefWidth="100.0" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox prefHeight="32.0" style="-fx-border-color: #dddddd; -fx-border-radius: 4;">
+                                       <children>
+                                          <Button maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" text="X" />
+                                          <TextField maxHeight="32.0" maxWidth="200.0" minHeight="32.0" minWidth="200.0" prefHeight="32.0" prefWidth="200.0" text="Date" />
+                                          <ChoiceBox maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="100.0" prefHeight="32.0" prefWidth="100.0" />
+                                          <Separator maxHeight="32.0" minHeight="32.0" orientation="VERTICAL" prefHeight="32.0" visible="false">
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                             <padding>
+                                                <Insets left="5.0" right="5.0" />
+                                             </padding>
+                                          </Separator>
+                                          <CheckBox contentDisplay="CENTER" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="80.0" text="Default:" />
+                                          <DatePicker maxWidth="150.0" minWidth="100.0" prefHeight="31.0" prefWidth="150.0" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </HBox>
+                                    <HBox prefHeight="32.0" style="-fx-border-color: #dddddd; -fx-border-radius: 4;">
+                                       <children>
+                                          <Button maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" text="X" />
+                                          <TextField maxHeight="32.0" maxWidth="200.0" minHeight="32.0" minWidth="200.0" prefHeight="32.0" prefWidth="200.0" text="Choice" />
+                                          <ChoiceBox maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="100.0" prefHeight="32.0" prefWidth="100.0" />
+                                          <Separator maxHeight="32.0" minHeight="32.0" orientation="VERTICAL" prefHeight="32.0" visible="false">
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                             <padding>
+                                                <Insets left="5.0" right="5.0" />
+                                             </padding>
+                                          </Separator>
+                                          <TextField minWidth="0.0" prefHeight="33.0" prefWidth="100000.0" />
+                                          <Separator maxHeight="32.0" minHeight="32.0" orientation="VERTICAL" prefHeight="32.0" visible="false">
+                                             <padding>
+                                                <Insets left="5.0" right="5.0" />
+                                             </padding>
+                                             <HBox.margin>
+                                                <Insets left="5.0" right="5.0" />
+                                             </HBox.margin>
+                                          </Separator>
+                                          <CheckBox contentDisplay="CENTER" maxWidth="80.0" minWidth="80.0" mnemonicParsing="false" prefHeight="31.0" prefWidth="80.0" text="Default:" />
+                                          <ChoiceBox maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="100.0" prefHeight="32.0" prefWidth="100.0" />
+                                       </children>
+                                       <padding>
+                                          <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                       </padding>
+                                    </HBox>
+                                 </children>
+                              </VBox>
+                              <Button fx:id="btnAddAttribute" minWidth="0.0" mnemonicParsing="false" prefWidth="10000.0" text="Add New Attribute" />
+                           </children>
+                        </VBox>
                      </children>
                      <padding>
                         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

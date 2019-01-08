@@ -229,7 +229,6 @@ public class ViewManager {
 	
 	
 	
-	
 	public static void loadFXModule(String id, String pathFXML) {
 	
 		try {

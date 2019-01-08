@@ -13,10 +13,11 @@ import com.ruegnerlukas.taskmanager.ui.taskview.TasksLoader;
 import com.ruegnerlukas.taskmanager.ui.taskview.TasksService;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ModuleView;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
-import com.ruegnerlukas.taskmanager.utils.viewsystem.WindowView;
 
 import javafx.application.Application;
 import javafx.event.EventHandler;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
@@ -25,7 +26,7 @@ public class TaskManager extends Application {
 	
 	
 	public static void main(String[] args) {
-		
+
 		// setup logger
 		Logger.get().redirectStdOutput(LogLevel.DEBUG, LogLevel.ERROR);
 		((DefaultMessageBuilder)Logger.get().getMessageBuilder()).setSourceNameSizeMin(23);
@@ -61,15 +62,18 @@ public class TaskManager extends Application {
 			} 
 		});
 		
-		ViewManager.addView(new WindowView("view_main", new MainLoader(), new MainService()));
+		ViewManager.addView(new ModuleView("view_main", new MainLoader(), new MainService()));
 		ViewManager.addView(new ModuleView("view_projectsettings", new ProjectSettingsLoader(), new ProjectSettingsService()));
 		ViewManager.addView(new ModuleView("view_tasks", new TasksLoader(), new TasksService()));
-		ViewManager.getLoader("view_main").load(primaryStage);
+
+		ViewManager.getLoader("view_main").load(null);
+		Parent rootMain = ViewManager.getRoot("view_main");
+		
+		Scene scene = new Scene(rootMain, 1280, 720);
+		primaryStage.setScene(scene);
+		primaryStage.show();
 		
 	}
-	
-	
-	
 	
 	public void closeApplication() {
 		System.exit(0);

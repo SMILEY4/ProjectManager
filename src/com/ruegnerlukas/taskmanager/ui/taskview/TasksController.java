@@ -1,45 +1,38 @@
 package com.ruegnerlukas.taskmanager.ui.taskview;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.taskmanager.logic.data.TaskList;
 import com.ruegnerlukas.taskmanager.logic.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.logic.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.logic.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.logic.eventsystem.events.ListChangedVisibilityEvent;
-import com.ruegnerlukas.taskmanager.logic.eventsystem.events.ListCreatedEvent;
-import com.ruegnerlukas.taskmanager.logic.eventsystem.events.ListDeletedEvent;
-import com.ruegnerlukas.taskmanager.logic.eventsystem.events.ListMovedEvent;
-import com.ruegnerlukas.taskmanager.logic.eventsystem.events.ListsChangedOrderEvent;
+import com.ruegnerlukas.taskmanager.logic.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.logic.services.DataService;
+import com.ruegnerlukas.taskmanager.ui.taskview.taskdetails.TaskDetailsNode;
+import com.ruegnerlukas.taskmanager.ui.taskview.tasklist.TaskListNode;
 import com.ruegnerlukas.taskmanager.utils.LoremIpsum;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
+import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.label.LabelUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.menu.MenuFunction;
-import com.ruegnerlukas.taskmanager.utils.uielements.tasklist.TaskListNode;
 import com.ruegnerlukas.taskmanager.utils.uielements.textfield.AutocompletionTextField;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.IViewController;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.SplitPane;
+import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class TasksController implements IViewController {
 
@@ -48,8 +41,11 @@ public class TasksController implements IViewController {
 	
 	@FXML private AnchorPane paneHeader;
 	
-	@FXML private AnchorPane paneFilterBar;
-	@FXML private Button btnClearFilter;
+	@FXML private AnchorPane paneOperationBar;
+	@FXML private ChoiceBox<String> choiceOperation;
+	@FXML private TextField operationDisplay;
+	@FXML private Button btnClearOps;
+
 	@FXML private Button btnActions;
 
 	@FXML private SplitPane splitContent;
@@ -62,6 +58,7 @@ public class TasksController implements IViewController {
 	
 	private boolean sidebarHidden = true;
 	@FXML private AnchorPane paneSidebar;
+	private TaskDetailsNode detailsNode;
 
 	private List<MenuFunction> actionFunctions = new ArrayList<MenuFunction>();
 	
@@ -108,11 +105,11 @@ public class TasksController implements IViewController {
 		AnchorPane.setBottomAnchor(fieldFilter, 0.0);
 		AnchorPane.setLeftAnchor(fieldFilter, 0.0);
 		AnchorPane.setRightAnchor(fieldFilter, 0.0);
-		paneFilterBar.getChildren().clear();
-		paneFilterBar.getChildren().add(fieldFilter);
+		paneOperationBar.getChildren().clear();
+		paneOperationBar.getChildren().add(fieldFilter);
 		
-		ButtonUtils.makeIconButton(btnClearFilter, SVGIcons.getCross(), 40, 40, "white");
-		btnClearFilter.setOnAction(new EventHandler<ActionEvent>() {
+		ButtonUtils.makeIconButton(btnClearOps, SVGIcons.getCross(), 40, 40, "white");
+		btnClearOps.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				fieldFilter.setText("");
 			}			
@@ -127,6 +124,7 @@ public class TasksController implements IViewController {
 			splitContent.setDividerPosition(0, 0.75);
 			labelHideSidebar.setText(">");
 		}
+		
 		
 		splitContent.getDividers().get(0).positionProperty().addListener(new ChangeListener<Number>() {
 			@Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -290,6 +288,35 @@ public class TasksController implements IViewController {
 				}
 			}
 		}, ListDeletedEvent.class);
+		
+		// TASK SELECTED
+		EventManager.registerListener(new EventListener() {
+			@Override public void onEvent(Event e) {
+				TaskSelectedEvent event = (TaskSelectedEvent)e;
+				detailsNode = new TaskDetailsNode(event.getTask());
+				AnchorUtils.setAnchors(detailsNode, 0, 0, 0, 0);
+				paneSidebar.getChildren().clear();
+				paneSidebar.getChildren().add(detailsNode);
+				if(sidebarHidden) {
+					labelHideSidebar.setText(">");
+					sidebarHidden = false;
+					splitContent.setDividerPosition(0, 0.75);
+				}
+			}
+		}, TaskSelectedEvent.class);
+		
+		// TASK DELETED
+		EventManager.registerListener(new EventListener() {
+			@Override public void onEvent(Event e) {
+				TaskDeletedEvent event = (TaskDeletedEvent)e;
+				if(detailsNode != null && detailsNode.task == event.getTask()) {
+					paneSidebar.getChildren().remove(detailsNode);
+					detailsNode = null;
+				}
+			}
+		}, TaskDeletedEvent.class);
+		
+		
 		
 	}
 	
