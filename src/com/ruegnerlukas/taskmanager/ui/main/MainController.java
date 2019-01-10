@@ -1,31 +1,26 @@
 package com.ruegnerlukas.taskmanager.ui.main;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.ruegnerlukas.taskmanager.logic.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.logic.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.logic.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.logic.eventsystem.events.ProjectClosedEvent;
-import com.ruegnerlukas.taskmanager.logic.eventsystem.events.ProjectCreatedEvent;
-import com.ruegnerlukas.taskmanager.logic.services.DataService;
+import com.ruegnerlukas.taskmanager.eventsystem.Event;
+import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
+import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectClosedEvent;
+import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectCreatedEvent;
+import com.ruegnerlukas.taskmanager.logic_v2.LogicService;
 import com.ruegnerlukas.taskmanager.ui.infobar.InfobarHandler;
 import com.ruegnerlukas.taskmanager.utils.LoremIpsum;
 import com.ruegnerlukas.taskmanager.utils.uielements.alert.Alerts;
 import com.ruegnerlukas.taskmanager.utils.uielements.menu.MenuFunction;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.IViewController;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
-
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.Label;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.FileChooser;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainController implements IViewController {
 	
@@ -52,19 +47,18 @@ public class MainController implements IViewController {
 	
 	@Override
 	public void create() {
-		
 		InfobarHandler infobarHandler = new InfobarHandler();
 		infobarHandler.create(paneInfobar, labelInfobar);
-		
 		setupListeners();
 		setupMenuFunctions();
 	}
 	
 	
 	
-	
+
 	private void setupListeners() {
-	
+
+		// listen for project closed
 		EventManager.registerListener(new EventListener() {
 			@Override public void onEvent(Event event) {
 				functionCloseProject.setDisable(true);
@@ -73,7 +67,8 @@ public class MainController implements IViewController {
 			}
 		}, ProjectClosedEvent.class);
 		
-		
+
+		// listen for project created
 		EventManager.registerListener(new EventListener() {
 			@Override public void onEvent(Event event) {
 				functionCloseProject.setDisable(false);
@@ -85,153 +80,106 @@ public class MainController implements IViewController {
 	}
 	
 	
-	
-	
+
+
 	private void setupMenuFunctions() {
 		
-		// FILE
+		// Create new empty Project
 		functionNewProject = new MenuFunction("File", "New Project") {
 			@Override public void onAction() {
-
 				// save/close last project
-				if(DataService.project.getProject() != null) {
-					ButtonType alertSaveResult = Alerts.confirmation("Save current Project before closing?", "Current project: " + DataService.project.getProject().name);
-					if(alertSaveResult == ButtonType.YES) {
-						DataService.project.saveProject();
-						DataService.project.closeProject();
+				if(LogicService.get().isProjectOpen()) {
+					if(handleOpenProject()) {
+						LogicService.get().createProject();
 					}
-					if(alertSaveResult == ButtonType.NO) {
-						DataService.project.closeProject();
-					}
-					if(alertSaveResult == ButtonType.CANCEL) {
-						return;
-					}
+				} else {
+					LogicService.get().createProject();
 				}
-				
-				// create new
-				DataService.project.createProject();
-				
 			}
 		}.addToMenuBar(menuBar);
 		
-		
+
+		// Open saved project
 		functionOpenProject = new MenuFunction("File", "Open Project") { @Override public void onAction() {
-			
 			FileChooser fileChooser = new FileChooser();
 			fileChooser.setTitle("Select project root-file.");
 			fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 			File file = fileChooser.showOpenDialog(ViewManager.getPrimaryStage());
-			
 			if(file == null) {
 				return;
-				
 			} else {
-				
-				if(DataService.project.getProject() != null) {
-					ButtonType alertSaveResult = Alerts.confirmation("Save Project current Project before closing?", "Current project: " + DataService.project.getProject().name);
-					if(alertSaveResult == ButtonType.YES) {
-						DataService.project.saveProject();
-						DataService.project.closeProject();
+				if(LogicService.get().isProjectOpen()) {
+					if(handleOpenProject()) {
+						LogicService.get().loadProject(file);
 					}
-					if(alertSaveResult == ButtonType.NO) {
-						DataService.project.closeProject();
-					}
-					if(alertSaveResult == ButtonType.CANCEL) {
-						return;
-					}
+				} else {
+					LogicService.get().loadProject(file);
 				}
-
-				DataService.project.loadProject(file);
-				
 			}
-			
 		}}.addToMenuBar(menuBar);
 		
-		
+
+		// open a remote project
 		functionOpenRemoteProject = new MenuFunction("File", "Open Remote Project") { @Override public void onAction() {
 			// TODO
 			System.out.println("TODO: open remove project (->git?)");
 		}}.addToMenuBar(menuBar);
-		
+
+
+		// open recent project
 		for(int i=0; i<5; i++) {
 			final String filepath = LoremIpsum.get(2, 8, true);
+
 			MenuFunction fctOpenRecentFile = new MenuFunction("File", "Open Recent", filepath) { @Override public void onAction() {
-
-
 				File file = new File(filepath);
 				if(!file.exists()) {
 					return;
-					
 				} else {
-
-					if(DataService.project.getProject() != null) {
-						ButtonType alertSaveResult = Alerts.confirmation("Save current Project before closing?", "Current project: " + DataService.project.getProject().name);
-						if(alertSaveResult == ButtonType.YES) {
-							DataService.project.saveProject();
-							DataService.project.closeProject();
+					if(LogicService.get().isProjectOpen()) {
+						if(handleOpenProject()) {
+							LogicService.get().loadProject(file);
 						}
-						if(alertSaveResult == ButtonType.NO) {
-							DataService.project.closeProject();
-						}
-						if(alertSaveResult == ButtonType.CANCEL) {
-							return;
-						}
+					} else {
+						LogicService.get().loadProject(file);
 					}
-					
-					DataService.project.loadProject(file);
-					
 				}
-				
 			}};
+
 			fctOpenRecentFile.addToMenuBar(menuBar);
 			functionsOpenRecentProject.add(fctOpenRecentFile);
 		}
 		
-		
+
+		// save project
 		functionSaveProject = new MenuFunction("File", "Save") { @Override public void onAction() {
-			if(DataService.project.getProject() != null) {
-				DataService.project.saveProject();
-				Alerts.info("Project has been saved.", DataService.project.getProject().name);
+			if(LogicService.get().isProjectOpen()) {
+				LogicService.get().saveProject();
+				Alerts.info("Project has been saved.", LogicService.get().getProject().name);
 			}
 		}}.addToMenuBar(menuBar);
 		functionSaveProject.setDisable(true);
-		
-		functionCloseProject = new MenuFunction("File", "Close Project") { @Override public void onAction() {
-			
-			if(DataService.project.getProject() != null) {
-			
-				ButtonType alertSaveResult = Alerts.confirmation("Save Project current Project before closing?", "Current project: " + DataService.project.getProject().name);
-				if(alertSaveResult == ButtonType.YES) {
-					DataService.project.saveProject();
-				}
-				if(alertSaveResult == ButtonType.NO) {
-				}
-				if(alertSaveResult == ButtonType.CANCEL) {
-					return;
-				}
-				
-				DataService.project.closeProject();
 
+
+		// close project
+		functionCloseProject = new MenuFunction("File", "Close Project") { @Override public void onAction() {
+			if(LogicService.get().isProjectOpen()) {
+				handleOpenProject();
 			}
 		}}.addToMenuBar(menuBar);
 		functionCloseProject.setDisable(true);
-		
+
+
+		// exit application
 		functionExit = new MenuFunction("File", "Exit") { @Override public void onAction() {
-			
-			if(DataService.project.getProject() != null) {
-				ButtonType alertSaveResult = Alerts.confirmation("Save current Project before closing?", "Current project: " + DataService.project.getProject().name);
-				if(alertSaveResult == ButtonType.YES) {
-					DataService.project.saveProject();
+			if(LogicService.get().isProjectOpen()) {
+				if(handleOpenProject()) {
+					// TODO exit application
+					System.out.println("TODO: Exit application");
 				}
-				if(alertSaveResult == ButtonType.NO) {
-				}
-				if(alertSaveResult == ButtonType.CANCEL) {
-					return;
-				}
-				DataService.project.closeProject();
+			} else {
+				// TODO exit application
+				System.out.println("TODO: Exit application");
 			}
-			// TODO exit application
-			System.out.println("TODO: Exit application");
 		}}.addToMenuBar(menuBar);
 		
 		
@@ -259,16 +207,47 @@ public class MainController implements IViewController {
 		}}.addToMenuBar(menuBar);
 
 	}
-	
+
+
+
+
+	/**
+	 * shows a dialog and asks user if he wants to save project before closing it.
+	 * @return true, if the project was closed (with or without saving it); false, if the user cancelled the actions
+	 * */
+	private boolean handleOpenProject() {
+		if(!LogicService.get().isProjectOpen()) {
+			return false;
+		}
+
+		ButtonType alertSaveResult = Alerts.confirmation("Save Project current Project before closing?", "Current project: " + LogicService.get().getProject().name);
+
+		if(alertSaveResult == ButtonType.YES) {
+			LogicService.get().saveProject();
+			LogicService.get().closeProject();
+			return true;
+		}
+
+		if(alertSaveResult == ButtonType.NO) {
+			LogicService.get().closeProject();
+			return true;
+		}
+
+		if(alertSaveResult == ButtonType.CANCEL) {
+			return false;
+		}
+		return false;
+	}
+
 
 
 
 	private void openAllTabs() {
 		openTap_projectSettings();
-		openTap_dashboard();
-		openTap_tasks();
-		openTap_documentation();
-		openTap_team();
+//		openTap_dashboard();
+//		openTap_tasks();
+//		openTap_documentation();
+//		openTap_team();
 	}
 	
 	

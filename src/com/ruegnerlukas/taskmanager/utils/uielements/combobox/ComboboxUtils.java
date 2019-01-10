@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.utils.uielements.combobox;
 
 
-import com.ruegnerlukas.taskmanager.logic.data.TaskFlag;
-import com.ruegnerlukas.taskmanager.logic.data.TaskList;
+import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.logic_v1.data.TaskList;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

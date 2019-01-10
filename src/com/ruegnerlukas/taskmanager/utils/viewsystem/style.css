@@ -75,8 +75,36 @@
  #paneInfobar > #labelInfobar{
  	-fx-text-fill: -text-light-1;
  }
+
+
+
+
+
+
+ /* PROJECT SETTINGS*/
+ #boxTaskAttribs > TaskAttributeNode {
+  -fx-background-color: white;
+  -fx-border-color: -gray-mid;
+  -fx-border-radius: 5;
+}
+
+ #boxTaskAttribs > TaskAttributeNode > AnchorPane > HBox {
+  -fx-border-color: -gray-mid;
+  -fx-border-radius: 5;
+  -fx-border-width: 0 0 1 0;
+}
  
  
+#boxTaskAttribs > TaskAttributeNode > AnchorPane > HBox > Button {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+ 
+ 
+
+
+
  /* TASK VIEW */
  
  /* header */
