@@ -5,7 +5,7 @@
 //import java.util.List;
 //
 //import com.ruegnerlukas.taskmanager.logic_v1.data.TaskCard;
-//import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.TaskFlag;
+//import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
 //import com.ruegnerlukas.taskmanager.logic_v1.data.TaskList;
 //import com.ruegnerlukas.taskmanager.eventsystem.Event;
 //import com.ruegnerlukas.taskmanager.eventsystem.EventListener;

@@ -1,5 +1,4 @@
-package com.ruegnerlukas.taskmanager.logic_v1.data;
-
+package com.ruegnerlukas.taskmanager.logic.data;
 
 
 public class Data {

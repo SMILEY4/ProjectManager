@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes;
+package com.ruegnerlukas.taskmanager.logic.data.taskAttributes;
 
 import javafx.scene.paint.Color;
 

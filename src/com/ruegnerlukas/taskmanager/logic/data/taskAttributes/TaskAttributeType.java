@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes;
+package com.ruegnerlukas.taskmanager.logic.data.taskAttributes;
 
 public enum TaskAttributeType {
 

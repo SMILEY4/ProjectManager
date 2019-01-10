@@ -1,7 +1,7 @@
-package com.ruegnerlukas.taskmanager.logic_v2.data;
+package com.ruegnerlukas.taskmanager.logic.data;
 
-import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,6 +1,6 @@
-package com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.requirements;
+package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements;
 
-import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
 
 public class IDAttributeRequirement implements TaskAttributeRequirement {
 

@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.eventsystem.events;
 
 import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 
 public class AttributeCreatedRejection extends Event {
 

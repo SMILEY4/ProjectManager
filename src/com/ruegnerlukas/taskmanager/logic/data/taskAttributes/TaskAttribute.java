@@ -1,7 +1,7 @@
-package com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes;
+package com.ruegnerlukas.taskmanager.logic.data.taskAttributes;
 
 
-import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.requirements.*;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements.*;
 
 public class TaskAttribute {
 

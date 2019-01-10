@@ -1,12 +1,12 @@
-package com.ruegnerlukas.taskmanager.logic_v2;
+package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.eventsystem.events.*;
-import com.ruegnerlukas.taskmanager.logic_v2.data.Data;
-import com.ruegnerlukas.taskmanager.logic_v2.data.Project;
-import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.requirements.TaskAttributeRequirement;
+import com.ruegnerlukas.taskmanager.logic.data.Data;
+import com.ruegnerlukas.taskmanager.logic.data.Project;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements.TaskAttributeRequirement;
 
 import java.io.File;
 

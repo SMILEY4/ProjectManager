@@ -72,7 +72,8 @@ public class TaskManager extends Application {
 		Scene scene = new Scene(rootMain, 1280, 720);
 		primaryStage.setScene(scene);
 		primaryStage.show();
-		
+
+
 	}
 	
 	public void closeApplication() {

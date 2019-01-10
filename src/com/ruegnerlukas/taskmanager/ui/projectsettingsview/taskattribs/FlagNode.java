@@ -1,9 +1,9 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
-import com.ruegnerlukas.taskmanager.logic_v2.LogicService;
-import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.TaskFlag.FlagColor;
-import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.requirements.FlagAttributeRequirement;
+import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag.FlagColor;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements.FlagAttributeRequirement;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabel.EditableLabel;

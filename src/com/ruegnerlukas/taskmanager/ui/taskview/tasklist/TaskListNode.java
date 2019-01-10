@@ -7,7 +7,7 @@
 //
 //import com.ruegnerlukas.simplemath.MathUtils;
 //import com.ruegnerlukas.taskmanager.logic_v1.data.TaskCard;
-//import com.ruegnerlukas.taskmanager.logic_v2.data.taskAttributes.TaskFlag.FlagColor;
+//import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag.FlagColor;
 //import com.ruegnerlukas.taskmanager.logic_v1.data.TaskList;
 //import com.ruegnerlukas.taskmanager.eventsystem.Event;
 //import com.ruegnerlukas.taskmanager.eventsystem.EventListener;

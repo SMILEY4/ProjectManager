@@ -5,7 +5,7 @@ import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectClosedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectCreatedEvent;
-import com.ruegnerlukas.taskmanager.logic_v2.LogicService;
+import com.ruegnerlukas.taskmanager.logic.LogicService;
 import com.ruegnerlukas.taskmanager.ui.infobar.InfobarHandler;
 import com.ruegnerlukas.taskmanager.utils.LoremIpsum;
 import com.ruegnerlukas.taskmanager.utils.uielements.alert.Alerts;

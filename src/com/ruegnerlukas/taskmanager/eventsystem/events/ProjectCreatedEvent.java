@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.eventsystem.events;
 
-import com.ruegnerlukas.taskmanager.logic_v2.data.Project;
+import com.ruegnerlukas.taskmanager.logic.data.Project;
 import com.ruegnerlukas.taskmanager.eventsystem.Event;
 
 public class ProjectCreatedEvent extends Event {
