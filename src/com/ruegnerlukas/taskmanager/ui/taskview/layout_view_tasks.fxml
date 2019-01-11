@@ -3,32 +3,29 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ChoiceBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 
 <AnchorPane fx:id="rootTaskView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ruegnerlukas.taskmanager.ui.taskview.TasksController">
    <children>
       <AnchorPane fx:id="paneHeader" maxHeight="60.0" minHeight="50.0" prefHeight="50.0" prefWidth="1280.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
+            <AnchorPane fx:id="paneHeaderBadges" prefHeight="50.0" prefWidth="1280.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
             <HBox alignment="CENTER_LEFT" layoutY="-25.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                <children>
                   <HBox alignment="CENTER_LEFT" spacing="5.0">
                      <children>
-                        <ChoiceBox fx:id="choiceOperation" minWidth="120.0" prefHeight="31.0" prefWidth="120.0" />
-                        <AnchorPane fx:id="paneOperationBar" prefWidth="10000.0">
-                           <children>
-                              <TextField fx:id="operationDisplay" prefHeight="33.0" prefWidth="1165.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                           </children>
-                        </AnchorPane>
-                        <Button fx:id="btnClearOps" maxHeight="25.0" maxWidth="25.0" minHeight="25.0" minWidth="25.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="25.0" />
+                        <Button fx:id="btnFilter" minWidth="60.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="60.0" text="Filter" />
+                        <Button fx:id="btnGroup" minWidth="85.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Group By" />
+                        <Button fx:id="btnSort" minWidth="55.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="55.0" text="Sort" />
+                        <Region maxHeight="0.0" maxWidth="100000.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="100000.0" />
+                        <Button fx:id="btnActions" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" />
                      </children>
                   </HBox>
-                  <Button fx:id="btnActions" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" />
                </children>
                <padding>
                   <Insets bottom="9.0" left="9.0" right="9.0" top="9.0" />

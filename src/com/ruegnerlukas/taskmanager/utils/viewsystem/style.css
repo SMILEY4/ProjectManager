@@ -112,26 +112,19 @@
  	-fx-background-color: -primary-2;
  }
  
- 
- /* "Filter:"-label */
- #rootTaskView > #paneHeader > HBox > HBox > .label {
- 	-fx-text-fill: -text-light-1;
- }
- 
- 
- /* Autocomplete-textfield */
- #rootTaskView > #paneHeader > HBox > HBox > #paneFilterBar > * {
- 	-fx-background-color: -primary-2;
- 	-fx-text-fill: -text-light-1;
- 	-fx-prompt-text-fill: -text-light-0;
- }
- 
- 
- /* "clearFilters"-button */
+ /* buttons */
  #rootTaskView > #paneHeader > HBox > HBox > Button {
  	-fx-border-color: transparent;
  	-fx-background-color: transparent;
+ 	-fx-text-fill: -text-light-1;
  }
+
+ #rootTaskView > #paneHeader > HBox > HBox > Button:hover {
+  	-fx-border-color: transparent;
+  	-fx-background-color: transparent;
+  	-fx-text-fill: -text-light-0;
+ }
+
  #rootTaskView > #paneHeader > HBox > HBox > Button > SVGPath {
  	-fx-fill: -text-light-1;
  }

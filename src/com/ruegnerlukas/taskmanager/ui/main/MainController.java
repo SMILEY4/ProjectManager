@@ -245,7 +245,7 @@ public class MainController implements IViewController {
 	private void openAllTabs() {
 		openTap_projectSettings();
 //		openTap_dashboard();
-//		openTap_tasks();
+		openTap_tasks();
 //		openTap_documentation();
 //		openTap_team();
 	}

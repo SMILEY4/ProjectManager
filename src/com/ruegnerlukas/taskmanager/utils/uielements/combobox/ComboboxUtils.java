@@ -2,7 +2,6 @@ package com.ruegnerlukas.taskmanager.utils.uielements.combobox;
 
 
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.logic_v1.data.TaskList;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -70,40 +69,6 @@ public class ComboboxUtils {
 		});
 	}
 	
-	
-	
-	
-	public static void initComboboxTasklist(ComboBox<TaskList> combobox) {
-		combobox.setButtonCell(new ListCell<TaskList>() {
-			@Override protected void updateItem(TaskList item, boolean empty) {
-				super.updateItem(item, empty);
-				if (item == null || empty) {
-					setText("");
-					setGraphic(null);
-				} else {
-					setText(item.title);
-					setGraphic(null);
-				}
-			}
-		});
-		combobox.setCellFactory(new Callback<ListView<TaskList>, ListCell<TaskList>>() {
-			@Override public ListCell<TaskList> call(ListView<TaskList> p) {
-				return new ListCell<TaskList>() {
-					@Override protected void updateItem(TaskList item, boolean empty) {
-						super.updateItem(item, empty);
-						if (item == null || empty) {
-							setText("");
-							setGraphic(null);
-						} else {
-							setText(item.title);
-							setGraphic(null);
-						}
-					}
-				};
-			}
-		});
-	}
-	
-	
+
 	
 }
