@@ -5,21 +5,11 @@ import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.builder.DefaultMessageBuilder;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.ui.main.MainLoader;
-import com.ruegnerlukas.taskmanager.ui.main.MainService;
-import com.ruegnerlukas.taskmanager.ui.projectsettingsview.ProjectSettingsLoader;
-import com.ruegnerlukas.taskmanager.ui.projectsettingsview.ProjectSettingsService;
-import com.ruegnerlukas.taskmanager.ui.taskview.TasksLoader;
-import com.ruegnerlukas.taskmanager.ui.taskview.TasksService;
-import com.ruegnerlukas.taskmanager.utils.viewsystem.ModuleView;
+import com.ruegnerlukas.taskmanager.ui.main.MainView;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
-
 import javafx.application.Application;
-import javafx.event.EventHandler;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 
 public class TaskManager extends Application {
 
@@ -56,20 +46,10 @@ public class TaskManager extends Application {
 	public void start(Stage primaryStage) throws Exception {
 		
 		ViewManager.setPrimaryStage(primaryStage);
-		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			@Override public void handle(WindowEvent event) {
-				closeApplication();
-			} 
-		});
-		
-		ViewManager.addView(new ModuleView("view_main", new MainLoader(), new MainService()));
-		ViewManager.addView(new ModuleView("view_projectsettings", new ProjectSettingsLoader(), new ProjectSettingsService()));
-		ViewManager.addView(new ModuleView("view_tasks", new TasksLoader(), new TasksService()));
+		primaryStage.setOnCloseRequest(event -> closeApplication());
 
-		ViewManager.getLoader("view_main").load(null);
-		Parent rootMain = ViewManager.getRoot("view_main");
-		
-		Scene scene = new Scene(rootMain, 1280, 720);
+		MainView viewMain = new MainView();
+		Scene scene = new Scene(viewMain, 1280, 720);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 

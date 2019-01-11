@@ -1,22 +1,27 @@
 package com.ruegnerlukas.taskmanager.ui.taskview;
 
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
+import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.label.LabelUtils;
-import com.ruegnerlukas.taskmanager.utils.viewsystem.IViewController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
-public class TasksController implements IViewController {
+import java.io.IOException;
+
+public class TasksController extends AnchorPane {
 
 
 	@FXML private AnchorPane rootTaskView;
@@ -43,10 +48,16 @@ public class TasksController implements IViewController {
 
 
 
+	public TasksController() {
+		try {
 
+			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_view_tasks.fxml"), this);
+			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
+			this.getChildren().add(root);
+		} catch (IOException e) {
+			Logger.get().error("Error loading TaskView-FXML: " + e);
+		}
 
-	@Override
-	public void create() {
 		setupListeners();
 		createCustomElements();
 	}
