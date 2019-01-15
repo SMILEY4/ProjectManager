@@ -2,19 +2,23 @@ package com.ruegnerlukas.taskmanager.eventsystem.events;
 
 import com.ruegnerlukas.taskmanager.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements.TaskAttributeRequirement;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
 
 public class AttributeUpdatedEvent extends Event {
 
 
 	private TaskAttribute attribute;
-	private TaskAttributeRequirement oldRequirement;
+	private TaskAttributeData.Var var;
+	private Object newValue;
 
 
-	public AttributeUpdatedEvent(TaskAttribute attribute, TaskAttributeRequirement oldRequirement, Object source) {
+
+
+	public AttributeUpdatedEvent(TaskAttribute attribute, TaskAttributeData.Var var, Object newValue, Object source) {
 		super(source);
 		this.attribute = attribute;
-		this.oldRequirement = oldRequirement;
+		this.var = var;
+		this.newValue = newValue;
 	}
 
 
@@ -27,8 +31,16 @@ public class AttributeUpdatedEvent extends Event {
 
 
 
-	public TaskAttributeRequirement getOldRequirement() {
-		return oldRequirement;
+	public TaskAttributeData.Var getVar() {
+		return var;
 	}
+
+
+
+
+	public Object getNewValue() {
+		return newValue;
+	}
+
 
 }

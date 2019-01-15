@@ -5,7 +5,7 @@ import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeRenamedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeTypeChangedEvent;
-import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
@@ -83,7 +83,7 @@ public class TaskAttributeNode extends AnchorPane {
 		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f, "black");
 		btnRemove.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				LogicService.get().deleteAttribute(attribute.name);
+				Logic.attribute.deleteAttribute(attribute.name);
 			}
 		});
 		boxHeader.getChildren().add(btnRemove);
@@ -109,7 +109,7 @@ public class TaskAttributeNode extends AnchorPane {
 		choiceType.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				if(!oldValue.equals(newValue)) {
-					LogicService.get().changeAttributeType(attribute.name, TaskAttributeType.getFromDisplay(newValue));
+					Logic.attribute.changeAttributeType(attribute.name, TaskAttributeType.getFromDisplay(newValue));
 				}
 			}
 		});
@@ -141,7 +141,7 @@ public class TaskAttributeNode extends AnchorPane {
 		labelAttName.addListener(new ChangeListener<String>() {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				labelAttName.setText(oldValue);
-				LogicService.get().renameAttribute(oldValue, newValue);
+				Logic.attribute.renameAttribute(oldValue, newValue);
 			}
 		});
 		boxHeader.getChildren().add(labelAttName);

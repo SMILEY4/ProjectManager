@@ -8,7 +8,7 @@ import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeCreatedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeLockEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeRemovedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectRenamedEvent;
-import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs.TaskAttributeNode;
@@ -68,7 +68,7 @@ public class ProjectSettingsView extends AnchorPane {
 	private void create() {
 
 		// Project name
-		labelName = new EditableLabel(LogicService.get().getProject().name);
+		labelName = new EditableLabel(Logic.project.getProject().name);
 		AnchorPane.setBottomAnchor(labelName, 0.0);
 		AnchorPane.setTopAnchor(labelName, 0.0);
 		AnchorPane.setLeftAnchor(labelName, 0.0);
@@ -77,7 +77,7 @@ public class ProjectSettingsView extends AnchorPane {
 
 
 		// lock task attributes
-		attributesLocked = LogicService.get().getProject().attributesLocked;
+		attributesLocked = Logic.project.getProject().attributesLocked;
 		if(attributesLocked) {
 			ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1f, "black");
 		} else {
@@ -85,7 +85,7 @@ public class ProjectSettingsView extends AnchorPane {
 		}
 		btnLockAttributes.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				LogicService.get().setAttributeLock(!attributesLocked);
+				Logic.attribute.setAttributeLock(!attributesLocked);
 			}
 		});
 		setAttributeLock(attributesLocked);
@@ -100,7 +100,7 @@ public class ProjectSettingsView extends AnchorPane {
 		// add attribute
 		btnAddAttribute.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				LogicService.get().createAttribute(
+				Logic.attribute.createAttribute(
 						"Attribute " + Integer.toHexString(new Integer(new Random().nextInt()).hashCode()),
 						TaskAttributeType.TEXT);
 			}
@@ -108,7 +108,7 @@ public class ProjectSettingsView extends AnchorPane {
 
 
 		// add initial attributes
-		for(TaskAttribute attribute : LogicService.get().getProject().attributes) {
+		for(TaskAttribute attribute : Logic.project.getProject().attributes) {
 			TaskAttributeNode attrNode = new TaskAttributeNode(attribute);
 			boxTaskAttribs.getChildren().add(attrNode);
 		}

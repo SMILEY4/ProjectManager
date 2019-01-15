@@ -1,9 +1,10 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
-import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag.FlagColor;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements.FlagAttributeRequirement;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabel.EditableLabel;
@@ -21,6 +22,9 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class FlagNode extends HBox {
 
@@ -42,7 +46,7 @@ public class FlagNode extends HBox {
 		this.setPrefSize(-1, -1);
 		this.setAlignment(Pos.CENTER_LEFT);
 
-		isDefaultFlag = ((FlagAttributeRequirement)parentNode.attribute.data).defaultFlag.name.equals(flag.name);
+		isDefaultFlag = ((FlagAttributeData)parentNode.attribute.data).defaultFlag.name.equals(flag.name);
 
 		// remove flag button
 		Button btnRemoveFlag = new Button();
@@ -54,14 +58,13 @@ public class FlagNode extends HBox {
 		ButtonUtils.makeIconButton(btnRemoveFlag, SVGIcons.CROSS, 0.7f, "black");
 		btnRemoveFlag.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				FlagAttributeRequirement updatedRequirement = (FlagAttributeRequirement)parentNode.attribute.data.copy();
-				for(TaskFlag f : updatedRequirement.flags) {
-					if(f.name.equals(flag.name)) {
-						updatedRequirement.flags.remove(f);
-						break;
+				List<TaskFlag> flags = new ArrayList<>();
+				for(TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
+					if(!f.name.equals(flag.name)) {
+						flags.add(f);
 					}
 				}
-				LogicService.get().updateTaskAttribute(parentNode.attribute.name, updatedRequirement);
+				Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, flags.toArray());
 			}
 		});
 		this.getChildren().add(btnRemoveFlag);
@@ -92,17 +95,14 @@ public class FlagNode extends HBox {
 							item.setContent(colorPane);
 							item.setOnAction(new EventHandler<ActionEvent>() {
 								@Override public void handle(ActionEvent event) {
-									FlagAttributeRequirement updatedRequirement = (FlagAttributeRequirement)parentNode.attribute.data.copy();
-									for(TaskFlag f : updatedRequirement.flags) {
+									List<TaskFlag> flags = new ArrayList<>();
+									for(TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
 										if(f.name.equals(flag.name)) {
 											f.color = flagColor;
-											if(isDefaultFlag) {
-												updatedRequirement.defaultFlag = f;
-											}
-											break;
 										}
+										flags.add(f);
 									}
-									LogicService.get().updateTaskAttribute(parentNode.attribute.name, updatedRequirement);
+									Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, flags.toArray());
 								}
 							});
 							menu.getItems().add(item);
@@ -124,18 +124,14 @@ public class FlagNode extends HBox {
 		label.setMaxWidth(300);
 		label.addListener(new ChangeListener<String>() {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				label.setText(FlagNode.this.flag.name);
-				FlagAttributeRequirement updatedRequirement = (FlagAttributeRequirement)parentNode.attribute.data.copy();
-				for(TaskFlag f : updatedRequirement.flags) {
+				List<TaskFlag> flags = new ArrayList<>();
+				for(TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
 					if(f.name.equals(flag.name)) {
 						f.name = newValue;
-						if(isDefaultFlag) {
-							updatedRequirement.defaultFlag = f;
-						}
-						break;
 					}
+					flags.add(f);
 				}
-				LogicService.get().updateTaskAttribute(parentNode.attribute.name, updatedRequirement);
+				Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, flags.toArray());
 			}
 		});
 

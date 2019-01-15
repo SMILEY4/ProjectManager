@@ -6,10 +6,11 @@ import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedRejection;
-import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements.FlagAttributeRequirement;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.utils.FXEvents;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
@@ -79,7 +80,7 @@ public class FlagAttributeNode extends AnchorPane implements AttributeRequiremen
 		this.setPrefSize(root.getPrefWidth(), root.getPrefHeight());
 		this.setMaxSize(root.getMaxWidth(), root.getMaxHeight());
 
-		FlagAttributeRequirement attributeData = (FlagAttributeRequirement)attribute.data;
+		FlagAttributeData attributeData = (FlagAttributeData)attribute.data;
 
 
 		// flags
@@ -91,10 +92,10 @@ public class FlagAttributeNode extends AnchorPane implements AttributeRequiremen
 
 		btnAddFlag.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				FlagAttributeRequirement updatedRequirement = (FlagAttributeRequirement)attributeData.copy();
 				TaskFlag flag = new TaskFlag(TaskFlag.FlagColor.GRAY, "Flag " + Integer.toHexString(new Integer(new Random().nextInt()).hashCode()), false);
-				updatedRequirement.flags.add(flag);
-				LogicService.get().updateTaskAttribute(attribute.name, updatedRequirement);
+				TaskFlag[] flagArray = new TaskFlag[attributeData.flags.length+1];
+				flagArray[flagArray.length-1] = flag;
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, flagArray);
 			}
 		});
 
@@ -106,13 +107,11 @@ public class FlagAttributeNode extends AnchorPane implements AttributeRequiremen
 		defaultFlag.getSelectionModel().select(attributeData.defaultFlag.name);
 		defaultFlag.setOnAction(FXEvents.register(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				FlagAttributeRequirement updatedRequirement = (FlagAttributeRequirement)attributeData.copy();
 				for(TaskFlag flag : attributeData.flags) {
 					if(flag.name.equals(defaultFlag.getValue())) {
-						updatedRequirement.defaultFlag = flag;
+						Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, flag);
 					}
 				}
-				LogicService.get().updateTaskAttribute(attribute.name, updatedRequirement);
 			}
 		}, defaultFlag));
 
@@ -154,7 +153,7 @@ public class FlagAttributeNode extends AnchorPane implements AttributeRequiremen
 
 	private void updateData() {
 
-		FlagAttributeRequirement attributeData = (FlagAttributeRequirement)attribute.data;
+		FlagAttributeData attributeData = (FlagAttributeData)attribute.data;
 
 		FXEvents.mute(defaultFlag);
 

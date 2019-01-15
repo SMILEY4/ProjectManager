@@ -2,23 +2,27 @@ package com.ruegnerlukas.taskmanager.eventsystem.events;
 
 import com.ruegnerlukas.taskmanager.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements.TaskAttributeRequirement;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
 
 public class AttributeUpdatedRejection extends Event {
 
 
-	private TaskAttribute attribute;
-	private TaskAttributeRequirement newRequirement;
 	private EventCause cause;
+	private TaskAttribute attribute;
+	private TaskAttributeData.Var var;
+	private Object newValue;
 
 
-	public AttributeUpdatedRejection(TaskAttribute attribute, TaskAttributeRequirement newRequirement, EventCause cause, Object source) {
+
+
+	public AttributeUpdatedRejection(TaskAttribute attribute, TaskAttributeData.Var var,
+									 Object newValue, EventCause cause, Object source) {
 		super(source);
 		this.attribute = attribute;
-		this.newRequirement = newRequirement;
+		this.var = var;
+		this.newValue = newValue;
 		this.cause = cause;
 	}
-
 
 
 
@@ -30,10 +34,16 @@ public class AttributeUpdatedRejection extends Event {
 
 
 
-	public TaskAttributeRequirement getNewRequirement() {
-		return newRequirement;
+	public TaskAttributeData.Var getVar() {
+		return var;
 	}
 
+
+
+
+	public Object getNewValue() {
+		return newValue;
+	}
 
 
 

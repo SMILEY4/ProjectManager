@@ -6,9 +6,10 @@ import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedRejection;
-import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements.BoolAttributeRequirement;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.BoolAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
 import javafx.beans.value.ChangeListener;
@@ -75,16 +76,14 @@ public class BoolAttributeNode extends AnchorPane implements AttributeRequiremen
 		this.setMaxSize(root.getMaxWidth(), root.getMaxHeight());
 
 
-		BoolAttributeRequirement attributeData = (BoolAttributeRequirement)attribute.data;
+		BoolAttributeData attributeData = (BoolAttributeData)attribute.data;
 
 
 		// use default
 		useDefault.setSelected(attributeData.useDefault);
 		useDefault.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				BoolAttributeRequirement updatedRequirement = (BoolAttributeRequirement)attributeData.copy();
-				updatedRequirement.useDefault = useDefault.isSelected();
-				LogicService.get().updateTaskAttribute(attribute.name, updatedRequirement);
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, useDefault.isSelected());
 			}
 		});
 
@@ -94,9 +93,7 @@ public class BoolAttributeNode extends AnchorPane implements AttributeRequiremen
 		defaultValue.getSelectionModel().select(attributeData.defaultValue ? "True" : "False");
 		defaultValue.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				BoolAttributeRequirement updatedRequirement = (BoolAttributeRequirement)attributeData.copy();
-				updatedRequirement.defaultValue = newValue.equalsIgnoreCase("True");
-				LogicService.get().updateTaskAttribute(attribute.name, updatedRequirement);
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, newValue.equalsIgnoreCase("True"));
 			}
 		});
 		defaultValue.setDisable(!useDefault.isSelected());
@@ -137,7 +134,7 @@ public class BoolAttributeNode extends AnchorPane implements AttributeRequiremen
 
 
 	private void updateData() {
-		BoolAttributeRequirement attributeData = (BoolAttributeRequirement)attribute.data;
+		BoolAttributeData attributeData = (BoolAttributeData)attribute.data;
 		useDefault.setSelected(attributeData.useDefault);
 		defaultValue.getSelectionModel().select(attributeData.defaultValue ? "True" : "False");
 		defaultValue.setDisable(!useDefault.isSelected());

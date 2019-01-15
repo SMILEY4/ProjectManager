@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -51,14 +51,14 @@ public class FilterPopup extends AnchorPane {
 
 		// attributes
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		for(FilterCriteria criteria : LogicService.get().getProject().filterCriteria) {
+		for(FilterCriteria criteria : Logic.project.getProject().filterCriteria) {
 			boxAttributes.getChildren().add(new FilterCriteriaNode(criteria));
 		}
 
 
 		// add attribute
 		btnAdd.setOnAction(event -> {
-			boxAttributes.getChildren().add(new FilterCriteriaNode(LogicService.get().getProject().attributes.get(0)));
+			boxAttributes.getChildren().add(new FilterCriteriaNode(Logic.project.getProject().attributes.get(0)));
 		});
 
 
@@ -69,7 +69,7 @@ public class FilterPopup extends AnchorPane {
 				FilterCriteriaNode groupByNode = (FilterCriteriaNode)node;
 				attributes.add(groupByNode.criteria);
 			}
-			LogicService.get().setFilterCriteria(attributes);
+			Logic.filter.setFilterCriteria(attributes);
 			this.stage.close();
 		});
 

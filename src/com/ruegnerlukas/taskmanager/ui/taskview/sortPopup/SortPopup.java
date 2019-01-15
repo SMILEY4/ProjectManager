@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sortPopup;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -50,13 +50,13 @@ public class SortPopup extends AnchorPane {
 
 		// elements
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		for(SortElement element : LogicService.get().getProject().sortElements) {
+		for(SortElement element : Logic.project.getProject().sortElements) {
 			boxAttributes.getChildren().add(new SortElementNode(element));
 		}
 
 		// add element
 		btnAdd.setOnAction(event -> {
-			boxAttributes.getChildren().add(new SortElementNode(LogicService.get().getProject().attributes.get(0)));
+			boxAttributes.getChildren().add(new SortElementNode(Logic.project.getProject().attributes.get(0)));
 		});
 
 		// accept
@@ -67,7 +67,7 @@ public class SortPopup extends AnchorPane {
 				elements.add(sortNode.sortElement);
 			}
 			// TODO
-//			LogicService.get().setGroupByOrder(attributes);
+//			Logic.get().setGroupByOrder(attributes);
 			this.stage.close();
 		});
 

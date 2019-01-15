@@ -6,7 +6,7 @@ import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectClosedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectCreatedEvent;
-import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.projectsettingsview.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
@@ -94,12 +94,12 @@ public class MainView extends AnchorPane {
 			@Override
 			public void onAction() {
 				// save/close last project
-				if (LogicService.get().isProjectOpen()) {
+				if (Logic.project.isProjectOpen()) {
 					if (handleOpenProject()) {
-						LogicService.get().createProject();
+						Logic.project.createProject();
 					}
 				} else {
-					LogicService.get().createProject();
+					Logic.project.createProject();
 				}
 			}
 		}.addToMenuBar(menuBar);
@@ -116,12 +116,12 @@ public class MainView extends AnchorPane {
 				if (file == null) {
 					return;
 				} else {
-					if (LogicService.get().isProjectOpen()) {
+					if (Logic.project.isProjectOpen()) {
 						if (handleOpenProject()) {
-							LogicService.get().loadProject(file);
+							Logic.project.loadProject(file);
 						}
 					} else {
-						LogicService.get().loadProject(file);
+						Logic.project.loadProject(file);
 					}
 				}
 			}
@@ -149,12 +149,12 @@ public class MainView extends AnchorPane {
 					if (!file.exists()) {
 						return;
 					} else {
-						if (LogicService.get().isProjectOpen()) {
+						if (Logic.project.isProjectOpen()) {
 							if (handleOpenProject()) {
-								LogicService.get().loadProject(file);
+								Logic.project.loadProject(file);
 							}
 						} else {
-							LogicService.get().loadProject(file);
+							Logic.project.loadProject(file);
 						}
 					}
 				}
@@ -168,9 +168,9 @@ public class MainView extends AnchorPane {
 		functionSaveProject = new MenuFunction("File", "Save") {
 			@Override
 			public void onAction() {
-				if (LogicService.get().isProjectOpen()) {
-					LogicService.get().saveProject();
-					Alerts.info("Project has been saved.", LogicService.get().getProject().name);
+				if (Logic.project.isProjectOpen()) {
+					Logic.project.saveProject();
+					Alerts.info("Project has been saved.", Logic.project.getProject().name);
 				}
 			}
 		}.addToMenuBar(menuBar);
@@ -181,7 +181,7 @@ public class MainView extends AnchorPane {
 		functionCloseProject = new MenuFunction("File", "Close Project") {
 			@Override
 			public void onAction() {
-				if (LogicService.get().isProjectOpen()) {
+				if (Logic.project.isProjectOpen()) {
 					handleOpenProject();
 				}
 			}
@@ -193,7 +193,7 @@ public class MainView extends AnchorPane {
 		MenuFunction functionExit = new MenuFunction("File", "Exit") {
 			@Override
 			public void onAction() {
-				if (LogicService.get().isProjectOpen()) {
+				if (Logic.project.isProjectOpen()) {
 					if (handleOpenProject()) {
 						// TODO exit application
 						System.out.println("TODO: Exit application");
@@ -245,20 +245,21 @@ public class MainView extends AnchorPane {
 	 * @return true, if the project was closed (with or without saving it); false, if the user cancelled the actions
 	 */
 	private boolean handleOpenProject() {
-		if (!LogicService.get().isProjectOpen()) {
+		if (!Logic.project.isProjectOpen()) {
 			return false;
 		}
 
-		ButtonType alertSaveResult = Alerts.confirmation("Save Project current Project before closing?", "Current project: " + LogicService.get().getProject().name);
+		ButtonType alertSaveResult = Alerts.confirmation("Save Project current Project before closing?",
+				"Current project: " + Logic.project.getProject().name);
 
 		if (alertSaveResult == ButtonType.YES) {
-			LogicService.get().saveProject();
-			LogicService.get().closeProject();
+			Logic.project.saveProject();
+			Logic.project.closeProject();
 			return true;
 		}
 
 		if (alertSaveResult == ButtonType.NO) {
-			LogicService.get().closeProject();
+			Logic.project.closeProject();
 			return true;
 		}
 

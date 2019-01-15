@@ -1,13 +1,13 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes;
 
 
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements.*;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.*;
 
 public class TaskAttribute {
 
 
 	public String name;
-	public TaskAttributeRequirement data;
+	public TaskAttributeData data;
 	
 	
 	public TaskAttribute(String name, TaskAttributeType type) {
@@ -22,25 +22,25 @@ public class TaskAttribute {
 
 	public void createRequirement(TaskAttributeType type) {
 		if(type == TaskAttributeType.ID) {
-			data = new IDAttributeRequirement();
+			data = new IDAttributeData();
 		}
 		if(type == TaskAttributeType.FLAG) {
-			data = new FlagAttributeRequirement();
+			data = new FlagAttributeData();
 		}
 		if(type == TaskAttributeType.DESCRIPTION) {
-			data = new DescriptionAttributeRequirement();
+			data = new DescriptionAttributeData();
 		}
 		if(type == TaskAttributeType.TEXT) {
-			data = new TextAttributeRequirement();
+			data = new TextAttributeData();
 		}
 		if(type == TaskAttributeType.NUMBER) {
-			data = new NumberAttributeRequirement();
+			data = new NumberAttributeData();
 		}
 		if(type == TaskAttributeType.BOOLEAN) {
-			data = new BoolAttributeRequirement();
+			data = new BoolAttributeData();
 		}
 		if(type == TaskAttributeType.CHOICE) {
-			data = new ChoiceAttributeRequirement();
+			data = new ChoiceAttributeData();
 		}
 	}
 

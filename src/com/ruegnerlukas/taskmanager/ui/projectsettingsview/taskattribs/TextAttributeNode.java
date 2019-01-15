@@ -6,9 +6,10 @@ import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedRejection;
-import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements.TextAttributeRequirement;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TextAttributeData;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.spinner.SpinnerUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
@@ -79,18 +80,13 @@ public class TextAttributeNode extends AnchorPane implements AttributeRequiremen
 		this.setMaxSize(root.getMaxWidth(), root.getMaxHeight());
 
 
-		TextAttributeRequirement attributeData = (TextAttributeRequirement)attribute.data;
+		TextAttributeData attributeData = (TextAttributeData)attribute.data;
 
 
 		// character limit
 		SpinnerUtils.initSpinner(charLimit, attributeData.charLimit, 1, Integer.MAX_VALUE, 1, 0, new ChangeListener() {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				TextAttributeRequirement updatedRequirement = (TextAttributeRequirement)attributeData.copy();
-				updatedRequirement.charLimit = charLimit.getValue();
-				if(defaultValue.getText().length() > updatedRequirement.charLimit) {
-					updatedRequirement.defaultValue = defaultValue.getText().substring(0, updatedRequirement.charLimit);
-				}
-				LogicService.get().updateTaskAttribute(attribute.name, updatedRequirement);
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.TEXT_CHAR_LIMIT, charLimit.getValue());
 			}
 		});
 
@@ -98,9 +94,7 @@ public class TextAttributeNode extends AnchorPane implements AttributeRequiremen
 		multiline.setSelected(attributeData.multiline);
 		multiline.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				TextAttributeRequirement updatedRequirement = (TextAttributeRequirement)attributeData.copy();
-				updatedRequirement.multiline = multiline.isSelected();
-				LogicService.get().updateTaskAttribute(attribute.name, updatedRequirement);
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.TEXT_MULTILINE, multiline.isSelected());
 			}
 		});
 
@@ -108,9 +102,7 @@ public class TextAttributeNode extends AnchorPane implements AttributeRequiremen
 		useDefault.setSelected(attributeData.useDefault);
 		useDefault.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				TextAttributeRequirement updatedRequirement = (TextAttributeRequirement)attributeData.copy();
-				updatedRequirement.useDefault = useDefault.isSelected();
-				LogicService.get().updateTaskAttribute(attribute.name, updatedRequirement);
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, useDefault.isSelected());
 			}
 		});
 
@@ -126,16 +118,12 @@ public class TextAttributeNode extends AnchorPane implements AttributeRequiremen
 		});
 		defaultValue.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				TextAttributeRequirement updatedRequirement = (TextAttributeRequirement)attributeData.copy();
-				updatedRequirement.defaultValue = defaultValue.getText();
-				LogicService.get().updateTaskAttribute(attribute.name, updatedRequirement);
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, defaultValue.getText());
 			}
 		});
 		defaultValue.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				TextAttributeRequirement updatedRequirement = (TextAttributeRequirement)attributeData.copy();
-				updatedRequirement.defaultValue = defaultValue.getText();
-				LogicService.get().updateTaskAttribute(attribute.name, updatedRequirement);
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, defaultValue.getText());
 			}
 		});
 
@@ -159,7 +147,7 @@ public class TextAttributeNode extends AnchorPane implements AttributeRequiremen
 		};
 
 		EventManager.registerListener(eventListener, AttributeUpdatedEvent.class);
-		EventManager.registerListener(eventListener , AttributeUpdatedRejection.class);
+		EventManager.registerListener(eventListener, AttributeUpdatedRejection.class);
 	}
 
 
@@ -173,7 +161,7 @@ public class TextAttributeNode extends AnchorPane implements AttributeRequiremen
 
 
 	private void updateData() {
-		TextAttributeRequirement attributeData = (TextAttributeRequirement)attribute.data;
+		TextAttributeData attributeData = (TextAttributeData)attribute.data;
 		SpinnerUtils.initSpinner(charLimit, attributeData.charLimit, 1, Integer.MAX_VALUE, 1, 0, null);
 		multiline.setSelected(attributeData.multiline);
 		useDefault.setSelected(attributeData.useDefault);

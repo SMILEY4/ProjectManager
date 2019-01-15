@@ -5,7 +5,7 @@ import com.ruegnerlukas.taskmanager.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.eventsystem.events.GroupByOrderChangedEvent;
-import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -54,13 +54,13 @@ public class GroupByPopup extends AnchorPane {
 
 		// attributes
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		for(TaskAttribute attribute : LogicService.get().getProject().groupByOrder) {
+		for(TaskAttribute attribute : Logic.project.getProject().groupByOrder) {
 			boxAttributes.getChildren().add(new GroupByAttributeNode(attribute));
 		}
 
 		// add attribute
 		btnAdd.setOnAction(event -> {
-			boxAttributes.getChildren().add(new GroupByAttributeNode(LogicService.get().getProject().attributes.get(0)));
+			boxAttributes.getChildren().add(new GroupByAttributeNode(Logic.project.getProject().attributes.get(0)));
 		});
 
 		// accept
@@ -70,7 +70,7 @@ public class GroupByPopup extends AnchorPane {
 				GroupByAttributeNode groupByNode = (GroupByAttributeNode)node;
 				attributes.add(groupByNode.attribute);
 			}
-			LogicService.get().setGroupByOrder(attributes);
+			Logic.groupBy.setGroupByOrder(attributes);
 			this.stage.close();
 		});
 

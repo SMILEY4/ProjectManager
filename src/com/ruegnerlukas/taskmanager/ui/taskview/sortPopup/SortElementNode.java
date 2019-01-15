@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sortPopup;
 
-import com.ruegnerlukas.taskmanager.logic.LogicService;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
@@ -59,12 +59,12 @@ public class SortElementNode extends HBox {
 		choiceAttrib.setMinSize(250, 32);
 		choiceAttrib.setPrefSize(250, 32);
 		choiceAttrib.setMaxSize(500, 32);
-		for(TaskAttribute attrib : LogicService.get().getProject().attributes ) {
+		for(TaskAttribute attrib : Logic.project.getProject().attributes ) {
 			choiceAttrib.getItems().add(attrib.name);
 		}
 		choiceAttrib.getSelectionModel().select(sortElement.attribute.name);
 		choiceAttrib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			for(TaskAttribute attrib : LogicService.get().getProject().attributes) {
+			for(TaskAttribute attrib : Logic.project.getProject().attributes) {
 				if(attrib.name.equals(choiceAttrib.getValue())) {
 					this.sortElement.attribute = attrib;
 					break;
