@@ -4,11 +4,13 @@ import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.logic.data.Data;
 import com.ruegnerlukas.taskmanager.logic.data.Project;
+import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.requirements.TaskAttributeRequirement;
 
 import java.io.File;
+import java.util.List;
 
 public class LogicService {
 
@@ -321,6 +323,48 @@ public class LogicService {
 		}
 	}
 
+
+
+
+
+
+	//===============//
+	//    FILTER     //
+	//===============//
+
+	public boolean setFilterCriteria(List<FilterCriteria> filterCriteria) {
+		if(isProjectOpen()) {
+			Project project = getProject();
+			project.filterCriteria.clear();
+			project.filterCriteria.addAll(filterCriteria);
+			EventManager.fireEvent(new FilterCriteriaChangedEvent(project.filterCriteria, this));
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+
+
+
+
+	//===============//
+	//    GROUP-BY   //
+	//===============//
+
+
+	public boolean setGroupByOrder(List<TaskAttribute> attribOrder) {
+		if(isProjectOpen()) {
+			Project project = getProject();
+			project.groupByOrder.clear();
+			project.groupByOrder.addAll(attribOrder);
+			EventManager.fireEvent(new GroupByOrderChangedEvent(project.groupByOrder, this));
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 
 

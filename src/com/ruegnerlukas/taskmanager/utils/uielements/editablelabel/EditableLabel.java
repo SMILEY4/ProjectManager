@@ -1,16 +1,15 @@
 package com.ruegnerlukas.taskmanager.utils.uielements.editablelabel;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -18,6 +17,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditableLabel extends AnchorPane {
 
@@ -28,32 +30,79 @@ public class EditableLabel extends AnchorPane {
 	
 	private boolean editable = true;
 	private boolean selectOnEdit = true;
-	
+
+	private Button icon;
+	private boolean showEditIcon;
+
 	private List<ChangeListener<String>> listener = new ArrayList<ChangeListener<String>>();
-	
-	
-	
-	
+
+
+
 	public EditableLabel() {
-		this("");
+		this("", true);
 	}
-	
-	
+
+
 	public EditableLabel(String text) {
+		this(text, true);
+	}
+
+	
+	public EditableLabel(boolean showEditIcon) {
+		this("", true);
+	}
+
+
+	public EditableLabel(String text, boolean showEditIcon) {
 		super();
-		
+
 		label = new Label(text);
-		AnchorUtils.setAnchors(label, 0, 0, 0, 0);
 		label.setVisible(true);
 		label.setMouseTransparent(false);
 		label.setPadding(new Insets(0, 10, 0, 10));
 		this.getChildren().add(label);
-		
+
+
 		field = new TextField(text);
-		AnchorUtils.setAnchors(field, 0, 0, 0, 0);
 		field.setMouseTransparent(true);
 		field.setVisible(false);
 		this.getChildren().add(field);
+
+
+		if(showEditIcon) {
+
+			icon = new Button();
+			icon.setMouseTransparent(true);
+			ButtonUtils.makeIconButton(icon, SVGIcons.EDIT, 0.5f, "black");
+			icon.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+			this.getChildren().add(icon);
+
+			double iconSize = this.getHeight();
+			AnchorUtils.setAnchors(label, 0, 0, 0, iconSize-(iconSize*0.28) );
+			AnchorUtils.setAnchors(field, 0, 0, 0, iconSize-(iconSize*0.28));
+			AnchorPane.setBottomAnchor(icon, 0.0);
+			AnchorPane.setTopAnchor(icon, 0.0);
+			AnchorPane.setLeftAnchor(icon, 0.0);
+			icon.setMinSize(iconSize, 0);
+			icon.setPrefSize(iconSize, iconSize);
+			icon.setMaxSize(iconSize, 100000);
+
+			this.heightProperty().addListener(new ChangeListener<Number>() {
+				@Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+					double iconSize = newValue.doubleValue();
+					AnchorUtils.setAnchors(label, 0, 0, 0, iconSize-(iconSize*0.28) );
+					AnchorUtils.setAnchors(field, 0, 0, 0, iconSize-(iconSize*0.28));
+					icon.setMinSize(iconSize, 0);
+					icon.setPrefSize(iconSize, iconSize);
+					icon.setMaxSize(iconSize, 100000);
+				}
+			});
+
+		} else {
+			AnchorUtils.setAnchors(label, 0, 0, 0, 0);
+			AnchorUtils.setAnchors(field, 0, 0, 0, 0);
+		}
+
 
 		label.setOnMouseClicked(new EventHandler<MouseEvent>() {
 			@Override public void handle(MouseEvent event) {
@@ -64,7 +113,7 @@ public class EditableLabel extends AnchorPane {
 				}
 			}
 		});
-		
+
 		field.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				exitEditMode(false);
@@ -130,6 +179,7 @@ public class EditableLabel extends AnchorPane {
 		field.setMouseTransparent(false);
 		field.setVisible(true);
 		field.requestFocus();
+		field.setStyle("-fx-border-color: transparent;");
 		if(selectOnEdit) {
 			field.selectAll();
 		}

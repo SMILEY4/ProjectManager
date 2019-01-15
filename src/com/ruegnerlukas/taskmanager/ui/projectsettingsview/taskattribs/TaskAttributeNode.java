@@ -12,15 +12,12 @@ import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabel.EditableLabel;
-import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
@@ -42,6 +39,8 @@ public class TaskAttributeNode extends AnchorPane {
 	public AttributeRequirementNode requirementNode;
 
 
+
+
 	public TaskAttributeNode(TaskAttribute attribute) {
 		this.attribute = attribute;
 
@@ -49,16 +48,6 @@ public class TaskAttributeNode extends AnchorPane {
 		this.setMinSize(100, 34);
 		this.setPrefSize(10000, 34);
 		this.setMaxSize(10000, 34);
-
-		this.setOnKeyReleased(new EventHandler<KeyEvent>() {
-			@Override public void handle(KeyEvent event) {
-				if(event.getCode() == KeyCode.R) {
-					TaskAttributeNode.this.getStylesheets().clear();
-					TaskAttributeNode.this.getStylesheets().add(ViewManager.class.getResource("bootstrap4_2.css").toExternalForm());
-					TaskAttributeNode.this.getStylesheets().add(ViewManager.class.getResource("style.css").toExternalForm());
-				}
-			}
-		});
 
 
 		// header pane
@@ -91,7 +80,7 @@ public class TaskAttributeNode extends AnchorPane {
 		btnRemove.setMinSize(32, 32);
 		btnRemove.setPrefSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
-		ButtonUtils.makeIconButton(btnRemove, SVGIcons.getCross(), 40, 40, "black");
+		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f, "black");
 		btnRemove.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				LogicService.get().deleteAttribute(attribute.name);
@@ -173,7 +162,7 @@ public class TaskAttributeNode extends AnchorPane {
 		btnExpandCollapse.setMinSize(32, 32);
 		btnExpandCollapse.setPrefSize(32, 32);
 		btnExpandCollapse.setMaxSize(32, 32);
-		ButtonUtils.makeIconButton(btnExpandCollapse, SVGIcons.getArrowDown(), 40, 40, "black");
+		ButtonUtils.makeIconButton(btnExpandCollapse, SVGIcons.ARROW_DOWN, 0.75f, "black");
 		boxHeader.getChildren().add(btnExpandCollapse);
 
 		btnExpandCollapse.setOnAction(new EventHandler<ActionEvent>() {
@@ -181,12 +170,14 @@ public class TaskAttributeNode extends AnchorPane {
 				if(isExpanded) {
 					paneBody.setVisible(false);
 					isExpanded = false;
+					ButtonUtils.makeIconButton(btnExpandCollapse, SVGIcons.ARROW_DOWN, 0.75f, "black");
 					TaskAttributeNode.this.setMinSize(100, 34);
 					TaskAttributeNode.this.setPrefSize(10000, 34);
 					TaskAttributeNode.this.setMaxSize(10000, 34);
 				} else {
 					paneBody.setVisible(true);
 					isExpanded = true;
+					ButtonUtils.makeIconButton(btnExpandCollapse, SVGIcons.ARROW_UP, 0.75f, "black");
 					TaskAttributeNode.this.setMinSize(100, requirementNode.getNodeHeight()+35);
 					TaskAttributeNode.this.setPrefSize(10000, requirementNode.getNodeHeight()+35);
 					TaskAttributeNode.this.setMaxSize(10000, requirementNode.getNodeHeight()+35);

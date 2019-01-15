@@ -51,7 +51,7 @@ public class FlagNode extends HBox {
 		}
 		btnRemoveFlag.setMinSize(32, 32);
 		btnRemoveFlag.setMaxSize(32, 32);
-		ButtonUtils.makeIconButton(btnRemoveFlag, SVGIcons.getCross(), 40, 40, "black");
+		ButtonUtils.makeIconButton(btnRemoveFlag, SVGIcons.CROSS, 0.7f, "black");
 		btnRemoveFlag.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				FlagAttributeRequirement updatedRequirement = (FlagAttributeRequirement)parentNode.attribute.data.copy();

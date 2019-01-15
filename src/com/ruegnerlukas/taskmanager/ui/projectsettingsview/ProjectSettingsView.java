@@ -69,8 +69,6 @@ public class ProjectSettingsView extends AnchorPane {
 
 		// Project name
 		labelName = new EditableLabel(LogicService.get().getProject().name);
-		labelName.getLabel().setStyle("-fx-font-weight: bold; -fx-font-size: 20px;");
-		labelName.getTextField().setStyle("-fx-font-weight: bold; -fx-font-size: 20px;");
 		AnchorPane.setBottomAnchor(labelName, 0.0);
 		AnchorPane.setTopAnchor(labelName, 0.0);
 		AnchorPane.setLeftAnchor(labelName, 0.0);
@@ -81,9 +79,9 @@ public class ProjectSettingsView extends AnchorPane {
 		// lock task attributes
 		attributesLocked = LogicService.get().getProject().attributesLocked;
 		if(attributesLocked) {
-			ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.SVG_LOCK_LOCKED, 40, 40, "black");
+			ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1f, "black");
 		} else {
-			ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.SVG_LOCK_UNLOCKED, 40, 40, "black");
+			ButtonUtils.makeIconButton(btnLockAttributes,SVGIcons.LOCK_OPEN, 1f, "black");
 		}
 		btnLockAttributes.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
@@ -136,9 +134,9 @@ public class ProjectSettingsView extends AnchorPane {
 				AttributeLockEvent event = (AttributeLockEvent)e;
 				attributesLocked = event.getLockNow();
 				if(attributesLocked) {
-					ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.SVG_LOCK_LOCKED, 40, 40, "black");
+					ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1f, "black");
 				} else {
-					ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.SVG_LOCK_UNLOCKED, 40, 40, "black");
+					ButtonUtils.makeIconButton(btnLockAttributes,SVGIcons.LOCK_OPEN, 1f, "black");
 				}
 				setAttributeLock(attributesLocked);
 			}

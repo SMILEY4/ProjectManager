@@ -6,9 +6,11 @@ import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.builder.DefaultMessageBuilder;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.ui.main.MainView;
+import com.ruegnerlukas.taskmanager.utils.StyleUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 public class TaskManager extends Application {
@@ -43,19 +45,29 @@ public class TaskManager extends Application {
 	
 	
 	@Override
-	public void start(Stage primaryStage) throws Exception {
+	public void start(Stage primaryStage) {
 		
 		ViewManager.setPrimaryStage(primaryStage);
 		primaryStage.setOnCloseRequest(event -> closeApplication());
 
 		MainView viewMain = new MainView();
 		Scene scene = new Scene(viewMain, 1280, 720);
+
+		scene.setOnKeyReleased(event -> {
+			if (event.getCode() == KeyCode.R) {
+				StyleUtils.reloadAll();
+			}
+		});
+
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
 
 	}
-	
+
+
+
+
 	public void closeApplication() {
 		System.exit(0);
 	}

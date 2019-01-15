@@ -12,8 +12,9 @@
 	-light: #eceeec;
 	-dark: #1e2b37;
 
-	-gray-dark: #b9b9b9;
-	-gray-mid: #cccccc;
+    -gray-dark: #767676;
+	-gray-mid-1: #b9b9b9;
+	-gray-mid-0: #cccccc;
 	-gray-light: #ededed;
 	
 	-text-light-0: #b9b9b9;
@@ -82,26 +83,55 @@
 
 
  /* PROJECT SETTINGS*/
+ #rootProjectSettingsView > AnchorPane > EditableLabel {
+   -fx-font-weight: bold;
+   -fx-font-size: 20;
+ }
+
+ #btnLockAttributes {
+   -fx-background-color: transparent;
+   -fx-border-color: transparent;
+ }
+
  #boxTaskAttribs > TaskAttributeNode {
   -fx-background-color: white;
-  -fx-border-color: -gray-mid;
+  -fx-border-color: -gray-mid-0;
   -fx-border-radius: 5;
 }
 
+
+ #boxTaskAttribs > TaskAttributeNode > AnchorPane > HBox > ChoiceBox {
+  -fx-background-color: white;
+  -fx-border-color: -gray-mid-0;
+  -fx-border-radius: 0;
+  -fx-border-width: 0 0 1 0;
+  -fx-border-insets: 0 0 5 0;
+}
+
  #boxTaskAttribs > TaskAttributeNode > AnchorPane > HBox {
-  -fx-border-color: -gray-mid;
+  -fx-border-color: -gray-mid-0;
   -fx-border-radius: 5;
   -fx-border-width: 0 0 1 0;
 }
  
- 
+
 #boxTaskAttribs > TaskAttributeNode > AnchorPane > HBox > Button {
   -fx-background-color: transparent;
   -fx-border-color: transparent;
 }
 
- 
- 
+#boxTaskAttribs > TaskAttributeNode > AnchorPane > HBox > Button:hover > SVGPath{
+  -fx-fill: -gray-dark;
+}
+
+#boxTaskAttribs > TaskAttributeNode > AnchorPane > FlagAttributeNode > AnchorPane > ScrollPane > * > * > AnchorPane > #boxFlags > FlagNode > Button {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+}
+
+#boxTaskAttribs > TaskAttributeNode > AnchorPane > FlagAttributeNode > AnchorPane > ScrollPane > * > * > AnchorPane > #boxFlags > FlagNode > Button:hover > SVGPath {
+  -fx-fill: -gray-dark;
+}
 
 
 
@@ -162,8 +192,33 @@
 
 
 
- 
- 
+
+/* GROUP BY */
+
+ #boxAttributes > GroupByAttributeNode {
+  -fx-background-color: white;
+  -fx-border-color: -gray-mid-0;
+  -fx-border-radius: 5;
+ }
+
+ #boxAttributes > GroupByAttributeNode > Button {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+ }
+
+ #boxAttributes > GroupByAttributeNode > Button:hover > SVGPath{
+  -fx-fill: -gray-dark;
+ }
+
+ #boxAttributes > GroupByAttributeNode > ChoiceBox {
+  -fx-background-color: transparent;
+  -fx-border-color: -gray-mid-0;
+  -fx-border-radius: 0;
+  -fx-border-width: 0 0 1 0;
+  -fx-border-insets: 0 0 5 0;
+ }
+
+
  
  /* TASK LIST */
  
@@ -203,7 +258,7 @@
  /* border between tasklists */
  #rootTasklist > ScrollPane {
   	-fx-border-width: 0 1 0 1;
-  	-fx-border-color: -gray-dark;
+  	-fx-border-color: -gray-mid-1;
  }
  
  
@@ -247,7 +302,7 @@
   /* tags */
   #rootTaskCard > #boxTags > Label{
   	-fx-background-radius: 8;
-  	-fx-background-color: -gray-mid;
+  	-fx-background-color: -gray-mid-0;
   	-fx-padding: 0 5 0 5;
   }
  

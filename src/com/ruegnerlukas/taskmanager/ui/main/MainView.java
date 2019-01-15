@@ -8,7 +8,7 @@ import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectClosedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectCreatedEvent;
 import com.ruegnerlukas.taskmanager.logic.LogicService;
 import com.ruegnerlukas.taskmanager.ui.projectsettingsview.ProjectSettingsView;
-import com.ruegnerlukas.taskmanager.ui.taskview.TasksController;
+import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.LoremIpsum;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -297,7 +297,7 @@ public class MainView extends AnchorPane {
 
 	private void openTap_tasks() {
 		Tab tab = new Tab("Tasks");
-		TasksController taskView = new TasksController();
+		TaskView taskView = new TaskView();
 		AnchorUtils.setAnchors(taskView, 0, 0, 0, 0);
 		tab.setContent(taskView);
 		tabPane.getTabs().add(tab);
