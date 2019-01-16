@@ -33,19 +33,21 @@ public class FilterCriteria {
 
 	public TaskAttribute attribute;
 	public ComparisonOp comparisonOp;
+	public Object comparisionValue;
 
 
 
 
-	public FilterCriteria(TaskAttribute attribute, ComparisonOp comparisonOp) {
+	public FilterCriteria(TaskAttribute attribute, ComparisonOp comparisonOp, Object comparisionValue) {
 		this.attribute = attribute;
 		this.comparisonOp = comparisonOp;
+		this.comparisionValue = comparisionValue;
 	}
 
 
 
 
-	public ComparisonOp[] getPossibleComparisionOps() {
+	public static ComparisonOp[] getPossibleComparisionOps(TaskAttribute attribute) {
 		if(attribute == null) {
 			return new ComparisonOp[]{
 				ComparisonOp.EQUALITY

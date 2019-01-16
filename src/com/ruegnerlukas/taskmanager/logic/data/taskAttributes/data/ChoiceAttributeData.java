@@ -30,7 +30,7 @@ public class ChoiceAttributeData implements TaskAttributeData {
 
 					boolean foundDefault = false;
 					for(String value : values) {
-						if(values.equals(defaultValue)) {
+						if(value.equals(defaultValue)) {
 							foundDefault = true;
 							break;
 						}

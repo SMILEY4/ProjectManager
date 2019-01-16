@@ -1,8 +1,5 @@
 package com.ruegnerlukas.taskmanager.utils.uielements.spinner;
 
-import java.text.DecimalFormat;
-import java.text.ParseException;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -13,6 +10,9 @@ import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.StringConverter;
+
+import java.text.DecimalFormat;
+import java.text.ParseException;
 
 public class SpinnerUtils {
 
@@ -173,7 +173,6 @@ public class SpinnerUtils {
 		spinner.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				if(!newValue) {
-					
 					commitEditorText(spinner);
 				}
 			}

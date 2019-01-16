@@ -1,22 +1,22 @@
 package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.FilterCriteriaChangedEvent;
+import com.ruegnerlukas.taskmanager.eventsystem.events.SortElementsChangedEvent;
 import com.ruegnerlukas.taskmanager.logic.data.Project;
-import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
+import com.ruegnerlukas.taskmanager.logic.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class FilterLogic {
+public class SortLogic {
 
-	public boolean setFilterCriteria(List<FilterCriteria> filterCriteria) {
+	public boolean setSort(List<SortElement> elements) {
 		if(Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
-			project.filterCriteria.clear();
-			project.filterCriteria.addAll(filterCriteria);
-			EventManager.fireEvent(new FilterCriteriaChangedEvent(project.filterCriteria, this));
+			project.sortElements.clear();
+			project.sortElements.addAll(elements);
+			EventManager.fireEvent(new SortElementsChangedEvent(project.sortElements, this));
 			return true;
 		} else {
 			return false;
@@ -24,16 +24,18 @@ public class FilterLogic {
 	}
 
 
-	public boolean removeFilterCriteria(TaskAttribute attribute) {
+
+
+	public boolean removeSortElement(TaskAttribute attribute) {
 		if(Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
-			List<FilterCriteria> toRemove = new ArrayList<>();
-			for(FilterCriteria element : project.filterCriteria) {
+			List<SortElement> toRemove = new ArrayList<>();
+			for(SortElement element : project.sortElements) {
 				if(element.attribute == attribute) {
 					toRemove.add(element);
 				}
 			}
-			project.filterCriteria.removeAll(toRemove);
+			project.sortElements.removeAll(toRemove);
 			return !toRemove.isEmpty();
 		} else {
 			return false;

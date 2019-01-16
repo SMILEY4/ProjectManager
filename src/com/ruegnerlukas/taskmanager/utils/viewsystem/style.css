@@ -192,6 +192,33 @@
 
 
 
+/* FILTER */
+
+ #boxAttributes > FilterCriteriaNode {
+  -fx-background-color: white;
+  -fx-border-color: -gray-mid-0;
+  -fx-border-radius: 5;
+ }
+
+ #boxAttributes > FilterCriteriaNode > Button {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+ }
+
+ #boxAttributes > FilterCriteriaNode > Button:hover > SVGPath {
+  -fx-fill: -gray-dark;
+ }
+
+ #boxAttributes > FilterCriteriaNode > ChoiceBox {
+  -fx-background-color: transparent;
+  -fx-border-color: -gray-mid-0;
+  -fx-border-radius: 0;
+  -fx-border-width: 0 0 1 0;
+  -fx-border-insets: 0 0 5 0;
+ }
+
+
+
 
 /* GROUP BY */
 
@@ -218,6 +245,32 @@
   -fx-border-insets: 0 0 5 0;
  }
 
+
+
+/* SORT */
+
+ #boxAttributes > SortElementNode {
+  -fx-background-color: white;
+  -fx-border-color: -gray-mid-0;
+  -fx-border-radius: 5;
+ }
+
+ #boxAttributes > SortElementNode > Button {
+  -fx-background-color: transparent;
+  -fx-border-color: transparent;
+ }
+
+ #boxAttributes > SortElementNode > Button:hover > SVGPath {
+  -fx-fill: -gray-dark;
+ }
+
+ #boxAttributes > SortElementNode > ChoiceBox {
+  -fx-background-color: transparent;
+  -fx-border-color: -gray-mid-0;
+  -fx-border-radius: 0;
+  -fx-border-width: 0 0 1 0;
+  -fx-border-insets: 0 0 5 0;
+ }
 
  
  /* TASK LIST */

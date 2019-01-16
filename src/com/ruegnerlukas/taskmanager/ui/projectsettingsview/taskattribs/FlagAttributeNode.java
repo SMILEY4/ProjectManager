@@ -103,7 +103,6 @@ public class FlagAttributeNode extends AnchorPane implements AttributeRequiremen
 		for(TaskFlag flag : attributeData.flags) {
 			defaultFlag.getItems().add(flag.name);
 		}
-
 		defaultFlag.getSelectionModel().select(attributeData.defaultFlag.name);
 		defaultFlag.setOnAction(FXEvents.register(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {

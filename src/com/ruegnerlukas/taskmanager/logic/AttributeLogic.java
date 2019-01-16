@@ -81,6 +81,9 @@ public class AttributeLogic {
 
 			if (attribute != null && !attribute.data.getType().fixed) {
 				project.attributes.remove(attribute);
+				Logic.filter.removeFilterCriteria(attribute);
+				Logic.groupBy.removeGroupByElement(attribute);
+				Logic.sort.removeSortElement(attribute);
 				EventManager.fireEvent(new AttributeRemovedEvent(attribute, this));
 				return true;
 			} else {

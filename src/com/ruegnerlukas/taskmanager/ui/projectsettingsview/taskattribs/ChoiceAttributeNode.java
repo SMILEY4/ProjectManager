@@ -84,29 +84,32 @@ public class ChoiceAttributeNode extends AnchorPane implements AttributeRequirem
 
 		// values
 		values.setText(String.join(",", attributeData.values));
-//		values.focusedProperty().addListener(new ChangeListener<Boolean>() {
-//			@Override public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-//				ChoiceAttributeData updatedRequirement = (ChoiceAttributeData)attributeData.copy();
-//				Set<String> valuesSet = new HashSet<>();
-//				for(String value : values.getText().split(",")) {
-//					if(!value.trim().isEmpty()) {
-//						valuesSet.add(value.trim());
-//					}
-//				}
-//				updatedRequirement.values = valuesSet;
-//				if(!valuesSet.contains(defaultValue.getValue())) {
-//					updatedRequirement.defaultValue = valuesSet.isEmpty() ? "" : valuesSet.iterator().next();
-//				}
-//				Logic.get().updateTaskAttribute(attribute.name, updatedRequirement);
-//			}
-//		});
+		values.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				Set<String> valuesSet = new HashSet<>();
+				for(String value : values.getText().split(",")) {
+					valuesSet.add(value.trim());
+				}
+				String[] valuesArray = new String[valuesSet.size()];
+				int i=0;
+				for(String v : valuesSet) {
+					valuesArray[i++] = v;
+				}
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.CHOICE_ATT_VALUES, valuesArray);
+			}
+		});
 		values.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
 				Set<String> valuesSet = new HashSet<>();
 				for(String value : values.getText().split(",")) {
 					valuesSet.add(value.trim());
 				}
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.CHOICE_ATT_VALUES, valuesSet.toArray());
+				String[] valuesArray = new String[valuesSet.size()];
+				int i=0;
+				for(String v : valuesSet) {
+					valuesArray[i++] = v;
+				}
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.CHOICE_ATT_VALUES, valuesArray);
 
 			}
 		});

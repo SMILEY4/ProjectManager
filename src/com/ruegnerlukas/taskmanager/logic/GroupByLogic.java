@@ -23,4 +23,15 @@ public class GroupByLogic {
 	}
 
 
+
+
+	public boolean removeGroupByElement(TaskAttribute attribute) {
+		if(Logic.project.isProjectOpen()) {
+			Project project = Logic.project.getProject();
+			return project.groupByOrder.remove(attribute);
+		} else {
+			return false;
+		}
+	}
+
 }

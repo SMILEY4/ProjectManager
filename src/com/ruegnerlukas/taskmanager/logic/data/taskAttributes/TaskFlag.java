@@ -42,5 +42,17 @@ public class TaskFlag {
 		this.name = name;
 		this.isDefaultFlag = isDefaultFlag;
 	}
+
+
+
+
+	public static TaskFlag findFlag(String name, TaskFlag... flags) {
+		for(TaskFlag flag : flags) {
+			if(flag.name.equals(name)) {
+				return flag;
+			}
+		}
+		return null;
+	}
 	
 }

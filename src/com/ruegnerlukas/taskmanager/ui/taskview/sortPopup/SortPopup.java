@@ -31,6 +31,10 @@ public class SortPopup extends AnchorPane {
 
 	public SortPopup(Stage stage) {
 		this.stage = stage;
+
+		stage.setOnCloseRequest(event -> {
+		});
+
 		try {
 			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_sort.fxml"), this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
@@ -51,7 +55,7 @@ public class SortPopup extends AnchorPane {
 		// elements
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
 		for(SortElement element : Logic.project.getProject().sortElements) {
-			boxAttributes.getChildren().add(new SortElementNode(element));
+			boxAttributes.getChildren().add(new SortElementNode(element.attribute, element.sortDir));
 		}
 
 		// add element
@@ -64,10 +68,9 @@ public class SortPopup extends AnchorPane {
 			List<SortElement> elements = new ArrayList<>();
 			for(Node node : boxAttributes.getChildren()) {
 				SortElementNode sortNode = (SortElementNode)node;
-				elements.add(sortNode.sortElement);
+				elements.add(new SortElement(sortNode.sortDir, sortNode.attribute));
 			}
-			// TODO
-//			Logic.get().setGroupByOrder(attributes);
+			Logic.sort.setSort(elements);
 			this.stage.close();
 		});
 
@@ -82,8 +85,11 @@ public class SortPopup extends AnchorPane {
 
 
 
+
 	private void setupListeners() {
 	}
+
+
 
 
 

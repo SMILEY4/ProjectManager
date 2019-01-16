@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sortPopup;
 
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.sorting.SortElement;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxOrder;
@@ -15,7 +15,8 @@ import javafx.scene.layout.VBox;
 public class SortElementNode extends HBox {
 
 
-	public SortElement sortElement;
+	public SortElement.Sort sortDir;
+	public TaskAttribute attribute;
 
 	private Button btnRemove;
 	private ChoiceBox<String> choiceAttrib;
@@ -27,12 +28,13 @@ public class SortElementNode extends HBox {
 
 
 	public SortElementNode(TaskAttribute attribute) {
-		this(new SortElement(SortElement.Sort.ASC, attribute));
+		this(attribute, SortElement.Sort.ASC);
 	}
 
 
-	public SortElementNode(SortElement sortElement) {
-		this.sortElement = sortElement;
+	public SortElementNode(TaskAttribute attribute, SortElement.Sort sortDir) {
+		this.attribute = attribute;
+		this.sortDir = sortDir;
 
 		// root
 		this.setMinSize(100, 34);
@@ -62,11 +64,11 @@ public class SortElementNode extends HBox {
 		for(TaskAttribute attrib : Logic.project.getProject().attributes ) {
 			choiceAttrib.getItems().add(attrib.name);
 		}
-		choiceAttrib.getSelectionModel().select(sortElement.attribute.name);
+		choiceAttrib.getSelectionModel().select(attribute.name);
 		choiceAttrib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			for(TaskAttribute attrib : Logic.project.getProject().attributes) {
 				if(attrib.name.equals(choiceAttrib.getValue())) {
-					this.sortElement.attribute = attrib;
+					this.attribute = attrib;
 					break;
 				}
 			}
@@ -79,11 +81,11 @@ public class SortElementNode extends HBox {
 		choiceSortDir.setPrefSize(150, 32);
 		choiceSortDir.setMaxSize(150, 32);
 		choiceSortDir.getItems().addAll(SortElement.Sort.ASC.display, SortElement.Sort.DESC.display);
-		choiceSortDir.getSelectionModel().select(sortElement.sortDir.display);
+		choiceSortDir.getSelectionModel().select(sortDir.display);
 		choiceSortDir.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			for(SortElement.Sort sortDir : SortElement.Sort.values()) {
+			for(SortElement.Sort dir : SortElement.Sort.values()) {
 				if(sortDir.display.equals(choiceSortDir.getValue())) {
-					this.sortElement.sortDir = sortDir;
+					this.sortDir = dir;
 					break;
 				}
 			}

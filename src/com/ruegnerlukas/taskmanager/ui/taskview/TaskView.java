@@ -78,7 +78,7 @@ public class TaskView extends AnchorPane {
 			stage.initModality(Modality.WINDOW_MODAL);
 			stage.initOwner(ViewManager.getPrimaryStage());
 			FilterPopup popup = new FilterPopup(stage);
-			Scene scene = new Scene(popup, 500, 300);
+			Scene scene = new Scene(popup, 1000, 400);
 			stage.setScene(scene);
 			stage.show();
 		});
@@ -102,7 +102,7 @@ public class TaskView extends AnchorPane {
 			stage.initModality(Modality.WINDOW_MODAL);
 			stage.initOwner(ViewManager.getPrimaryStage());
 			SortPopup popup = new SortPopup(stage);
-			Scene scene = new Scene(popup, 500, 300);
+			Scene scene = new Scene(popup, 600, 300);
 			stage.setScene(scene);
 			stage.show();
 		});
