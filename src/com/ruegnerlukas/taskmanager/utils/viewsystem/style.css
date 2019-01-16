@@ -191,6 +191,16 @@
  }
 
 
+/* Badges for filter/group/sort */
+#paneHeaderBadges > Label {
+    -fx-background-color: -warning;
+    -fx-background-radius: 7;
+    -fx-text-fill: -text-light-1;
+    -fx-alignment: center;
+    -fx-font-size: 11;
+    -fx-font-weight: bold;
+}
+
 
 /* FILTER */
 

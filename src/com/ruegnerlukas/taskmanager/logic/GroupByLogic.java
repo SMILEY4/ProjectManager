@@ -28,6 +28,9 @@ public class GroupByLogic {
 	public boolean removeGroupByElement(TaskAttribute attribute) {
 		if(Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
+			if(project.groupByOrder.contains(attribute)) {
+				EventManager.fireEvent(new GroupByOrderChangedEvent(project.groupByOrder, this));
+			}
 			return project.groupByOrder.remove(attribute);
 		} else {
 			return false;

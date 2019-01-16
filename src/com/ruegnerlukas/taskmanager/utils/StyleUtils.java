@@ -28,6 +28,7 @@ public class StyleUtils {
 
 
 	public static void reloadAll() {
+		System.out.println("Reload CSS-Styles: all");
 		for (Parent root : roots) {
 			setStyle(root);
 		}

@@ -21,7 +21,7 @@ public class FilterCriteriaChangedEvent extends Event {
 
 
 
-	public List<FilterCriteria> getAttributeOrder() {
+	public List<FilterCriteria> getFilterCriteria() {
 		return this.filterCriteria;
 	}
 

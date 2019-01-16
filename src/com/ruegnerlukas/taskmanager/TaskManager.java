@@ -11,6 +11,7 @@ import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class TaskManager extends Application {
@@ -53,11 +54,13 @@ public class TaskManager extends Application {
 		MainView viewMain = new MainView();
 		Scene scene = new Scene(viewMain, 1280, 720);
 
-		scene.setOnKeyReleased(event -> {
-			if (event.getCode() == KeyCode.R) {
+		scene.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+			if (ke.getCode() == KeyCode.R) {
 				StyleUtils.reloadAll();
+				ke.consume();
 			}
 		});
+
 
 		primaryStage.setScene(scene);
 		primaryStage.show();

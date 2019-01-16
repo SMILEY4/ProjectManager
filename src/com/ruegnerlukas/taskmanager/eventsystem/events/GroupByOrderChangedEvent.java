@@ -8,21 +8,21 @@ import java.util.List;
 public class GroupByOrderChangedEvent extends Event {
 
 
-	private List<TaskAttribute> order;
+	private List<TaskAttribute> elements;
 
 
 
 
-	public GroupByOrderChangedEvent(List<TaskAttribute> order, Object source) {
+	public GroupByOrderChangedEvent(List<TaskAttribute> elements, Object source) {
 		super(source);
-		this.order = order;
+		this.elements = elements;
 	}
 
 
 
 
-	public List<TaskAttribute> getAttributeOrder() {
-		return this.order;
+	public List<TaskAttribute> getAttributes() {
+		return this.elements;
 	}
 
 

@@ -34,6 +34,9 @@ public class FilterLogic {
 				}
 			}
 			project.filterCriteria.removeAll(toRemove);
+			if(!toRemove.isEmpty()) {
+				EventManager.fireEvent(new FilterCriteriaChangedEvent(project.filterCriteria, this));
+			}
 			return !toRemove.isEmpty();
 		} else {
 			return false;

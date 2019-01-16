@@ -36,6 +36,9 @@ public class SortLogic {
 				}
 			}
 			project.sortElements.removeAll(toRemove);
+			if(!toRemove.isEmpty()) {
+				EventManager.fireEvent(new SortElementsChangedEvent(project.sortElements, this));
+			}
 			return !toRemove.isEmpty();
 		} else {
 			return false;
