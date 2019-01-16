@@ -26,7 +26,7 @@ public interface TaskAttributeData {
 
 	public TaskAttributeType getType();
 
-	public boolean update(Var var, Object newValue);
+	public Var[] update(Var var, Object newValue);
 
 
 }

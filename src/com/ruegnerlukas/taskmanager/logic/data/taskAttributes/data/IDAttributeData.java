@@ -11,8 +11,8 @@ public class IDAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public boolean update(Var var, Object newValue) {
-		return false;
+	public Var[] update(Var var, Object newValue) {
+		return null;
 	}
 
 }

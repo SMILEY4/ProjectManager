@@ -8,17 +8,17 @@ public class AttributeUpdatedEvent extends Event {
 
 
 	private TaskAttribute attribute;
-	private TaskAttributeData.Var var;
-	private Object newValue;
+	private TaskAttributeData.Var[] changedVars;
+	private Object newMainValue;
 
 
 
 
-	public AttributeUpdatedEvent(TaskAttribute attribute, TaskAttributeData.Var var, Object newValue, Object source) {
+	public AttributeUpdatedEvent(TaskAttribute attribute, TaskAttributeData.Var[] changedVars, Object newMainValue, Object source) {
 		super(source);
 		this.attribute = attribute;
-		this.var = var;
-		this.newValue = newValue;
+		this.changedVars = changedVars;
+		this.newMainValue = newMainValue;
 	}
 
 
@@ -31,15 +31,15 @@ public class AttributeUpdatedEvent extends Event {
 
 
 
-	public TaskAttributeData.Var getVar() {
-		return var;
+	public TaskAttributeData.Var[] getChangedVars() {
+		return changedVars;
 	}
 
 
 
 
-	public Object getNewValue() {
-		return newValue;
+	public Object getNewMainValue() {
+		return newMainValue;
 	}
 
 

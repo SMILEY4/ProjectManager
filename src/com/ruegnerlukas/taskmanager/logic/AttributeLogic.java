@@ -201,8 +201,9 @@ public class AttributeLogic {
 			}
 
 			if (attribute != null && attribute.data != null) {
-				if(attribute.data.update(var, newValue)) {
-					EventManager.fireEvent(new AttributeUpdatedEvent(attribute, var, newValue, this));
+				TaskAttributeData.Var[] changedVars = attribute.data.update(var, newValue);
+				if(changedVars != null) {
+					EventManager.fireEvent(new AttributeUpdatedEvent(attribute, changedVars, newValue, this));
 					return true;
 				} else {
 					EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, newValue, EventCause.UNKNOWN, this));

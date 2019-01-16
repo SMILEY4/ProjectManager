@@ -22,7 +22,7 @@ public class NumberAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public boolean update(Var var, Object newValue) {
+	public Var[] update(Var var, Object newValue) {
 
 		switch (var) {
 
@@ -32,59 +32,63 @@ public class NumberAttributeData implements TaskAttributeData {
 					defaultValue = MathUtils.setDecPlaces(defaultValue, decPlaces);
 					min = MathUtils.setDecPlaces(min, decPlaces);
 					max = MathUtils.setDecPlaces(max, decPlaces);
-					return true;
+					return new Var[] {
+							Var.NUMBER_ATT_DEC_PLACES,
+							Var.DEFAULT_VALUE,
+							Var.NUMBER_ATT_MIN,
+							Var.NUMBER_ATT_MAX };
 				} else {
-					return false;
+					return null;
 				}
 			}
 
 			case NUMBER_ATT_MIN: {
 				if(newValue instanceof Double) {
 					min = (Double) newValue;
-					return true;
+					return new Var[] {Var.NUMBER_ATT_MIN};
 				} else if(newValue instanceof Integer) {
 					min = (Integer)newValue;
-					return true;
+					return new Var[] {Var.NUMBER_ATT_MIN};
 				} else {
-					return false;
+					return null;
 				}
 			}
 
 			case NUMBER_ATT_MAX: {
 				if(newValue instanceof Double) {
 					max = (Double)newValue;
-					return true;
+					return new Var[] {Var.NUMBER_ATT_MAX};
 				} else if(newValue instanceof Integer) {
 					max = (Integer)newValue;
-					return true;
+					return new Var[] {Var.NUMBER_ATT_MAX};
 				} else {
-					return false;
+					return null;
 				}
 			}
 
 			case USE_DEFAULT: {
 				if(newValue instanceof Boolean) {
 					useDefault = (Boolean)newValue;
-					return true;
+					return new Var[] {Var.USE_DEFAULT};
 				} else {
-					return false;
+					return null;
 				}
 			}
 
 			case DEFAULT_VALUE: {
 				if(newValue instanceof Double) {
 					defaultValue = (Double)newValue;
-					return true;
+					return new Var[] {Var.DEFAULT_VALUE};
 				} else if(newValue instanceof Integer) {
 					defaultValue = (Integer)newValue;
-					return true;
+					return new Var[] {Var.DEFAULT_VALUE};
 				} else {
-					return false;
+					return null;
 				}
 			}
 
 			default: {
-				return false;
+				return null;
 			}
 		}
 	}

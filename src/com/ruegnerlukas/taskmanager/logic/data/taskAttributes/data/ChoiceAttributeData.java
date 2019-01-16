@@ -20,7 +20,7 @@ public class ChoiceAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public boolean update(Var var, Object newValue) {
+	public Var[] update(Var var, Object newValue) {
 
 		switch (var) {
 
@@ -37,34 +37,36 @@ public class ChoiceAttributeData implements TaskAttributeData {
 					}
 					if(!foundDefault) {
 						this.defaultValue = values.length==0 ? "" : values[0];
+						return new Var[] {Var.CHOICE_ATT_VALUES, Var.DEFAULT_VALUE};
+					} else {
+						return new Var[] {Var.CHOICE_ATT_VALUES};
 					}
 
-					return true;
 				} else {
-					return false;
+					return null;
 				}
 			}
 
 			case USE_DEFAULT: {
 				if(newValue instanceof Boolean) {
 					useDefault = (Boolean)newValue;
-					return true;
+					return new Var[] {Var.USE_DEFAULT};
 				} else {
-					return false;
+					return null;
 				}
 			}
 
 			case DEFAULT_VALUE: {
 				if(newValue instanceof String) {
 					defaultValue = (String)newValue;
-					return true;
+					return new Var[] {Var.DEFAULT_VALUE};
 				} else {
-					return false;
+					return null;
 				}
 			}
 
 			default: {
-				return false;
+				return null;
 			}
 		}
 	}

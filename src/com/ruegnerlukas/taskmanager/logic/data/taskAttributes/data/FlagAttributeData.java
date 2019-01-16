@@ -29,14 +29,14 @@ public class FlagAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public boolean update(Var var, Object newValue) {
+	public Var[] update(Var var, Object newValue) {
 
 		switch (var) {
 
 			case FLAG_ATT_FLAGS: {
 				if(newValue instanceof TaskFlag[]) {
 					if(((Task[])newValue).length==0) {
-						return false;
+						return null;
 					}
 
 					flags = (TaskFlag[])newValue;
@@ -50,25 +50,27 @@ public class FlagAttributeData implements TaskAttributeData {
 					}
 					if(!foundDefault) {
 						defaultFlag = flags[0];
+						return new Var[] {Var.FLAG_ATT_FLAGS, Var.DEFAULT_VALUE};
+					} else {
+						return new Var[] {Var.FLAG_ATT_FLAGS};
 					}
 
-					return true;
 				} else {
-					return false;
+					return null;
 				}
 			}
 
 			case DEFAULT_VALUE: {
 				if(newValue instanceof TaskFlag) {
 					defaultFlag = (TaskFlag)newValue;
-					return true;
+					return new Var[] {Var.DEFAULT_VALUE};
 				} else {
-					return false;
+					return null;
 				}
 			}
 
 			default: {
-				return false;
+				return null;
 			}
 		}
 	}
