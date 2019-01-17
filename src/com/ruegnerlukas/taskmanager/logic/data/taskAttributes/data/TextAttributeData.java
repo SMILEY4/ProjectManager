@@ -83,7 +83,10 @@ public class TextAttributeData implements TaskAttributeData {
 
 
 
-
+	@Override
+	public boolean validate(TaskAttributeValue value) {
+		return value instanceof TextValue && (((TextValue)value).getText().length() <= charLimit);
+	}
 
 
 }

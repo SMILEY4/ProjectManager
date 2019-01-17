@@ -6,6 +6,9 @@ import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttribu
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextArrayValue;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 public class ChoiceAttributeData implements TaskAttributeData {
 
 	public String[] values = new String[0];
@@ -72,6 +75,16 @@ public class ChoiceAttributeData implements TaskAttributeData {
 			default: {
 				return null;
 			}
+		}
+	}
+
+
+	@Override
+	public boolean validate(TaskAttributeValue value) {
+		if(value instanceof TextValue) {
+			return new HashSet<>(Arrays.asList(values)).contains( ((TextValue)value).getText() );
+		} else {
+			return false;
 		}
 	}
 

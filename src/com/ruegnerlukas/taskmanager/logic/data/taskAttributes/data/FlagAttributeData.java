@@ -6,6 +6,9 @@ import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagArrayVa
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 
+import java.util.Arrays;
+import java.util.HashSet;
+
 public class FlagAttributeData implements TaskAttributeData {
 
 
@@ -74,6 +77,18 @@ public class FlagAttributeData implements TaskAttributeData {
 			default: {
 				return null;
 			}
+		}
+	}
+
+
+
+
+	@Override
+	public boolean validate(TaskAttributeValue value) {
+		if(value instanceof FlagValue) {
+			return new HashSet<>(Arrays.asList(flags)).contains(((FlagValue)value).getFlag());
+		} else {
+			return false;
 		}
 	}
 

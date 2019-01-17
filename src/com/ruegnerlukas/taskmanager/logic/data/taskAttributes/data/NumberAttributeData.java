@@ -86,4 +86,18 @@ public class NumberAttributeData implements TaskAttributeData {
 			}
 		}
 	}
+
+
+
+
+	@Override
+	public boolean validate(TaskAttributeValue value) {
+		if(value instanceof NumberValue) {
+			final double number = ((NumberValue)value).getDouble();
+			return min <= number && number <= max;
+		} else {
+			return false;
+		}
+	}
+
 }

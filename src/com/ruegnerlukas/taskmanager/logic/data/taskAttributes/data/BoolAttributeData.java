@@ -52,4 +52,10 @@ public class BoolAttributeData implements TaskAttributeData {
 
 
 
+	@Override
+	public boolean validate(TaskAttributeValue value) {
+		return (value instanceof BoolValue);
+	}
+
+
 }

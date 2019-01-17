@@ -29,6 +29,6 @@ public interface TaskAttributeData {
 
 	public Var[] update(Var var, TaskAttributeValue newValue);
 
-//	public boolean validate(Object value);
+	public boolean validate(TaskAttributeValue value);
 
 }
