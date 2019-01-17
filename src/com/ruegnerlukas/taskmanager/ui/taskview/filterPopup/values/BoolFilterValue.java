@@ -2,6 +2,8 @@ package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values;
 
 import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 
@@ -13,11 +15,11 @@ public class BoolFilterValue extends FilterValue {
 
 
 	@Override
-	public void update(List<Node> outNodes, TaskAttributeData data, FilterCriteria.ComparisonOp compOp, Object compValue) {
+	public void update(List<Node> outNodes, TaskAttributeData data, FilterCriteria.ComparisonOp compOp, TaskAttributeValue compValue) {
 
 		if (FilterCriteria.ComparisonOp.EQUALITY == compOp || FilterCriteria.ComparisonOp.INEQUALITY == compOp) {
-			if(compValue instanceof Boolean) {
-				value = (Boolean)compValue;
+			if(compValue instanceof BoolValue) {
+				value = ((BoolValue)compValue).getBoolValue();
 			}
 			ChoiceBox<String> choice = buildChoiceBox( (value ? "True" : "False"), "True", "False");
 			outNodes.add(choice);
@@ -33,8 +35,8 @@ public class BoolFilterValue extends FilterValue {
 
 
 	@Override
-	public Object getValue() {
-		return this.value;
+	public TaskAttributeValue getValue() {
+		return new BoolValue(value);
 	}
 
 

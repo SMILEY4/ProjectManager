@@ -11,6 +11,8 @@ import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagArrayValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.utils.FXEvents;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
@@ -95,7 +97,7 @@ public class FlagAttributeNode extends AnchorPane implements AttributeRequiremen
 				TaskFlag flag = new TaskFlag(TaskFlag.FlagColor.GRAY, "Flag " + Integer.toHexString(new Integer(new Random().nextInt()).hashCode()), false);
 				TaskFlag[] flagArray = new TaskFlag[attributeData.flags.length+1];
 				flagArray[flagArray.length-1] = flag;
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, flagArray);
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flagArray));
 			}
 		});
 
@@ -108,7 +110,7 @@ public class FlagAttributeNode extends AnchorPane implements AttributeRequiremen
 			@Override public void handle(ActionEvent event) {
 				for(TaskFlag flag : attributeData.flags) {
 					if(flag.name.equals(defaultFlag.getValue())) {
-						Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, flag);
+						Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new FlagValue(flag));
 					}
 				}
 			}

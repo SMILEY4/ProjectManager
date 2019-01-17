@@ -10,6 +10,8 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.NumberAttributeData;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberValue;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.spinner.SpinnerUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
@@ -84,21 +86,21 @@ public class NumberAttributeNode extends AnchorPane implements AttributeRequirem
 		// dec places
 		SpinnerUtils.initSpinner(decPlaces, attributeData.decPlaces, 0, 10, 1, 0, new ChangeListener() {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.NUMBER_ATT_DEC_PLACES, decPlaces.getValue());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.NUMBER_ATT_DEC_PLACES, new NumberValue(decPlaces.getValue()));
 			}
 		});
 
 		// min value
 		SpinnerUtils.initSpinner(minValue, attributeData.min, Integer.MIN_VALUE, attributeData.max, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, new ChangeListener() {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.NUMBER_ATT_MIN, minValue.getValue());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.NUMBER_ATT_MIN, new NumberValue(minValue.getValue()));
 			}
 		});
 
 		// max value
 		SpinnerUtils.initSpinner(maxValue, attributeData.max, attributeData.min, Integer.MAX_VALUE, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, new ChangeListener() {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.NUMBER_ATT_MAX, maxValue.getValue());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.NUMBER_ATT_MAX, new NumberValue(maxValue.getValue()));
 
 			}
 		});
@@ -107,14 +109,14 @@ public class NumberAttributeNode extends AnchorPane implements AttributeRequirem
 		useDefault.setSelected(attributeData.useDefault);
 		useDefault.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, useDefault.isSelected());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, new BoolValue(useDefault.isSelected()));
 			}
 		});
 
 		// default value
 		SpinnerUtils.initSpinner(defaultValue, attributeData.defaultValue, attributeData.min, attributeData.max, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, new ChangeListener() {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, defaultValue.getValue());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new NumberValue(defaultValue.getValue()));
 			}
 		});
 

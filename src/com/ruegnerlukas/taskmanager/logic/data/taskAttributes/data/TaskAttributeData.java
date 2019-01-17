@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data;
 
 
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 
 public interface TaskAttributeData {
 
@@ -26,7 +27,8 @@ public interface TaskAttributeData {
 
 	public TaskAttributeType getType();
 
-	public Var[] update(Var var, Object newValue);
+	public Var[] update(Var var, TaskAttributeValue newValue);
 
+//	public boolean validate(Object value);
 
 }

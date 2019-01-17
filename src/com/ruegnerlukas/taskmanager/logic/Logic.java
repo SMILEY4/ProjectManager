@@ -7,6 +7,7 @@ public class Logic {
 	public static final FilterLogic filter = new FilterLogic();
 	public static final GroupByLogic groupBy = new GroupByLogic();
 	public static final SortLogic sort = new SortLogic();
+	public static final TaskLogic tasks = new TaskLogic();
 
 
 }

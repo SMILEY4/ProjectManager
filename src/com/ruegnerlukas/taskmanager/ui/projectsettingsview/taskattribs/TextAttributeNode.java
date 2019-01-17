@@ -10,6 +10,9 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TextAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.spinner.SpinnerUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
@@ -86,7 +89,7 @@ public class TextAttributeNode extends AnchorPane implements AttributeRequiremen
 		// character limit
 		SpinnerUtils.initSpinner(charLimit, attributeData.charLimit, 1, Integer.MAX_VALUE, 1, 0, new ChangeListener() {
 			@Override public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.TEXT_CHAR_LIMIT, charLimit.getValue());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.TEXT_CHAR_LIMIT, new NumberValue(charLimit.getValue()));
 			}
 		});
 
@@ -94,7 +97,7 @@ public class TextAttributeNode extends AnchorPane implements AttributeRequiremen
 		multiline.setSelected(attributeData.multiline);
 		multiline.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.TEXT_MULTILINE, multiline.isSelected());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.TEXT_MULTILINE, new BoolValue(multiline.isSelected()));
 			}
 		});
 
@@ -102,7 +105,7 @@ public class TextAttributeNode extends AnchorPane implements AttributeRequiremen
 		useDefault.setSelected(attributeData.useDefault);
 		useDefault.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, useDefault.isSelected());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, new BoolValue(useDefault.isSelected()));
 			}
 		});
 
@@ -118,12 +121,12 @@ public class TextAttributeNode extends AnchorPane implements AttributeRequiremen
 		});
 		defaultValue.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, defaultValue.getText());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new TextValue(defaultValue.getText()));
 			}
 		});
 		defaultValue.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, defaultValue.getText());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new TextValue(defaultValue.getText()));
 			}
 		});
 

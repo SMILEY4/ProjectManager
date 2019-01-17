@@ -10,6 +10,7 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.BoolAttributeData;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
 import javafx.beans.value.ChangeListener;
@@ -83,7 +84,7 @@ public class BoolAttributeNode extends AnchorPane implements AttributeRequiremen
 		useDefault.setSelected(attributeData.useDefault);
 		useDefault.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, useDefault.isSelected());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, new BoolValue(useDefault.isSelected()));
 			}
 		});
 
@@ -93,7 +94,7 @@ public class BoolAttributeNode extends AnchorPane implements AttributeRequiremen
 		defaultValue.getSelectionModel().select(attributeData.defaultValue ? "True" : "False");
 		defaultValue.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, newValue.equalsIgnoreCase("True"));
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new BoolValue(newValue.equalsIgnoreCase("True")));
 			}
 		});
 		defaultValue.setDisable(!useDefault.isSelected());

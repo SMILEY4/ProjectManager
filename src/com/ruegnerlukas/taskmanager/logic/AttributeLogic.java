@@ -6,6 +6,10 @@ import com.ruegnerlukas.taskmanager.logic.data.Project;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AttributeLogic {
 
@@ -186,7 +190,7 @@ public class AttributeLogic {
 
 
 
-	public boolean updateTaskAttribute(String attributeName, TaskAttributeData.Var var, Object newValue) {
+	public boolean updateTaskAttribute(String attributeName, TaskAttributeData.Var var, TaskAttributeValue newValue) {
 		if (Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
 
@@ -222,6 +226,26 @@ public class AttributeLogic {
 		}
 	}
 
+
+
+
+	public List<TaskAttribute> getAttributes(TaskAttributeType type) {
+		if (Logic.project.isProjectOpen()) {
+			Project project = Logic.project.getProject();
+
+			List<TaskAttribute> attributes = new ArrayList<>();
+			for(TaskAttribute attribute : project.attributes) {
+				if(attribute.data.getType() == type) {
+					attributes.add(attribute);
+				}
+			}
+
+			return attributes;
+
+		} else {
+			return new ArrayList<>();
+		}
+	}
 
 
 

@@ -4,6 +4,7 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values.*;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
@@ -30,7 +31,7 @@ public class FilterCriteriaNode extends HBox {
 	public FilterValue filterValue;
 	public TaskAttribute attribute;
 	public FilterCriteria.ComparisonOp comparisonOp;
-	public Object compValue;
+	public TaskAttributeValue compValue;
 
 
 
@@ -40,7 +41,7 @@ public class FilterCriteriaNode extends HBox {
 	}
 
 
-	public FilterCriteriaNode(TaskAttribute attribute, FilterCriteria.ComparisonOp comparisonOp, Object compValue) {
+	public FilterCriteriaNode(TaskAttribute attribute, FilterCriteria.ComparisonOp comparisonOp, TaskAttributeValue compValue) {
 		this.attribute = attribute;
 		this.comparisonOp = comparisonOp;
 		this.compValue = compValue;

@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag.FlagColor;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagArrayValue;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabel.EditableLabel;
@@ -64,7 +65,7 @@ public class FlagNode extends HBox {
 						flags.add(f);
 					}
 				}
-				Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, flags.toArray());
+				Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flags));
 			}
 		});
 		this.getChildren().add(btnRemoveFlag);
@@ -102,7 +103,7 @@ public class FlagNode extends HBox {
 										}
 										flags.add(f);
 									}
-									Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, flags.toArray());
+									Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flags));
 								}
 							});
 							menu.getItems().add(item);
@@ -131,7 +132,7 @@ public class FlagNode extends HBox {
 					}
 					flags.add(f);
 				}
-				Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, flags.toArray());
+				Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flags));
 			}
 		});
 

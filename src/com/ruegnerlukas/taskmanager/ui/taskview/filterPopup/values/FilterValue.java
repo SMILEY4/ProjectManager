@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values;
 
 import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.utils.uielements.spinner.SpinnerUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -32,9 +33,9 @@ public abstract class FilterValue {
 
 
 
-	public abstract void update(List<Node> outNodes, TaskAttributeData data, FilterCriteria.ComparisonOp compOp, Object compValue);
+	public abstract void update(List<Node> outNodes, TaskAttributeData data, FilterCriteria.ComparisonOp compOp, TaskAttributeValue compValue);
 
-	public abstract Object getValue();
+	public abstract TaskAttributeValue getValue();
 
 
 

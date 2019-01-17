@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.logic.data.filter.criteria;
 
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 
 public class FilterCriteria {
 
@@ -33,12 +34,12 @@ public class FilterCriteria {
 
 	public TaskAttribute attribute;
 	public ComparisonOp comparisonOp;
-	public Object comparisionValue;
+	public TaskAttributeValue comparisionValue;
 
 
 
 
-	public FilterCriteria(TaskAttribute attribute, ComparisonOp comparisonOp, Object comparisionValue) {
+	public FilterCriteria(TaskAttribute attribute, ComparisonOp comparisonOp, TaskAttributeValue comparisionValue) {
 		this.attribute = attribute;
 		this.comparisonOp = comparisonOp;
 		this.comparisionValue = comparisionValue;

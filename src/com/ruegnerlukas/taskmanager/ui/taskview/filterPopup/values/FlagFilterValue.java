@@ -4,6 +4,10 @@ import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagArrayValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
@@ -12,18 +16,19 @@ import java.util.List;
 
 public class FlagFilterValue extends FilterValue {
 
-	private Object value = null;
+
+	private TaskAttributeValue value = null;
 
 
 
 
 	@Override
-	public void update(List<Node> outNodes, TaskAttributeData data, FilterCriteria.ComparisonOp compOp, Object compValue) {
+	public void update(List<Node> outNodes, TaskAttributeData data, FilterCriteria.ComparisonOp compOp, TaskAttributeValue compValue) {
 
 		if (FilterCriteria.ComparisonOp.EQUALITY == compOp || FilterCriteria.ComparisonOp.INEQUALITY == compOp) {
 
-			value = ((FlagAttributeData)data).defaultFlag;
-			if(compValue instanceof TaskFlag) {
+			value = new FlagValue(((FlagAttributeData) data).defaultFlag);
+			if (compValue instanceof FlagValue) {
 				value = compValue;
 			}
 
@@ -32,28 +37,27 @@ public class FlagFilterValue extends FilterValue {
 				flagNames[i] = ((FlagAttributeData) data).flags[i].name;
 			}
 
-			ChoiceBox<String> choice = buildChoiceBox( ((TaskFlag)value).name, flagNames);
+			ChoiceBox<String> choice = buildChoiceBox(((FlagValue) value).getFlag().name, flagNames);
 			outNodes.add(choice);
 
 			choice.setOnAction(event -> {
 				String name = choice.getSelectionModel().getSelectedItem();
-				value = TaskFlag.findFlag(name, ((FlagAttributeData)data).flags);
+				value = new FlagValue(TaskFlag.findFlag(name, ((FlagAttributeData) data).flags));
 				onAction();
 			});
 		}
 
 
-
 		if (FilterCriteria.ComparisonOp.IN_LIST == compOp || FilterCriteria.ComparisonOp.NOT_IN_LIST == compOp) {
 
-			value = new TaskFlag[0];
-			if(compValue instanceof TaskFlag[]) {
+			value = new FlagArrayValue();
+			if (compValue instanceof FlagArrayValue) {
 				value = compValue;
 			}
 
-			String[] startValues = new String[((TaskFlag[])value).length];
+			String[] startValues = new String[((FlagArrayValue) value).getFlags().length];
 			for (int i = 0; i < startValues.length; i++) {
-				startValues[i] = ((TaskFlag[])value)[i].name;
+				startValues[i] = ((FlagArrayValue) value).getFlags()[i].name;
 			}
 
 			TextField textField = buildTextField("Comma Separated values", String.join(",", startValues));
@@ -63,9 +67,9 @@ public class FlagFilterValue extends FilterValue {
 				String[] values = textField.getText().split(",");
 				TaskFlag[] flags = new TaskFlag[values.length];
 				for (int i = 0; i < values.length; i++) {
-					flags[0] = TaskFlag.findFlag(values[i].trim(), ((FlagAttributeData)data).flags);
+					flags[0] = TaskFlag.findFlag(values[i].trim(), ((FlagAttributeData) data).flags);
 				}
-				value = flags;
+				value = new FlagArrayValue(flags);
 				onAction();
 			});
 
@@ -73,31 +77,29 @@ public class FlagFilterValue extends FilterValue {
 				String[] values = textField.getText().split(",");
 				TaskFlag[] flags = new TaskFlag[values.length];
 				for (int i = 0; i < values.length; i++) {
-					flags[0] = TaskFlag.findFlag(values[i].trim(), ((FlagAttributeData)data).flags);
+					flags[0] = TaskFlag.findFlag(values[i].trim(), ((FlagAttributeData) data).flags);
 				}
-				value = flags;
+				value = new FlagArrayValue(flags);
 				onAction();
 			});
 		}
 
 
-
-
 		if (FilterCriteria.ComparisonOp.CONTAINS == compOp || FilterCriteria.ComparisonOp.CONTAINS_NOT == compOp) {
 
-			value = "";
-			if(compValue instanceof String) {
+			value = new TextValue("");
+			if (compValue instanceof TextValue) {
 				value = compValue;
 			}
 
-			TextField textField = buildTextField("", ((String)value));
+			TextField textField = buildTextField("", ((TextValue) value).getText());
 			outNodes.add(textField);
 
 			textField.setOnAction(event -> {
-				value = textField.getText();
+				value = new TextValue(textField.getText());
 			});
 			textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-				value = textField.getText();
+				value = new TextValue(textField.getText());
 			});
 
 		}
@@ -108,7 +110,7 @@ public class FlagFilterValue extends FilterValue {
 
 
 	@Override
-	public Object getValue() {
+	public TaskAttributeValue getValue() {
 		return this.value;
 	}
 

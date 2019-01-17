@@ -1,6 +1,8 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 
 public class BoolAttributeData implements TaskAttributeData {
 
@@ -19,13 +21,13 @@ public class BoolAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public Var[] update(Var var, Object newValue) {
+	public Var[] update(Var var, TaskAttributeValue newValue) {
 
 		switch (var) {
 
 			case USE_DEFAULT: {
-				if(newValue instanceof Boolean) {
-					useDefault = (Boolean)newValue;
+				if(newValue instanceof BoolValue) {
+					useDefault = ((BoolValue)newValue).getBoolValue();
 					return new Var[] {Var.USE_DEFAULT};
 				} else {
 					return null;
@@ -33,8 +35,8 @@ public class BoolAttributeData implements TaskAttributeData {
 			}
 
 			case DEFAULT_VALUE: {
-				if(newValue instanceof Boolean) {
-					defaultValue = (Boolean)newValue;
+				if(newValue instanceof BoolValue) {
+					defaultValue = ((BoolValue)newValue).getBoolValue();
 					return new Var[] {Var.DEFAULT_VALUE};
 				} else {
 					return null;
@@ -46,7 +48,6 @@ public class BoolAttributeData implements TaskAttributeData {
 			}
 		}
 	}
-
 
 
 

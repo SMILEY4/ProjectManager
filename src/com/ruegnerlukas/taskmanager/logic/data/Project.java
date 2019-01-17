@@ -19,6 +19,10 @@ public class Project {
 	public List<FilterCriteria> filterCriteria = new ArrayList<>();
 	public List<SortElement> sortElements = new ArrayList<>();
 
+	public List<Task> tasks = new ArrayList<>();
+
+
+
 
 	public Project(String name) {
 		this.name = name;

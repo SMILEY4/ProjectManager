@@ -1,6 +1,10 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
 
 public class TextAttributeData implements TaskAttributeData {
 
@@ -21,13 +25,13 @@ public class TextAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public Var[] update(Var var, Object newValue) {
+	public Var[] update(Var var, TaskAttributeValue newValue) {
 
 		switch (var) {
 
 			case TEXT_CHAR_LIMIT: {
-				if(newValue instanceof Integer) {
-					charLimit = (Integer)newValue;
+				if(newValue instanceof NumberValue) {
+					charLimit = ((NumberValue)newValue).getInt();
 					if(defaultValue.length() > charLimit) {
 						defaultValue = defaultValue.substring(0, charLimit);
 						return new Var[] {Var.TEXT_CHAR_LIMIT, Var.DEFAULT_VALUE};
@@ -40,8 +44,8 @@ public class TextAttributeData implements TaskAttributeData {
 			}
 
 			case TEXT_MULTILINE: {
-				if(newValue instanceof Boolean) {
-					multiline = (Boolean)newValue;
+				if(newValue instanceof BoolValue) {
+					multiline = ((BoolValue)newValue).getBoolValue();
 					if(multiline) {
 						defaultValue = defaultValue.replaceAll(System.lineSeparator(), " ");
 					}
@@ -53,8 +57,8 @@ public class TextAttributeData implements TaskAttributeData {
 
 
 			case USE_DEFAULT: {
-				if(newValue instanceof Boolean) {
-					useDefault = (Boolean)newValue;
+				if(newValue instanceof BoolValue) {
+					useDefault = ((BoolValue)newValue).getBoolValue();
 					return new Var[] {Var.USE_DEFAULT};
 				} else {
 					return null;
@@ -62,8 +66,8 @@ public class TextAttributeData implements TaskAttributeData {
 			}
 
 			case DEFAULT_VALUE: {
-				if(newValue instanceof String) {
-					defaultValue = (String)newValue;
+				if(newValue instanceof TextValue) {
+					defaultValue = ((TextValue)newValue).getText();
 					return new Var[] {Var.DEFAULT_VALUE};
 				} else {
 					return null;

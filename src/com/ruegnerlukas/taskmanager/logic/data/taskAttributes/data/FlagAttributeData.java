@@ -1,8 +1,10 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data;
 
-import com.ruegnerlukas.taskmanager.logic.data.Task;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagArrayValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 
 public class FlagAttributeData implements TaskAttributeData {
 
@@ -29,17 +31,17 @@ public class FlagAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public Var[] update(Var var, Object newValue) {
+	public Var[] update(Var var, TaskAttributeValue newValue) {
 
 		switch (var) {
 
 			case FLAG_ATT_FLAGS: {
-				if(newValue instanceof TaskFlag[]) {
-					if(((Task[])newValue).length==0) {
+				if(newValue instanceof FlagArrayValue) {
+					if(((FlagArrayValue)newValue).getFlags().length == 0) {
 						return null;
 					}
 
-					flags = (TaskFlag[])newValue;
+					flags = ((FlagArrayValue)newValue).getFlags();
 
 					boolean foundDefault = false;
 					for(TaskFlag flag : flags) {
@@ -61,8 +63,8 @@ public class FlagAttributeData implements TaskAttributeData {
 			}
 
 			case DEFAULT_VALUE: {
-				if(newValue instanceof TaskFlag) {
-					defaultFlag = (TaskFlag)newValue;
+				if(newValue instanceof FlagValue) {
+					defaultFlag = ((FlagValue)newValue).getFlag();
 					return new Var[] {Var.DEFAULT_VALUE};
 				} else {
 					return null;

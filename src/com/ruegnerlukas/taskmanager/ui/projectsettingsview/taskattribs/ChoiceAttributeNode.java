@@ -10,6 +10,9 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.ChoiceAttributeData;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextArrayValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.utils.FXEvents;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
@@ -90,12 +93,7 @@ public class ChoiceAttributeNode extends AnchorPane implements AttributeRequirem
 				for(String value : values.getText().split(",")) {
 					valuesSet.add(value.trim());
 				}
-				String[] valuesArray = new String[valuesSet.size()];
-				int i=0;
-				for(String v : valuesSet) {
-					valuesArray[i++] = v;
-				}
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.CHOICE_ATT_VALUES, valuesArray);
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.CHOICE_ATT_VALUES, new TextArrayValue(valuesSet));
 			}
 		});
 		values.setOnAction(new EventHandler<ActionEvent>() {
@@ -104,12 +102,7 @@ public class ChoiceAttributeNode extends AnchorPane implements AttributeRequirem
 				for(String value : values.getText().split(",")) {
 					valuesSet.add(value.trim());
 				}
-				String[] valuesArray = new String[valuesSet.size()];
-				int i=0;
-				for(String v : valuesSet) {
-					valuesArray[i++] = v;
-				}
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.CHOICE_ATT_VALUES, valuesArray);
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.CHOICE_ATT_VALUES, new TextArrayValue(valuesSet));
 
 			}
 		});
@@ -119,7 +112,7 @@ public class ChoiceAttributeNode extends AnchorPane implements AttributeRequirem
 		useDefault.setSelected(attributeData.useDefault);
 		useDefault.setOnAction(new EventHandler<ActionEvent>() {
 			@Override public void handle(ActionEvent event) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, useDefault.isSelected());
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, new BoolValue(useDefault.isSelected()));
 			}
 		});
 
@@ -129,7 +122,7 @@ public class ChoiceAttributeNode extends AnchorPane implements AttributeRequirem
 		defaultValue.getSelectionModel().select(attributeData.defaultValue);
 		defaultValue.getSelectionModel().selectedItemProperty().addListener(FXEvents.register(new ChangeListener<String>() {
 			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, newValue);
+				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new TextValue(newValue));
 
 			}
 		}, defaultValue.getSelectionModel().selectedItemProperty()));

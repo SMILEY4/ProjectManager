@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 
 public class DescriptionAttributeData implements TaskAttributeData {
 
@@ -11,8 +12,10 @@ public class DescriptionAttributeData implements TaskAttributeData {
 	}
 
 
+
+
 	@Override
-	public Var[] update(Var var, Object newValue) {
+	public Var[] update(Var var, TaskAttributeValue newValue) {
 		return null;
 	}
 

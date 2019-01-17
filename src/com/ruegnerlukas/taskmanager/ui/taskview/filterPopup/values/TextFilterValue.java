@@ -2,6 +2,8 @@ package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values;
 
 import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 
@@ -15,7 +17,7 @@ public class TextFilterValue extends FilterValue {
 
 
 	@Override
-	public void update(List<Node> outNodes, TaskAttributeData data, FilterCriteria.ComparisonOp compOp, Object compValue) {
+	public void update(List<Node> outNodes, TaskAttributeData data, FilterCriteria.ComparisonOp compOp, TaskAttributeValue compValue) {
 
 
 		if (FilterCriteria.ComparisonOp.EQUALITY == compOp
@@ -24,8 +26,8 @@ public class TextFilterValue extends FilterValue {
 				|| FilterCriteria.ComparisonOp.CONTAINS_NOT == compOp) {
 
 			value = "";
-			if(compValue instanceof String) {
-				value = (String)compValue;
+			if(compValue instanceof TextValue) {
+				value = ((TextValue)compValue).getText();
 			}
 
 			TextField textField = buildTextField("", value);
@@ -46,8 +48,8 @@ public class TextFilterValue extends FilterValue {
 
 
 	@Override
-	public Object getValue() {
-		return this.value;
+	public TaskAttributeValue getValue() {
+		return new TextValue(value);
 	}
 
 
