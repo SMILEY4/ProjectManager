@@ -45,6 +45,14 @@ public class TextArrayValue implements TaskAttributeValue {
 
 
 	@Override
+	public String toString() {
+		return "TextArrayValue:" + Arrays.toString(text);
+	}
+
+
+
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;

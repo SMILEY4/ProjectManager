@@ -47,6 +47,14 @@ public class FlagArrayValue implements TaskAttributeValue {
 
 
 	@Override
+	public String toString() {
+		return "FlagArrayValue:" + Arrays.toString(flags);
+	}
+
+
+
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;

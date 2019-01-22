@@ -31,6 +31,14 @@ public class BoolValue implements TaskAttributeValue {
 
 
 	@Override
+	public String toString() {
+		return "BoolValue:" + value;
+	}
+
+
+
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;

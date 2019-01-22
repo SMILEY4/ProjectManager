@@ -4,16 +4,16 @@ public class NoValue implements TaskAttributeValue {
 
 
 	@Override
-	public String toString() {
-		return "NoValue";
+	public Object getValue() {
+		return null;
 	}
 
 
 
 
 	@Override
-	public Object getValue() {
-		return null;
+	public String toString() {
+		return "NoValue";
 	}
 
 

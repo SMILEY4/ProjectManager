@@ -69,6 +69,14 @@ public class NumberPairValue implements TaskAttributeValue {
 
 
 	@Override
+	public String toString() {
+		return "NumberPairValue:(" + v0 + "," + v1 + ")";
+	}
+
+
+
+
+	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
