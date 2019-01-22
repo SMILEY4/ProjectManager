@@ -29,4 +29,25 @@ public class FlagValue implements TaskAttributeValue {
 		return flag;
 	}
 
+
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		FlagValue flagValue = (FlagValue) o;
+
+		return flag != null ? flag.equals(flagValue.flag) : flagValue.flag == null;
+	}
+
+
+
+
+	@Override
+	public int hashCode() {
+		return flag != null ? flag.hashCode() : 0;
+	}
+
 }

@@ -27,4 +27,23 @@ public class TextValue implements TaskAttributeValue {
 		return text;
 	}
 
+
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		TextValue textValue = (TextValue) o;
+		return text != null ? text.equals(textValue.text) : textValue.text == null;
+	}
+
+
+
+
+	@Override
+	public int hashCode() {
+		return text != null ? text.hashCode() : 0;
+	}
+
 }

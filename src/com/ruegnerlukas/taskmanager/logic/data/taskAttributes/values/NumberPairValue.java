@@ -33,6 +33,8 @@ public class NumberPairValue implements TaskAttributeValue {
 	}
 
 
+
+
 	public int getInt1() {
 		return (int) v1;
 	}
@@ -44,6 +46,9 @@ public class NumberPairValue implements TaskAttributeValue {
 		return v0;
 	}
 
+
+
+
 	public double getDouble1() {
 		return v1;
 	}
@@ -54,10 +59,40 @@ public class NumberPairValue implements TaskAttributeValue {
 	@Override
 	public Object getValue() {
 		if (isInt) {
-			return new int[] {(int)v0, (int)v1};
+			return new int[]{(int) v0, (int) v1};
 		} else {
-			return new double[] {v0, v1};
+			return new double[]{v0, v1};
 		}
+	}
+
+
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		NumberPairValue that = (NumberPairValue) o;
+
+		if (Double.compare(that.v0, v0) != 0) return false;
+		if (Double.compare(that.v1, v1) != 0) return false;
+		return isInt == that.isInt;
+	}
+
+
+
+
+	@Override
+	public int hashCode() {
+		int result;
+		long temp;
+		temp = Double.doubleToLongBits(v0);
+		result = (int) (temp ^ (temp >>> 32));
+		temp = Double.doubleToLongBits(v1);
+		result = 31 * result + (int) (temp ^ (temp >>> 32));
+		result = 31 * result + (isInt ? 1 : 0);
+		return result;
 	}
 
 }

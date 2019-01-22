@@ -48,4 +48,31 @@ public class NumberValue implements TaskAttributeValue {
 		}
 	}
 
+
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+
+		NumberValue that = (NumberValue) o;
+
+		if (Double.compare(that.value, value) != 0) return false;
+		return isInt == that.isInt;
+	}
+
+
+
+
+	@Override
+	public int hashCode() {
+		int result;
+		long temp;
+		temp = Double.doubleToLongBits(value);
+		result = (int) (temp ^ (temp >>> 32));
+		result = 31 * result + (isInt ? 1 : 0);
+		return result;
+	}
+
 }
