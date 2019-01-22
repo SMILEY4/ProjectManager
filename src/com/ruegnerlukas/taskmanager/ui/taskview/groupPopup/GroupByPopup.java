@@ -1,10 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.groupPopup;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.GroupByOrderChangedEvent;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
@@ -23,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GroupByPopup extends AnchorPane {
+
 
 	private Stage stage;
 	@FXML private VBox boxAttributes;
@@ -43,7 +40,6 @@ public class GroupByPopup extends AnchorPane {
 			Logger.get().error("Error loading GroupByPopup-FXML: " + e);
 		}
 
-		setupListeners();
 		create();
 	}
 
@@ -54,20 +50,22 @@ public class GroupByPopup extends AnchorPane {
 
 		// attributes
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		for(TaskAttribute attribute : Logic.project.getProject().groupByOrder) {
+		for (TaskAttribute attribute : Logic.project.getProject().groupByOrder) {
 			boxAttributes.getChildren().add(new GroupByAttributeNode(attribute));
 		}
+
 
 		// add attribute
 		btnAdd.setOnAction(event -> {
 			boxAttributes.getChildren().add(new GroupByAttributeNode(Logic.project.getProject().attributes.get(0)));
 		});
 
+
 		// accept
 		btnAccept.setOnAction(event -> {
 			List<TaskAttribute> attributes = new ArrayList<>();
-			for(Node node : boxAttributes.getChildren()) {
-				GroupByAttributeNode groupByNode = (GroupByAttributeNode)node;
+			for (Node node : boxAttributes.getChildren()) {
+				GroupByAttributeNode groupByNode = (GroupByAttributeNode) node;
 				attributes.add(groupByNode.attribute);
 			}
 			Logic.groupBy.setGroupByOrder(attributes);
@@ -79,20 +77,6 @@ public class GroupByPopup extends AnchorPane {
 		btnCancel.setOnAction(event -> {
 			this.stage.close();
 		});
-
-	}
-
-
-
-
-	private void setupListeners() {
-
-		// listen for changed groupBy-order
-		EventManager.registerListener(new EventListener() {
-			@Override public void onEvent(Event e) {
-				GroupByOrderChangedEvent event = (GroupByOrderChangedEvent)e;
-			}
-		}, GroupByOrderChangedEvent.class);
 
 	}
 

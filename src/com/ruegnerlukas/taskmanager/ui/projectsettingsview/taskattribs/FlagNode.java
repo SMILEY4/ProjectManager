@@ -29,6 +29,7 @@ import java.util.List;
 
 public class FlagNode extends HBox {
 
+
 	public TaskFlag flag;
 	public FlagAttributeNode parentNode;
 	private boolean isDefaultFlag = false;
@@ -47,21 +48,22 @@ public class FlagNode extends HBox {
 		this.setPrefSize(-1, -1);
 		this.setAlignment(Pos.CENTER_LEFT);
 
-		isDefaultFlag = ((FlagAttributeData)parentNode.attribute.data).defaultFlag.name.equals(flag.name);
+		isDefaultFlag = ((FlagAttributeData) parentNode.attribute.data).defaultFlag.name.equals(flag.name);
 
 		// remove flag button
 		Button btnRemoveFlag = new Button();
-		if(isDefaultFlag) {
+		if (isDefaultFlag) {
 			btnRemoveFlag.setDisable(true);
 		}
 		btnRemoveFlag.setMinSize(32, 32);
 		btnRemoveFlag.setMaxSize(32, 32);
 		ButtonUtils.makeIconButton(btnRemoveFlag, SVGIcons.CROSS, 0.7f, "black");
 		btnRemoveFlag.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent event) {
+			@Override
+			public void handle(ActionEvent event) {
 				List<TaskFlag> flags = new ArrayList<>();
-				for(TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
-					if(!f.name.equals(flag.name)) {
+				for (TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
+					if (!f.name.equals(flag.name)) {
 						flags.add(f);
 					}
 				}
@@ -70,19 +72,21 @@ public class FlagNode extends HBox {
 		});
 		this.getChildren().add(btnRemoveFlag);
 
+
 		// flag color
 		pane = new Pane();
 		this.getChildren().add(pane);
 		pane.setMinSize(32, 32);
 		pane.setMaxSize(32, 32);
 		pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override public void handle(MouseEvent event) {
+			@Override
+			public void handle(MouseEvent event) {
 
 				// select-color menu
 				if (event.getButton().equals(MouseButton.PRIMARY)) {
 					if (event.getClickCount() == 2) {
 						ContextMenu menu = new ContextMenu();
-						for(int i=0; i<FlagColor.values().length; i++) {
+						for (int i = 0; i < FlagColor.values().length; i++) {
 							final FlagColor flagColor = FlagColor.values()[i];
 							Color color = flagColor.color;
 
@@ -90,15 +94,16 @@ public class FlagNode extends HBox {
 							colorPane.setMinSize(60, 30);
 							colorPane.setPrefSize(60, 30);
 							colorPane.setMaxSize(60, 30);
-							colorPane.setStyle("-fx-background-radius: 5; -fx-background-color: rgba(" + (int)(255*color.getRed()) +","+ (int)(255*color.getGreen()) +","+ (int)(255*color.getBlue()) + ",255);");
+							colorPane.setStyle("-fx-background-radius: 5; -fx-background-color: rgba(" + (int) (255 * color.getRed()) + "," + (int) (255 * color.getGreen()) + "," + (int) (255 * color.getBlue()) + ",255);");
 
 							CustomMenuItem item = new CustomMenuItem();
 							item.setContent(colorPane);
 							item.setOnAction(new EventHandler<ActionEvent>() {
-								@Override public void handle(ActionEvent event) {
+								@Override
+								public void handle(ActionEvent event) {
 									List<TaskFlag> flags = new ArrayList<>();
-									for(TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
-										if(f.name.equals(flag.name)) {
+									for (TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
+										if (f.name.equals(flag.name)) {
 											f.color = flagColor;
 										}
 										flags.add(f);
@@ -115,19 +120,21 @@ public class FlagNode extends HBox {
 			}
 		});
 
+
 		// flag name
 		label = new EditableLabel();
-		if(flag.isDefaultFlag) {
+		if (flag.isDefaultFlag) {
 			label.setEditable(false);
 		}
 		this.getChildren().add(label);
 		label.setMinWidth(300);
 		label.setMaxWidth(300);
 		label.addListener(new ChangeListener<String>() {
-			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				List<TaskFlag> flags = new ArrayList<>();
-				for(TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
-					if(f.name.equals(flag.name)) {
+				for (TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
+					if (f.name.equals(flag.name)) {
 						f.name = newValue;
 					}
 					flags.add(f);
@@ -135,6 +142,7 @@ public class FlagNode extends HBox {
 				Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flags));
 			}
 		});
+
 
 		update();
 	}
@@ -144,7 +152,7 @@ public class FlagNode extends HBox {
 
 	public void update() {
 		Color color = flag.color.color;
-		String hexColor = String.format( "#%02X%02X%02X", (int)(color.getRed()*255), (int)(color.getGreen()*255), (int)(color.getBlue()*255) );
+		String hexColor = String.format("#%02X%02X%02X", (int) (color.getRed() * 255), (int) (color.getGreen() * 255), (int) (color.getBlue() * 255));
 		pane.setStyle("-fx-background-color: " + hexColor + "; -fx-background-radius: 5;");
 		this.label.setText(flag.name);
 	}

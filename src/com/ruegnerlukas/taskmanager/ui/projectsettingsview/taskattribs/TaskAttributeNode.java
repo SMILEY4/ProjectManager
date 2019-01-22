@@ -24,6 +24,7 @@ import javafx.scene.layout.Region;
 
 public class TaskAttributeNode extends AnchorPane {
 
+
 	public TaskAttribute attribute;
 
 	private AnchorPane paneHeader;
@@ -82,7 +83,8 @@ public class TaskAttributeNode extends AnchorPane {
 		btnRemove.setMaxSize(32, 32);
 		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f, "black");
 		btnRemove.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent event) {
+			@Override
+			public void handle(ActionEvent event) {
 				Logic.attribute.deleteAttribute(attribute.name);
 			}
 		});
@@ -91,24 +93,24 @@ public class TaskAttributeNode extends AnchorPane {
 
 		// attribute type
 		choiceType = new ChoiceBox<>();
-		if(attribute.data.getType().fixed) {
+		if (attribute.data.getType().fixed) {
 			choiceType.getItems().add(attribute.data.getType().display);
 
 		} else {
-			for(TaskAttributeType type : TaskAttributeType.values()) {
-				if(!type.fixed) {
+			for (TaskAttributeType type : TaskAttributeType.values()) {
+				if (!type.fixed) {
 					choiceType.getItems().add(type.display);
 				}
 			}
-
 		}
 		choiceType.getSelectionModel().select(this.attribute.data.getType().display);
 		choiceType.setMinSize(150, 32);
 		choiceType.setPrefSize(150, 32);
 		choiceType.setMaxSize(150, 32);
 		choiceType.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if(!oldValue.equals(newValue)) {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (!oldValue.equals(newValue)) {
 					Logic.attribute.changeAttributeType(attribute.name, TaskAttributeType.getFromDisplay(newValue));
 				}
 			}
@@ -116,21 +118,21 @@ public class TaskAttributeNode extends AnchorPane {
 		boxHeader.getChildren().add(choiceType);
 
 		// listen for changed type
-		EventManager.registerListener(new EventListener() {
-			@Override public void onEvent(Event e) {
-				AttributeTypeChangedEvent event = (AttributeTypeChangedEvent)e;
-				if(event.getAttribute() == attribute) {
+		EventManager.registerListener(this, new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				AttributeTypeChangedEvent event = (AttributeTypeChangedEvent) e;
+				if (event.getAttribute() == attribute) {
 					choiceType.getSelectionModel().select(event.getAttribute().data.getType().display);
 					buildAttributeType(event.getAttribute().data.getType());
-					if(isExpanded) {
-						TaskAttributeNode.this.setMinSize(100, requirementNode.getNodeHeight()+35);
-						TaskAttributeNode.this.setPrefSize(10000, requirementNode.getNodeHeight()+35);
-						TaskAttributeNode.this.setMaxSize(10000, requirementNode.getNodeHeight()+35);
+					if (isExpanded) {
+						TaskAttributeNode.this.setMinSize(100, requirementNode.getNodeHeight() + 35);
+						TaskAttributeNode.this.setPrefSize(10000, requirementNode.getNodeHeight() + 35);
+						TaskAttributeNode.this.setMaxSize(10000, requirementNode.getNodeHeight() + 35);
 					}
 				}
 			}
 		}, AttributeTypeChangedEvent.class);
-
 
 
 		// attribute name
@@ -139,7 +141,8 @@ public class TaskAttributeNode extends AnchorPane {
 		labelAttName.setPrefSize(10000, 32);
 		labelAttName.setMaxSize(10000, 32);
 		labelAttName.addListener(new ChangeListener<String>() {
-			@Override public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
 				labelAttName.setText(oldValue);
 				Logic.attribute.renameAttribute(oldValue, newValue);
 			}
@@ -147,10 +150,11 @@ public class TaskAttributeNode extends AnchorPane {
 		boxHeader.getChildren().add(labelAttName);
 
 		// listen for changed name
-		EventManager.registerListener(new EventListener() {
-			@Override public void onEvent(Event e) {
-				AttributeRenamedEvent event = (AttributeRenamedEvent)e;
-				if(event.getAttribute() == attribute) {
+		EventManager.registerListener(this, new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				AttributeRenamedEvent event = (AttributeRenamedEvent) e;
+				if (event.getAttribute() == attribute) {
 					labelAttName.setText(event.getAttribute().name);
 				}
 			}
@@ -166,8 +170,9 @@ public class TaskAttributeNode extends AnchorPane {
 		boxHeader.getChildren().add(btnExpandCollapse);
 
 		btnExpandCollapse.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent event) {
-				if(isExpanded) {
+			@Override
+			public void handle(ActionEvent event) {
+				if (isExpanded) {
 					paneBody.setVisible(false);
 					isExpanded = false;
 					ButtonUtils.makeIconButton(btnExpandCollapse, SVGIcons.ARROW_DOWN, 0.75f, "black");
@@ -178,9 +183,9 @@ public class TaskAttributeNode extends AnchorPane {
 					paneBody.setVisible(true);
 					isExpanded = true;
 					ButtonUtils.makeIconButton(btnExpandCollapse, SVGIcons.ARROW_UP, 0.75f, "black");
-					TaskAttributeNode.this.setMinSize(100, requirementNode.getNodeHeight()+35);
-					TaskAttributeNode.this.setPrefSize(10000, requirementNode.getNodeHeight()+35);
-					TaskAttributeNode.this.setMaxSize(10000, requirementNode.getNodeHeight()+35);
+					TaskAttributeNode.this.setMinSize(100, requirementNode.getNodeHeight() + 35);
+					TaskAttributeNode.this.setPrefSize(10000, requirementNode.getNodeHeight() + 35);
+					TaskAttributeNode.this.setMaxSize(10000, requirementNode.getNodeHeight() + 35);
 				}
 			}
 		});
@@ -206,43 +211,43 @@ public class TaskAttributeNode extends AnchorPane {
 		labelAttName.setDisable(type.fixed);
 		choiceType.setDisable(type.fixed);
 
-		if(requirementNode != null) {
-			requirementNode.dispose();
+		if (requirementNode != null) {
+			requirementNode.close();
 		}
 
 		Region node = null;
 
-		if(type == TaskAttributeType.BOOLEAN) {
+		if (type == TaskAttributeType.BOOLEAN) {
 			BoolAttributeNode attributeNode = new BoolAttributeNode(attribute);
 			node = attributeNode;
 			requirementNode = attributeNode;
 
-		} else if(type == TaskAttributeType.CHOICE) {
+		} else if (type == TaskAttributeType.CHOICE) {
 			ChoiceAttributeNode attributeNode = new ChoiceAttributeNode(attribute);
 			node = attributeNode;
 			requirementNode = attributeNode;
 
-		} else if(type == TaskAttributeType.NUMBER) {
+		} else if (type == TaskAttributeType.NUMBER) {
 			NumberAttributeNode attributeNode = new NumberAttributeNode(attribute);
 			node = attributeNode;
 			requirementNode = attributeNode;
 
-		} else if(type == TaskAttributeType.TEXT) {
+		} else if (type == TaskAttributeType.TEXT) {
 			TextAttributeNode attributeNode = new TextAttributeNode(attribute);
 			node = attributeNode;
 			requirementNode = attributeNode;
 
-		} else if(type == TaskAttributeType.FLAG) {
+		} else if (type == TaskAttributeType.FLAG) {
 			FlagAttributeNode attributeNode = new FlagAttributeNode(attribute);
 			node = attributeNode;
 			requirementNode = attributeNode;
 
-		} else if(type == TaskAttributeType.ID) {
+		} else if (type == TaskAttributeType.ID) {
 			IDAttributeNode attributeNode = new IDAttributeNode();
 			node = attributeNode;
 			requirementNode = attributeNode;
 
-		} else if(type == TaskAttributeType.DESCRIPTION) {
+		} else if (type == TaskAttributeType.DESCRIPTION) {
 			DescriptionAttributeNode attributeNode = new DescriptionAttributeNode();
 			node = attributeNode;
 			requirementNode = attributeNode;
@@ -258,12 +263,20 @@ public class TaskAttributeNode extends AnchorPane {
 
 
 	public void setLocked(boolean locked) {
-		if(!attribute.data.getType().fixed) {
+		if (!attribute.data.getType().fixed) {
 			btnRemove.setDisable(locked);
 			choiceType.setDisable(locked);
 			labelAttName.setDisable(locked);
 		}
 		paneBody.setDisable(locked);
+	}
+
+
+
+
+	public void close() {
+		this.requirementNode.close();
+		EventManager.deregisterListeners(this);
 	}
 
 

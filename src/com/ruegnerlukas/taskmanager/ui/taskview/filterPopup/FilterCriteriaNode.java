@@ -41,10 +41,13 @@ public class FilterCriteriaNode extends HBox {
 	}
 
 
+
+
 	public FilterCriteriaNode(TaskAttribute attribute, FilterCriteria.ComparisonOp comparisonOp, TaskAttributeValue compValue) {
 		this.attribute = attribute;
 		this.comparisonOp = comparisonOp;
 		this.compValue = compValue;
+
 
 		// root
 		this.setMinSize(100, 34);
@@ -62,7 +65,7 @@ public class FilterCriteriaNode extends HBox {
 		btnRemove.setPrefSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
 		btnRemove.setOnAction(event -> {
-			VBox parent = (VBox)this.getParent();
+			VBox parent = (VBox) this.getParent();
 			parent.getChildren().remove(this);
 		});
 		this.getChildren().add(btnRemove);
@@ -73,13 +76,13 @@ public class FilterCriteriaNode extends HBox {
 		choiceAttrib.setMinSize(250, 32);
 		choiceAttrib.setPrefSize(250, 32);
 		choiceAttrib.setMaxSize(250, 32);
-		for(TaskAttribute attrib : Logic.project.getProject().attributes ) {
+		for (TaskAttribute attrib : Logic.project.getProject().attributes) {
 			choiceAttrib.getItems().add(attrib.name);
 		}
 		choiceAttrib.getSelectionModel().select(attribute.name);
 		choiceAttrib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			for(TaskAttribute attrib : Logic.project.getProject().attributes) {
-				if(attrib.name.equals(choiceAttrib.getValue())) {
+			for (TaskAttribute attrib : Logic.project.getProject().attributes) {
+				if (attrib.name.equals(choiceAttrib.getValue())) {
 					this.attribute = attrib;
 					this.compValue = null;
 					update();
@@ -106,19 +109,19 @@ public class FilterCriteriaNode extends HBox {
 	private void update() {
 
 		choiceCompOp.getItems().clear();
-		for(FilterCriteria.ComparisonOp comp : FilterCriteria.getPossibleComparisionOps(attribute) ) {
+		for (FilterCriteria.ComparisonOp comp : FilterCriteria.getPossibleComparisionOps(attribute)) {
 			choiceCompOp.getItems().add(comp.display);
 		}
 
 		boolean foundCompOp = false;
-		for(FilterCriteria.ComparisonOp c : FilterCriteria.getPossibleComparisionOps(attribute)) {
-			if(c == comparisonOp) {
+		for (FilterCriteria.ComparisonOp c : FilterCriteria.getPossibleComparisionOps(attribute)) {
+			if (c == comparisonOp) {
 				foundCompOp = true;
 				break;
 			}
 		}
 
-		if(foundCompOp) {
+		if (foundCompOp) {
 			choiceCompOp.getSelectionModel().select(comparisonOp.display);
 		} else {
 			this.comparisonOp = FilterCriteria.getPossibleComparisionOps(attribute)[0];
@@ -126,8 +129,8 @@ public class FilterCriteriaNode extends HBox {
 		}
 
 		choiceCompOp.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			for(FilterCriteria.ComparisonOp comp : FilterCriteria.getPossibleComparisionOps(attribute) ) {
-				if(comp.display.equals(choiceCompOp.getValue())) {
+			for (FilterCriteria.ComparisonOp comp : FilterCriteria.getPossibleComparisionOps(attribute)) {
+				if (comp.display.equals(choiceCompOp.getValue())) {
 					this.comparisonOp = comp;
 					this.compValue = null;
 					updateCompValues();
@@ -149,7 +152,7 @@ public class FilterCriteriaNode extends HBox {
 		valueNodes.clear();
 
 		// discard old filter value
-		if(filterValue != null) {
+		if (filterValue != null) {
 			filterValue.setOnAction(null);
 		}
 
@@ -177,7 +180,7 @@ public class FilterCriteriaNode extends HBox {
 		}
 
 		// update new filter value
-		if(filterValue != null) {
+		if (filterValue != null) {
 			filterValue.setOnAction(event -> {
 				this.compValue = filterValue.getValue();
 			});
@@ -185,8 +188,7 @@ public class FilterCriteriaNode extends HBox {
 		}
 
 
-
-		if(valueNodes.isEmpty()) {
+		if (valueNodes.isEmpty()) {
 			Label label = new Label("Undefined");
 			label.setMinSize(10, 32);
 			label.setPrefSize(100000, 32);
@@ -197,7 +199,6 @@ public class FilterCriteriaNode extends HBox {
 
 		this.getChildren().addAll(valueNodes);
 	}
-
 
 
 }

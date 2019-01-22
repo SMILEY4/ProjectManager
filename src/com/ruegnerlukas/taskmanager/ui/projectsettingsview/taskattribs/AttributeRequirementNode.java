@@ -4,6 +4,6 @@ public interface AttributeRequirementNode {
 
 	public double getNodeHeight();
 
-	public void dispose();
+	public void close();
 
 }

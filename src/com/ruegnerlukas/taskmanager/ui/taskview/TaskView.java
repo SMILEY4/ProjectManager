@@ -11,6 +11,7 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.FilterPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.groupPopup.GroupByPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.sortPopup.SortPopup;
+import com.ruegnerlukas.taskmanager.ui.taskview.tasklist.TaskList;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -37,6 +38,8 @@ import java.io.IOException;
 
 public class TaskView extends AnchorPane {
 
+
+	public static final String TITLE = "Tasks";
 
 	@FXML private AnchorPane rootTaskView;
 
@@ -76,156 +79,24 @@ public class TaskView extends AnchorPane {
 		}
 
 		setupListeners();
-		create();
+		createHeader();
+		createSidebar();
+		createContent();
 	}
 
 
 
 
-	private void create() {
+	private void createHeader() {
 
 		// badges
 		paneHeaderBadges.setMouseTransparent(true);
-
-		badgeFilter = new Label("!");
-		badgeFilter.setMinSize(14, 14);
-		badgeFilter.setPrefSize(14, 14);
-		badgeFilter.setMaxSize(14, 14);
-		paneHeaderBadges.getChildren().add(badgeFilter);
-		btnFilter.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
-			@Override public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
-				double x = newValue.getMinX();
-				double y = newValue.getMinY();
-				double w = newValue.getWidth();
-				double h = newValue.getHeight();
-				AnchorPane.setLeftAnchor(badgeFilter, x+w-7-3);
-				AnchorPane.setBottomAnchor(badgeFilter, y+h-7-7);
-
-			}
-		});
-
-		int nFilter = Logic.project.getProject().filterCriteria.size();
-		if(0 < nFilter && nFilter < 10) {
-			badgeFilter.setText(""+nFilter);
-			badgeFilter.setVisible(true);
-		} else if(nFilter >= 10) {
-			badgeFilter.setText("!");
-			badgeFilter.setVisible(true);
-		} else {
-			badgeFilter.setText("");
-			badgeFilter.setVisible(false);
-		}
-
-		EventManager.registerListener(new EventListener() {
-			@Override public void onEvent(Event e) {
-				int n = ((FilterCriteriaChangedEvent)e).getFilterCriteria().size();
-				if(0 < n && n < 10) {
-					badgeFilter.setText(""+n);
-					badgeFilter.setVisible(true);
-				} else if(n >= 10) {
-					badgeFilter.setText("!");
-					badgeFilter.setVisible(true);
-				} else {
-					badgeFilter.setText("");
-					badgeFilter.setVisible(false);
-				}
-			}
-		}, FilterCriteriaChangedEvent.class);
+		badgeFilter = createButtonBadge(paneHeaderBadges, btnFilter);
+		badgeGroupBy = createButtonBadge(paneHeaderBadges, btnGroup);
+		badgeSort = createButtonBadge(paneHeaderBadges, btnSort);
 
 
-		badgeGroupBy = new Label("!");
-		badgeGroupBy.setMinSize(14, 14);
-		badgeGroupBy.setPrefSize(14, 14);
-		badgeGroupBy.setMaxSize(14, 14);
-		paneHeaderBadges.getChildren().add(badgeGroupBy);
-		btnGroup.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
-			@Override public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
-				double x = newValue.getMinX();
-				double y = newValue.getMinY();
-				double w = newValue.getWidth();
-				double h = newValue.getHeight();
-				AnchorPane.setLeftAnchor(badgeGroupBy, x+w-7-3);
-				AnchorPane.setBottomAnchor(badgeGroupBy, y+h-7-7);
-
-			}
-		});
-
-		int nGroupBy = Logic.project.getProject().groupByOrder.size();
-		if(0 < nGroupBy && nGroupBy < 10) {
-			badgeGroupBy.setText(""+nGroupBy);
-			badgeGroupBy.setVisible(true);
-		} else if(nGroupBy >= 10) {
-			badgeGroupBy.setText("!");
-			badgeGroupBy.setVisible(true);
-		} else {
-			badgeGroupBy.setText("");
-			badgeGroupBy.setVisible(false);
-		}
-
-		EventManager.registerListener(new EventListener() {
-			@Override public void onEvent(Event e) {
-				int n = ((GroupByOrderChangedEvent)e).getAttributes().size();
-				if(0 < n && n < 10) {
-					badgeGroupBy.setText(""+n);
-					badgeGroupBy.setVisible(true);
-				} else if(n >= 10) {
-					badgeGroupBy.setText("!");
-					badgeGroupBy.setVisible(true);
-				} else {
-					badgeGroupBy.setText("");
-					badgeGroupBy.setVisible(false);
-				}
-			}
-		}, GroupByOrderChangedEvent.class);
-
-
-		badgeSort = new Label("!");
-		badgeSort.setMinSize(14, 14);
-		badgeSort.setPrefSize(14, 14);
-		badgeSort.setMaxSize(14, 14);
-		paneHeaderBadges.getChildren().add(badgeSort);
-		btnSort.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
-			@Override public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
-				double x = newValue.getMinX();
-				double y = newValue.getMinY();
-				double w = newValue.getWidth();
-				double h = newValue.getHeight();
-				AnchorPane.setLeftAnchor(badgeSort, x+w-7-3);
-				AnchorPane.setBottomAnchor(badgeSort, y+h-7-7);
-
-			}
-		});
-
-		int nSort = Logic.project.getProject().sortElements.size();
-		if(0 < nSort && nSort < 10) {
-			badgeSort.setText(""+nSort);
-			badgeSort.setVisible(true);
-		} else if(nSort >= 10) {
-			badgeSort.setText("!");
-			badgeSort.setVisible(true);
-		} else {
-			badgeSort.setText("");
-			badgeSort.setVisible(false);
-		}
-
-		EventManager.registerListener(new EventListener() {
-			@Override public void onEvent(Event e) {
-				int n = ((SortElementsChangedEvent)e).getSortElements().size();
-				if(0 < n && n < 10) {
-					badgeSort.setText(""+n);
-					badgeSort.setVisible(true);
-				} else if(n >= 10) {
-					badgeSort.setText("!");
-					badgeSort.setVisible(true);
-				} else {
-					badgeSort.setText("");
-					badgeSort.setVisible(false);
-				}
-			}
-		}, SortElementsChangedEvent.class);
-
-
-		// filter
+		// button filter
 		btnFilter.setOnAction(event -> {
 			Stage stage = new Stage();
 			stage.initModality(Modality.WINDOW_MODAL);
@@ -237,7 +108,7 @@ public class TaskView extends AnchorPane {
 		});
 
 
-		// group by
+		// button group-by
 		btnGroup.setOnAction(event -> {
 			Stage stage = new Stage();
 			stage.initModality(Modality.WINDOW_MODAL);
@@ -249,7 +120,7 @@ public class TaskView extends AnchorPane {
 		});
 
 
-		// sort
+		// button sort
 		btnSort.setOnAction(event -> {
 			Stage stage = new Stage();
 			stage.initModality(Modality.WINDOW_MODAL);
@@ -265,16 +136,24 @@ public class TaskView extends AnchorPane {
 		ButtonUtils.makeIconButton(btnActions, SVGIcons.HAMBURGER, 0.7f, "white");
 		btnActions.setOnAction(event -> {
 			ContextMenu popup = new ContextMenu();
-//				for(int i=0; i<actionFunctions.size(); i++) {
-//					MenuFunction func = actionFunctions.get(i);
-//					func.addToContextMenu(popup);
-//				}
+			/*
+			for(int i=0; i<actionFunctions.size(); i++) {
+				MenuFunction func = actionFunctions.get(i);
+				func.addToContextMenu(popup);
+			}
+			*/
 			popup.show(btnActions, Side.BOTTOM, 0, 0);
 		});
 
+	}
+
+
+
+
+	private void createSidebar() {
 
 		// sidebar show/hide
-		if(sidebarHidden) {
+		if (sidebarHidden) {
 			splitContent.setDividerPosition(0, 1);
 			labelHideSidebar.setText("<");
 		} else {
@@ -282,9 +161,11 @@ public class TaskView extends AnchorPane {
 			labelHideSidebar.setText(">");
 		}
 
+		// listen for dragging
 		splitContent.getDividers().get(0).positionProperty().addListener(new ChangeListener<Number>() {
-			@Override public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				if(newValue.doubleValue() > 0.95) {
+			@Override
+			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+				if (newValue.doubleValue() > 0.95) {
 					splitContent.setDividerPosition(0, 1);
 					labelHideSidebar.setText("<");
 					sidebarHidden = true;
@@ -295,13 +176,16 @@ public class TaskView extends AnchorPane {
 			}
 		});
 
+
+		// transform label into button
 		LabelUtils.makeAsButton(labelHideSidebar, "-fx-background-color: #c9c9c9;", "-fx-background-color: #bcbcbc;", new EventHandler<MouseEvent>() {
-			@Override public void handle(MouseEvent event) {
-				if(event.getButton() != MouseButton.PRIMARY) {
+			@Override
+			public void handle(MouseEvent event) {
+				if (event.getButton() != MouseButton.PRIMARY) {
 					return;
 				}
 				sidebarHidden = !sidebarHidden;
-				if(sidebarHidden) {
+				if (sidebarHidden) {
 					splitContent.setDividerPosition(0, 1);
 					labelHideSidebar.setText("<");
 				} else {
@@ -312,7 +196,126 @@ public class TaskView extends AnchorPane {
 			}
 		});
 
+
 	}
+
+
+
+
+	private void createContent() {
+
+		// TMP
+		for (int i = 0; i < 10; i++) {
+			Logic.tasks.createTask();
+		}
+
+		for (int i = 0; i < 3; i++) {
+			TaskList list = new TaskList();
+			boxTasks.getChildren().add(list);
+		}
+
+	}
+
+
+
+
+	private Label createButtonBadge(AnchorPane pane, Button button) {
+
+		// create badge-label
+		Label badge = new Label("!");
+		badge.setMinSize(14, 14);
+		badge.setPrefSize(14, 14);
+		badge.setMaxSize(14, 14);
+		pane.getChildren().add(badge);
+		button.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
+			@Override
+			public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
+				double x = newValue.getMinX();
+				double y = newValue.getMinY();
+				double w = newValue.getWidth();
+				double h = newValue.getHeight();
+				AnchorPane.setLeftAnchor(badge, x + w - 7 - 3);
+				AnchorPane.setBottomAnchor(badge, y + h - 7 - 7);
+
+			}
+		});
+
+
+		// get number to display
+		int nSort = 0;
+		if (button == btnSort) {
+			nSort = Logic.project.getProject().sortElements.size();
+		}
+		if (button == btnFilter) {
+			nSort = Logic.project.getProject().filterCriteria.size();
+		}
+		if (button == btnGroup) {
+			nSort = Logic.project.getProject().groupByOrder.size();
+		}
+
+
+		// set badge-text
+		if (0 < nSort && nSort < 10) {
+			badge.setText("" + nSort);
+			badge.setVisible(true);
+		} else if (nSort >= 10) {
+			badge.setText("!");
+			badge.setVisible(true);
+		} else {
+			badge.setText("");
+			badge.setVisible(false);
+		}
+
+
+		// get event to listen to
+		Class eventClass = null;
+		if (button == btnSort) {
+			eventClass = SortElementsChangedEvent.class;
+		}
+		if (button == btnFilter) {
+			eventClass = FilterCriteriaChangedEvent.class;
+		}
+		if (button == btnGroup) {
+			eventClass = GroupByOrderChangedEvent.class;
+		}
+
+
+		// listen for changes
+		EventManager.registerListener(this, new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+
+				// get number to display
+				int n = 0;
+				if (button == btnSort) {
+					n = Logic.project.getProject().sortElements.size();
+				}
+				if (button == btnFilter) {
+					n = Logic.project.getProject().filterCriteria.size();
+				}
+				if (button == btnGroup) {
+					n = Logic.project.getProject().groupByOrder.size();
+				}
+
+				// set badge-text
+				if (0 < n && n < 10) {
+					badge.setText("" + n);
+					badge.setVisible(true);
+				} else if (n >= 10) {
+					badge.setText("!");
+					badge.setVisible(true);
+				} else {
+					badge.setText("");
+					badge.setVisible(false);
+				}
+
+			}
+		}, eventClass);
+
+
+		return badge;
+	}
+
 
 
 
@@ -322,6 +325,9 @@ public class TaskView extends AnchorPane {
 
 
 
+	public void close() {
+		EventManager.deregisterListeners(this);
+	}
 
 
 }

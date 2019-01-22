@@ -32,9 +32,12 @@ public class SortElementNode extends HBox {
 	}
 
 
+
+
 	public SortElementNode(TaskAttribute attribute, SortElement.Sort sortDir) {
 		this.attribute = attribute;
 		this.sortDir = sortDir;
+
 
 		// root
 		this.setMinSize(100, 34);
@@ -50,7 +53,7 @@ public class SortElementNode extends HBox {
 		btnRemove.setPrefSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
 		btnRemove.setOnAction(event -> {
-			VBox boxAttributes = (VBox)this.getParent();
+			VBox boxAttributes = (VBox) this.getParent();
 			boxAttributes.getChildren().remove(this);
 		});
 		this.getChildren().add(btnRemove);
@@ -61,19 +64,20 @@ public class SortElementNode extends HBox {
 		choiceAttrib.setMinSize(250, 32);
 		choiceAttrib.setPrefSize(250, 32);
 		choiceAttrib.setMaxSize(500, 32);
-		for(TaskAttribute attrib : Logic.project.getProject().attributes ) {
+		for (TaskAttribute attrib : Logic.project.getProject().attributes) {
 			choiceAttrib.getItems().add(attrib.name);
 		}
 		choiceAttrib.getSelectionModel().select(attribute.name);
 		choiceAttrib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			for(TaskAttribute attrib : Logic.project.getProject().attributes) {
-				if(attrib.name.equals(choiceAttrib.getValue())) {
+			for (TaskAttribute attrib : Logic.project.getProject().attributes) {
+				if (attrib.name.equals(choiceAttrib.getValue())) {
 					this.attribute = attrib;
 					break;
 				}
 			}
 		});
 		this.getChildren().add(choiceAttrib);
+
 
 		// choice sort dir
 		choiceSortDir = new ChoiceBox<>();
@@ -83,8 +87,8 @@ public class SortElementNode extends HBox {
 		choiceSortDir.getItems().addAll(SortElement.Sort.ASC.display, SortElement.Sort.DESC.display);
 		choiceSortDir.getSelectionModel().select(sortDir.display);
 		choiceSortDir.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			for(SortElement.Sort dir : SortElement.Sort.values()) {
-				if(sortDir.display.equals(choiceSortDir.getValue())) {
+			for (SortElement.Sort dir : SortElement.Sort.values()) {
+				if (sortDir.display.equals(choiceSortDir.getValue())) {
 					this.sortDir = dir;
 					break;
 				}
@@ -93,6 +97,7 @@ public class SortElementNode extends HBox {
 		this.getChildren().add(choiceSortDir);
 
 
+		// separator
 		Region region = new Region();
 		region.setMinSize(0, 1);
 		region.setPrefSize(10000, 1);
@@ -107,9 +112,9 @@ public class SortElementNode extends HBox {
 		btnUp.setPrefSize(32, 32);
 		btnUp.setMaxSize(32, 32);
 		btnUp.setOnAction(event -> {
-			VBox boxAttributes = (VBox)this.getParent();
+			VBox boxAttributes = (VBox) this.getParent();
 			int index = boxAttributes.getChildren().indexOf(SortElementNode.this);
-			if(index > 0) {
+			if (index > 0) {
 				VBoxOrder.moveItem(boxAttributes, SortElementNode.this, -1);
 			}
 
@@ -124,13 +129,14 @@ public class SortElementNode extends HBox {
 		btnDown.setPrefSize(32, 32);
 		btnDown.setMaxSize(32, 32);
 		btnDown.setOnAction(event -> {
-			VBox boxAttributes = (VBox)this.getParent();
+			VBox boxAttributes = (VBox) this.getParent();
 			int index = boxAttributes.getChildren().indexOf(SortElementNode.this);
-			if(index < boxAttributes.getChildren().size()-1) {
+			if (index < boxAttributes.getChildren().size() - 1) {
 				VBoxOrder.moveItem(boxAttributes, SortElementNode.this, +1);
 			}
 		});
 		this.getChildren().add(btnDown);
 
 	}
+
 }

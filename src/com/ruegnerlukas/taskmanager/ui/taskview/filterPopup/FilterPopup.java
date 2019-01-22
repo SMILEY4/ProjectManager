@@ -6,8 +6,6 @@ import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxDragAndDrop;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -42,7 +40,6 @@ public class FilterPopup extends AnchorPane {
 			Logger.get().error("Error loading FilterPopup-FXML: " + e);
 		}
 
-		setupListeners();
 		create();
 	}
 
@@ -53,7 +50,7 @@ public class FilterPopup extends AnchorPane {
 
 		// attributes
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		for(FilterCriteria criteria : Logic.project.getProject().filterCriteria) {
+		for (FilterCriteria criteria : Logic.project.getProject().filterCriteria) {
 			boxAttributes.getChildren().add(new FilterCriteriaNode(criteria.attribute, criteria.comparisonOp, criteria.comparisionValue));
 		}
 
@@ -67,8 +64,8 @@ public class FilterPopup extends AnchorPane {
 		// accept
 		btnAccept.setOnAction(event -> {
 			List<FilterCriteria> criteriaList = new ArrayList<>();
-			for(Node node : boxAttributes.getChildren()) {
-				FilterCriteriaNode filterNode = (FilterCriteriaNode)node;
+			for (Node node : boxAttributes.getChildren()) {
+				FilterCriteriaNode filterNode = (FilterCriteriaNode) node;
 				criteriaList.add(new FilterCriteria(filterNode.attribute, filterNode.comparisonOp, filterNode.compValue));
 			}
 			Logic.filter.setFilterCriteria(criteriaList);
@@ -81,12 +78,6 @@ public class FilterPopup extends AnchorPane {
 			this.stage.close();
 		});
 
-	}
-
-
-
-
-	private void setupListeners() {
 	}
 
 

@@ -33,6 +33,8 @@ import java.util.Random;
 public class ProjectSettingsView extends AnchorPane {
 
 
+	public static final String TITLE = "Project Settings";
+
 	@FXML private AnchorPane rootProjectSettingsView;
 
 	private EditableLabel labelName;
@@ -78,13 +80,14 @@ public class ProjectSettingsView extends AnchorPane {
 
 		// lock task attributes
 		attributesLocked = Logic.project.getProject().attributesLocked;
-		if(attributesLocked) {
+		if (attributesLocked) {
 			ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1f, "black");
 		} else {
-			ButtonUtils.makeIconButton(btnLockAttributes,SVGIcons.LOCK_OPEN, 1f, "black");
+			ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_OPEN, 1f, "black");
 		}
 		btnLockAttributes.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent event) {
+			@Override
+			public void handle(ActionEvent event) {
 				Logic.attribute.setAttributeLock(!attributesLocked);
 			}
 		});
@@ -99,7 +102,8 @@ public class ProjectSettingsView extends AnchorPane {
 
 		// add attribute
 		btnAddAttribute.setOnAction(new EventHandler<ActionEvent>() {
-			@Override public void handle(ActionEvent event) {
+			@Override
+			public void handle(ActionEvent event) {
 				Logic.attribute.createAttribute(
 						"Attribute " + Integer.toHexString(new Integer(new Random().nextInt()).hashCode()),
 						TaskAttributeType.TEXT);
@@ -108,7 +112,7 @@ public class ProjectSettingsView extends AnchorPane {
 
 
 		// add initial attributes
-		for(TaskAttribute attribute : Logic.project.getProject().attributes) {
+		for (TaskAttribute attribute : Logic.project.getProject().attributes) {
 			TaskAttributeNode attrNode = new TaskAttributeNode(attribute);
 			boxTaskAttribs.getChildren().add(attrNode);
 		}
@@ -120,23 +124,25 @@ public class ProjectSettingsView extends AnchorPane {
 	private void setupListeners() {
 
 		// listen for project renamed
-		EventManager.registerListener(new EventListener() {
-			@Override public void onEvent(Event e) {
-				ProjectRenamedEvent event = (ProjectRenamedEvent)e;
+		EventManager.registerListener(this, new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				ProjectRenamedEvent event = (ProjectRenamedEvent) e;
 				labelName.setText(event.getNewName());
 			}
 		}, ProjectRenamedEvent.class);
 
 
 		// listen for attribute-lock-event
-		EventManager.registerListener(new EventListener() {
-			@Override public void onEvent(Event e) {
-				AttributeLockEvent event = (AttributeLockEvent)e;
+		EventManager.registerListener(this, new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				AttributeLockEvent event = (AttributeLockEvent) e;
 				attributesLocked = event.getLockNow();
-				if(attributesLocked) {
+				if (attributesLocked) {
 					ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1f, "black");
 				} else {
-					ButtonUtils.makeIconButton(btnLockAttributes,SVGIcons.LOCK_OPEN, 1f, "black");
+					ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_OPEN, 1f, "black");
 				}
 				setAttributeLock(attributesLocked);
 			}
@@ -144,9 +150,10 @@ public class ProjectSettingsView extends AnchorPane {
 
 
 		// listen for added attributes
-		EventManager.registerListener(new EventListener() {
-			@Override public void onEvent(Event e) {
-				AttributeCreatedEvent event = (AttributeCreatedEvent)e;
+		EventManager.registerListener(this, new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				AttributeCreatedEvent event = (AttributeCreatedEvent) e;
 				TaskAttributeNode attrNode = new TaskAttributeNode(event.getAttribute());
 				boxTaskAttribs.getChildren().add(attrNode);
 			}
@@ -154,16 +161,17 @@ public class ProjectSettingsView extends AnchorPane {
 
 
 		// listen for removed attributes
-		EventManager.registerListener(new EventListener() {
-			@Override public void onEvent(Event e) {
-				AttributeRemovedEvent event = (AttributeRemovedEvent)e;
+		EventManager.registerListener(this, new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				AttributeRemovedEvent event = (AttributeRemovedEvent) e;
 
-				for(Node node : boxTaskAttribs.getChildren()) {
-					TaskAttributeNode attributeNode = (TaskAttributeNode)node;
+				for (Node node : boxTaskAttribs.getChildren()) {
+					TaskAttributeNode attributeNode = (TaskAttributeNode) node;
 
-					if(attributeNode.attribute == event.getAttribute()) {
+					if (attributeNode.attribute == event.getAttribute()) {
 						boxTaskAttribs.getChildren().remove(node);
-						attributeNode.requirementNode.dispose();
+						attributeNode.close();
 						break;
 					}
 				}
@@ -175,13 +183,21 @@ public class ProjectSettingsView extends AnchorPane {
 
 
 
+	public void close() {
+		EventManager.deregisterListeners(this);
+	}
+
+
+
+
 	private void setAttributeLock(boolean locked) {
 		btnAddAttribute.setDisable(locked);
-		for(Node node : boxTaskAttribs.getChildren()) {
-			if(node instanceof TaskAttributeNode) {
-				((TaskAttributeNode)node).setLocked(locked);
+		for (Node node : boxTaskAttribs.getChildren()) {
+			if (node instanceof TaskAttributeNode) {
+				((TaskAttributeNode) node).setLocked(locked);
 			}
 		}
 	}
+
 
 }
