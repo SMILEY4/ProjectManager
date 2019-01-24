@@ -1,6 +1,9 @@
 package com.ruegnerlukas.taskmanager.logic;
 
+import com.ruegnerlukas.taskmanager.eventsystem.Event;
+import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeRemovedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.SortElementsChangedEvent;
 import com.ruegnerlukas.taskmanager.logic.data.Project;
 import com.ruegnerlukas.taskmanager.logic.data.sorting.SortElement;
@@ -10,6 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SortLogic {
+
+
+
+
+	protected SortLogic() {
+		EventManager.registerListener(new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				AttributeRemovedEvent event = (AttributeRemovedEvent)e;
+				removeSortElement(event.getAttribute());
+			}
+		}, AttributeRemovedEvent.class);
+	}
+
+
+
 
 	public boolean setSort(List<SortElement> elements) {
 		if(Logic.project.isProjectOpen()) {

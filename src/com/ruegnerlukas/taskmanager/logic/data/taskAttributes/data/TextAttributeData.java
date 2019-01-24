@@ -1,10 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.*;
 
 public class TextAttributeData implements TaskAttributeData {
 
@@ -85,7 +82,11 @@ public class TextAttributeData implements TaskAttributeData {
 
 	@Override
 	public boolean validate(TaskAttributeValue value) {
-		return value instanceof TextValue && (((TextValue)value).getText().length() <= charLimit);
+		if(value instanceof NoValue) {
+			return !useDefault;
+		} else {
+			return value instanceof TextValue && (((TextValue)value).getText().length() <= charLimit);
+		}
 	}
 
 

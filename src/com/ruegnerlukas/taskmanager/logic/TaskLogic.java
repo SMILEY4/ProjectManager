@@ -7,8 +7,11 @@ import com.ruegnerlukas.taskmanager.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.logic.data.Project;
 import com.ruegnerlukas.taskmanager.logic.data.Task;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NoValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberValue;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
 
 import java.util.List;
 
@@ -65,6 +68,12 @@ public class TaskLogic {
 			}
 			project.tasks.add(task);
 
+			// set fixed attributes (flag has default)
+			setAttributeValue(task, Logic.attribute.getAttributes(TaskAttributeType.ID).get(0), new NumberValue(project.idCounter));
+			setAttributeValue(task, Logic.attribute.getAttributes(TaskAttributeType.DESCRIPTION).get(0), new TextValue(""));
+
+			project.idCounter++;
+
 			EventManager.fireEvent(new TaskCreatedEvent(task, this));
 			return true;
 		} else {
@@ -87,6 +96,7 @@ public class TaskLogic {
 					task.attributes.put(attribute, value);
 					EventManager.fireEvent(new TaskValueChangedEvent(task, attribute, oldValue, value, this));
 				} else {
+					System.out.println("Rejected: " + oldValue + " -> " + value + "   (" + attribute.data  + ")");
 					EventManager.fireEvent(new TaskValueChangedRejection(task, attribute, oldValue, value, EventCause.NOT_ALLOWED,this));
 				}
 				return valid;
@@ -113,6 +123,47 @@ public class TaskLogic {
 			}
 		} else {
 			return false;
+		}
+	}
+
+
+
+	public TaskAttributeValue getAttributeValue(Task task, String attributeName) {
+		if (Logic.project.isProjectOpen()) {
+			Project project = Logic.project.getProject();
+
+			if(project.tasks.contains(task)) {
+
+				TaskAttribute attribute = null;
+				for(TaskAttribute attrib : task.attributes.keySet()) {
+					if(attrib.name.equals(attributeName)) {
+						attribute = attrib;
+					}
+				}
+
+				if(attribute != null) {
+
+					// value is set
+					if(task.attributes.containsKey(attribute) && !(task.attributes.get(attribute) instanceof NoValue))  {
+						return task.attributes.get(attribute);
+
+					// use default values
+					} else if(attribute.data.usesDefault()) {
+						return attribute.data.getDefault();
+
+					// no value found
+					} else {
+						return new NoValue();
+					}
+				}
+
+				return null;
+
+			} else {
+				return null;
+			}
+		} else {
+			return null;
 		}
 	}
 

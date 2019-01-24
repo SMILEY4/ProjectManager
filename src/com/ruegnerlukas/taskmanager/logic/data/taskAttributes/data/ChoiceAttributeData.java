@@ -1,10 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextArrayValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.*;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -81,10 +78,14 @@ public class ChoiceAttributeData implements TaskAttributeData {
 
 	@Override
 	public boolean validate(TaskAttributeValue value) {
-		if(value instanceof TextValue) {
-			return new HashSet<>(Arrays.asList(values)).contains( ((TextValue)value).getText() );
+		if(value instanceof NoValue) {
+			return !useDefault;
 		} else {
-			return false;
+			if(value instanceof TextValue) {
+				return new HashSet<>(Arrays.asList(values)).contains( ((TextValue)value).getText() );
+			} else {
+				return false;
+			}
 		}
 	}
 

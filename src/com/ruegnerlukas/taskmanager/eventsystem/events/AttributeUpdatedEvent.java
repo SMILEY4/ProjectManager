@@ -37,6 +37,16 @@ public class AttributeUpdatedEvent extends Event {
 
 
 
+	public boolean wasChanged(TaskAttributeData.Var var) {
+		for(int i=0; i<getChangedVars().length; i++) {
+			if(getChangedVars()[i] == var) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
 
 	public Object getNewMainValue() {
 		return newMainValue;

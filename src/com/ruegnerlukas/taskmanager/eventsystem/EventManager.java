@@ -8,11 +8,29 @@ import java.util.Map;
 public class EventManager {
 
 	
-	private static Map< Class<? extends Event>, ArrayList<EventListener> > listenerMap = new HashMap< Class<? extends Event>, ArrayList<EventListener> >();
-	private static Map< Class<? extends RequestEvent<?>>, ArrayList<RequestEventListener<?>> > reqListenerMap = new HashMap< Class<? extends RequestEvent<?>>, ArrayList<RequestEventListener<?>> >();
+	private static Map< Class<? extends Event>, ArrayList<EventListener> > listenerMap = new HashMap<>();
+	private static Map< Class<? extends RequestEvent<?>>, ArrayList<RequestEventListener<?>> > reqListenerMap = new HashMap<>();
+	private static Map<Object, List<EventListener>> originMap = new HashMap<>();
 
-	
-	
+
+
+	@SafeVarargs
+	public static void registerListener(Object origin, EventListener listener, Class<? extends Event>... events) {
+		for(Class<? extends Event> event : events) {
+			ArrayList<EventListener> listeners = listenerMap.get(event);
+			if(listeners == null) {
+				listeners = new ArrayList<EventListener>();
+				listenerMap.put(event, listeners);
+			}
+			listeners.add(listener);
+			if(!originMap.containsKey(origin)) {
+				originMap.put(origin, new ArrayList<>());
+			}
+			originMap.get(origin).add(listener);
+		}
+	}
+
+
 	
 	@SafeVarargs
 	public static void registerListener(EventListener listener, Class<? extends Event>... events) {
@@ -45,7 +63,7 @@ public class EventManager {
 	
 	
 	@SafeVarargs
-	public static void deregisterListener(EventListener listener, Class<? extends Event>... events) {
+	public static void deregisterListeners(EventListener listener, Class<? extends Event>... events) {
 		for(Class<? extends Event> event : events) {
 			ArrayList<EventListener> listeners = listenerMap.get(event);
 			if(listeners != null) {
@@ -58,7 +76,7 @@ public class EventManager {
 	
 	
 	@SafeVarargs
-	public static void deregisterListener(RequestEventListener<?> listener, Class<? extends RequestEvent<?>>... events) {
+	public static void deregisterListeners(RequestEventListener<?> listener, Class<? extends RequestEvent<?>>... events) {
 		for(Class<? extends RequestEvent<?>> event : events) {
 			ArrayList<RequestEventListener<?>> listeners = reqListenerMap.get(event);
 			if(listeners != null) {
@@ -70,7 +88,7 @@ public class EventManager {
 	
 	
 	
-	public static void deregisterListener(EventListener listener) {
+	public static void deregisterListeners(EventListener listener) {
 		for(Class<? extends Event> event : listenerMap.keySet()) {
 			ArrayList<EventListener> listeners = listenerMap.get(event);
 			if(listeners != null) {
@@ -82,7 +100,7 @@ public class EventManager {
 	
 	
 	
-	public static void deregisterListener(RequestEventListener<?> listener) {
+	public static void deregisterListeners(RequestEventListener<?> listener) {
 		for(Class<? extends RequestEvent<?>> event : reqListenerMap.keySet()) {
 			ArrayList<RequestEventListener<?>> listeners = reqListenerMap.get(event);
 			if(listeners != null) {
@@ -91,9 +109,21 @@ public class EventManager {
 		}
 	}
 
-	
-	
-	
+
+
+
+	public static void deregisterListeners(Object origin) {
+		if(originMap.containsKey(origin)) {
+			for(EventListener listener : originMap.get(origin)) {
+				deregisterListeners(listener);
+			}
+			originMap.remove(origin);
+		}
+	}
+
+
+
+
 	public static void fireEvent(Event event) {
 		System.out.println("FIRE: " + event);
 		ArrayList<EventListener> listeners = listenerMap.get(event.getClass());

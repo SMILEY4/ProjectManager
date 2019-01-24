@@ -4,10 +4,17 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.FilterCriteriaChangedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.GroupByOrderChangedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.SortElementsChangedEvent;
+import com.ruegnerlukas.taskmanager.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.logic.data.Task;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagArrayValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.FilterPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.groupPopup.GroupByPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.sortPopup.SortPopup;
@@ -35,6 +42,9 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class TaskView extends AnchorPane {
 
@@ -78,10 +88,33 @@ public class TaskView extends AnchorPane {
 			Logger.get().error("Error loading TaskView-FXML: " + e);
 		}
 
+
+		// FOR TESTING
+		for(int i=0; i<40; i++) {
+			Logic.tasks.createTask();
+		}
+
+		FlagArrayValue flags = new FlagArrayValue(
+				new TaskFlag(TaskFlag.FlagColor.RED, "Bug Critical", false),
+				new TaskFlag(TaskFlag.FlagColor.ORANGE, "Bug", false),
+				new TaskFlag(TaskFlag.FlagColor.CYAN, "Feature", false),
+				new TaskFlag(TaskFlag.FlagColor.BLUE, "Feature Critical", false),
+				new TaskFlag(TaskFlag.FlagColor.GRAY, "Unassigned", false)
+		);
+		Logic.attribute.updateTaskAttribute(FlagAttributeData.NAME, TaskAttributeData.Var.FLAG_ATT_FLAGS, flags);
+
+		for(Task task : Logic.project.getProject().tasks) {
+			TaskAttribute flagAttribute = Logic.attribute.getAttributes(TaskAttributeType.FLAG).get(0);
+			FlagValue value = new FlagValue( ((FlagAttributeData)flagAttribute.data).flags[new Random().nextInt(((FlagAttributeData)flagAttribute.data).flags.length)] );
+			Logic.tasks.setAttributeValue(task, Logic.attribute.getAttributes(TaskAttributeType.FLAG).get(0), value);
+		}
+		// END TESTING
+
+
 		setupListeners();
 		createHeader();
 		createSidebar();
-		createContent();
+		refreshTaskView();
 	}
 
 
@@ -202,18 +235,40 @@ public class TaskView extends AnchorPane {
 
 
 
-	private void createContent() {
+	private void refreshTaskView() {
 
-		// TMP
-		for (int i = 0; i < 10; i++) {
-			Logic.tasks.createTask();
+		Map<List<TaskAttributeValue>, List<Task>> mapLists = Logic.groupBy.getTaskLists();
+
+		clearTaskList();
+
+		for(List<TaskAttributeValue> key : mapLists.keySet()) {
+
+			String listTitle = "";
+			for(int i=0; i<key.size(); i++) {
+				TaskAttributeValue value = key.get(i);
+				listTitle += value.toString();
+				if(i < key.size()-1) {
+					listTitle += ", ";
+				}
+			}
+
+			createTaskList(listTitle, mapLists.get(key));
 		}
+	}
 
-		for (int i = 0; i < 3; i++) {
-			TaskList list = new TaskList();
-			boxTasks.getChildren().add(list);
-		}
 
+
+
+	private void clearTaskList() {
+		boxTasks.getChildren().clear();
+	}
+
+
+
+
+	private void createTaskList(String name, List<Task> tasks) {
+		TaskList list = new TaskList(name, tasks);
+		boxTasks.getChildren().add(list);
 	}
 
 
@@ -320,6 +375,14 @@ public class TaskView extends AnchorPane {
 
 
 	private void setupListeners() {
+
+		EventManager.registerListener(this, new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				refreshTaskView();
+			}
+		}, GroupByOrderChangedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class, AttributeRenamedEvent.class);
+
 	}
 
 

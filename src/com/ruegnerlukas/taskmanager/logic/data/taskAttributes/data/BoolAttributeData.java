@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 
 public class BoolAttributeData implements TaskAttributeData {
@@ -54,7 +55,11 @@ public class BoolAttributeData implements TaskAttributeData {
 
 	@Override
 	public boolean validate(TaskAttributeValue value) {
-		return (value instanceof BoolValue);
+		if(value instanceof NoValue) {
+			return !useDefault;
+		} else {
+			return (value instanceof BoolValue);
+		}
 	}
 
 

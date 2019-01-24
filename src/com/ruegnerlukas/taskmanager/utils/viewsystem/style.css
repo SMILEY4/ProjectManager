@@ -283,92 +283,49 @@
  }
 
  
- /* TASK LIST */
- 
- /* tasklist header*/
- #rootTasklist > #paneHeader {
- 	-fx-background-color: -primary-0;
- 	-fx-border-color: -primary-2;
- 	-fx-border-width: 0 1 0 1;
+ /* TASK LISTS */
+
+ #boxTasks > TaskList > AnchorPane > #labelTitle {
+    -fx-background-color: -primary-0;
+    -fx-border-color: -primary-2;
+    -fx-border-width: 0 2 0 2;
+    -fx-font-weight: bold;
+    -fx-text-fill: -text-light-1;
  }
- 
- /*tasklist title */
- #rootTasklist > #paneHeader > * > Label {
- 	-fx-text-fill: -text-light-1;
- 	-fx-font-weight: bold;
- }
-  #rootTasklist > #paneHeader > * > TextField {
- 	-fx-text-fill: -text-light-1;
- 	-fx-font-weight: bold;
- 	-fx-background-color: -primary-1;
- 	-fx-border-color: transparent;
- }
- 
- 
- /* tasklist header hamburger-menu-button */
- #rootTasklist > #paneHeader > Button {
- 	-fx-border-color: transparent;
- 	-fx-background-color: transparent;
- }
- #rootTasklist > #paneHeader > Button > SVGPath {
- 	-fx-fill: -text-light-1;
- }
-  #rootTasklist > #paneHeader > Button:hover > SVGPath {
- 	-fx-fill: -text-light-0;
- }
- 
- 
- /* border between tasklists */
- #rootTasklist > ScrollPane {
-  	-fx-border-width: 0 1 0 1;
-  	-fx-border-color: -gray-mid-1;
- }
- 
- 
- /* tasklist content background */
- #rootTasklist > * > * > * > #boxContent {
- 	-fx-background-color: -gray-light;
- }
- 
- 
- 
- 
- 
- 
-  /* TASK CARD */
-  
-  /* background + dropshadow */
-  #rootTaskCard > #paneBackground {
-  	-fx-background-color: white;
-  	-fx-effect: dropshadow(gaussian, #0000009b, 13, 0.0, 0, 0);
+
+  #boxTasks > TaskList > AnchorPane > ScrollPane {
+     -fx-border-color: -gray-mid-1;
+     -fx-border-width: 0 2 0 2;
   }
-  
-  
-  /* label id */
-  #rootTaskCard > VBox > HBox > #labelID {
-  	-fx-text-fill: -info;
+
+
+ /* TASK CARDS */
+
+TaskCard {
+ -fx-background-radius: 5;
+ }
+
+ TaskCard > AnchorPane > {
+   -fx-effect: dropshadow(gaussian, rgba(0.0,0.0,0.0,0.6), 7, 0, 0, 0);
+ }
+
+ TaskCard > AnchorPane > #paneFlag {
+    -fx-background-color: red;
+ }
+
+ TaskCard > AnchorPane > #paneBackground {
+    -fx-background-color: -gray-light;
+ }
+
+ TaskCard > AnchorPane > VBox > #labelID {
+   -fx-text-fill: -info;
+ }
+
+  TaskCard > AnchorPane > VBox > #paneDescription > EditableAreaLabel {
+    -fx-border-color: -gray-mid-0;
+    -fx-border-radius: 6;
   }
-  
-  /* button actions */
-  #rootTaskCard > VBox > HBox > #btnActions {
- 	-fx-border-color: transparent;
- 	-fx-background-color: transparent;
-  }
-  #rootTaskCard > VBox > HBox > #btnActions > SVGPath {
- 	-fx-fill: -dark;
-  }
-  #rootTaskCard > VBox > HBox > #btnActions:hover > SVGPath {
- 	-fx-fill: black;
-  }
- 
- 
-  /* tags */
-  #rootTaskCard > #boxTags > Label{
-  	-fx-background-radius: 8;
-  	-fx-background-color: -gray-mid-0;
-  	-fx-padding: 0 5 0 5;
-  }
- 
- 
+
+
  
  

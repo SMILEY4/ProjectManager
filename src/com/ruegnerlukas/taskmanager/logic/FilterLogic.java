@@ -1,6 +1,9 @@
 package com.ruegnerlukas.taskmanager.logic;
 
+import com.ruegnerlukas.taskmanager.eventsystem.Event;
+import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeRemovedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.FilterCriteriaChangedEvent;
 import com.ruegnerlukas.taskmanager.logic.data.Project;
 import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
@@ -10,6 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class FilterLogic {
+
+
+	protected FilterLogic() {
+
+		EventManager.registerListener(new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				AttributeRemovedEvent event = (AttributeRemovedEvent)e;
+				removeFilterCriteria(event.getAttribute());
+			}
+		}, AttributeRemovedEvent.class);
+
+	}
+
+
+
 
 	public boolean setFilterCriteria(List<FilterCriteria> filterCriteria) {
 		if(Logic.project.isProjectOpen()) {
@@ -22,6 +41,8 @@ public class FilterLogic {
 			return false;
 		}
 	}
+
+
 
 
 	public boolean removeFilterCriteria(TaskAttribute attribute) {

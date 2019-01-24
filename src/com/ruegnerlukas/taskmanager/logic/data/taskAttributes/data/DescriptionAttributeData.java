@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
 
@@ -30,7 +31,11 @@ public class DescriptionAttributeData implements TaskAttributeData {
 
 	@Override
 	public boolean validate(TaskAttributeValue value) {
-		return value instanceof TextValue;
+		if (value instanceof NoValue) {
+			return true;
+		} else {
+			return value instanceof TextValue;
+		}
 	}
 
 

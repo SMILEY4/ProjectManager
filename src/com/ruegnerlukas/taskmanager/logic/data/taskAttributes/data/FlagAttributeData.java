@@ -2,9 +2,7 @@ package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagArrayValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.*;
 
 import java.util.Arrays;
 import java.util.HashSet;

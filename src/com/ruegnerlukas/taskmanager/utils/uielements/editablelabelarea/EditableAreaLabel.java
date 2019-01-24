@@ -1,11 +1,7 @@
 package com.ruegnerlukas.taskmanager.utils.uielements.editablelabelarea;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
-
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
@@ -13,11 +9,11 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EditableAreaLabel extends AnchorPane {
 
@@ -68,11 +64,6 @@ public class EditableAreaLabel extends AnchorPane {
 			}
 		});
 		
-//		area.setOnAction(new EventHandler<ActionEvent>() {
-//			@Override public void handle(ActionEvent event) {
-//				exitEditMode(false);
-//			}
-//		});
 		area.focusedProperty().addListener(new ChangeListener<Boolean>() {
 			@Override public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
 				if(newValue == false) {
@@ -101,8 +92,8 @@ public class EditableAreaLabel extends AnchorPane {
 		});
 	}
 	
-	
-	
+
+
 	
 	public EditableAreaLabel setEditable(boolean editable) {
 		this.editable = editable;

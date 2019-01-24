@@ -36,7 +36,8 @@ public class MainView extends AnchorPane {
 	private MenuFunction functionSaveProject;
 	private MenuFunction functionCloseProject;
 
-
+	private ProjectSettingsView viewProjectSettings;
+	private TaskView viewTasks;
 
 
 
@@ -65,8 +66,7 @@ public class MainView extends AnchorPane {
 			public void onEvent(Event event) {
 				functionCloseProject.setDisable(true);
 				functionSaveProject.setDisable(true);
-				closeTap_projectSettings();
-				closeTap_tasks();
+				closeAllTabs();
 			}
 		}, ProjectClosedEvent.class);
 
@@ -76,8 +76,7 @@ public class MainView extends AnchorPane {
 			public void onEvent(Event event) {
 				functionCloseProject.setDisable(false);
 				functionSaveProject.setDisable(false);
-				openTabProjectSettings();
-				openTap_tasks();
+				openTabs();
 			}
 		}, ProjectCreatedEvent.class);
 
@@ -89,7 +88,6 @@ public class MainView extends AnchorPane {
 	private void setupMenuFunctions() {
 
 		// Create new empty Project
-		// save/close last project
 		MenuFunction functionNewProject = new MenuFunction("File", "New Project") {
 			@Override
 			public void onAction() {
@@ -242,7 +240,7 @@ public class MainView extends AnchorPane {
 	/**
 	 * shows a dialog and asks user if he wants to save project before closing it.
 	 *
-	 * @return true, if the project was closed (with or without saving it); false, if the user cancelled the actions
+	 * @return true, if the project was closed (with or without saving it); false, if the user cancelled the action
 	 */
 	private boolean handleOpenProject() {
 		if (!Logic.project.isProjectOpen()) {
@@ -273,20 +271,46 @@ public class MainView extends AnchorPane {
 
 
 	private void openTabProjectSettings() {
-		Tab tab = new Tab("Project Settings");
-		ProjectSettingsView projectSettingsView = new ProjectSettingsView();
-		AnchorUtils.setAnchors(projectSettingsView, 0, 0, 0, 0);
-		tab.setContent(projectSettingsView);
+		viewProjectSettings = new ProjectSettingsView();
+		AnchorUtils.setAnchors(viewProjectSettings, 0, 0, 0, 0);
+		Tab tab = new Tab(ProjectSettingsView.TITLE);
+		tab.setContent(viewProjectSettings);
 		tabPane.getTabs().add(tab);
 	}
 
 
 
 
-	private void closeTap_projectSettings() {
+	private void closeTabProjectSettings() {
 		for (int i = 0; i < tabPane.getTabs().size(); i++) {
 			Tab tab = tabPane.getTabs().get(i);
-			if (tab.getText().equalsIgnoreCase("Project Settings")) {
+			if (tab.getContent() == viewProjectSettings) {
+				tabPane.getTabs().remove(tab);
+				viewProjectSettings.close();
+				break;
+			}
+		}
+	}
+
+
+
+
+	private void openTabTasks() {
+		viewTasks = new TaskView();
+		AnchorUtils.setAnchors(viewTasks, 0, 0, 0, 0);
+		Tab tab = new Tab(TaskView.TITLE);
+		tab.setContent(viewTasks);
+		tabPane.getTabs().add(tab);
+	}
+
+
+
+
+	private void closeTabTasks() {
+		for (int i = 0; i < tabPane.getTabs().size(); i++) {
+			Tab tab = tabPane.getTabs().get(i);
+			if (tab.getContent() == viewTasks) {
+				viewTasks.close();
 				tabPane.getTabs().remove(tab);
 				break;
 			}
@@ -296,29 +320,18 @@ public class MainView extends AnchorPane {
 
 
 
-	private void openTap_tasks() {
-		Tab tab = new Tab("Tasks");
-		TaskView taskView = new TaskView();
-		AnchorUtils.setAnchors(taskView, 0, 0, 0, 0);
-		tab.setContent(taskView);
-		tabPane.getTabs().add(tab);
+	private void openTabs() {
+		openTabProjectSettings();
+		openTabTasks();
 	}
 
 
 
 
-	private void closeTap_tasks() {
-		for (int i = 0; i < tabPane.getTabs().size(); i++) {
-			Tab tab = tabPane.getTabs().get(i);
-			if (tab.getText().equalsIgnoreCase("Tasks")) {
-				tabPane.getTabs().remove(tab);
-				break;
-			}
-		}
+	private void closeAllTabs() {
+		closeTabTasks();
+		closeTabProjectSettings();
 	}
-
-
-
 
 
 }
