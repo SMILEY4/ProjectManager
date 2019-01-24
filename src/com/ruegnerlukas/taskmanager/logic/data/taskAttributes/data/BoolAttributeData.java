@@ -58,4 +58,20 @@ public class BoolAttributeData implements TaskAttributeData {
 	}
 
 
+
+
+	@Override
+	public boolean usesDefault() {
+		return useDefault;
+	}
+
+
+
+
+	@Override
+	public BoolValue getDefault() {
+		return new BoolValue(defaultValue);
+	}
+
+
 }

@@ -6,6 +6,12 @@ import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttribu
 
 public class IDAttributeData implements TaskAttributeData {
 
+
+	public static final String NAME = "ID Attribute";
+
+
+
+
 	@Override
 	public TaskAttributeType getType() {
 		return TaskAttributeType.ID;
@@ -27,6 +33,21 @@ public class IDAttributeData implements TaskAttributeData {
 		} else {
 			return false;
 		}
+	}
+
+
+
+	@Override
+	public boolean usesDefault() {
+		return true;
+	}
+
+
+
+
+	@Override
+	public NumberValue getDefault() {
+		return new NumberValue(-1);
 	}
 
 }

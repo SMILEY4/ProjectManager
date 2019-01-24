@@ -7,6 +7,11 @@ import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
 public class DescriptionAttributeData implements TaskAttributeData {
 
 
+	public static final String NAME = "Description Attribute";
+
+
+
+
 	@Override
 	public TaskAttributeType getType() {
 		return TaskAttributeType.DESCRIPTION;
@@ -28,5 +33,21 @@ public class DescriptionAttributeData implements TaskAttributeData {
 		return value instanceof TextValue;
 	}
 
+
+
+
+
+	@Override
+	public boolean usesDefault() {
+		return true;
+	}
+
+
+
+
+	@Override
+	public TextValue getDefault() {
+		return new TextValue("");
+	}
 
 }

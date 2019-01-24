@@ -12,6 +12,11 @@ import java.util.HashSet;
 public class FlagAttributeData implements TaskAttributeData {
 
 
+	public static final String NAME = "Flag Attribute";
+
+
+
+
 	public TaskFlag[] flags;
 	public TaskFlag defaultFlag;
 
@@ -90,6 +95,22 @@ public class FlagAttributeData implements TaskAttributeData {
 		} else {
 			return false;
 		}
+	}
+
+
+
+
+	@Override
+	public boolean usesDefault() {
+		return true;
+	}
+
+
+
+
+	@Override
+	public FlagValue getDefault() {
+		return new FlagValue(defaultFlag);
 	}
 
 }

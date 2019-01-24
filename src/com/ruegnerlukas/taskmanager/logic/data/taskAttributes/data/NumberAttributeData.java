@@ -100,4 +100,20 @@ public class NumberAttributeData implements TaskAttributeData {
 		}
 	}
 
+
+
+
+	@Override
+	public boolean usesDefault() {
+		return useDefault;
+	}
+
+
+
+
+	@Override
+	public NumberValue getDefault() {
+		return new NumberValue(defaultValue);
+	}
+
 }

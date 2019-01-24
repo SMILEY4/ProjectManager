@@ -31,4 +31,8 @@ public interface TaskAttributeData {
 
 	public boolean validate(TaskAttributeValue value);
 
+
+	public boolean usesDefault();
+	public TaskAttributeValue getDefault();
+
 }

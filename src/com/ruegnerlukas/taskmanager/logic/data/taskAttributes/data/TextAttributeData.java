@@ -89,4 +89,19 @@ public class TextAttributeData implements TaskAttributeData {
 	}
 
 
+
+
+	@Override
+	public boolean usesDefault() {
+		return useDefault;
+	}
+
+
+
+
+	@Override
+	public TextValue getDefault() {
+		return new TextValue(defaultValue);
+	}
+
 }
