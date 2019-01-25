@@ -8,10 +8,10 @@ import com.ruegnerlukas.taskmanager.logic.data.Project;
 import com.ruegnerlukas.taskmanager.logic.data.Task;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NoValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.*;
 
 import java.util.List;
 
@@ -21,12 +21,14 @@ public class TaskLogic {
 
 	public TaskLogic() {
 
+
+		// attribute removed
 		EventManager.registerListener(new EventListener() {
 			@Override
 			public void onEvent(Event e) {
-				AttributeRemovedEvent event = (AttributeRemovedEvent)e;
 				if(Logic.project.isProjectOpen()) {
 
+					AttributeRemovedEvent event = (AttributeRemovedEvent)e;
 					List<Task> taskList = Logic.project.getProject().tasks;
 					for(Task task : taskList) {
 						removeAttribute(task, event.getAttribute());
@@ -36,12 +38,14 @@ public class TaskLogic {
 			}
 		}, AttributeRemovedEvent.class);
 
+
+		// attribute created
 		EventManager.registerListener(new EventListener() {
 			@Override
 			public void onEvent(Event e) {
-				AttributeCreatedEvent event = (AttributeCreatedEvent)e;
 				if(Logic.project.isProjectOpen()) {
 
+					AttributeCreatedEvent event = (AttributeCreatedEvent)e;
 					List<Task> taskList = Logic.project.getProject().tasks;
 					for(Task task : taskList) {
 						setAttributeValue(task, event.getAttribute(), new NoValue());
@@ -50,6 +54,30 @@ public class TaskLogic {
 				}
 			}
 		}, AttributeCreatedEvent.class);
+
+
+		// attribute changed
+		EventManager.registerListener(new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				if(Logic.project.isProjectOpen()) {
+					AttributeUpdatedEvent event = (AttributeUpdatedEvent)e;
+
+					// update tasks when TaskFlag was removed
+					if(event.wasChanged(TaskAttributeData.Var.FLAG_ATT_FLAGS)) {
+						FlagAttributeData flagData = (FlagAttributeData)Logic.attribute.getAttributes(TaskAttributeType.FLAG).get(0).data;
+						List<Task> taskList = Logic.project.getProject().tasks;
+						for(Task task : taskList) {
+							TaskFlag currFlag = ((FlagValue)getAttributeValue(task, FlagAttributeData.NAME)).getFlag();
+							if(!flagData.hasFlag(currFlag)) {
+								setAttributeValue(task, event.getAttribute(), new FlagValue(flagData.defaultFlag));
+							}
+						}
+					}
+
+				}
+			}
+		}, AttributeUpdatedEvent.class);
 
 	}
 
@@ -96,7 +124,6 @@ public class TaskLogic {
 					task.attributes.put(attribute, value);
 					EventManager.fireEvent(new TaskValueChangedEvent(task, attribute, oldValue, value, this));
 				} else {
-					System.out.println("Rejected: " + oldValue + " -> " + value + "   (" + attribute.data  + ")");
 					EventManager.fireEvent(new TaskValueChangedRejection(task, attribute, oldValue, value, EventCause.NOT_ALLOWED,this));
 				}
 				return valid;

@@ -28,6 +28,18 @@ public class FlagAttributeData implements TaskAttributeData {
 
 
 
+	public boolean hasFlag(TaskFlag flag) {
+		for(TaskFlag f : flags) {
+			if(f == flag) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+
 	@Override
 	public TaskAttributeType getType() {
 		return TaskAttributeType.FLAG;
