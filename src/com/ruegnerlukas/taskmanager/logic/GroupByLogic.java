@@ -4,17 +4,19 @@ import com.ruegnerlukas.taskmanager.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeRemovedEvent;
+import com.ruegnerlukas.taskmanager.eventsystem.events.GroupByHeaderChangedEvent;
 import com.ruegnerlukas.taskmanager.eventsystem.events.GroupByOrderChangedEvent;
 import com.ruegnerlukas.taskmanager.logic.data.Project;
 import com.ruegnerlukas.taskmanager.logic.data.Task;
+import com.ruegnerlukas.taskmanager.logic.data.groups.GroupByData;
+import com.ruegnerlukas.taskmanager.logic.data.groups.TaskGroup;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.IDAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberValue;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GroupByLogic {
 
@@ -48,6 +50,21 @@ public class GroupByLogic {
 
 
 
+	public boolean setGroupHeaderString(String string) {
+		if(Logic.project.isProjectOpen()) {
+			Project project = Logic.project.getProject();
+			String oldString = project.groupByHeaderString;
+			project.groupByHeaderString = string;
+			EventManager.fireEvent(new GroupByHeaderChangedEvent(oldString, string, this));
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+
+
 	public boolean removeGroupByElement(TaskAttribute attribute) {
 		if(Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
@@ -64,115 +81,41 @@ public class GroupByLogic {
 
 
 
-//	public static void main(String[] args) {
-//
-//
-//		for(Task task : Logic.project.getProject().tasks) {
-//			System.out.println("Task " + Integer.toHexString(task.hashCode()));
-//			FlagValue flagValue = (FlagValue)Logic.tasks.getAttributeValue(task, FlagAttributeData.NAME);
-//			NumberValue idValue = (NumberValue) Logic.tasks.getAttributeValue(task, IDAttributeData.NAME);
-//			System.out.println("  - id   = " + idValue.getInt());
-//			System.out.println("  - flag = " + flagValue.getFlag().name);
-//
-//		}
-//
-//
-//		List<TaskAttribute> groupByOrder = new ArrayList<>();
-//		groupByOrder.add( Logic.attribute.getAttributes(TaskAttributeType.FLAG).get(0));
-//		groupByOrder.add( Logic.attribute.getAttributes(TaskAttributeType.ID).get(0));
-//		Logic.groupBy.setGroupByOrder(groupByOrder);
-//
-//
-//		System.out.println(); System.out.println(); System.out.println(); System.out.println();
-//
-//
-//		Map<List<TaskAttributeValue>, List<Task>> taskLists = Logic.groupBy.getTaskLists();
-//
-//		for(List<TaskAttributeValue> values : taskLists.keySet()) {
-//			System.out.println("TaskList: " + values);
-//			for(Task task : taskLists.get(values)) {
-//				System.out.println("  - Task " + Integer.toHexString(task.hashCode()));
-//				FlagValue flagValue = (FlagValue)Logic.tasks.getAttributeValue(task, FlagAttributeData.NAME);
-//				NumberValue idValue = (NumberValue) Logic.tasks.getAttributeValue(task, IDAttributeData.NAME);
-//				System.out.println("      - id   = " + idValue.getInt());
-//				System.out.println("      - flag = " + flagValue.getFlag().name);
-//			}
-//		}
-//
-//
-//	}
-
-
-
-
-	public Map<List<TaskAttributeValue>, List<Task>> getTaskLists() {
+	public boolean updateTaskGroups() {
 
 		if(Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
 
-			Map<List<TaskAttributeValue>, List<Task>> map = new HashMap<>();
+			GroupByData groupByData = new GroupByData();
+			groupByData.attributes.addAll(project.groupByOrder);
 
 			if(project.groupByOrder.isEmpty()) {
-				map.put(new ArrayList<>(), new ArrayList<>(project.tasks));
+				TaskGroup group = new TaskGroup();
+				group.tasks.addAll(project.tasks);
 
 			} else {
+
 				List<Node> tree = buildTree(project.tasks, project.groupByOrder);
-				Node root = tree.get(0);
-
-				for(int i=1; i<tree.size(); i++) {
-					Node node = tree.get(i);
-
-					List<TaskAttributeValue> values = new ArrayList<>();
+				for(int i=0; i<tree.size(); i++) {
+					Node node = tree.get(0);
+					TaskGroup group = new TaskGroup();
 
 					Node current = node;
 					while(current != null) {
-						values.add(current.value);
+						group.attributes.put(node.attribute, node.value);
 						current = current.parent;
 					}
 
-					values.remove(null);
-					Collections.reverse(values);
-					map.put(values, node.tasks);
+					group.tasks.addAll(node.tasks);
+					groupByData.groups.add(group);
 				}
 
-
 			}
 
-			return map;
-
+			return true;
 		} else {
-			return null;
+			return false;
 		}
-	}
-
-
-
-
-	private void printTree(Node root, int level) {
-
-		String indent = "";
-		for(int i=0; i<level; i++) {
-			indent += "   ";
-		}
-
-		System.out.println(indent + "Node:" + Integer.toHexString(root.hashCode()));
-
-		if(root.children.isEmpty()) {
-			for(Task task : root.tasks) {
-				System.out.println(indent + "  - Task " + Integer.toHexString(task.hashCode()));
-				FlagValue flagValue = (FlagValue)Logic.tasks.getAttributeValue(task, FlagAttributeData.NAME);
-				NumberValue idValue = (NumberValue) Logic.tasks.getAttributeValue(task, IDAttributeData.NAME);
-				System.out.println(indent + "      - id   = " + idValue.getInt());
-				System.out.println(indent + "      - flag = " + flagValue.getFlag().name);
-			}
-
-		} else {
-			for(Node node : root.children) {
-				printTree(node, level+1);
-			}
-		}
-
-
 	}
 
 

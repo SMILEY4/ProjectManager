@@ -381,7 +381,7 @@ public class TaskView extends AnchorPane {
 			public void onEvent(Event e) {
 				refreshTaskView();
 			}
-		}, GroupByOrderChangedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class, AttributeRenamedEvent.class);
+		}, GroupByOrderChangedEvent.class, GroupByHeaderChangedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class, AttributeRenamedEvent.class);
 
 	}
 

@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.data;
 
 import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
+import com.ruegnerlukas.taskmanager.logic.data.groups.GroupByData;
 import com.ruegnerlukas.taskmanager.logic.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
@@ -12,18 +13,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Project {
-	
+
+	// project data
 	public String name;
 
+
+	// attributes
 	public boolean attributesLocked = false;
 	public List<TaskAttribute> attributes = new ArrayList<>();
 
+	// group by
 	public List<TaskAttribute> groupByOrder = new ArrayList<>();
+	public GroupByData groupByData = new GroupByData();
+	public boolean useCustomHeaderString = false;
+	public String groupByHeaderString = "";
+
+	// filter
 	public List<FilterCriteria> filterCriteria = new ArrayList<>();
+
+	// sort
 	public List<SortElement> sortElements = new ArrayList<>();
 
+	// tasks
 	public List<Task> tasks = new ArrayList<>();
-
 	public int idCounter = 1;
 
 

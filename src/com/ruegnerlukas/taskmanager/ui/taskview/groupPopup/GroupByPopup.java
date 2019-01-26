@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -23,9 +25,11 @@ public class GroupByPopup extends AnchorPane {
 
 	private Stage stage;
 	@FXML private VBox boxAttributes;
+	@FXML private Button btnAdd;
+	@FXML private CheckBox cbUseHeaderString;
+	@FXML private TextField fieldHeaderText;
 	@FXML private Button btnCancel;
 	@FXML private Button btnAccept;
-	@FXML private Button btnAdd;
 
 
 
@@ -61,6 +65,18 @@ public class GroupByPopup extends AnchorPane {
 		});
 
 
+		// use custom header string
+		cbUseHeaderString.setSelected(Logic.project.getProject().useCustomHeaderString);
+		fieldHeaderText.setDisable(!cbUseHeaderString.isSelected());
+		cbUseHeaderString.setOnAction(event -> {
+			fieldHeaderText.setDisable(!cbUseHeaderString.isSelected());
+		});
+
+
+		// list header string
+		fieldHeaderText.setText(Logic.project.getProject().groupByHeaderString);
+
+
 		// accept
 		btnAccept.setOnAction(event -> {
 			List<TaskAttribute> attributes = new ArrayList<>();
@@ -69,6 +85,7 @@ public class GroupByPopup extends AnchorPane {
 				attributes.add(groupByNode.attribute);
 			}
 			Logic.groupBy.setGroupByOrder(attributes);
+			Logic.groupBy.setGroupHeaderString(fieldHeaderText.getText());
 			this.stage.close();
 		});
 
