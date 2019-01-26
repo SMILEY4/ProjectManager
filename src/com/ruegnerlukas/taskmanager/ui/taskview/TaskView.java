@@ -7,6 +7,8 @@ import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.Task;
+import com.ruegnerlukas.taskmanager.logic.data.groups.GroupByData;
+import com.ruegnerlukas.taskmanager.logic.data.groups.TaskGroup;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
@@ -43,7 +45,6 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 public class TaskView extends AnchorPane {
@@ -235,25 +236,57 @@ public class TaskView extends AnchorPane {
 
 
 
-	private void refreshTaskView() {
+	private void setupListeners() {
 
-		Map<List<TaskAttributeValue>, List<Task>> mapLists = Logic.groupBy.getTaskLists();
+		EventManager.registerListener(this, new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				refreshTaskView();
+			}
+		}, GroupByRebuildEvent.class, GroupByHeaderChangedEvent.class, AttributeRenamedEvent.class);
+
+	}
+
+
+
+
+	private void refreshTaskView() {
 
 		clearTaskList();
 
-		for(List<TaskAttributeValue> key : mapLists.keySet()) {
+		GroupByData groupByData = Logic.project.getProject().groupByData;
 
-			String listTitle = "";
-			for(int i=0; i<key.size(); i++) {
-				TaskAttributeValue value = key.get(i);
-				listTitle += value.toString();
-				if(i < key.size()-1) {
-					listTitle += ", ";
+		if(groupByData.attributes.isEmpty()) {
+			createTaskList("All Tasks", Logic.project.getProject().tasks);
+
+		} else {
+
+			for(TaskGroup group : groupByData.groups) {
+
+				StringBuilder title = new StringBuilder();
+
+
+				if(Logic.project.getProject().useCustomHeaderString) {
+					title.append("No Name");
+
+				} else {
+					for(int i=0; i<groupByData.attributes.size(); i++) {
+						TaskAttribute attribute = groupByData.attributes.get(i);
+						TaskAttributeValue value = group.values.get(attribute);
+						title.append(value.toString());
+						if(i != groupByData.attributes.size()-1) {
+							title.append(", ");
+						}
+					}
 				}
+
+				createTaskList(title.toString(), group.tasks);
+
 			}
 
-			createTaskList(listTitle, mapLists.get(key));
 		}
+
+
 	}
 
 
@@ -372,18 +405,6 @@ public class TaskView extends AnchorPane {
 	}
 
 
-
-
-	private void setupListeners() {
-
-		EventManager.registerListener(this, new EventListener() {
-			@Override
-			public void onEvent(Event e) {
-				refreshTaskView();
-			}
-		}, GroupByOrderChangedEvent.class, GroupByHeaderChangedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class, AttributeRenamedEvent.class);
-
-	}
 
 
 

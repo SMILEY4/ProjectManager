@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class TaskGroup {
 
-	public Map<TaskAttribute, TaskAttributeValue> attributes = new HashMap<>();
+	public Map<TaskAttribute, TaskAttributeValue> values = new HashMap<>();
 	public List<Task> tasks = new ArrayList<>();
 
 }

@@ -310,7 +310,7 @@ TaskCard {
  }
 
  TaskCard > AnchorPane > #paneFlag {
-    -fx-background-color: red;
+    -fx-background-color: white;
  }
 
  TaskCard > AnchorPane > #paneBackground {

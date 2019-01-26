@@ -52,7 +52,7 @@ public class GroupByPopup extends AnchorPane {
 
 	private void create() {
 
-		// attributes
+		// values
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
 		for (TaskAttribute attribute : Logic.project.getProject().groupByOrder) {
 			boxAttributes.getChildren().add(new GroupByAttributeNode(attribute));

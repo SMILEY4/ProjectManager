@@ -3,9 +3,7 @@ package com.ruegnerlukas.taskmanager.logic;
 import com.ruegnerlukas.taskmanager.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeRemovedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.GroupByHeaderChangedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.GroupByOrderChangedEvent;
+import com.ruegnerlukas.taskmanager.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.logic.data.Project;
 import com.ruegnerlukas.taskmanager.logic.data.Task;
 import com.ruegnerlukas.taskmanager.logic.data.groups.GroupByData;
@@ -21,22 +19,32 @@ import java.util.Map;
 public class GroupByLogic {
 
 
-
 	protected GroupByLogic() {
 
+		// attribute deleted -> remove from groupBy-values
 		EventManager.registerListener(new EventListener() {
 			@Override
 			public void onEvent(Event e) {
-				AttributeRemovedEvent event = (AttributeRemovedEvent)e;
+				AttributeRemovedEvent event = (AttributeRemovedEvent) e;
 				removeGroupByElement(event.getAttribute());
 			}
 		}, AttributeRemovedEvent.class);
 
+		// any change to values -> rebuildTaskGroups TaskGroups
+		EventManager.registerListener(this, new EventListener() {
+			@Override
+			public void onEvent(Event e) {
+				rebuildTaskGroups();
+			}
+		}, GroupByOrderChangedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class);
+
 	}
 
 
+
+
 	public boolean setGroupByOrder(List<TaskAttribute> attribOrder) {
-		if(Logic.project.isProjectOpen()) {
+		if (Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
 			project.groupByOrder.clear();
 			project.groupByOrder.addAll(attribOrder);
@@ -51,7 +59,7 @@ public class GroupByLogic {
 
 
 	public boolean setGroupHeaderString(String string) {
-		if(Logic.project.isProjectOpen()) {
+		if (Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
 			String oldString = project.groupByHeaderString;
 			project.groupByHeaderString = string;
@@ -66,9 +74,9 @@ public class GroupByLogic {
 
 
 	public boolean removeGroupByElement(TaskAttribute attribute) {
-		if(Logic.project.isProjectOpen()) {
+		if (Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
-			if(project.groupByOrder.contains(attribute)) {
+			if (project.groupByOrder.contains(attribute)) {
 				project.groupByOrder.remove(attribute);
 				EventManager.fireEvent(new GroupByOrderChangedEvent(project.groupByOrder, this));
 			}
@@ -80,29 +88,31 @@ public class GroupByLogic {
 
 
 
+	public boolean rebuildTaskGroups() {
 
-	public boolean updateTaskGroups() {
-
-		if(Logic.project.isProjectOpen()) {
+		if (Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
 
 			GroupByData groupByData = new GroupByData();
 			groupByData.attributes.addAll(project.groupByOrder);
 
-			if(project.groupByOrder.isEmpty()) {
+			if (project.groupByOrder.isEmpty()) {
 				TaskGroup group = new TaskGroup();
 				group.tasks.addAll(project.tasks);
 
 			} else {
 
 				List<Node> tree = buildTree(project.tasks, project.groupByOrder);
-				for(int i=0; i<tree.size(); i++) {
-					Node node = tree.get(0);
+				Node root = tree.get(0);
+				for (int i = 1; i < tree.size(); i++) {
+					Node node = tree.get(i);
 					TaskGroup group = new TaskGroup();
 
 					Node current = node;
-					while(current != null) {
-						group.attributes.put(node.attribute, node.value);
+					while (current != null) {
+						if(current.attribute != null && current.value != null) {
+							group.values.put(current.attribute, current.value);
+						}
 						current = current.parent;
 					}
 
@@ -112,7 +122,10 @@ public class GroupByLogic {
 
 			}
 
+			project.groupByData = groupByData;
+			EventManager.fireEvent(new GroupByRebuildEvent(groupByData, this));
 			return true;
+
 		} else {
 			return false;
 		}
@@ -132,16 +145,16 @@ public class GroupByLogic {
 		outList.add(root);
 
 
-		for(int i=0; i<attributes.size(); i++) {
+		for (int i = 0; i < attributes.size(); i++) {
 			TaskAttribute attribute = attributes.get(i);
 			List<Node> openedNodes = new ArrayList<>();
 
-			for(Node node : workingNodes) {
+			for (Node node : workingNodes) {
 
-				if(!node.tasks.isEmpty()) {
+				if (!node.tasks.isEmpty()) {
 					Map<TaskAttributeValue, ArrayList<Task>> split = split(node.tasks, attribute);
 
-					for(TaskAttributeValue value : split.keySet()) {
+					for (TaskAttributeValue value : split.keySet()) {
 						Node newNode = new Node();
 						newNode.parent = node;
 						newNode.attribute = attribute;
@@ -157,7 +170,7 @@ public class GroupByLogic {
 
 			workingNodes = openedNodes;
 
-			if(i == attributes.size()-1) {
+			if (i == attributes.size() - 1) {
 				outList.addAll(workingNodes);
 			}
 		}
@@ -171,10 +184,10 @@ public class GroupByLogic {
 	private Map<TaskAttributeValue, ArrayList<Task>> split(List<Task> tasks, TaskAttribute attribute) {
 		Map<TaskAttributeValue, ArrayList<Task>> map = new HashMap<>();
 
-		for(Task task : tasks) {
+		for (Task task : tasks) {
 			TaskAttributeValue value = Logic.tasks.getAttributeValue(task, attribute.name);
 
-			if(!map.containsKey(value)) {
+			if (!map.containsKey(value)) {
 				map.put(value, new ArrayList<>());
 			}
 			map.get(value).add(task);
@@ -187,11 +200,11 @@ public class GroupByLogic {
 
 
 	class Node {
-		public Node 				parent;
-		public List<Node> 			children = new ArrayList<>();
-		public TaskAttribute 		attribute;
-		public TaskAttributeValue 	value;
-		public List<Task> 			tasks = new ArrayList<>();
+		public Node parent;
+		public List<Node> children = new ArrayList<>();
+		public TaskAttribute attribute;
+		public TaskAttributeValue value;
+		public List<Task> tasks = new ArrayList<>();
 	}
 
 

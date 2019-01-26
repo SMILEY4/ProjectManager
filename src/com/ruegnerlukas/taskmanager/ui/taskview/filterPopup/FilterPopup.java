@@ -48,7 +48,7 @@ public class FilterPopup extends AnchorPane {
 
 	private void create() {
 
-		// attributes
+		// values
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
 		for (FilterCriteria criteria : Logic.project.getProject().filterCriteria) {
 			boxAttributes.getChildren().add(new FilterCriteriaNode(criteria.attribute, criteria.comparisonOp, criteria.comparisionValue));

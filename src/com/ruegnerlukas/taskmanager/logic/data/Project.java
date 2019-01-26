@@ -18,7 +18,7 @@ public class Project {
 	public String name;
 
 
-	// attributes
+	// values
 	public boolean attributesLocked = false;
 	public List<TaskAttribute> attributes = new ArrayList<>();
 

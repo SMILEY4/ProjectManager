@@ -93,7 +93,7 @@ public class TaskLogic {
 			}
 			project.tasks.add(task);
 
-			// set fixed attributes (flag has default)
+			// set fixed values (flag has default)
 			setAttributeValue(task, Logic.attribute.getAttributes(TaskAttributeType.ID).get(0), new NumberValue(project.idCounter));
 			setAttributeValue(task, Logic.attribute.getAttributes(TaskAttributeType.DESCRIPTION).get(0), new TextValue(""));
 

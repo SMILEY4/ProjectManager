@@ -41,7 +41,7 @@ public class AttributeLogic {
 	/**
 	 * creates a new TaskAttribute with the given name and type <p>
 	 * Events: <p>
-	 * - AttributeCreatedRejection: when the attribute could not be created (NOT_ALLOWED = attributes are locked, NAME_EXISTS = given name is not unique) <p>
+	 * - AttributeCreatedRejection: when the attribute could not be created (NOT_ALLOWED = values are locked, NAME_EXISTS = given name is not unique) <p>
 	 * - AttributeCreatedEvent: when the attribute was created
 	 *
 	 * @return true, if completed successful
@@ -86,7 +86,7 @@ public class AttributeLogic {
 	/**
 	 * Deletes the attribute with the given name<p>
 	 * Events: <p>
-	 * - AttributeRemovedRejection: when the attribute could not be deleted (NOT_ALLOWED = attributes are locked / attribute is fixed, NOT_EXISTS = given name does not exist) <p>
+	 * - AttributeRemovedRejection: when the attribute could not be deleted (NOT_ALLOWED = values are locked / attribute is fixed, NOT_EXISTS = given name does not exist) <p>
 	 * - AttributeRemovedEvent: when the attribute was deleted
 	 *
 	 * @return true, if completed successful
@@ -125,7 +125,7 @@ public class AttributeLogic {
 	/**
 	 * renames the attribute with the given name to the new name <p>
 	 * Events: <p>
-	 * - AttributeRenamedRejection: when the attribute could not be renamed (NOT_ALLOWED = attributes are locked / attribute is fixed, NAME_EXISTS = given new name already exists, NOT_EXISTS = attribute with given name does not exist) <p>
+	 * - AttributeRenamedRejection: when the attribute could not be renamed (NOT_ALLOWED = values are locked / attribute is fixed, NAME_EXISTS = given new name already exists, NOT_EXISTS = attribute with given name does not exist) <p>
 	 * - AttributeRenamedEvent: when the attribute was renamed
 	 *
 	 * @return true, if completed successful
@@ -169,7 +169,7 @@ public class AttributeLogic {
 	/**
 	 * changes the attribute-type of the given attribute to the new type <p>
 	 * Events <p>
-	 * - AttributeTypeChangedRejection: when the type could not be changed (NOT_ALLOWED = attributes are locked / attribute is fixed / new attribute is fixed, NOT_EXISTS = attribute with given name does not exist) <p>
+	 * - AttributeTypeChangedRejection: when the type could not be changed (NOT_ALLOWED = values are locked / attribute is fixed / new attribute is fixed, NOT_EXISTS = attribute with given name does not exist) <p>
 	 * - AttributeTypeChangedEvent: when the type was changed <p>
 	 *
 	 * @return true, if completed successful
@@ -209,7 +209,7 @@ public class AttributeLogic {
 	/**
 	 * Updates a variable of a given task with a new value <p>
 	 * Events <p>
-	 * - AttributeUpdatedRejection: when the type could not be changed (NOT_ALLOWED = attributes are locked / attribute is fixed, NOT_EXISTS = attribute with given name does not exist, INVALID: new value is invalid) <p>
+	 * - AttributeUpdatedRejection: when the type could not be changed (NOT_ALLOWED = values are locked / attribute is fixed, NOT_EXISTS = attribute with given name does not exist, INVALID: new value is invalid) <p>
 	 * - AttributeUpdatedEvent: when the value was changed <p>
 	 *
 	 * @return true, if completed successful
@@ -247,7 +247,7 @@ public class AttributeLogic {
 
 
 	/**
-	 * @return all attributes of the given type in a list
+	 * @return all values of the given type in a list
 	 */
 	public List<TaskAttribute> getAttributes(TaskAttributeType type) {
 		if (Logic.project.isProjectOpen()) {

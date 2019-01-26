@@ -78,7 +78,7 @@ public class ProjectSettingsView extends AnchorPane {
 		paneHeader.getChildren().add(labelName);
 
 
-		// lock task attributes
+		// lock task values
 		attributesLocked = Logic.project.getProject().attributesLocked;
 		if (attributesLocked) {
 			ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1f, "black");
@@ -94,7 +94,7 @@ public class ProjectSettingsView extends AnchorPane {
 		setAttributeLock(attributesLocked);
 
 
-		// task attributes
+		// task values
 		boxTaskAttribs.getChildren().clear();
 		boxTaskAttribs.setSpacing(3);
 		VBoxDragAndDrop.enableDragAndDrop(boxTaskAttribs);
@@ -111,7 +111,7 @@ public class ProjectSettingsView extends AnchorPane {
 		});
 
 
-		// add initial attributes
+		// add initial values
 		for (TaskAttribute attribute : Logic.project.getProject().attributes) {
 			TaskAttributeNode attrNode = new TaskAttributeNode(attribute);
 			boxTaskAttribs.getChildren().add(attrNode);
@@ -149,7 +149,7 @@ public class ProjectSettingsView extends AnchorPane {
 		}, AttributeLockEvent.class);
 
 
-		// listen for added attributes
+		// listen for added values
 		EventManager.registerListener(this, new EventListener() {
 			@Override
 			public void onEvent(Event e) {
@@ -160,7 +160,7 @@ public class ProjectSettingsView extends AnchorPane {
 		}, AttributeCreatedEvent.class);
 
 
-		// listen for removed attributes
+		// listen for removed values
 		EventManager.registerListener(this, new EventListener() {
 			@Override
 			public void onEvent(Event e) {
