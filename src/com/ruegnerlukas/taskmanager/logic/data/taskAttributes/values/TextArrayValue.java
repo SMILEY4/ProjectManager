@@ -46,7 +46,7 @@ public class TextArrayValue implements TaskAttributeValue {
 
 	@Override
 	public String toString() {
-		return "TextArrayValue:" + Arrays.toString(text);
+		return Arrays.toString(text);
 	}
 
 

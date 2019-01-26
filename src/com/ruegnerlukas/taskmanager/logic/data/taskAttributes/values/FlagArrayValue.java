@@ -48,7 +48,7 @@ public class FlagArrayValue implements TaskAttributeValue {
 
 	@Override
 	public String toString() {
-		return "FlagArrayValue:" + Arrays.toString(flags);
+		return Arrays.toString(flags);
 	}
 
 

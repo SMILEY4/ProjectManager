@@ -70,7 +70,7 @@ public class NumberPairValue implements TaskAttributeValue {
 
 	@Override
 	public String toString() {
-		return "NumberPairValue:(" + v0 + "," + v1 + ")";
+		return "(" + v0 + "," + v1 + ")";
 	}
 
 

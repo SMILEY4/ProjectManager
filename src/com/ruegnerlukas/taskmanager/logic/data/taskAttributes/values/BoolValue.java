@@ -32,7 +32,7 @@ public class BoolValue implements TaskAttributeValue {
 
 	@Override
 	public String toString() {
-		return "BoolValue:" + value;
+		return Boolean.toString(value);
 	}
 
 

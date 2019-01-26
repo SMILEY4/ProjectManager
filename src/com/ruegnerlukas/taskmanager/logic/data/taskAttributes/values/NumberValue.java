@@ -53,7 +53,7 @@ public class NumberValue implements TaskAttributeValue {
 
 	@Override
 	public String toString() {
-		return "NumberValue:" + (isInt ? (int) value : value);
+		return ""+(isInt ? (int) value : value);
 	}
 
 

@@ -32,7 +32,7 @@ public class TextValue implements TaskAttributeValue {
 
 	@Override
 	public String toString() {
-		return "TextValue:" + text;
+		return text;
 	}
 
 

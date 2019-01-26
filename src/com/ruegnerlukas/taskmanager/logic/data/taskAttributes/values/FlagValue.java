@@ -33,7 +33,7 @@ public class FlagValue implements TaskAttributeValue {
 
 	@Override
 	public String toString() {
-		return "FlagValue:" + flag.name + "," + flag.color;
+		return flag.name;
 	}
 
 
