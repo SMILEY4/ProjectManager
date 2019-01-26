@@ -12,6 +12,9 @@ import java.io.File;
 public class ProjectLogic {
 
 
+	/**
+	 * @return true, if a project is currently open
+	 * */
 	public boolean isProjectOpen() {
 		return getProject() != null;
 	}
@@ -19,6 +22,12 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * creates a new project <p>
+	 * Events: <p>
+	 * - ProjectCreatedEvent: when the project was created
+	 * @return true, if completed successful
+	 * */
 	public boolean createProject() {
 		setProject(new Project("New Project"));
 		EventManager.fireEvent(new ProjectCreatedEvent(getProject(), this));
@@ -44,16 +53,29 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * closes the current project
+	 * Events: <p>
+	 * - ProjectClosedEvent: when a project was closed
+	 * @return true, if completed successful
+	 * */
 	public boolean closeProject() {
 		Project project = getProject();
-		setProject(null);
-		EventManager.fireEvent(new ProjectClosedEvent(project, this));
-		return true;
+		if(project != null) {
+			setProject(null);
+			EventManager.fireEvent(new ProjectClosedEvent(project, this));
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 
 
 
+	/**
+	 * @return the current project
+	 * */
 	public Project getProject() {
 		return Data.get().project;
 	}
@@ -61,20 +83,29 @@ public class ProjectLogic {
 
 
 
-	public void setProject(Project project) {
+	/**
+	 * sets the current project to the given project
+	 * */
+	private void setProject(Project project) {
 		Data.get().project = project;
 	}
 
 
 
 
+	/**
+	 * renames the current project, if the new name is empty, it will rename it but using the current name as the new name
+	 * Events: <p>
+	 * - ProjectRenamedEvent: when the project was renamed
+	 * @return true, if completed successful
+	 * */
 	public boolean renameProject(String name) {
 		if (getProject() == null) {
 			return false;
 		} else {
 			String newName = name.trim();
 			String oldName = getProject().name;
-			if (newName.isEmpty()) {
+			if (!newName.isEmpty()) {
 				EventManager.fireEvent(new ProjectRenamedEvent(oldName, oldName, this));
 			} else {
 				getProject().name = newName;

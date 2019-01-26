@@ -19,8 +19,7 @@ public class TaskLogic {
 
 
 
-	public TaskLogic() {
-
+	TaskLogic() {
 
 		// attribute removed
 		EventManager.registerListener(new EventListener() {
@@ -38,7 +37,6 @@ public class TaskLogic {
 			}
 		}, AttributeRemovedEvent.class);
 
-
 		// attribute created
 		EventManager.registerListener(new EventListener() {
 			@Override
@@ -54,7 +52,6 @@ public class TaskLogic {
 				}
 			}
 		}, AttributeCreatedEvent.class);
-
 
 		// attribute changed
 		EventManager.registerListener(new EventListener() {
