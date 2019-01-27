@@ -1,5 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values;
 
+import com.ruegnerlukas.simplemath.MathUtils;
+
 import java.util.Arrays;
 import java.util.Collection;
 
@@ -84,14 +86,14 @@ public class TextArrayValue implements TaskAttributeValue {
 				String ot = oValue[i];
 				int cmp = tt.compareTo(ot);
 				if(cmp != 0) {
-					return cmp;
+					return MathUtils.clamp(cmp, -1, +1);
 				}
 			}
 
-			return text.length - oValue.length;
+			return MathUtils.clamp(text.length - oValue.length, -1, -2);
 
 		} else {
-			return +1;
+			return -2;
 		}
 	}
 

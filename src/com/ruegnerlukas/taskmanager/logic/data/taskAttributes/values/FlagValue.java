@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values;
 
+import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
@@ -80,9 +81,10 @@ public class FlagValue implements TaskAttributeValue {
 				}
 			}
 
-			return indexThis - indexOther;
+			return MathUtils.clamp(indexThis - indexOther, -1, +1);
+
 		} else {
-			return +1;
+			return -2;
 		}
 	}
 

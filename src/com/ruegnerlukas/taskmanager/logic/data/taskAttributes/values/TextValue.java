@@ -1,5 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values;
 
+import com.ruegnerlukas.simplemath.MathUtils;
+
 public class TextValue implements TaskAttributeValue {
 
 
@@ -60,9 +62,9 @@ public class TextValue implements TaskAttributeValue {
 	public int compareTo(TaskAttributeValue o) {
 		if(o instanceof TextValue) {
 			final String oValue = ((TextValue)o).getText();
-			return this.text.compareTo(oValue);
+			return MathUtils.clamp(text.compareTo(oValue), -1, +1);
 		} else {
-			return +1;
+			return -2;
 		}
 	}
 }

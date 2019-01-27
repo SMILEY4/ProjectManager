@@ -27,13 +27,13 @@ public class GroupByLogic {
 			}
 		}, AttributeRemovedEvent.class);
 
-		// any change to values -> rebuildTaskGroups TaskGroups
+		// any change to attributevalues / tasks -> rebuildTaskGroups TaskGroups
 		EventManager.registerListener(this, new EventListener() {
 			@Override
 			public void onEvent(Event e) {
 				rebuildTaskGroups();
 			}
-		}, GroupByOrderChangedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class);
+		}, GroupByOrderChangedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class, FilteredTasksChangedEvent.class);
 
 	}
 
@@ -148,11 +148,11 @@ public class GroupByLogic {
 
 			if (project.groupByOrder.isEmpty()) {
 				TaskGroup group = new TaskGroup();
-				group.tasks.addAll(project.tasks);
+				group.tasks.addAll(project.filteredTasks);
 
 			} else {
 
-				List<Node> tree = buildTree(project.tasks, project.groupByOrder);
+				List<Node> tree = buildTree(project.filteredTasks, project.groupByOrder);
 				Node root = tree.get(0);
 				for (int i = 1; i < tree.size(); i++) {
 					Node node = tree.get(i);

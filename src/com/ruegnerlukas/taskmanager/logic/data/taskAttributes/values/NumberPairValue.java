@@ -56,6 +56,20 @@ public class NumberPairValue implements TaskAttributeValue {
 
 
 
+	public NumberValue getNumberValue0() {
+		return new NumberValue(isInt ? getInt0() : getDouble0());
+	}
+
+
+
+
+	public NumberValue getNumberValue1() {
+		return new NumberValue(isInt ? getInt1() : getDouble1());
+	}
+
+
+
+
 	@Override
 	public Object getValue() {
 		if (isInt) {
@@ -109,18 +123,28 @@ public class NumberPairValue implements TaskAttributeValue {
 	@Override
 	public int compareTo(TaskAttributeValue o) {
 		if(o instanceof NumberPairValue) {
-			final double oValue0 = ((NumberPairValue)o).getDouble0();
-			final double oValue1 = ((NumberPairValue)o).getDouble1();
-			final double tValue0 = this.v0;
-			final double tValue1 = this.v1;
-			if(tValue0 < oValue0) return -1;
-			if(tValue0 > oValue0) return +1;
-			if(tValue1 < oValue1) return -1;
-			if(tValue1 > oValue1) return +1;
+			NumberValue tValue0 = this.getNumberValue0();
+			NumberValue tValue1 = this.getNumberValue1();
+			NumberValue oValue0 = ((NumberPairValue)o).getNumberValue0();
+			NumberValue oValue1 = ((NumberPairValue)o).getNumberValue1();
+			if(tValue0.compareTo(oValue0) == -1) { return -1; }
+			if(tValue0.compareTo(oValue0) == +1) { return +1; }
+			if(tValue1.compareTo(oValue1) == -1) { return -1; }
+			if(tValue1.compareTo(oValue1) == +1) { return +1; }
 			return 0;
 		} else {
-			return +1;
+			return -2;
 		}
 	}
+
+
+
+
+	public boolean inRange(NumberValue other) {
+		NumberValue min = this.getNumberValue0();
+		NumberValue max = this.getNumberValue1();
+		return (min.compareTo(other) != +1 && other.compareTo(max) != +1);
+	}
+
 
 }

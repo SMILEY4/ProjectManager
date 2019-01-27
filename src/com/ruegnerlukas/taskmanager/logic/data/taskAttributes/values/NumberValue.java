@@ -24,6 +24,11 @@ public class NumberValue implements TaskAttributeValue {
 
 
 
+	public boolean isInt() {
+		return this.isInt;
+	}
+
+
 
 	public int getInt() {
 		return (int) value;
@@ -89,12 +94,16 @@ public class NumberValue implements TaskAttributeValue {
 	@Override
 	public int compareTo(TaskAttributeValue o) {
 		if(o instanceof NumberValue) {
-			final double oValue = ((NumberValue)o).getDouble();
-			if(this.value < oValue) return -1;
-			if(this.value > oValue) return +1;
+			final NumberValue other = (NumberValue)o;
+			if( (this.isInt ? this.getInt() : this.getDouble()) < (other.isInt ? other.getInt() : other.getDouble()) ) {
+				return -1;
+			}
+			if( (this.isInt ? this.getInt() : this.getDouble()) > (other.isInt ? other.getInt() : other.getDouble()) ) {
+				return -1;
+			}
 			return 0;
 		} else {
-			return +1;
+			return -2;
 		}
 	}
 

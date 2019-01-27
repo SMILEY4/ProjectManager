@@ -65,7 +65,7 @@ public class BoolValue implements TaskAttributeValue {
 			if(value && !oValue) return +1;
 			return 0;
 		} else {
-			return +1;
+			return -2;
 		}
 	}
 

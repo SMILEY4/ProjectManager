@@ -257,7 +257,7 @@ public class TaskView extends AnchorPane {
 		GroupByData groupByData = Logic.project.getProject().groupByData;
 
 		if(groupByData.attributes.isEmpty()) {
-			createTaskList("All Tasks", Logic.project.getProject().tasks);
+			createTaskList("All Tasks", Logic.project.getProject().filteredTasks);
 
 		} else {
 

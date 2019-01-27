@@ -50,9 +50,7 @@ public class FilterCriteria {
 
 	public static ComparisonOp[] getPossibleComparisionOps(TaskAttribute attribute) {
 		if(attribute == null) {
-			return new ComparisonOp[]{
-				ComparisonOp.EQUALITY
-			};
+			return new ComparisonOp[]{};
 		}
 
 		if(attribute.data.getType() == TaskAttributeType.BOOLEAN) {
@@ -126,9 +124,7 @@ public class FilterCriteria {
 			};
 		}
 
-		return new ComparisonOp[]{
-				ComparisonOp.EQUALITY
-		};
+		return new ComparisonOp[]{};
 	}
 
 
