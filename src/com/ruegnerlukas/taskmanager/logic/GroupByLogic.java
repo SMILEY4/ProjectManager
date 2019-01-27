@@ -11,10 +11,7 @@ import com.ruegnerlukas.taskmanager.logic.data.groups.TaskGroup;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class GroupByLogic {
 
@@ -88,6 +85,8 @@ public class GroupByLogic {
 	}
 
 
+
+
 	public boolean removeGroupByElement(TaskAttribute attribute) {
 		if (Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
@@ -100,6 +99,7 @@ public class GroupByLogic {
 			return false;
 		}
 	}
+
 
 
 
@@ -136,6 +136,23 @@ public class GroupByLogic {
 				}
 
 			}
+
+			Comparator<TaskGroup> comp = new Comparator<TaskGroup>() {
+				@Override
+				public int compare(TaskGroup a, TaskGroup b) {
+					for(int i=0; i<groupByData.attributes.size(); i++) {
+						TaskAttribute attrib = groupByData.attributes.get(i);
+						TaskAttributeValue valueA = a.values.get(attrib);
+						TaskAttributeValue valueB = b.values.get(attrib);
+						int cmp = valueA.compareTo(valueB);
+						if(cmp != 0) {
+							return cmp;
+						}
+					}
+					return 0;
+				}
+			};
+			groupByData.groups.sort(comp);
 
 			project.groupByData = groupByData;
 			EventManager.fireEvent(new GroupByRebuildEvent(groupByData, this));

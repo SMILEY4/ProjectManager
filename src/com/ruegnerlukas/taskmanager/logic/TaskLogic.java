@@ -42,13 +42,11 @@ public class TaskLogic {
 			@Override
 			public void onEvent(Event e) {
 				if(Logic.project.isProjectOpen()) {
-
 					AttributeCreatedEvent event = (AttributeCreatedEvent)e;
 					List<Task> taskList = Logic.project.getProject().tasks;
 					for(Task task : taskList) {
 						setAttributeValue(task, event.getAttribute(), new NoValue());
 					}
-
 				}
 			}
 		}, AttributeCreatedEvent.class);
