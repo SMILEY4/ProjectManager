@@ -71,4 +71,28 @@ public class TextArrayValue implements TaskAttributeValue {
 		return Arrays.hashCode(text);
 	}
 
+
+
+
+	@Override
+	public int compareTo(TaskAttributeValue o) {
+		if(o instanceof TextArrayValue) {
+			final String[] oValue = ((TextArrayValue)o).getText();
+
+			for(int i=0; i<Math.min(text.length, oValue.length); i++) {
+				String tt = text[i];
+				String ot = oValue[i];
+				int cmp = tt.compareTo(ot);
+				if(cmp != 0) {
+					return cmp;
+				}
+			}
+
+			return text.length - oValue.length;
+
+		} else {
+			return +1;
+		}
+	}
+
 }

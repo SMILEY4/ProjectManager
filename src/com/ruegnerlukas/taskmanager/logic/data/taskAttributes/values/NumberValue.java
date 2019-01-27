@@ -83,4 +83,19 @@ public class NumberValue implements TaskAttributeValue {
 		return result;
 	}
 
+
+
+
+	@Override
+	public int compareTo(TaskAttributeValue o) {
+		if(o instanceof NumberValue) {
+			final double oValue = ((NumberValue)o).getDouble();
+			if(this.value < oValue) return -1;
+			if(this.value > oValue) return +1;
+			return 0;
+		} else {
+			return +1;
+		}
+	}
+
 }

@@ -1,6 +1,8 @@
 package com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values;
 
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
 
 public class FlagValue implements TaskAttributeValue {
 
@@ -54,6 +56,34 @@ public class FlagValue implements TaskAttributeValue {
 	@Override
 	public int hashCode() {
 		return flag != null ? flag.hashCode() : 0;
+	}
+
+
+
+
+	@Override
+	public int compareTo(TaskAttributeValue o) {
+		if(o instanceof FlagValue) {
+			final TaskFlag oValue = ((FlagValue)o).getFlag();
+
+
+			int indexThis = 0;
+			int indexOther = 0;
+			TaskFlag[] flags = ((FlagAttributeData)Logic.attribute.findAttribute(FlagAttributeData.NAME).data).flags;
+
+			for(int i=0; i<flags.length; i++) {
+				if(this.getFlag() == flags[i]) {
+					indexThis = i;
+				}
+				if(oValue == flags[i]) {
+					indexOther = i;
+				}
+			}
+
+			return indexThis - indexOther;
+		} else {
+			return +1;
+		}
 	}
 
 }

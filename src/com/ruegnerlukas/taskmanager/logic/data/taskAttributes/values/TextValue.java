@@ -54,4 +54,15 @@ public class TextValue implements TaskAttributeValue {
 		return text != null ? text.hashCode() : 0;
 	}
 
+
+
+	@Override
+	public int compareTo(TaskAttributeValue o) {
+		if(o instanceof TextValue) {
+			final String oValue = ((TextValue)o).getText();
+			return this.text.compareTo(oValue);
+		} else {
+			return +1;
+		}
+	}
 }

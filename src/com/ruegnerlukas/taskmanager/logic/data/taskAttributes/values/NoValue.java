@@ -34,4 +34,11 @@ public class NoValue implements TaskAttributeValue {
 	}
 
 
+
+
+	@Override
+	public int compareTo(TaskAttributeValue o) {
+		return 0;
+	}
+
 }
