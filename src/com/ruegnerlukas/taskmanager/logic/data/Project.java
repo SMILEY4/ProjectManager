@@ -14,29 +14,28 @@ import java.util.List;
 
 public class Project {
 
-	// project data
+	// 0. project data
 	public String name;
-
-
-	// values
 	public boolean attributesLocked = false;
 	public List<TaskAttribute> attributes = new ArrayList<>();
 
-	// group by
+	// 1. tasks
+	public List<Task> tasks = new ArrayList<>();
+	public int idCounter = 1;
+
+	// 2. filter
+	public List<FilterCriteria> filterCriteria = new ArrayList<>();
+	public List<Task> filteredTasks = new ArrayList<>();
+
+	// 3. group by
 	public List<TaskAttribute> groupByOrder = new ArrayList<>();
 	public GroupByData groupByData = new GroupByData();
 	public boolean useCustomHeaderString = false;
 	public String groupByHeaderString = "";
 
-	// filter
-	public List<FilterCriteria> filterCriteria = new ArrayList<>();
-
-	// sort
+	// 4. sort
 	public List<SortElement> sortElements = new ArrayList<>();
 
-	// tasks
-	public List<Task> tasks = new ArrayList<>();
-	public int idCounter = 1;
 
 
 

@@ -40,6 +40,13 @@ public class GroupByLogic {
 
 
 
+	/**
+	 * Set the TaskAttributes and their order to group tasks <p>
+	 * Events <p>
+	 * - GroupByOrderChangedEvent: when the attributes where changed
+	 *
+	 * @return true, if completed successful
+	 */
 	public boolean setGroupByOrder(List<TaskAttribute> attribOrder) {
 		if (Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
@@ -55,6 +62,13 @@ public class GroupByLogic {
 
 
 
+	/**
+	 * Sets the title of TaskGroups. Use {att.name} to insert the value of the TaskGroup of the specified attribute.  <p>
+	 * Events <p>
+	 * - GroupByHeaderChangedEvent: when the title-string was changed
+	 *
+	 * @return true, if completed successful
+	 */
 	public boolean setGroupHeaderString(String string) {
 		if (Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
@@ -70,6 +84,13 @@ public class GroupByLogic {
 
 
 
+	/**
+	 * Whether or not the custom title of TaskGroups should be used <p>
+	 * Events <p>
+	 * - GroupHeaderStringChangedEvent
+	 *
+	 * @return true, if completed successful
+	 */
 	public boolean setUseCustomHeaderString(boolean useCustomHeaderString) {
 		if (Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
@@ -87,6 +108,13 @@ public class GroupByLogic {
 
 
 
+	/**
+	 * Removes an attribute <p>
+	 * Events <p>
+	 * - GroupByOrderChangedEvent: when the list of TaskAttributes has been changed
+	 *
+	 * @return true, if completed successful
+	 */
 	public boolean removeGroupByElement(TaskAttribute attribute) {
 		if (Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
@@ -103,6 +131,13 @@ public class GroupByLogic {
 
 
 
+	/**
+	 * Groups the (filtered) Tasks by the specified TaskAttributes <p>
+	 * Events <p>
+	 * - GroupByRebuildEvent
+	 *
+	 * @return true, if completed successful
+	 */
 	public boolean rebuildTaskGroups() {
 
 		if (Logic.project.isProjectOpen()) {
