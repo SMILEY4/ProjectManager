@@ -267,7 +267,17 @@ public class TaskView extends AnchorPane {
 
 
 				if(Logic.project.getProject().useCustomHeaderString) {
-					title.append("No Name");
+					String strCustomHeader = Logic.project.getProject().groupByHeaderString;
+
+					for(int i=0; i<groupByData.attributes.size(); i++) {
+						TaskAttribute attribute = groupByData.attributes.get(i);
+						if(strCustomHeader.contains("{"+attribute.name+"}")) {
+							TaskAttributeValue value = group.values.get(attribute);
+							strCustomHeader = strCustomHeader.replaceAll("\\{"+attribute.name+"\\}", value.toString());
+						}
+					}
+
+					title.append(strCustomHeader);
 
 				} else {
 					for(int i=0; i<groupByData.attributes.size(); i++) {

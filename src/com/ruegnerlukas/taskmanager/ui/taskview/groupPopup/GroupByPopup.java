@@ -85,6 +85,7 @@ public class GroupByPopup extends AnchorPane {
 				attributes.add(groupByNode.attribute);
 			}
 			Logic.groupBy.setGroupByOrder(attributes);
+			Logic.groupBy.setUseCustomHeaderString(cbUseHeaderString.isSelected());
 			Logic.groupBy.setGroupHeaderString(fieldHeaderText.getText());
 			this.stage.close();
 		});

@@ -73,6 +73,21 @@ public class GroupByLogic {
 
 
 
+	public boolean setUseCustomHeaderString(boolean useCustomHeaderString) {
+		if (Logic.project.isProjectOpen()) {
+			Project project = Logic.project.getProject();
+			boolean prev = project.useCustomHeaderString;
+			if(prev != useCustomHeaderString) {
+				project.useCustomHeaderString = useCustomHeaderString;
+				EventManager.fireEvent(new GroupHeaderStringChangedEvent(prev, useCustomHeaderString, this));
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
 	public boolean removeGroupByElement(TaskAttribute attribute) {
 		if (Logic.project.isProjectOpen()) {
 			Project project = Logic.project.getProject();
