@@ -1,12 +1,12 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values;
 
-import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.NumberAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberPairValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextArrayValue;
+import com.ruegnerlukas.taskmanager.data.filter.criteria.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.NumberAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberPairValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextArrayValue;
 import javafx.scene.Node;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;

@@ -1,17 +1,17 @@
 package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.simplemath.MathUtils;
-import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.*;
-import com.ruegnerlukas.taskmanager.logic.data.Project;
-import com.ruegnerlukas.taskmanager.logic.data.Task;
-import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.*;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
+import com.ruegnerlukas.taskmanager.data.Project;
+import com.ruegnerlukas.taskmanager.data.Task;
+import com.ruegnerlukas.taskmanager.data.filter.criteria.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.*;
 
 import java.util.ArrayList;
 import java.util.List;

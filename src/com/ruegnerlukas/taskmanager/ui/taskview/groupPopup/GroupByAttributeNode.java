@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.groupPopup;
 
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxOrder;

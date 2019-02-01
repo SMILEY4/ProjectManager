@@ -1,13 +1,13 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
-import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeRenamedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeTypeChangedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRenamedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeTypeChangedEvent;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;

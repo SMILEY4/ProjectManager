@@ -1,11 +1,11 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values;
 
-import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.ChoiceAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextArrayValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
+import com.ruegnerlukas.taskmanager.data.filter.criteria.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.ChoiceAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextArrayValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;

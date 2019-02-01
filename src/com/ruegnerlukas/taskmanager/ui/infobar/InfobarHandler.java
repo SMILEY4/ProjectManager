@@ -1,11 +1,11 @@
 package com.ruegnerlukas.taskmanager.ui.infobar;
 
-import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectClosedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectCreatedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectRenamedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectClosedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectCreatedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectRenamedEvent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 

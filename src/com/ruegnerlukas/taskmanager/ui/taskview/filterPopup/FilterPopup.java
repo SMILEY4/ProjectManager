@@ -2,7 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.filter.criteria.FilterCriteria;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxDragAndDrop;

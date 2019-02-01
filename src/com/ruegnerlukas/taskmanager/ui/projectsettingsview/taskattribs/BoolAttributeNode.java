@@ -1,16 +1,16 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedRejection;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedRejection;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.BoolAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.BoolAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.BoolValue;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.beans.value.ChangeListener;

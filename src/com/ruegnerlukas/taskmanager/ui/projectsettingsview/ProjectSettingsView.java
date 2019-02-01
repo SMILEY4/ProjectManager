@@ -1,16 +1,16 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeCreatedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeLockEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeRemovedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectRenamedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeCreatedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeLockEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRemovedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectRenamedEvent;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs.TaskAttributeNode;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;

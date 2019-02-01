@@ -1,9 +1,9 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values;
 
-import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.data.filter.criteria.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 

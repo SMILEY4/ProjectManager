@@ -1,15 +1,15 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.*;
-import com.ruegnerlukas.taskmanager.logic.data.Project;
-import com.ruegnerlukas.taskmanager.logic.data.Task;
-import com.ruegnerlukas.taskmanager.logic.data.groups.GroupByData;
-import com.ruegnerlukas.taskmanager.logic.data.groups.TaskGroup;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
+import com.ruegnerlukas.taskmanager.data.Project;
+import com.ruegnerlukas.taskmanager.data.Task;
+import com.ruegnerlukas.taskmanager.data.groups.GroupByData;
+import com.ruegnerlukas.taskmanager.data.groups.TaskGroup;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
 import java.util.*;
 

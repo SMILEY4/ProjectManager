@@ -1,11 +1,11 @@
 package com.ruegnerlukas.taskmanager.ui.main;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectClosedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.ProjectCreatedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectClosedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectCreatedEvent;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.projectsettingsview.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
