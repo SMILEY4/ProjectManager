@@ -5,7 +5,11 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.BoolValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class BoolAttributeData implements TaskAttributeData {
+
 
 	public boolean useDefault = false;
 	public boolean defaultValue = false;
@@ -22,32 +26,27 @@ public class BoolAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public Var[] update(Var var, TaskAttributeValue newValue) {
+	public Map<Var, TaskAttributeValue> update(Var var, TaskAttributeValue newValue) {
+		Map<Var, TaskAttributeValue> changedVars = new HashMap<>();
 
 		switch (var) {
 
 			case USE_DEFAULT: {
-				if(newValue instanceof BoolValue) {
-					useDefault = ((BoolValue)newValue).getBoolValue();
-					return new Var[] {Var.USE_DEFAULT};
-				} else {
-					return null;
+				if (newValue instanceof BoolValue) {
+					useDefault = ((BoolValue) newValue).getBoolValue();
+					changedVars.put(Var.USE_DEFAULT, newValue);
 				}
 			}
 
 			case DEFAULT_VALUE: {
-				if(newValue instanceof BoolValue) {
-					defaultValue = ((BoolValue)newValue).getBoolValue();
-					return new Var[] {Var.DEFAULT_VALUE};
-				} else {
-					return null;
+				if (newValue instanceof BoolValue) {
+					defaultValue = ((BoolValue) newValue).getBoolValue();
+					changedVars.put(Var.DEFAULT_VALUE, newValue);
 				}
 			}
-
-			default: {
-				return null;
-			}
 		}
+
+		return changedVars;
 	}
 
 
@@ -55,7 +54,7 @@ public class BoolAttributeData implements TaskAttributeData {
 
 	@Override
 	public boolean validate(TaskAttributeValue value) {
-		if(value instanceof NoValue) {
+		if (value instanceof NoValue) {
 			return !useDefault;
 		} else {
 			return (value instanceof BoolValue);

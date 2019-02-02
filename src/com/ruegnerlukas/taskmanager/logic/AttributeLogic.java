@@ -1,5 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic;
 
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.data.Project;
@@ -10,28 +12,100 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValu
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AttributeLogic {
 
 
-	/**
-	 * Locks all TaskAttributes <p>
-	 * Events: <p>
-	 * - AttributeLockEvent: when the lock was changed
-	 *
-	 * @return true, if completed successful
-	 */
-	public boolean setAttributeLock(boolean locked) {
-		if (Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
-			final boolean lockPrev = project.attributesLocked;
-			if (lockPrev != locked) {
-				project.attributesLocked = locked;
-				EventManager.fireEvent(new AttributeLockEvent(lockPrev, locked, this));
+	//======================//
+	//       INTERNAL       //
+	//======================//
+
+
+
+
+	protected TaskAttribute findAttribute(String name) {
+		return findAttribute(name, false);
+	}
+
+
+
+
+	protected TaskAttribute findAttribute(String name, boolean ignoreCase) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			for (int i = 0; i < project.attributes.size(); i++) {
+				TaskAttribute attribute = project.attributes.get(i);
+				if (ignoreCase) {
+					if (attribute.name.equalsIgnoreCase(name)) {
+						return attribute;
+					}
+				} else {
+					if (attribute.name.equals(name)) {
+						return attribute;
+					}
+				}
 			}
-			return true;
+			return null;
 		} else {
-			return false;
+			return null;
+		}
+	}
+
+
+
+
+	protected TaskAttribute findAttribute(TaskAttributeType type) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			for (int i = 0; i < project.attributes.size(); i++) {
+				TaskAttribute attribute = project.attributes.get(i);
+				if (attribute.data.getType() == type) {
+					return attribute;
+				}
+			}
+			return null;
+		} else {
+			return null;
+		}
+	}
+
+
+
+
+	protected List<TaskAttribute> findAttributes(TaskAttributeType type) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			List<TaskAttribute> attributes = new ArrayList<>();
+			for (int i = 0; i < project.attributes.size(); i++) {
+				TaskAttribute attribute = project.attributes.get(i);
+				if (attribute.data.getType() == type) {
+					attributes.add(attribute);
+				}
+			}
+			return attributes;
+		} else {
+			return null;
+		}
+	}
+
+
+	//======================//
+	//        GETTER        //
+	//======================//
+
+
+
+
+	/**
+	 * request the attribute with the given name
+	 */
+	public void getAttribute(String name, Request request) {
+		TaskAttribute attribute = findAttribute(name);
+		if (attribute != null) {
+			request.onResponse(new Response<>(Response.State.SUCCESS, attribute));
+		} else {
+			request.onResponse(new Response<TaskAttribute>(Response.State.FAIL, "Attribute '" + name + "' not found.", null));
 		}
 	}
 
@@ -39,45 +113,72 @@ public class AttributeLogic {
 
 
 	/**
-	 * creates a new TaskAttribute with the given name and type <p>
-	 * Events: <p>
-	 * - AttributeCreatedRejection: when the attribute could not be created (NOT_ALLOWED = values are locked, NAME_EXISTS = given name is not unique) <p>
-	 * - AttributeCreatedEvent: when the attribute was created
-	 *
-	 * @return true, if completed successful
+	 * request all attributes of the given type
 	 */
-	public boolean createAttribute(String name, TaskAttributeType type) {
-		if (Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
+	public void getAttributes(TaskAttributeType type, Request request) {
+		List<TaskAttribute> attributes = findAttributes(type);
+		if (attributes != null && !attributes.isEmpty()) {
+			request.onResponse(new Response<>(Response.State.SUCCESS, attributes));
+		} else {
+			request.onResponse(new Response<List<TaskAttribute>>(Response.State.FAIL, "No attributes with type '" + type + "' found.", null));
+		}
+	}
 
+
+	//======================//
+	//        SETTER        //
+	//======================//
+
+
+
+
+	/**
+	 * Locks all TaskAttributes and prevents any changes<p>
+	 * Events: <p>
+	 * - AttributeLockEvent: when the lock was changed
+	 */
+	public void setAttributeLock(boolean lockAttributes) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			final boolean lockPrev = project.attributesLocked;
+			if (lockPrev != lockAttributes) {
+				project.attributesLocked = lockAttributes;
+				EventManager.fireEvent(new AttributeLockEvent(lockPrev, lockAttributes, this));
+			}
+		}
+	}
+
+
+
+
+	/**
+	 * Creates a new TaskAttribute with the given name and type <p>
+	 * Events: <p>
+	 * - AttributeCreatedRejection: when the attribute could not be created (NOT_ALLOWED = values are locked, NOT_UNIQUE = given name is not unique) <p>
+	 * - AttributeCreatedEvent: when the attribute was created
+	 */
+	public void createAttribute(String name, TaskAttributeType type) {
+
+		Project project = Logic.project.getProject();
+		if (project != null) {
+
+			// create attribute
 			TaskAttribute attribute = new TaskAttribute(name, type);
 
+			// try to add attribute to project
 			if (project.attributesLocked) {
 				EventManager.fireEvent(new AttributeCreatedRejection(attribute, EventCause.NOT_ALLOWED, this));
-				return false;
-			}
 
-			boolean nameExists = false;
-			for (TaskAttribute a : project.attributes) {
-				if (a.name.equals(name)) {
-					nameExists = true;
-					break;
-				}
-			}
-
-			if (nameExists) {
-				EventManager.fireEvent(new AttributeCreatedRejection(attribute, EventCause.NAME_EXISTS, this));
-				return false;
+			} else if (findAttribute(name) != null) {
+				EventManager.fireEvent(new AttributeCreatedRejection(attribute, EventCause.NOT_UNIQUE, this));
 
 			} else {
 				project.attributes.add(attribute);
 				EventManager.fireEvent(new AttributeCreatedEvent(attribute, this));
-				return true;
 			}
 
-		} else {
-			return false;
 		}
+
 	}
 
 
@@ -86,37 +187,35 @@ public class AttributeLogic {
 	/**
 	 * Deletes the attribute with the given name<p>
 	 * Events: <p>
-	 * - AttributeRemovedRejection: when the attribute could not be deleted (NOT_ALLOWED = values are locked / attribute is fixed, NOT_EXISTS = given name does not exist) <p>
+	 * - AttributeRemovedRejection: when the attribute could not be deleted (NOT_ALLOWED = values are locked / attribute is fixed,
+	 * 		NOT_EXISTS = given name does not exist) <p>
 	 * - AttributeRemovedEvent: when the attribute was deleted
-	 *
-	 * @return true, if completed successful
 	 */
-	public boolean deleteAttribute(String name) {
-		if (Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
+	public void deleteAttribute(String name) {
 
+		Project project = Logic.project.getProject();
+		if (project != null) {
+
+			// find attribute
 			TaskAttribute attribute = findAttribute(name);
 
-			if (project.attributesLocked) {
-				EventManager.fireEvent(new AttributeRemovedRejection(attribute, EventCause.NOT_ALLOWED, this));
-				return false;
-			}
+			// try to delete attribute
 			if (attribute == null) {
-				EventManager.fireEvent(new AttributeRemovedRejection(null, EventCause.NOT_EXISTS, this));
-				return false;
-			}
-			if (attribute.data.getType().fixed) {
-				EventManager.fireEvent(new AttributeRemovedRejection(null, EventCause.NOT_ALLOWED, this));
-				return false;
+				EventManager.fireEvent(new AttributeRemovedRejection(attribute, EventCause.NOT_EXISTS, this));
+
+			} else if (project.attributesLocked) {
+				EventManager.fireEvent(new AttributeRemovedRejection(attribute, EventCause.NOT_ALLOWED, this));
+
+			} else if (attribute.data.getType().fixed) {
+				EventManager.fireEvent(new AttributeRemovedRejection(attribute, EventCause.NOT_ALLOWED, this));
+
+			} else {
+				project.attributes.remove(attribute);
+				EventManager.fireEvent(new AttributeRemovedEvent(attribute, this));
 			}
 
-			project.attributes.remove(attribute);
-			EventManager.fireEvent(new AttributeRemovedEvent(attribute, this));
-			return true;
-
-		} else {
-			return false;
 		}
+
 	}
 
 
@@ -125,42 +224,39 @@ public class AttributeLogic {
 	/**
 	 * renames the attribute with the given name to the new name <p>
 	 * Events: <p>
-	 * - AttributeRenamedRejection: when the attribute could not be renamed (NOT_ALLOWED = values are locked / attribute is fixed, NAME_EXISTS = given new name already exists, NOT_EXISTS = attribute with given name does not exist) <p>
+	 * - AttributeRenamedRejection: when the attribute could not be renamed (NOT_ALLOWED = values are locked / attribute is fixed,
+	 * 		NOT_UNIQUE = given new name already exists, NOT_EXISTS = attribute with given name does not exist) <p>
 	 * - AttributeRenamedEvent: when the attribute was renamed
-	 *
-	 * @return true, if completed successful
 	 */
-	public boolean renameAttribute(String oldName, String newName) {
-		if (Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
+	public void renameAttribute(String oldName, String newName) {
 
+		Project project = Logic.project.getProject();
+		if (project != null) {
+
+			// find attributes
 			TaskAttribute attributeOld = findAttribute(oldName);
 			TaskAttribute attributeNew = findAttribute(newName);
 
-			if (project.attributesLocked) {
-				EventManager.fireEvent(new AttributeRenamedRejection(attributeOld, newName, EventCause.NOT_ALLOWED, this));
-				return false;
-			}
-			if (attributeNew != null) {
-				EventManager.fireEvent(new AttributeRenamedRejection(attributeOld, newName, EventCause.NAME_EXISTS, this));
-				return false;
-			}
+			// try to rename attribute
 			if (attributeOld == null) {
-				EventManager.fireEvent(new AttributeRenamedRejection(null, newName, EventCause.NOT_EXISTS, this));
-				return false;
-			}
-			if (attributeOld.data.getType().fixed) {
+				EventManager.fireEvent(new AttributeRenamedRejection(attributeOld, newName, EventCause.NOT_EXISTS, this));
+
+			} else if (project.attributesLocked) {
 				EventManager.fireEvent(new AttributeRenamedRejection(attributeOld, newName, EventCause.NOT_ALLOWED, this));
-				return false;
+
+			} else if (attributeOld.data.getType().fixed) {
+				EventManager.fireEvent(new AttributeRenamedRejection(attributeOld, newName, EventCause.NOT_ALLOWED, this));
+
+			} else if (attributeNew != null) {
+				EventManager.fireEvent(new AttributeRenamedRejection(attributeOld, newName, EventCause.NOT_UNIQUE, this));
+
+			} else {
+				attributeOld.name = newName;
+				EventManager.fireEvent(new AttributeRenamedEvent(attributeOld, newName, this));
 			}
 
-			attributeOld.name = newName;
-			EventManager.fireEvent(new AttributeRenamedEvent(attributeOld, oldName, this));
-			return true;
-
-		} else {
-			return false;
 		}
+
 	}
 
 
@@ -169,38 +265,39 @@ public class AttributeLogic {
 	/**
 	 * changes the attribute-type of the given attribute to the new type <p>
 	 * Events <p>
-	 * - AttributeTypeChangedRejection: when the type could not be changed (NOT_ALLOWED = values are locked / attribute is fixed / new attribute is fixed, NOT_EXISTS = attribute with given name does not exist) <p>
+	 * - AttributeTypeChangedRejection: when the type could not be changed (NOT_ALLOWED = values are locked / attribute is fixed / new attribute is fixed,
+	 * 		NOT_EXISTS = attribute with given name does not exist, UNKNOWN = error when creating new attributeData with given type) <p>
 	 * - AttributeTypeChangedEvent: when the type was changed <p>
-	 *
-	 * @return true, if completed successful
 	 */
-	public boolean changeAttributeType(String name, TaskAttributeType newType) {
-		if (Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
+	public void setAttributeType(String name, TaskAttributeType type) {
 
+		Project project = Logic.project.getProject();
+		if (project != null) {
+
+			// find attributes
 			TaskAttribute attribute = findAttribute(name);
 
-			if (project.attributesLocked) {
-				EventManager.fireEvent(new AttributeTypeChangedRejection(attribute, newType, EventCause.NOT_ALLOWED, this));
-				return false;
-			}
+			// try to set type of attribute
 			if (attribute == null) {
-				EventManager.fireEvent(new AttributeTypeChangedRejection(null, newType, EventCause.NOT_EXISTS, this));
-				return false;
-			}
-			if (attribute.data.getType().fixed || newType.fixed) {
-				EventManager.fireEvent(new AttributeTypeChangedRejection(attribute, newType, EventCause.NOT_ALLOWED, this));
-				return false;
-			}
+				EventManager.fireEvent(new AttributeTypeChangedRejection(attribute, type, EventCause.NOT_EXISTS, this));
 
-			TaskAttributeType oldType = attribute.data.getType();
-			attribute.createRequirement(newType);
-			EventManager.fireEvent(new AttributeTypeChangedEvent(attribute, oldType, this));
-			return true;
+			} else if (project.attributesLocked) {
+				EventManager.fireEvent(new AttributeTypeChangedRejection(attribute, type, EventCause.NOT_ALLOWED, this));
 
-		} else {
-			return false;
+			} else if (attribute.data.getType().fixed || type.fixed) {
+				EventManager.fireEvent(new AttributeTypeChangedRejection(attribute, type, EventCause.NOT_ALLOWED, this));
+
+			} else {
+				TaskAttributeType prevType = attribute.data.getType();
+				boolean valid = attribute.createNewData(type);
+				if(valid) {
+					EventManager.fireEvent(new AttributeTypeChangedEvent(attribute, prevType, this));
+				} else {
+					EventManager.fireEvent(new AttributeTypeChangedRejection(attribute, type, EventCause.UNKNOWN, this));
+				}
+			}
 		}
+
 	}
 
 
@@ -209,82 +306,42 @@ public class AttributeLogic {
 	/**
 	 * Updates a variable of a given task with a new value <p>
 	 * Events <p>
-	 * - AttributeUpdatedRejection: when the type could not be changed (NOT_ALLOWED = values are locked / attribute is fixed, NOT_EXISTS = attribute with given name does not exist, INVALID: new value is invalid) <p>
+	 * - AttributeUpdatedRejection: when the type could not be changed (NOT_ALLOWED = values are locked / attribute is fixed,
+	 * 		NOT_EXISTS = attribute with given name does not exist, INVALID: new value / variable is invalid) <p>
 	 * - AttributeUpdatedEvent: when the value was changed <p>
-	 *
-	 * @return true, if completed successful
 	 */
-	public boolean updateTaskAttribute(String attributeName, TaskAttributeData.Var var, TaskAttributeValue newValue) {
-		if (Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
+	public void updateTaskAttribute(String name, TaskAttributeData.Var var, TaskAttributeValue value) {
 
-			TaskAttribute attribute = findAttribute(attributeName);
+		Project project = Logic.project.getProject();
+		if (project != null) {
 
-			if (project.attributesLocked) {
-				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, newValue, EventCause.NOT_ALLOWED, this));
-				return false;
-			}
+			// find attribute
+			TaskAttribute attribute = findAttribute(name);
+
+			// try to update variable
 			if (attribute == null) {
-				EventManager.fireEvent(new AttributeUpdatedRejection(null, var, newValue, EventCause.NOT_EXISTS, this));
-				return false;
-			}
+				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.NOT_EXISTS, this));
 
-			TaskAttributeData.Var[] changedVars = attribute.data.update(var, newValue);
-			if (changedVars != null) {
-				EventManager.fireEvent(new AttributeUpdatedEvent(attribute, changedVars, newValue, this));
-				return true;
+			} else if (project.attributesLocked) {
+				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.NOT_ALLOWED, this));
+
+			} else if (attribute.data.getType().fixed) {
+				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.NOT_ALLOWED, this));
+
 			} else {
-				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, newValue, EventCause.INVALID, this));
-				return false;
-			}
-
-		} else {
-			return false;
-		}
-	}
 
 
-
-
-	/**
-	 * @return all values of the given type in a list
-	 */
-	public List<TaskAttribute> getAttributes(TaskAttributeType type) {
-		if (Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
-
-			List<TaskAttribute> attributes = new ArrayList<>();
-			for (TaskAttribute attribute : project.attributes) {
-				if (attribute.data.getType() == type) {
-					attributes.add(attribute);
+				Map<TaskAttributeData.Var, TaskAttributeValue> changedVars = attribute.data.update(var, value);
+				if (changedVars == null || changedVars.isEmpty()) {
+					EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.INVALID, this));
+				} else {
+					EventManager.fireEvent(new AttributeUpdatedEvent(attribute, changedVars, value, this));
 				}
+
 			}
 
-			return attributes;
-
-		} else {
-			return new ArrayList<>();
 		}
-	}
 
-
-
-
-	/**
-	 * @return the attribute with the given name or null
-	 */
-	public TaskAttribute findAttribute(String name) {
-		if (Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
-			for (TaskAttribute attribute : project.attributes) {
-				if (attribute.name.equals(name)) {
-					return attribute;
-				}
-			}
-			return null;
-		} else {
-			return null;
-		}
 	}
 
 

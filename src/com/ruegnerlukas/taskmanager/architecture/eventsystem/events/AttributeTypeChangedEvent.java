@@ -8,14 +8,15 @@ public class AttributeTypeChangedEvent extends Event {
 
 
 	private TaskAttribute attribute;
-	private TaskAttributeType oldType;
+	private TaskAttributeType prevType;
 
 
 
-	public AttributeTypeChangedEvent(TaskAttribute attribute, TaskAttributeType oldType, Object source) {
+
+	public AttributeTypeChangedEvent(TaskAttribute attribute, TaskAttributeType prevType, Object source) {
 		super(source);
 		this.attribute = attribute;
-		this.oldType = oldType;
+		this.prevType = prevType;
 	}
 
 
@@ -28,8 +29,8 @@ public class AttributeTypeChangedEvent extends Event {
 
 
 
-	public TaskAttributeType getOldType() {
-		return oldType;
+	public TaskAttributeType getPrevType() {
+		return prevType;
 	}
 
 

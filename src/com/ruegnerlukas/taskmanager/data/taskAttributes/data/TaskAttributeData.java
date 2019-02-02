@@ -4,6 +4,8 @@ package com.ruegnerlukas.taskmanager.data.taskAttributes.data;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
+import java.util.Map;
+
 public interface TaskAttributeData {
 
 
@@ -27,12 +29,12 @@ public interface TaskAttributeData {
 
 	public TaskAttributeType getType();
 
-	public Var[] update(Var var, TaskAttributeValue newValue);
+	public Map<Var,TaskAttributeValue> update(Var var, TaskAttributeValue newValue);
 
 	public boolean validate(TaskAttributeValue value);
 
-
 	public boolean usesDefault();
+
 	public TaskAttributeValue getDefault();
 
 }

@@ -3,7 +3,7 @@ package com.ruegnerlukas.taskmanager.architecture.eventsystem.events;
 
 public enum EventCause {
 
-	NAME_EXISTS,
+	NOT_UNIQUE,
 	LAST_ELEMENT,
 	NOT_ALLOWED,
 	NOT_EXISTS,

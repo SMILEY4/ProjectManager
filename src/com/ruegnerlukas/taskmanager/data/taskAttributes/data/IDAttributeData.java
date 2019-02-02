@@ -4,6 +4,9 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class IDAttributeData implements TaskAttributeData {
 
 
@@ -19,8 +22,8 @@ public class IDAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public Var[] update(Var var, TaskAttributeValue newValue) {
-		return null;
+	public Map<Var, TaskAttributeValue> update(Var var, TaskAttributeValue newValue) {
+		return new HashMap<>();
 	}
 
 

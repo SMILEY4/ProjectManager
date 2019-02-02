@@ -7,7 +7,11 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class NumberAttributeData implements TaskAttributeData {
+
 
 	public int decPlaces = 0;
 	public double min = -100;
@@ -25,67 +29,57 @@ public class NumberAttributeData implements TaskAttributeData {
 
 
 
+
 	@Override
-	public Var[] update(Var var, TaskAttributeValue newValue) {
+	public Map<Var, TaskAttributeValue> update(Var var, TaskAttributeValue newValue) {
+		Map<Var, TaskAttributeValue> changedVars = new HashMap<>();
 
 		switch (var) {
 
 			case NUMBER_ATT_DEC_PLACES: {
-				if(newValue instanceof NumberValue) {
-					decPlaces = ((NumberValue)newValue).getInt();
+				if (newValue instanceof NumberValue) {
+					decPlaces = ((NumberValue) newValue).getInt();
 					defaultValue = MathUtils.setDecPlaces(defaultValue, decPlaces);
 					min = MathUtils.setDecPlaces(min, decPlaces);
 					max = MathUtils.setDecPlaces(max, decPlaces);
-					return new Var[] {
-							Var.NUMBER_ATT_DEC_PLACES,
-							Var.DEFAULT_VALUE,
-							Var.NUMBER_ATT_MIN,
-							Var.NUMBER_ATT_MAX };
-				} else {
-					return null;
+					changedVars.put(Var.NUMBER_ATT_DEC_PLACES, newValue);
+					changedVars.put(Var.DEFAULT_VALUE, new NumberValue(defaultValue));
+					changedVars.put(Var.NUMBER_ATT_MIN, new NumberValue(min));
+					changedVars.put(Var.NUMBER_ATT_MAX, new NumberValue(max));
 				}
 			}
 
 			case NUMBER_ATT_MIN: {
-				if(newValue instanceof NumberValue) {
-					min = ((NumberValue)newValue).getDouble();
-					return new Var[] {Var.NUMBER_ATT_MIN};
-				} else {
-					return null;
+				if (newValue instanceof NumberValue) {
+					min = ((NumberValue) newValue).getDouble();
+					changedVars.put(Var.NUMBER_ATT_MIN, newValue);
 				}
 			}
 
 			case NUMBER_ATT_MAX: {
-				if(newValue instanceof NumberValue) {
-					max = ((NumberValue)newValue).getDouble();
-					return new Var[] {Var.NUMBER_ATT_MAX};
-				} else {
-					return null;
+				if (newValue instanceof NumberValue) {
+					max = ((NumberValue) newValue).getDouble();
+					changedVars.put(Var.NUMBER_ATT_MAX, newValue);
 				}
 			}
 
 			case USE_DEFAULT: {
-				if(newValue instanceof BoolValue) {
-					useDefault = ((BoolValue)newValue).getBoolValue();
-					return new Var[] {Var.USE_DEFAULT};
-				} else {
-					return null;
+				if (newValue instanceof BoolValue) {
+					useDefault = ((BoolValue) newValue).getBoolValue();
+					changedVars.put(Var.USE_DEFAULT, newValue);
 				}
 			}
 
 			case DEFAULT_VALUE: {
-				if(newValue instanceof NumberValue) {
-					defaultValue = ((NumberValue)newValue).getDouble();
-					return new Var[] {Var.DEFAULT_VALUE};
-				} else {
-					return null;
+				if (newValue instanceof NumberValue) {
+					defaultValue = ((NumberValue) newValue).getDouble();
+					changedVars.put(Var.DEFAULT_VALUE, newValue);
 				}
 			}
 
-			default: {
-				return null;
-			}
 		}
+
+		return changedVars;
 	}
 
 
@@ -93,11 +87,11 @@ public class NumberAttributeData implements TaskAttributeData {
 
 	@Override
 	public boolean validate(TaskAttributeValue value) {
-		if(value instanceof NoValue) {
+		if (value instanceof NoValue) {
 			return !useDefault;
 		} else {
-			if(value instanceof NumberValue) {
-				final double number = ((NumberValue)value).getDouble();
+			if (value instanceof NumberValue) {
+				final double number = ((NumberValue) value).getDouble();
 				return min <= number && number <= max;
 			} else {
 				return false;

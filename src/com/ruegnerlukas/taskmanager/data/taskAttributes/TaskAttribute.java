@@ -12,7 +12,7 @@ public class TaskAttribute {
 	
 	public TaskAttribute(String name, TaskAttributeType type) {
 		this.name = name;
-		createRequirement(type);
+		createNewData(type);
 	}
 
 
@@ -20,27 +20,16 @@ public class TaskAttribute {
 
 
 
-	public void createRequirement(TaskAttributeType type) {
-		if(type == TaskAttributeType.ID) {
-			data = new IDAttributeData();
-		}
-		if(type == TaskAttributeType.FLAG) {
-			data = new FlagAttributeData();
-		}
-		if(type == TaskAttributeType.DESCRIPTION) {
-			data = new DescriptionAttributeData();
-		}
-		if(type == TaskAttributeType.TEXT) {
-			data = new TextAttributeData();
-		}
-		if(type == TaskAttributeType.NUMBER) {
-			data = new NumberAttributeData();
-		}
-		if(type == TaskAttributeType.BOOLEAN) {
-			data = new BoolAttributeData();
-		}
-		if(type == TaskAttributeType.CHOICE) {
-			data = new ChoiceAttributeData();
+	public boolean createNewData(TaskAttributeType type) {
+		switch (type) {
+			case ID: 			{ data = new IDAttributeData(); return true; }
+			case FLAG: 			{ data = new FlagAttributeData(); return true; }
+			case DESCRIPTION: 	{ data = new DescriptionAttributeData(); return true; }
+			case TEXT: 			{ data = new TextAttributeData(); return true; }
+			case NUMBER: 		{ data = new NumberAttributeData(); return true; }
+			case BOOLEAN: 		{ data = new BoolAttributeData(); return true; }
+			case CHOICE: 		{ data = new ChoiceAttributeData(); return true; }
+			default:			{ return false; }
 		}
 	}
 

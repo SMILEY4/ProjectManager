@@ -14,7 +14,8 @@ import java.util.List;
 
 public class Project {
 
-	// 0. project data
+
+	// 0. project data / attributes
 	public String name;
 	public boolean attributesLocked = false;
 	public List<TaskAttribute> attributes = new ArrayList<>();
@@ -39,7 +40,6 @@ public class Project {
 
 
 
-
 	public Project(String name) {
 		this.name = name;
 		attributes.add(new TaskAttribute(IDAttributeData.NAME, TaskAttributeType.ID));
@@ -47,5 +47,5 @@ public class Project {
 		attributes.add(new TaskAttribute(DescriptionAttributeData.NAME, TaskAttributeType.DESCRIPTION));
 	}
 
-	
+
 }

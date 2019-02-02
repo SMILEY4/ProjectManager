@@ -11,7 +11,6 @@ public class AttributeLockEvent extends Event {
 
 
 
-
 	public AttributeLockEvent(boolean lockPrev, boolean lockNow, Object source) {
 		super(source);
 		this.lockPrev = lockPrev;
