@@ -15,7 +15,9 @@ public class TaskValueChangedRejection extends Event {
 	private EventCause cause;
 
 
-	public TaskValueChangedRejection(Task task, TaskAttribute attribute,TaskAttributeValue oldValue, TaskAttributeValue newValue,
+
+
+	public TaskValueChangedRejection(Task task, TaskAttribute attribute, TaskAttributeValue oldValue, TaskAttributeValue newValue,
 									 EventCause cause, Object source) {
 		super(source);
 		this.task = task;
@@ -28,14 +30,12 @@ public class TaskValueChangedRejection extends Event {
 
 
 
-
-
 	public Task getTask() {
 		return this.task;
 	}
 
 
-	
+
 
 	public TaskAttribute getAttribute() {
 		return attribute;
@@ -53,6 +53,13 @@ public class TaskValueChangedRejection extends Event {
 
 	public TaskAttributeValue getOldValue() {
 		return oldValue;
+	}
+
+
+
+
+	public boolean wasCleared() {
+		return newValue == null;
 	}
 
 
