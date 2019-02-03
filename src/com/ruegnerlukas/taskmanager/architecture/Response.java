@@ -41,4 +41,10 @@ public class Response<T> {
 		this.value = value;
 	}
 
+
+
+	public T getValue() {
+		return value;
+	}
+
 }

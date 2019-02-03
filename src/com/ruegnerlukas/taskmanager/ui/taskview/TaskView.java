@@ -1,14 +1,17 @@
 package com.ruegnerlukas.taskmanager.ui.taskview;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
+import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
-import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.Task;
-import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.groups.TaskGroup;
+import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
@@ -17,6 +20,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagArrayValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.FilterPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.groupPopup.GroupByPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.sortPopup.SortPopup;
@@ -27,11 +31,8 @@ import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.label.LabelUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.geometry.Bounds;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -91,24 +92,44 @@ public class TaskView extends AnchorPane {
 
 
 		// FOR TESTING
-		for(int i=0; i<40; i++) {
-			Logic.tasks.createTask();
+		for (int i = 0; i < 40; i++) {
+			Logic.tasks.createNewTask();
 		}
 
 		FlagArrayValue flags = new FlagArrayValue(
-				new TaskFlag(TaskFlag.FlagColor.RED, "Bug Critical", false),
-				new TaskFlag(TaskFlag.FlagColor.ORANGE, "Bug", false),
-				new TaskFlag(TaskFlag.FlagColor.CYAN, "Feature", false),
-				new TaskFlag(TaskFlag.FlagColor.BLUE, "Feature Critical", false),
-				new TaskFlag(TaskFlag.FlagColor.GRAY, "Unassigned", false)
+				new TaskFlag(TaskFlag.FlagColor.RED, "Bug Critical"),
+				new TaskFlag(TaskFlag.FlagColor.ORANGE, "Bug"),
+				new TaskFlag(TaskFlag.FlagColor.CYAN, "Feature"),
+				new TaskFlag(TaskFlag.FlagColor.BLUE, "Feature Critical"),
+				new TaskFlag(TaskFlag.FlagColor.GRAY, "Unassigned")
 		);
 		Logic.attribute.updateTaskAttribute(FlagAttributeData.NAME, TaskAttributeData.Var.FLAG_ATT_FLAGS, flags);
 
-		for(Task task : Logic.project.getProject().tasks) {
-			TaskAttribute flagAttribute = Logic.attribute.getAttributes(TaskAttributeType.FLAG).get(0);
-			FlagValue value = new FlagValue( ((FlagAttributeData)flagAttribute.data).flags[new Random().nextInt(((FlagAttributeData)flagAttribute.data).flags.length)] );
-			Logic.tasks.setAttributeValue(task, Logic.attribute.getAttributes(TaskAttributeType.FLAG).get(0), value);
-		}
+		Logic.tasks.getTasks(new Request() {
+			@Override
+			public void onResponse(Response response) {
+				if (response.state == Response.State.SUCCESS) {
+					List<Task> tasks = (List<Task>) response.getValue();
+					for (Task task : tasks) {
+
+						Logic.attribute.getAttributes(TaskAttributeType.FLAG, new Request() {
+							@Override
+							public void onResponse(Response response) {
+								if (response.state == Response.State.SUCCESS) {
+									TaskAttribute flagAttribute = (TaskAttribute) response.getValue();
+									FlagValue value = new FlagValue(((FlagAttributeData) flagAttribute.data).flags[new Random().nextInt(((FlagAttributeData) flagAttribute.data).flags.length)]);
+									Logic.tasks.setAttributeValue(task, flagAttribute, value);
+								}
+
+
+							}
+						});
+
+					}
+				}
+			}
+		});
+
 		// END TESTING
 
 
@@ -196,17 +217,14 @@ public class TaskView extends AnchorPane {
 		}
 
 		// listen for dragging
-		splitContent.getDividers().get(0).positionProperty().addListener(new ChangeListener<Number>() {
-			@Override
-			public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-				if (newValue.doubleValue() > 0.95) {
-					splitContent.setDividerPosition(0, 1);
-					labelHideSidebar.setText("<");
-					sidebarHidden = true;
-				} else {
-					labelHideSidebar.setText(">");
-					sidebarHidden = false;
-				}
+		splitContent.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue.doubleValue() > 0.95) {
+				splitContent.setDividerPosition(0, 1);
+				labelHideSidebar.setText("<");
+				sidebarHidden = true;
+			} else {
+				labelHideSidebar.setText(">");
+				sidebarHidden = false;
 			}
 		});
 
@@ -238,11 +256,8 @@ public class TaskView extends AnchorPane {
 
 	private void setupListeners() {
 
-		EventManager.registerListener(this, new EventListener() {
-			@Override
-			public void onEvent(Event e) {
-				refreshTaskView();
-			}
+		EventManager.registerListener(this, e -> {
+			refreshTaskView();
 		}, GroupByRebuildEvent.class, GroupHeaderChangedEvent.class, AttributeRenamedEvent.class);
 
 	}
@@ -254,47 +269,69 @@ public class TaskView extends AnchorPane {
 
 		clearTaskList();
 
-		TaskGroupData taskGroupData = Logic.project.getProject().taskGroupData;
+		Logic.group.getTaskGroups(new Request() {
+			@Override
+			public void onResponse(Response response) {
+				if (response.state == Response.State.SUCCESS) {
+					TaskGroupData taskGroupData = (TaskGroupData) response.getValue();
 
-		if(taskGroupData.attributes.isEmpty()) {
-			createTaskList("All Tasks", Logic.project.getProject().filteredTasks);
+					// display all filtered tasks
+					if (taskGroupData.attributes.isEmpty()) {
+						Logic.filter.getFilteredTasks(new Request() {
+							@Override
+							public void onResponse(Response response) {
+								if (response.state == Response.State.SUCCESS) {
+									createTaskList("All Tasks", (List<Task>) response.getValue());
+								}
+							}
+						});
 
-		} else {
+						// display grouped-tasks
+					} else {
 
-			for(TaskGroup group : taskGroupData.groups) {
+						for (TaskGroup group : taskGroupData.groups) {
 
-				StringBuilder title = new StringBuilder();
+							StringBuilder title = new StringBuilder();
 
+							SyncRequest reqHeaderString = new SyncRequest();
+							Logic.group.getCustomHeaderString(reqHeaderString);
+							Response resHeaderString = reqHeaderString.getResponse();
 
-				if(Logic.project.getProject().useCustomHeaderString) {
-					String strCustomHeader = Logic.project.getProject().taskGroupHeaderString;
+							boolean useCustomHeaderString = resHeaderString.state == Response.State.SUCCESS;
 
-					for(int i = 0; i< taskGroupData.attributes.size(); i++) {
-						TaskAttribute attribute = taskGroupData.attributes.get(i);
-						if(strCustomHeader.contains("{"+attribute.name+"}")) {
-							TaskAttributeValue value = group.values.get(attribute);
-							strCustomHeader = strCustomHeader.replaceAll("\\{"+attribute.name+"\\}", value.toString());
+							if (useCustomHeaderString) {
+								String strCustomHeader = (String) resHeaderString.getValue();
+
+								for (int i = 0; i < taskGroupData.attributes.size(); i++) {
+									TaskAttribute attribute = taskGroupData.attributes.get(i);
+									if (strCustomHeader.contains("{" + attribute.name + "}")) {
+										TaskAttributeValue value = group.values.get(attribute);
+										strCustomHeader = strCustomHeader.replaceAll("\\{" + attribute.name + "\\}", value.toString());
+									}
+								}
+
+								title.append(strCustomHeader);
+
+							} else {
+								for (int i = 0; i < taskGroupData.attributes.size(); i++) {
+									TaskAttribute attribute = taskGroupData.attributes.get(i);
+									TaskAttributeValue value = group.values.get(attribute);
+									title.append(value.toString());
+									if (i != taskGroupData.attributes.size() - 1) {
+										title.append(", ");
+									}
+								}
+							}
+
+							createTaskList(title.toString(), group.tasks);
+
 						}
+
 					}
 
-					title.append(strCustomHeader);
-
-				} else {
-					for(int i = 0; i< taskGroupData.attributes.size(); i++) {
-						TaskAttribute attribute = taskGroupData.attributes.get(i);
-						TaskAttributeValue value = group.values.get(attribute);
-						title.append(value.toString());
-						if(i != taskGroupData.attributes.size()-1) {
-							title.append(", ");
-						}
-					}
 				}
-
-				createTaskList(title.toString(), group.tasks);
-
 			}
-
-		}
+		});
 
 
 	}
@@ -325,44 +362,37 @@ public class TaskView extends AnchorPane {
 		badge.setPrefSize(14, 14);
 		badge.setMaxSize(14, 14);
 		pane.getChildren().add(badge);
-		button.boundsInParentProperty().addListener(new ChangeListener<Bounds>() {
-			@Override
-			public void changed(ObservableValue<? extends Bounds> observable, Bounds oldValue, Bounds newValue) {
-				double x = newValue.getMinX();
-				double y = newValue.getMinY();
-				double w = newValue.getWidth();
-				double h = newValue.getHeight();
-				AnchorPane.setLeftAnchor(badge, x + w - 7 - 3);
-				AnchorPane.setBottomAnchor(badge, y + h - 7 - 7);
+		button.boundsInParentProperty().addListener((observable, oldValue, newValue) -> {
+			double x = newValue.getMinX();
+			double y = newValue.getMinY();
+			double w = newValue.getWidth();
+			double h = newValue.getHeight();
+			AnchorPane.setLeftAnchor(badge, x + w - 7 - 3);
+			AnchorPane.setBottomAnchor(badge, y + h - 7 - 7);
 
-			}
 		});
 
 
 		// get number to display
-		int nSort = 0;
-		if (button == btnSort) {
-			nSort = Logic.project.getProject().sortElements.size();
-		}
-		if (button == btnFilter) {
-			nSort = Logic.project.getProject().filterCriteria.size();
-		}
-		if (button == btnGroup) {
-			nSort = Logic.project.getProject().groupByOrder.size();
-		}
-
-
-		// set badge-text
-		if (0 < nSort && nSort < 10) {
-			badge.setText("" + nSort);
-			badge.setVisible(true);
-		} else if (nSort >= 10) {
-			badge.setText("!");
-			badge.setVisible(true);
-		} else {
-			badge.setText("");
-			badge.setVisible(false);
-		}
+		Logic.project.getCurrentProject(new Request() {
+			@Override
+			public void onResponse(Response response) {
+				if (response.state == Response.State.SUCCESS) {
+					Project project = (Project) response.getValue();
+					int n = 0;
+					if (button == btnSort) {
+						n = project.sortElements.size();
+					}
+					if (button == btnFilter) {
+						n = project.filterCriteria.size();
+					}
+					if (button == btnGroup) {
+						n = project.taskGroupOrder.size();
+					}
+					setBadgeText(badge, n);
+				}
+			}
+		});
 
 
 		// get event to listen to
@@ -383,38 +413,49 @@ public class TaskView extends AnchorPane {
 			@Override
 			public void onEvent(Event e) {
 
-				// get number to display
-				int n = 0;
-				if (button == btnSort) {
-					n = Logic.project.getProject().sortElements.size();
-				}
-				if (button == btnFilter) {
-					n = Logic.project.getProject().filterCriteria.size();
-				}
-				if (button == btnGroup) {
-					n = Logic.project.getProject().groupByOrder.size();
-				}
+				Logic.project.getCurrentProject(new Request() {
+					@Override
+					public void onResponse(Response response) {
+						if (response.state == Response.State.SUCCESS) {
+							Project project = (Project) response.getValue();
+							int n = 0;
+							if (button == btnSort) {
+								n = project.sortElements.size();
+							}
+							if (button == btnFilter) {
+								n = project.filterCriteria.size();
+							}
+							if (button == btnGroup) {
+								n = project.taskGroupOrder.size();
+							}
+							setBadgeText(badge, n);
 
-				// set badge-text
-				if (0 < n && n < 10) {
-					badge.setText("" + n);
-					badge.setVisible(true);
-				} else if (n >= 10) {
-					badge.setText("!");
-					badge.setVisible(true);
-				} else {
-					badge.setText("");
-					badge.setVisible(false);
-				}
+						}
+					}
+				});
+
 
 			}
 		}, eventClass);
-
 
 		return badge;
 	}
 
 
+
+
+	private void setBadgeText(Label badge, int number) {
+		if (0 < number && number < 10) {
+			badge.setText("" + number);
+			badge.setVisible(true);
+		} else if (number >= 10) {
+			badge.setText("!");
+			badge.setVisible(true);
+		} else {
+			badge.setText("");
+			badge.setVisible(false);
+		}
+	}
 
 
 

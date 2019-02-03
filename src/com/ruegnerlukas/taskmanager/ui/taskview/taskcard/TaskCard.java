@@ -1,6 +1,8 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.taskcard;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.TaskValueChangedEvent;
@@ -64,21 +66,26 @@ public class TaskCard extends AnchorPane {
 	private void create() {
 
 		// id
-		int id = ((NumberValue)Logic.tasks.getAttributeValue(task, IDAttributeData.NAME)).getInt();
-		labelID.setText("T-" + id);
+		Logic.tasks.getAttributeValue(task, IDAttributeData.NAME, new Request() {
+			@Override
+			public void onResponse(Response response) {
+				if (response.state == Response.State.SUCCESS) {
+					NumberValue value = (NumberValue) response.getValue();
+					labelID.setText("T-" + value.getInt());
+				}
+			}
+		});
 
 
 		// flag
-		Color flagColor = ((FlagValue)Logic.tasks.getAttributeValue(task, FlagAttributeData.NAME)).getFlag().color.color;
-		paneFlag.setStyle("-fx-background-color: rgba(" + flagColor.getRed()*255 +","+ flagColor.getGreen()*255 +","+ flagColor.getBlue()*255 + ",1.0);");
+		updateFlagColor();
 
 		EventManager.registerListener(this, e -> {
-			AttributeUpdatedEvent event = (AttributeUpdatedEvent)e;
+			AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
 			TaskAttribute attribute = event.getAttribute();
-			if(attribute.data.getType() == TaskAttributeType.FLAG) {
-				if(event.wasChanged(TaskAttributeData.Var.DEFAULT_VALUE) || event.wasChanged(TaskAttributeData.Var.FLAG_ATT_FLAGS)) {
-					Color newColor = ((FlagValue)Logic.tasks.getAttributeValue(task, FlagAttributeData.NAME)).getFlag().color.color;
-					paneFlag.setStyle("-fx-background-color: rgba(" + newColor.getRed()*255 +","+ newColor.getGreen()*255 +","+ newColor.getBlue()*255 + ",1.0);");
+			if (attribute.data.getType() == TaskAttributeType.FLAG) {
+				if (event.getChangedVars().containsKey(TaskAttributeData.Var.DEFAULT_VALUE) || event.getChangedVars().containsKey(TaskAttributeData.Var.FLAG_ATT_FLAGS)) {
+					updateFlagColor();
 				}
 			}
 		}, AttributeUpdatedEvent.class);
@@ -86,21 +93,20 @@ public class TaskCard extends AnchorPane {
 
 		// description
 		areaDescription = new EditableAreaLabel();
-		areaDescription.setText( ((TextValue)(Logic.tasks.getAttributeValue(task, DescriptionAttributeData.NAME))).getText() );
+		updateDescription();
 		AnchorUtils.setAnchors(areaDescription, 0, 0, 0, 0);
 		paneDescription.getChildren().add(areaDescription);
-
 		areaDescription.addListener((observable, oldValue, newValue) -> {
-			Logic.tasks.setAttributeValue(task, Logic.attribute.getAttributes(TaskAttributeType.DESCRIPTION).get(0), new TextValue(newValue));
+			updateDescription();
 		});
 
 		EventManager.registerListener(this, e -> {
-			TaskValueChangedEvent event = (TaskValueChangedEvent)e;
-			if(event.getTask() == task) {
+			TaskValueChangedEvent event = (TaskValueChangedEvent) e;
+			if (event.getTask() == task) {
 
 				TaskAttribute attribute = event.getAttribute();
-				if(attribute.data.getType() == TaskAttributeType.DESCRIPTION) {
-					TextValue newDescription = (TextValue)event.getNewValue();
+				if (attribute.data.getType() == TaskAttributeType.DESCRIPTION) {
+					TextValue newDescription = (TextValue) event.getNewValue();
 					areaDescription.setText(newDescription.getText());
 				}
 
@@ -110,6 +116,35 @@ public class TaskCard extends AnchorPane {
 	}
 
 
+
+
+	private void updateFlagColor() {
+		Logic.tasks.getAttributeValue(task, FlagAttributeData.NAME, new Request() {
+			@Override
+			public void onResponse(Response response) {
+				if (response.state == Response.State.SUCCESS) {
+					FlagValue value = (FlagValue) response.getValue();
+					Color flagColor = value.getFlag().color.color;
+					paneFlag.setStyle("-fx-background-color: rgba(" + flagColor.getRed() * 255 + "," + flagColor.getGreen() * 255 + "," + flagColor.getBlue() * 255 + ",1.0);");
+				}
+			}
+		});
+	}
+
+
+
+
+	private void updateDescription() {
+		Logic.tasks.getAttributeValue(task, DescriptionAttributeData.NAME, new Request() {
+			@Override
+			public void onResponse(Response response) {
+				if (response.state == Response.State.SUCCESS) {
+					TextValue value = (TextValue) response.getValue();
+					areaDescription.setText(value.getText());
+				}
+			}
+		});
+	}
 
 
 }

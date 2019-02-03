@@ -1,9 +1,8 @@
 package com.ruegnerlukas.taskmanager.architecture;
 
-public class Request {
+public abstract class Request {
 
 
-	public void onResponse(Response response) {
-	}
+	public abstract void onResponse(Response response);
 
 }

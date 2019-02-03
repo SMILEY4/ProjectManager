@@ -1,8 +1,11 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxDragAndDrop;
@@ -50,14 +53,30 @@ public class FilterPopup extends AnchorPane {
 
 		// values
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		for (FilterCriteria criteria : Logic.project.getProject().filterCriteria) {
-			boxAttributes.getChildren().add(new FilterCriteriaNode(criteria.attribute, criteria.comparisonOp, criteria.comparisionValue));
-		}
+		Logic.filter.getFilterCriteria(new Request() {
+			@Override
+			public void onResponse(Response response) {
+				if (response.state == Response.State.SUCCESS) {
+					List<FilterCriteria> filterCriteria = (List<FilterCriteria>) response.getValue();
+					for (FilterCriteria criteria : filterCriteria) {
+						boxAttributes.getChildren().add(new FilterCriteriaNode(criteria.attribute, criteria.comparisonOp, criteria.comparisionValue));
+					}
+				}
+			}
+		});
 
 
 		// add attribute
 		btnAdd.setOnAction(event -> {
-			boxAttributes.getChildren().add(new FilterCriteriaNode(Logic.project.getProject().attributes.get(0)));
+			Logic.attribute.getAttributes(new Request() {
+				@Override
+				public void onResponse(Response response) {
+					if (response.state == Response.State.SUCCESS) {
+						List<TaskAttribute> attributes = (List<TaskAttribute>) response.getValue();
+						boxAttributes.getChildren().add(new FilterCriteriaNode(attributes.get(0)));
+					}
+				}
+			});
 		});
 
 

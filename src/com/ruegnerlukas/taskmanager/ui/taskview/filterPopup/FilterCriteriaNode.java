@@ -1,5 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup;
 
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -76,19 +78,31 @@ public class FilterCriteriaNode extends HBox {
 		choiceAttrib.setMinSize(250, 32);
 		choiceAttrib.setPrefSize(250, 32);
 		choiceAttrib.setMaxSize(250, 32);
-		for (TaskAttribute attrib : Logic.project.getProject().attributes) {
-			choiceAttrib.getItems().add(attrib.name);
-		}
-		choiceAttrib.getSelectionModel().select(attribute.name);
-		choiceAttrib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			for (TaskAttribute attrib : Logic.project.getProject().attributes) {
-				if (attrib.name.equals(choiceAttrib.getValue())) {
-					this.attribute = attrib;
-					this.compValue = null;
-					update();
-					break;
+		Logic.attribute.getAttributes(new Request() {
+			@Override
+			public void onResponse(Response response) {
+				if (response.state == Response.State.SUCCESS) {
+					List<TaskAttribute> attributes = (List<TaskAttribute>) response.getValue();
+					for (TaskAttribute attrib : attributes) {
+						choiceAttrib.getItems().add(attrib.name);
+					}
 				}
 			}
+		});
+
+
+		choiceAttrib.getSelectionModel().select(attribute.name);
+		choiceAttrib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			Logic.attribute.getAttribute(choiceAttrib.getValue(), new Request() {
+				@Override
+				public void onResponse(Response response) {
+					if (response.state == Response.State.SUCCESS) {
+						FilterCriteriaNode.this.attribute = (TaskAttribute) response.getValue();
+						FilterCriteriaNode.this.compValue = null;
+						update();
+					}
+				}
+			});
 		});
 		this.getChildren().add(choiceAttrib);
 

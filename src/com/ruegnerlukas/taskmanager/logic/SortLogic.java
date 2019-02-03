@@ -1,5 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic;
 
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRemovedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.SortElementsChangedEvent;
@@ -38,6 +40,16 @@ public class SortLogic {
 	//======================//
 	//        GETTER        //
 	//======================//
+
+
+
+
+	public void getSortElements(Request request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			request.onResponse(new Response<>(Response.State.SUCCESS, project.sortElements));
+		}
+	}
 
 
 	//======================//

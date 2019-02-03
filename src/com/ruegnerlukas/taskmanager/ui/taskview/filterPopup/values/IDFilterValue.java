@@ -31,7 +31,7 @@ public class IDFilterValue extends FilterValue {
 				value = compValue;
 			}
 
-			Spinner<Integer> spinner = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberValue)value).getInt());
+			Spinner<Integer> spinner = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberValue) value).getInt());
 			outNodes.add(spinner);
 
 			spinner.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -49,7 +49,7 @@ public class IDFilterValue extends FilterValue {
 				value = compValue;
 			}
 
-			TextField textField = buildTextField("Comma Separated values", String.join(",", ((TextArrayValue)value).getText() ));
+			TextField textField = buildTextField("Comma Separated values", String.join(",", ((TextArrayValue) value).getText()));
 			outNodes.add(textField);
 
 			textField.setOnAction(event -> {
@@ -90,17 +90,17 @@ public class IDFilterValue extends FilterValue {
 				value = compValue;
 			}
 
-			Spinner<Integer> spinnerMin = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberPairValue)value).getInt0());
+			Spinner<Integer> spinnerMin = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberPairValue) value).getInt0());
 			outNodes.add(spinnerMin);
 			spinnerMin.valueProperty().addListener((observable, oldValue, newValue) -> {
-				value = new NumberPairValue(spinnerMin.getValue(), ((NumberPairValue)value).getInt1());
+				value = new NumberPairValue(spinnerMin.getValue(), ((NumberPairValue) value).getInt1());
 				onAction();
 			});
 
-			Spinner<Integer> spinnerMax = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberPairValue)value).getInt1());
+			Spinner<Integer> spinnerMax = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberPairValue) value).getInt1());
 			outNodes.add(spinnerMax);
 			spinnerMax.valueProperty().addListener((observable, oldValue, newValue) -> {
-				value = new NumberPairValue(((NumberPairValue)value).getInt0(), spinnerMin.getValue());
+				value = new NumberPairValue(((NumberPairValue) value).getInt0(), spinnerMin.getValue());
 				onAction();
 			});
 		}

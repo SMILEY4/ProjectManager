@@ -98,6 +98,19 @@ public class AttributeLogic {
 
 
 	/**
+	 * Request a list of all attributes
+	 */
+	public void getAttributes(Request request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			request.onResponse(new Response<>(Response.State.SUCCESS, project.attributes));
+		}
+	}
+
+
+
+
+	/**
 	 * request the attribute with the given name
 	 */
 	public void getAttribute(String name, Request request) {
@@ -121,6 +134,19 @@ public class AttributeLogic {
 			request.onResponse(new Response<>(Response.State.SUCCESS, attributes));
 		} else {
 			request.onResponse(new Response<List<TaskAttribute>>(Response.State.FAIL, "No attributes with type '" + type + "' found.", null));
+		}
+	}
+
+
+
+
+	/**
+	 * Checks whether the attributes of the current project are locked
+	 */
+	public void getAttributeLock(Request request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			request.onResponse(new Response<>(Response.State.SUCCESS, project.attributesLocked));
 		}
 	}
 
@@ -188,7 +214,7 @@ public class AttributeLogic {
 	 * Deletes the attribute with the given name<p>
 	 * Events: <p>
 	 * - AttributeRemovedRejection: when the attribute could not be deleted (NOT_ALLOWED = values are locked / attribute is fixed,
-	 * 		NOT_EXISTS = given name does not exist) <p>
+	 * NOT_EXISTS = given name does not exist) <p>
 	 * - AttributeRemovedEvent: when the attribute was deleted
 	 */
 	public void deleteAttribute(String name) {
@@ -225,7 +251,7 @@ public class AttributeLogic {
 	 * renames the attribute with the given name to the new name <p>
 	 * Events: <p>
 	 * - AttributeRenamedRejection: when the attribute could not be renamed (NOT_ALLOWED = values are locked / attribute is fixed,
-	 * 		NOT_UNIQUE = given new name already exists, NOT_EXISTS = attribute with given name does not exist) <p>
+	 * NOT_UNIQUE = given new name already exists, NOT_EXISTS = attribute with given name does not exist) <p>
 	 * - AttributeRenamedEvent: when the attribute was renamed
 	 */
 	public void renameAttribute(String oldName, String newName) {
@@ -266,7 +292,7 @@ public class AttributeLogic {
 	 * changes the attribute-type of the given attribute to the new type <p>
 	 * Events <p>
 	 * - AttributeTypeChangedRejection: when the type could not be changed (NOT_ALLOWED = values are locked / attribute is fixed / new attribute is fixed,
-	 * 		NOT_EXISTS = attribute with given name does not exist, UNKNOWN = error when creating new attributeData with given type) <p>
+	 * NOT_EXISTS = attribute with given name does not exist, UNKNOWN = error when creating new attributeData with given type) <p>
 	 * - AttributeTypeChangedEvent: when the type was changed <p>
 	 */
 	public void setAttributeType(String name, TaskAttributeType type) {
@@ -290,7 +316,7 @@ public class AttributeLogic {
 			} else {
 				TaskAttributeType prevType = attribute.data.getType();
 				boolean valid = attribute.createNewData(type);
-				if(valid) {
+				if (valid) {
 					EventManager.fireEvent(new AttributeTypeChangedEvent(attribute, prevType, this));
 				} else {
 					EventManager.fireEvent(new AttributeTypeChangedRejection(attribute, type, EventCause.UNKNOWN, this));
@@ -307,7 +333,7 @@ public class AttributeLogic {
 	 * Updates a variable of a given task with a new value <p>
 	 * Events <p>
 	 * - AttributeUpdatedRejection: when the type could not be changed (NOT_ALLOWED = values are locked / attribute is fixed,
-	 * 		NOT_EXISTS = attribute with given name does not exist, INVALID: new value / variable is invalid) <p>
+	 * NOT_EXISTS = attribute with given name does not exist, INVALID: new value / variable is invalid) <p>
 	 * - AttributeUpdatedEvent: when the value was changed <p>
 	 */
 	public void updateTaskAttribute(String name, TaskAttributeData.Var var, TaskAttributeValue value) {

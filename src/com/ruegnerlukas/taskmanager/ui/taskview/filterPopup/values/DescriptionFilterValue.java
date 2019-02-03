@@ -11,6 +11,7 @@ import java.util.List;
 
 public class DescriptionFilterValue extends FilterValue {
 
+
 	private String value = "";
 
 
@@ -26,8 +27,8 @@ public class DescriptionFilterValue extends FilterValue {
 				|| FilterCriteria.ComparisonOp.CONTAINS_NOT == compOp) {
 
 			value = "";
-			if(compValue instanceof TextValue) {
-				value = ((TextValue)compValue).getText();
+			if (compValue instanceof TextValue) {
+				value = ((TextValue) compValue).getText();
 			}
 
 			TextField textField = buildTextField("", value);

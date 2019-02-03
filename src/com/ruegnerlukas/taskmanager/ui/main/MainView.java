@@ -1,11 +1,15 @@
 package com.ruegnerlukas.taskmanager.ui.main;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
+import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectClosedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectCreatedEvent;
+import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.projectsettingsview.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
@@ -38,6 +42,7 @@ public class MainView extends AnchorPane {
 
 	private ProjectSettingsView viewProjectSettings;
 	private TaskView viewTasks;
+
 
 
 
@@ -91,14 +96,22 @@ public class MainView extends AnchorPane {
 		MenuFunction functionNewProject = new MenuFunction("File", "New Project") {
 			@Override
 			public void onAction() {
-				// save/close last project
-				if (Logic.project.isProjectOpen()) {
-					if (handleOpenProject()) {
-						Logic.project.createProject();
+				Logic.project.getIsProjectOpen(new Request() {
+					@Override
+					public void onResponse(Response response) {
+						if (response.state == Response.State.SUCCESS) {
+
+							if ((boolean) response.value) {
+								if (handleOpenProject()) {
+									Logic.project.createProject();
+								}
+							} else {
+								Logic.project.createProject();
+							}
+
+						}
 					}
-				} else {
-					Logic.project.createProject();
-				}
+				});
 			}
 		}.addToMenuBar(menuBar);
 
@@ -111,16 +124,24 @@ public class MainView extends AnchorPane {
 				fileChooser.setTitle("Select project root-file.");
 				fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
 				File file = fileChooser.showOpenDialog(ViewManager.getPrimaryStage());
-				if (file == null) {
-					return;
-				} else {
-					if (Logic.project.isProjectOpen()) {
-						if (handleOpenProject()) {
-							Logic.project.loadProject(file);
+
+				if (file != null) {
+
+					Logic.project.getIsProjectOpen(new Request() {
+						@Override
+						public void onResponse(Response response) {
+							if (response.state == Response.State.SUCCESS) {
+								if ((boolean) response.value) {
+									if (handleOpenProject()) {
+										Logic.project.loadProject(file);
+									}
+								} else {
+									Logic.project.loadProject(file);
+								}
+							}
 						}
-					} else {
-						Logic.project.loadProject(file);
-					}
+					});
+
 				}
 			}
 		}.addToMenuBar(menuBar);
@@ -144,16 +165,21 @@ public class MainView extends AnchorPane {
 				@Override
 				public void onAction() {
 					File file = new File(filepath);
-					if (!file.exists()) {
-						return;
-					} else {
-						if (Logic.project.isProjectOpen()) {
-							if (handleOpenProject()) {
-								Logic.project.loadProject(file);
+					if (file.exists()) {
+						Logic.project.getIsProjectOpen(new Request() {
+							@Override
+							public void onResponse(Response response) {
+								if (response.state == Response.State.SUCCESS) {
+									if ((boolean) response.value) {
+										if (handleOpenProject()) {
+											Logic.project.loadProject(file);
+										}
+									} else {
+										Logic.project.loadProject(file);
+									}
+								}
 							}
-						} else {
-							Logic.project.loadProject(file);
-						}
+						});
 					}
 				}
 			};
@@ -166,10 +192,18 @@ public class MainView extends AnchorPane {
 		functionSaveProject = new MenuFunction("File", "Save") {
 			@Override
 			public void onAction() {
-				if (Logic.project.isProjectOpen()) {
-					Logic.project.saveProject();
-					Alerts.info("Project has been saved.", Logic.project.getProject().name);
-				}
+
+				Logic.project.getCurrentProject(new Request() {
+					@Override
+					public void onResponse(Response response) {
+						if (response.state == Response.State.SUCCESS) {
+							Project project = (Project) response.getValue();
+							Logic.project.saveProject();
+							Alerts.info("Project has been saved.", project.name);
+						}
+					}
+				});
+
 			}
 		}.addToMenuBar(menuBar);
 		functionSaveProject.setDisable(true);
@@ -179,9 +213,18 @@ public class MainView extends AnchorPane {
 		functionCloseProject = new MenuFunction("File", "Close Project") {
 			@Override
 			public void onAction() {
-				if (Logic.project.isProjectOpen()) {
-					handleOpenProject();
-				}
+
+				Logic.project.getIsProjectOpen(new Request() {
+					@Override
+					public void onResponse(Response response) {
+						if (response.state == Response.State.SUCCESS) {
+							if ((boolean) response.value) {
+								handleOpenProject();
+							}
+						}
+					}
+				});
+
 			}
 		}.addToMenuBar(menuBar);
 		functionCloseProject.setDisable(true);
@@ -191,15 +234,24 @@ public class MainView extends AnchorPane {
 		MenuFunction functionExit = new MenuFunction("File", "Exit") {
 			@Override
 			public void onAction() {
-				if (Logic.project.isProjectOpen()) {
-					if (handleOpenProject()) {
-						// TODO exit application
-						System.out.println("TODO: Exit application");
+
+				Logic.project.getIsProjectOpen(new Request() {
+					@Override
+					public void onResponse(Response response) {
+						if (response.state == Response.State.SUCCESS) {
+							if ((boolean) response.value) {
+								if (handleOpenProject()) {
+									// TODO exit application
+									System.out.println("TODO: Exit application");
+								}
+							} else {
+								// TODO exit application
+								System.out.println("TODO: Exit application");
+							}
+						}
 					}
-				} else {
-					// TODO exit application
-					System.out.println("TODO: Exit application");
-				}
+				});
+
 			}
 		}.addToMenuBar(menuBar);
 
@@ -243,12 +295,18 @@ public class MainView extends AnchorPane {
 	 * @return true, if the project was closed (with or without saving it); false, if the user cancelled the action
 	 */
 	private boolean handleOpenProject() {
-		if (!Logic.project.isProjectOpen()) {
+
+		// get project
+		SyncRequest requestProject = new SyncRequest();
+		Logic.project.getCurrentProject(requestProject);
+		if (requestProject.getResponse().state == Response.State.FAIL) {
 			return false;
 		}
+		Project project = (Project) requestProject.getResponse().getValue();
 
+		// handle project
 		ButtonType alertSaveResult = Alerts.confirmation("Save Project current Project before closing?",
-				"Current project: " + Logic.project.getProject().name);
+				"Current project: " + project.name);
 
 		if (alertSaveResult == ButtonType.YES) {
 			Logic.project.saveProject();

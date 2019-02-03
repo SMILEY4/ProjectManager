@@ -1,6 +1,9 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sortPopup;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
@@ -52,14 +55,30 @@ public class SortPopup extends AnchorPane {
 
 		// elements
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		for (SortElement element : Logic.project.getProject().sortElements) {
-			boxAttributes.getChildren().add(new SortElementNode(element.attribute, element.sortDir));
-		}
+		Logic.sort.getSortElements(new Request() {
+			@Override
+			public void onResponse(Response response) {
+				if (response.state == Response.State.SUCCESS) {
+					List<SortElement> elements = (List<SortElement>) response.getValue();
+					for (SortElement element : elements) {
+						boxAttributes.getChildren().add(new SortElementNode(element.attribute, element.sortDir));
+					}
+				}
+			}
+		});
 
 
 		// add element
 		btnAdd.setOnAction(event -> {
-			boxAttributes.getChildren().add(new SortElementNode(Logic.project.getProject().attributes.get(0)));
+			Logic.attribute.getAttributes(new Request() {
+				@Override
+				public void onResponse(Response response) {
+					if (response.state == Response.State.SUCCESS) {
+						List<TaskAttribute> attributes = (List<TaskAttribute>) response.getValue();
+						boxAttributes.getChildren().add(new SortElementNode(attributes.get(0)));
+					}
+				}
+			});
 		});
 
 

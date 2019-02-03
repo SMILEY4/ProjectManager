@@ -16,7 +16,10 @@ import java.util.List;
 
 public abstract class FilterValue {
 
+
 	private EventHandler<ActionEvent> eventHandler;
+
+
 
 
 	public void setOnAction(EventHandler<ActionEvent> eventHandler) {
@@ -24,8 +27,10 @@ public abstract class FilterValue {
 	}
 
 
+
+
 	protected void onAction() {
-		if(this.eventHandler != null) {
+		if (this.eventHandler != null) {
 			eventHandler.handle(new ActionEvent());
 		}
 	}
@@ -36,8 +41,6 @@ public abstract class FilterValue {
 	public abstract void update(List<Node> outNodes, TaskAttributeData data, FilterCriteria.ComparisonOp compOp, TaskAttributeValue compValue);
 
 	public abstract TaskAttributeValue getValue();
-
-
 
 
 

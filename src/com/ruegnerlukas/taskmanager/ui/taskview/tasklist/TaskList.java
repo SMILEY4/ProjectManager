@@ -55,7 +55,7 @@ public class TaskList extends AnchorPane {
 
 
 		// tasks
-		for(Task task : tasks) {
+		for (Task task : tasks) {
 			TaskCard card = new TaskCard(task);
 			boxCards.getChildren().add(card);
 		}

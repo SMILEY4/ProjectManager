@@ -325,8 +325,6 @@ public class FilterLogic {
 	}
 
 
-
-
 	//======================//
 	//        GETTER        //
 	//======================//
@@ -342,6 +340,14 @@ public class FilterLogic {
 	}
 
 
+
+
+	public void getFilterCriteria(Request request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			request.onResponse(new Response<>(Response.State.SUCCESS, project.filterCriteria));
+		}
+	}
 
 
 	//======================//

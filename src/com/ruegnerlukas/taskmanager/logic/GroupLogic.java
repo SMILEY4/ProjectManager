@@ -120,13 +120,15 @@ public class GroupLogic {
 
 
 	private class Node {
+
+
 		public Node parent;
 		public List<Node> children = new ArrayList<>();
 		public TaskAttribute attribute;
 		public TaskAttributeValue value;
 		public List<Task> tasks = new ArrayList<>();
-	}
 
+	}
 
 
 	//======================//
@@ -146,6 +148,28 @@ public class GroupLogic {
 
 
 
+	public void getCustomHeaderString(Request request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (project.useCustomHeaderString) {
+				request.onResponse(new Response<>(Response.State.SUCCESS, project.taskGroupHeaderString));
+			} else {
+				request.onResponse(new Response<>(Response.State.FAIL, "TaskGroups do not currently use a custom headerString"));
+			}
+		}
+	}
+
+
+
+
+	public void getTaskGroupOrder(Request request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			request.onResponse(new Response<>(Response.State.SUCCESS, project.taskGroupOrder));
+		}
+	}
+
+
 	//======================//
 	//        SETTER        //
 	//======================//
@@ -161,9 +185,9 @@ public class GroupLogic {
 	public void setGroupOrder(List<TaskAttribute> attribOrder) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			project.groupByOrder.clear();
-			project.groupByOrder.addAll(attribOrder);
-			EventManager.fireEvent(new TaskGroupOrderChangedEvent(project.groupByOrder, this));
+			project.taskGroupOrder.clear();
+			project.taskGroupOrder.addAll(attribOrder);
+			EventManager.fireEvent(new TaskGroupOrderChangedEvent(project.taskGroupOrder, this));
 		}
 	}
 
@@ -214,9 +238,9 @@ public class GroupLogic {
 	public void removeGroupElement(TaskAttribute attribute) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			if (project.groupByOrder.contains(attribute)) {
-				project.groupByOrder.remove(attribute);
-				EventManager.fireEvent(new TaskGroupOrderChangedEvent(project.groupByOrder, this));
+			if (project.taskGroupOrder.contains(attribute)) {
+				project.taskGroupOrder.remove(attribute);
+				EventManager.fireEvent(new TaskGroupOrderChangedEvent(project.taskGroupOrder, this));
 			}
 		}
 	}
@@ -236,10 +260,10 @@ public class GroupLogic {
 
 			// create new group data
 			TaskGroupData taskGroupData = new TaskGroupData();
-			taskGroupData.attributes.addAll(project.groupByOrder);
+			taskGroupData.attributes.addAll(project.taskGroupOrder);
 
 			// sort tasks into groups
-			if (project.groupByOrder.isEmpty()) {
+			if (project.taskGroupOrder.isEmpty()) {
 				// add all task to single group
 
 				TaskGroup group = new TaskGroup();
@@ -249,7 +273,7 @@ public class GroupLogic {
 				// split task into multiple groups
 
 				// build tree (first element is root)
-				List<Node> tree = buildTree(project.filteredTasks, project.groupByOrder);
+				List<Node> tree = buildTree(project.filteredTasks, project.taskGroupOrder);
 				Node root = tree.get(0);
 
 				for (int i = 1; i < tree.size(); i++) {

@@ -14,6 +14,7 @@ import java.util.List;
 
 public class ChoiceFilterValue extends FilterValue {
 
+
 	private TaskAttributeValue value = null;
 
 
@@ -25,12 +26,12 @@ public class ChoiceFilterValue extends FilterValue {
 
 		if (FilterCriteria.ComparisonOp.EQUALITY == compOp || FilterCriteria.ComparisonOp.INEQUALITY == compOp) {
 
-			value = new TextValue(((ChoiceAttributeData)data).defaultValue);
-			if(compValue instanceof TextValue) {
+			value = new TextValue(((ChoiceAttributeData) data).defaultValue);
+			if (compValue instanceof TextValue) {
 				value = compValue;
 			}
 
-			ChoiceBox<String> choice = buildChoiceBox( ((TextValue)value).getText(), ((ChoiceAttributeData)data).values);
+			ChoiceBox<String> choice = buildChoiceBox(((TextValue) value).getText(), ((ChoiceAttributeData) data).values);
 			outNodes.add(choice);
 			choice.setOnAction(event -> {
 				value = new TextValue(choice.getSelectionModel().getSelectedItem());
@@ -40,15 +41,14 @@ public class ChoiceFilterValue extends FilterValue {
 		}
 
 
-
 		if (FilterCriteria.ComparisonOp.IN_LIST == compOp || FilterCriteria.ComparisonOp.NOT_IN_LIST == compOp) {
 
 			value = new TextArrayValue();
-			if(compValue instanceof TextArrayValue) {
+			if (compValue instanceof TextArrayValue) {
 				value = compValue;
 			}
 
-			TextField textField = buildTextField("Comma Separated values", String.join(",", ((TextArrayValue)value).getText()));
+			TextField textField = buildTextField("Comma Separated values", String.join(",", ((TextArrayValue) value).getText()));
 			outNodes.add(textField);
 
 			textField.setOnAction(event -> {
@@ -70,15 +70,14 @@ public class ChoiceFilterValue extends FilterValue {
 		}
 
 
-
 		if (FilterCriteria.ComparisonOp.CONTAINS == compOp || FilterCriteria.ComparisonOp.CONTAINS_NOT == compOp) {
 
 			value = new TextValue("");
-			if(compValue instanceof TextValue) {
+			if (compValue instanceof TextValue) {
 				value = compValue;
 			}
 
-			TextField textField = buildTextField("", ((TextValue)value).getText());
+			TextField textField = buildTextField("", ((TextValue) value).getText());
 			textField.setOnAction(event -> {
 				value = new TextValue(textField.getText());
 				onAction();

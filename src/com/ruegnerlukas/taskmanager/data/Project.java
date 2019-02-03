@@ -29,7 +29,7 @@ public class Project {
 	public List<Task> filteredTasks = new ArrayList<>();
 
 	// 3. group by
-	public List<TaskAttribute> groupByOrder = new ArrayList<>();
+	public List<TaskAttribute> taskGroupOrder = new ArrayList<>();
 	public TaskGroupData taskGroupData = new TaskGroupData();
 	public boolean useCustomHeaderString = false;
 	public String taskGroupHeaderString = "";
