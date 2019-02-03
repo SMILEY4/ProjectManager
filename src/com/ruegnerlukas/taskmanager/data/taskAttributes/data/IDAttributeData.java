@@ -21,6 +21,8 @@ public class IDAttributeData implements TaskAttributeData {
 	}
 
 
+
+
 	@Override
 	public Map<Var, TaskAttributeValue> update(Var var, TaskAttributeValue newValue) {
 		return new HashMap<>();
@@ -31,12 +33,13 @@ public class IDAttributeData implements TaskAttributeData {
 
 	@Override
 	public boolean validate(TaskAttributeValue value) {
-		if(value instanceof NumberValue) {
-			return ((NumberValue)value).getInt() >= 0;
+		if (value instanceof NumberValue) {
+			return ((NumberValue) value).getInt() >= 0;
 		} else {
 			return false;
 		}
 	}
+
 
 
 

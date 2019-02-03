@@ -44,7 +44,6 @@ public class DescriptionAttributeData implements TaskAttributeData {
 
 
 
-
 	@Override
 	public boolean usesDefault() {
 		return true;

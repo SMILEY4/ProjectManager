@@ -84,7 +84,7 @@ public class FlagAttributeNode extends AnchorPane implements AttributeRequiremen
 		FlagAttributeData attributeData = (FlagAttributeData) attribute.data;
 
 
-		// flags
+		// taskFlags
 		btnAddFlag = new Button("Add Flag");
 		btnAddFlag.setMinSize(0, 32);
 		btnAddFlag.setPrefSize(100000, 32);

@@ -9,7 +9,7 @@ import java.util.Map;
 public interface TaskAttributeData {
 
 
-	public enum Var {
+	enum Var {
 		USE_DEFAULT,
 		DEFAULT_VALUE,
 
@@ -26,15 +26,14 @@ public interface TaskAttributeData {
 	}
 
 
+	TaskAttributeType getType();
 
-	public TaskAttributeType getType();
+	Map<Var, TaskAttributeValue> update(Var var, TaskAttributeValue newValue);
 
-	public Map<Var,TaskAttributeValue> update(Var var, TaskAttributeValue newValue);
+	boolean validate(TaskAttributeValue value);
 
-	public boolean validate(TaskAttributeValue value);
+	boolean usesDefault();
 
-	public boolean usesDefault();
-
-	public TaskAttributeValue getDefault();
+	TaskAttributeValue getDefault();
 
 }

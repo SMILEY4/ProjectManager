@@ -12,19 +12,23 @@ public enum TaskAttributeType {
 	CHOICE("Choice", false);
 
 
-
 	public final String display;
 	public final boolean fixed;
 
-	private TaskAttributeType(String display, boolean fixed) {
+
+
+
+	TaskAttributeType(String display, boolean fixed) {
 		this.display = display;
 		this.fixed = fixed;
 	}
 
 
+
+
 	public static TaskAttributeType getFromDisplay(String display) {
-		for(TaskAttributeType type : TaskAttributeType.values()) {
-			if(type.display.equalsIgnoreCase(display)) {
+		for (TaskAttributeType type : TaskAttributeType.values()) {
+			if (type.display.equalsIgnoreCase(display)) {
 				return type;
 			}
 		}

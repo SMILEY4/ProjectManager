@@ -58,13 +58,15 @@ public class TextValue implements TaskAttributeValue {
 
 
 
+
 	@Override
 	public int compareTo(TaskAttributeValue o) {
-		if(o instanceof TextValue) {
-			final String oValue = ((TextValue)o).getText();
+		if (o instanceof TextValue) {
+			final String oValue = ((TextValue) o).getText();
 			return MathUtils.clamp(text.compareTo(oValue), -1, +1);
 		} else {
 			return -2;
 		}
 	}
+
 }

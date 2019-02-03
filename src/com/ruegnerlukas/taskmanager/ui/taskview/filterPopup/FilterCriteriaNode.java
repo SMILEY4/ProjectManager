@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup;
 
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.data.filter.criteria.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;

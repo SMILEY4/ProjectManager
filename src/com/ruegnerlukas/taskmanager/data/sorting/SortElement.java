@@ -4,10 +4,13 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 
 public class SortElement {
 
+
 	public enum Sort {
 		ASC("Ascending"),
 		DESC("Descending");
 		public final String display;
+
+
 		Sort(String display) {
 			this.display = display;
 		}
@@ -15,8 +18,12 @@ public class SortElement {
 
 
 
+
+
+
 	public Sort sortDir;
 	public TaskAttribute attribute;
+
 
 
 

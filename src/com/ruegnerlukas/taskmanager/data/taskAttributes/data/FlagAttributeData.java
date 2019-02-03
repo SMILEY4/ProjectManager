@@ -24,7 +24,7 @@ public class FlagAttributeData implements TaskAttributeData {
 
 
 	public FlagAttributeData() {
-		defaultFlag = new TaskFlag(TaskFlag.FlagColor.GRAY, "Default", false);
+		defaultFlag = new TaskFlag(TaskFlag.FlagColor.GRAY, "Default");
 		flags = new TaskFlag[]{defaultFlag};
 	}
 

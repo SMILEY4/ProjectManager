@@ -122,15 +122,23 @@ public class NumberPairValue implements TaskAttributeValue {
 
 	@Override
 	public int compareTo(TaskAttributeValue o) {
-		if(o instanceof NumberPairValue) {
+		if (o instanceof NumberPairValue) {
 			NumberValue tValue0 = this.getNumberValue0();
 			NumberValue tValue1 = this.getNumberValue1();
-			NumberValue oValue0 = ((NumberPairValue)o).getNumberValue0();
-			NumberValue oValue1 = ((NumberPairValue)o).getNumberValue1();
-			if(tValue0.compareTo(oValue0) == -1) { return -1; }
-			if(tValue0.compareTo(oValue0) == +1) { return +1; }
-			if(tValue1.compareTo(oValue1) == -1) { return -1; }
-			if(tValue1.compareTo(oValue1) == +1) { return +1; }
+			NumberValue oValue0 = ((NumberPairValue) o).getNumberValue0();
+			NumberValue oValue1 = ((NumberPairValue) o).getNumberValue1();
+			if (tValue0.compareTo(oValue0) == -1) {
+				return -1;
+			}
+			if (tValue0.compareTo(oValue0) == +1) {
+				return +1;
+			}
+			if (tValue1.compareTo(oValue1) == -1) {
+				return -1;
+			}
+			if (tValue1.compareTo(oValue1) == +1) {
+				return +1;
+			}
 			return 0;
 		} else {
 			return -2;

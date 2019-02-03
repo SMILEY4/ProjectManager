@@ -59,10 +59,10 @@ public class BoolValue implements TaskAttributeValue {
 
 	@Override
 	public int compareTo(TaskAttributeValue o) {
-		if(o instanceof BoolValue) {
-			final boolean oValue = ((BoolValue)o).getBoolValue();
-			if(!value && oValue) return -1;
-			if(value && !oValue) return +1;
+		if (o instanceof BoolValue) {
+			final boolean oValue = ((BoolValue) o).getBoolValue();
+			if (!value && oValue) return -1;
+			if (value && !oValue) return +1;
 			return 0;
 		} else {
 			return -2;

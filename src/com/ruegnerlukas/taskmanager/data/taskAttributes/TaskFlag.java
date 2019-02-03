@@ -4,7 +4,8 @@ import javafx.scene.paint.Color;
 
 public class TaskFlag {
 
-	public static enum FlagColor {
+
+	public enum FlagColor {
 
 		BLUE("#007bff"),
 		INDIGO("6610f2"),
@@ -18,41 +19,70 @@ public class TaskFlag {
 		CYAN("#17a2b8"),
 		GRAY("#6c757d"),
 		;
-		
+
 		public final Color color;
-		
-		private FlagColor(Color color) {
-			this.color = color;
-		}
-		
-		private FlagColor(String color) {
+
+
+
+
+		FlagColor(String color) {
 			this.color = Color.web(color);
 		}
 	}
-	
-	
-	
-	public final boolean isDefaultFlag;
+
+
+
+
+
+
 	public FlagColor color;
 	public String name;
-	
-	
-	public TaskFlag(FlagColor color, String name, boolean isDefaultFlag) {
+
+
+
+
+	public TaskFlag(FlagColor color, String name) {
 		this.color = color;
 		this.name = name;
-		this.isDefaultFlag = isDefaultFlag;
 	}
 
 
 
 
 	public static TaskFlag findFlag(String name, TaskFlag... flags) {
-		for(TaskFlag flag : flags) {
-			if(flag.name.equals(name)) {
+		for (TaskFlag flag : flags) {
+			if (flag.name.equals(name)) {
 				return flag;
 			}
 		}
 		return null;
 	}
-	
+
+
+
+
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof TaskFlag) {
+			TaskFlag other = (TaskFlag) obj;
+			if (!other.name.equals(this.name)) {
+				return false;
+			}
+			if (other.color != this.color) {
+				return false;
+			}
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+
+
+	@Override
+	public String toString() {
+		return "TaskFlag@" + Integer.toHexString(this.hashCode()) + ":(" + this.name + ", " + this.color.toString() + ")";
+	}
+
 }

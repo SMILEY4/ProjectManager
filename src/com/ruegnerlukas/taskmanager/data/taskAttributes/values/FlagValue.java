@@ -1,9 +1,9 @@
 package com.ruegnerlukas.taskmanager.data.taskAttributes.values;
 
 import com.ruegnerlukas.simplemath.MathUtils;
-import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 
 public class FlagValue implements TaskAttributeValue {
 
@@ -34,10 +34,12 @@ public class FlagValue implements TaskAttributeValue {
 
 
 
+
 	@Override
 	public String toString() {
 		return flag.name;
 	}
+
 
 
 
@@ -64,19 +66,21 @@ public class FlagValue implements TaskAttributeValue {
 
 	@Override
 	public int compareTo(TaskAttributeValue o) {
-		if(o instanceof FlagValue) {
-			final TaskFlag oValue = ((FlagValue)o).getFlag();
-
+		if (o instanceof FlagValue) {
+			final TaskFlag oValue = ((FlagValue) o).getFlag();
 
 			int indexThis = 0;
 			int indexOther = 0;
-			TaskFlag[] flags = ((FlagAttributeData)Logic.attribute.findAttribute(FlagAttributeData.NAME).data).flags;
 
-			for(int i=0; i<flags.length; i++) {
-				if(this.getFlag() == flags[i]) {
+			SyncRequest request = new SyncRequest();
+			Logic.taskFlags.getAllFlags(request);
+			TaskFlag[] flags = (TaskFlag[]) request.getResponse().value;
+
+			for (int i = 0; i < flags.length; i++) {
+				if (this.getFlag() == flags[i]) {
 					indexThis = i;
 				}
-				if(oValue == flags[i]) {
+				if (oValue == flags[i]) {
 					indexOther = i;
 				}
 			}

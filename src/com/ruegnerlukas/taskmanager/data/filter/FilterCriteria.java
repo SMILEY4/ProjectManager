@@ -1,10 +1,11 @@
-package com.ruegnerlukas.taskmanager.data.filter.criteria;
+package com.ruegnerlukas.taskmanager.data.filter;
 
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
 public class FilterCriteria {
+
 
 	public enum ComparisonOp {
 		EQUALITY("equal"),
@@ -18,16 +19,18 @@ public class FilterCriteria {
 		IN_LIST("in list"),
 		NOT_IN_LIST("not in list"),
 		CONTAINS("contains"),
-		CONTAINS_NOT("contains not")
-		;
+		CONTAINS_NOT("contains not");
 
 		public final String display;
+
 
 		ComparisonOp(String display) {
 			this.display = display;
 		}
 
 	}
+
+
 
 
 
@@ -49,18 +52,18 @@ public class FilterCriteria {
 
 
 	public static ComparisonOp[] getPossibleComparisionOps(TaskAttribute attribute) {
-		if(attribute == null) {
+		if (attribute == null) {
 			return new ComparisonOp[]{};
 		}
 
-		if(attribute.data.getType() == TaskAttributeType.BOOLEAN) {
-			return new ComparisonOp[] {
+		if (attribute.data.getType() == TaskAttributeType.BOOLEAN) {
+			return new ComparisonOp[]{
 					ComparisonOp.EQUALITY,
 					ComparisonOp.INEQUALITY
 			};
 		}
-		if(attribute.data.getType() == TaskAttributeType.CHOICE) {
-			return new ComparisonOp[] {
+		if (attribute.data.getType() == TaskAttributeType.CHOICE) {
+			return new ComparisonOp[]{
 					ComparisonOp.EQUALITY,
 					ComparisonOp.INEQUALITY,
 					ComparisonOp.IN_LIST,
@@ -69,16 +72,16 @@ public class FilterCriteria {
 					ComparisonOp.CONTAINS_NOT
 			};
 		}
-		if(attribute.data.getType() == TaskAttributeType.DESCRIPTION) {
-			return new ComparisonOp[] {
+		if (attribute.data.getType() == TaskAttributeType.DESCRIPTION) {
+			return new ComparisonOp[]{
 					ComparisonOp.EQUALITY,
 					ComparisonOp.INEQUALITY,
 					ComparisonOp.CONTAINS,
 					ComparisonOp.CONTAINS_NOT
 			};
 		}
-		if(attribute.data.getType() == TaskAttributeType.FLAG) {
-			return new ComparisonOp[] {
+		if (attribute.data.getType() == TaskAttributeType.FLAG) {
+			return new ComparisonOp[]{
 					ComparisonOp.EQUALITY,
 					ComparisonOp.INEQUALITY,
 					ComparisonOp.IN_LIST,
@@ -87,8 +90,8 @@ public class FilterCriteria {
 					ComparisonOp.CONTAINS_NOT
 			};
 		}
-		if(attribute.data.getType() == TaskAttributeType.ID) {
-			return new ComparisonOp[] {
+		if (attribute.data.getType() == TaskAttributeType.ID) {
+			return new ComparisonOp[]{
 					ComparisonOp.EQUALITY,
 					ComparisonOp.INEQUALITY,
 					ComparisonOp.IN_LIST,
@@ -101,8 +104,8 @@ public class FilterCriteria {
 					ComparisonOp.NOT_IN_RANGE
 			};
 		}
-		if(attribute.data.getType() == TaskAttributeType.NUMBER) {
-			return new ComparisonOp[] {
+		if (attribute.data.getType() == TaskAttributeType.NUMBER) {
+			return new ComparisonOp[]{
 					ComparisonOp.EQUALITY,
 					ComparisonOp.INEQUALITY,
 					ComparisonOp.IN_LIST,
@@ -115,8 +118,8 @@ public class FilterCriteria {
 					ComparisonOp.NOT_IN_RANGE
 			};
 		}
-		if(attribute.data.getType() == TaskAttributeType.TEXT) {
-			return new ComparisonOp[] {
+		if (attribute.data.getType() == TaskAttributeType.TEXT) {
+			return new ComparisonOp[]{
 					ComparisonOp.EQUALITY,
 					ComparisonOp.INEQUALITY,
 					ComparisonOp.CONTAINS,

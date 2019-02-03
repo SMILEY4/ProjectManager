@@ -1,9 +1,9 @@
 package com.ruegnerlukas.taskmanager.data.taskAttributes.values;
 
 import com.ruegnerlukas.simplemath.MathUtils;
-import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -81,28 +81,30 @@ public class FlagArrayValue implements TaskAttributeValue {
 
 	@Override
 	public int compareTo(TaskAttributeValue o) {
-		if(o instanceof FlagArrayValue) {
-			final TaskFlag[] oValue = ((FlagArrayValue)o).getFlags();
+		if (o instanceof FlagArrayValue) {
+			final TaskFlag[] oValue = ((FlagArrayValue) o).getFlags();
 
-			TaskFlag[] flags = ((FlagAttributeData) Logic.attribute.findAttribute(FlagAttributeData.NAME).data).flags;
+			SyncRequest request = new SyncRequest();
+			Logic.taskFlags.getAllFlags(request);
+			TaskFlag[] flags = (TaskFlag[])request.getResponse().value;
 
-			for(int i=0; i<Math.min(flags.length, oValue.length); i++) {
+			for (int i = 0; i < Math.min(flags.length, oValue.length); i++) {
 				TaskFlag tf = flags[i];
 				TaskFlag of = oValue[i];
 
 				int indexThis = 0;
 				int indexOther = 0;
 
-				for(int j=0; j<flags.length; j++) {
-					if(tf == flags[j]) {
+				for (int j = 0; j < flags.length; j++) {
+					if (tf == flags[j]) {
 						indexThis = j;
 					}
-					if(of == flags[j]) {
+					if (of == flags[j]) {
 						indexOther = j;
 					}
 				}
 
-				if(indexThis != indexOther) {
+				if (indexThis != indexOther) {
 					return indexThis - indexOther;
 				}
 

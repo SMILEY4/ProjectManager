@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.data;
 
-import com.ruegnerlukas.taskmanager.data.filter.criteria.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;

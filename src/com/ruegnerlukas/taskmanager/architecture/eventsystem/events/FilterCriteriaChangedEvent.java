@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.architecture.eventsystem.events;
 
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.data.filter.criteria.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 
 import java.util.List;
 
