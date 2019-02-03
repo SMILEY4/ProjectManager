@@ -5,7 +5,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 
 import java.util.List;
 
-public class GroupByOrderChangedEvent extends Event {
+public class TaskGroupOrderChangedEvent extends Event {
 
 
 	private List<TaskAttribute> elements;
@@ -13,7 +13,7 @@ public class GroupByOrderChangedEvent extends Event {
 
 
 
-	public GroupByOrderChangedEvent(List<TaskAttribute> elements, Object source) {
+	public TaskGroupOrderChangedEvent(List<TaskAttribute> elements, Object source) {
 		super(source);
 		this.elements = elements;
 	}

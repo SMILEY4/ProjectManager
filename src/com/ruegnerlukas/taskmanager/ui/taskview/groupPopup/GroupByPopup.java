@@ -74,7 +74,7 @@ public class GroupByPopup extends AnchorPane {
 
 
 		// list header string
-		fieldHeaderText.setText(Logic.project.getProject().groupByHeaderString);
+		fieldHeaderText.setText(Logic.project.getProject().taskGroupHeaderString);
 
 
 		// accept
@@ -84,9 +84,9 @@ public class GroupByPopup extends AnchorPane {
 				GroupByAttributeNode groupByNode = (GroupByAttributeNode) node;
 				attributes.add(groupByNode.attribute);
 			}
-			Logic.groupBy.setGroupByOrder(attributes);
-			Logic.groupBy.setUseCustomHeaderString(cbUseHeaderString.isSelected());
-			Logic.groupBy.setGroupHeaderString(fieldHeaderText.getText());
+			Logic.group.setGroupOrder(attributes);
+			Logic.group.setUseCustomHeaderString(cbUseHeaderString.isSelected());
+			Logic.group.setGroupHeaderString(fieldHeaderText.getText());
 			this.stage.close();
 		});
 

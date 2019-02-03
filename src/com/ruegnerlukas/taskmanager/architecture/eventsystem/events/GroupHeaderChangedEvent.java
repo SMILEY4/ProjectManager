@@ -2,7 +2,7 @@ package com.ruegnerlukas.taskmanager.architecture.eventsystem.events;
 
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
 
-public class GroupByHeaderChangedEvent extends Event {
+public class GroupHeaderChangedEvent extends Event {
 
 
 	private String oldString, newString;
@@ -10,7 +10,7 @@ public class GroupByHeaderChangedEvent extends Event {
 
 
 
-	public GroupByHeaderChangedEvent(String oldString, String newString, Object source) {
+	public GroupHeaderChangedEvent(String oldString, String newString, Object source) {
 		super(source);
 		this.oldString = oldString;
 		this.newString = newString;

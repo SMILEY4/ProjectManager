@@ -7,7 +7,7 @@ import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.data.Task;
-import com.ruegnerlukas.taskmanager.data.groups.GroupByData;
+import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.groups.TaskGroup;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
@@ -243,7 +243,7 @@ public class TaskView extends AnchorPane {
 			public void onEvent(Event e) {
 				refreshTaskView();
 			}
-		}, GroupByRebuildEvent.class, GroupByHeaderChangedEvent.class, AttributeRenamedEvent.class);
+		}, GroupByRebuildEvent.class, GroupHeaderChangedEvent.class, AttributeRenamedEvent.class);
 
 	}
 
@@ -254,23 +254,23 @@ public class TaskView extends AnchorPane {
 
 		clearTaskList();
 
-		GroupByData groupByData = Logic.project.getProject().groupByData;
+		TaskGroupData taskGroupData = Logic.project.getProject().taskGroupData;
 
-		if(groupByData.attributes.isEmpty()) {
+		if(taskGroupData.attributes.isEmpty()) {
 			createTaskList("All Tasks", Logic.project.getProject().filteredTasks);
 
 		} else {
 
-			for(TaskGroup group : groupByData.groups) {
+			for(TaskGroup group : taskGroupData.groups) {
 
 				StringBuilder title = new StringBuilder();
 
 
 				if(Logic.project.getProject().useCustomHeaderString) {
-					String strCustomHeader = Logic.project.getProject().groupByHeaderString;
+					String strCustomHeader = Logic.project.getProject().taskGroupHeaderString;
 
-					for(int i=0; i<groupByData.attributes.size(); i++) {
-						TaskAttribute attribute = groupByData.attributes.get(i);
+					for(int i = 0; i< taskGroupData.attributes.size(); i++) {
+						TaskAttribute attribute = taskGroupData.attributes.get(i);
 						if(strCustomHeader.contains("{"+attribute.name+"}")) {
 							TaskAttributeValue value = group.values.get(attribute);
 							strCustomHeader = strCustomHeader.replaceAll("\\{"+attribute.name+"\\}", value.toString());
@@ -280,11 +280,11 @@ public class TaskView extends AnchorPane {
 					title.append(strCustomHeader);
 
 				} else {
-					for(int i=0; i<groupByData.attributes.size(); i++) {
-						TaskAttribute attribute = groupByData.attributes.get(i);
+					for(int i = 0; i< taskGroupData.attributes.size(); i++) {
+						TaskAttribute attribute = taskGroupData.attributes.get(i);
 						TaskAttributeValue value = group.values.get(attribute);
 						title.append(value.toString());
-						if(i != groupByData.attributes.size()-1) {
+						if(i != taskGroupData.attributes.size()-1) {
 							title.append(", ");
 						}
 					}
@@ -374,7 +374,7 @@ public class TaskView extends AnchorPane {
 			eventClass = FilterCriteriaChangedEvent.class;
 		}
 		if (button == btnGroup) {
-			eventClass = GroupByOrderChangedEvent.class;
+			eventClass = TaskGroupOrderChangedEvent.class;
 		}
 
 

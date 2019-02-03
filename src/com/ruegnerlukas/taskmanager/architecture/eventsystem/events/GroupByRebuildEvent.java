@@ -1,14 +1,14 @@
 package com.ruegnerlukas.taskmanager.architecture.eventsystem.events;
 
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.data.groups.GroupByData;
+import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 
 public class GroupByRebuildEvent extends Event {
 
-	private GroupByData data;
+	private TaskGroupData data;
 
 
-	public GroupByRebuildEvent(GroupByData data, Object source) {
+	public GroupByRebuildEvent(TaskGroupData data, Object source) {
 		super(source);
 		this.data = data;
 	}
@@ -16,7 +16,7 @@ public class GroupByRebuildEvent extends Event {
 	
 	
 	
-	public GroupByData getGroupByData() {
+	public TaskGroupData getGroupByData() {
 		return data;
 	}
 

@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.data;
 
 import com.ruegnerlukas.taskmanager.data.filter.criteria.FilterCriteria;
-import com.ruegnerlukas.taskmanager.data.groups.GroupByData;
+import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
@@ -30,9 +30,9 @@ public class Project {
 
 	// 3. group by
 	public List<TaskAttribute> groupByOrder = new ArrayList<>();
-	public GroupByData groupByData = new GroupByData();
+	public TaskGroupData taskGroupData = new TaskGroupData();
 	public boolean useCustomHeaderString = false;
-	public String groupByHeaderString = "";
+	public String taskGroupHeaderString = "";
 
 	// 4. sort
 	public List<SortElement> sortElements = new ArrayList<>();
