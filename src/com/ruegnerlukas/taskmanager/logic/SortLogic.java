@@ -1,7 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRemovedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.SortElementsChangedEvent;
@@ -15,52 +13,75 @@ import java.util.List;
 public class SortLogic {
 
 
+	//======================//
+	//       INTERNAL       //
+	//======================//
+
+
 
 
 	protected SortLogic() {
-		EventManager.registerListener(new EventListener() {
-			@Override
-			public void onEvent(Event e) {
-				AttributeRemovedEvent event = (AttributeRemovedEvent)e;
-				removeSortElement(event.getAttribute());
-			}
+		EventManager.registerListener(e -> {
+			AttributeRemovedEvent event = (AttributeRemovedEvent) e;
+			onAttributeDeleted(event.getAttribute());
 		}, AttributeRemovedEvent.class);
 	}
 
 
 
 
-	public boolean setSort(List<SortElement> elements) {
-		if(Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
+	private void onAttributeDeleted(TaskAttribute attribute) {
+		removeSortElement(attribute);
+	}
+
+
+	//======================//
+	//        GETTER        //
+	//======================//
+
+
+	//======================//
+	//        SETTER        //
+	//======================//
+
+
+
+
+	/**
+	 * Replaces the list of SortElements with the new given list<p>
+	 * Events:<p>
+	 * - SortElementsChangedEvent: when the list of SortElements has changed
+	 */
+	public void setSort(List<SortElement> elements) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
 			project.sortElements.clear();
 			project.sortElements.addAll(elements);
 			EventManager.fireEvent(new SortElementsChangedEvent(project.sortElements, this));
-			return true;
-		} else {
-			return false;
 		}
 	}
 
 
 
 
-	public boolean removeSortElement(TaskAttribute attribute) {
-		if(Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
+	/**
+	 * Removes a SortElement associated with the given attribute<p>
+	 * Events:<p>
+	 * - SortElementsChangedEvent: when the list of SortElements has changed
+	 */
+	public void removeSortElement(TaskAttribute attribute) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
 			List<SortElement> toRemove = new ArrayList<>();
-			for(SortElement element : project.sortElements) {
-				if(element.attribute == attribute) {
+			for (SortElement element : project.sortElements) {
+				if (element.attribute == attribute) {
 					toRemove.add(element);
 				}
 			}
 			project.sortElements.removeAll(toRemove);
-			if(!toRemove.isEmpty()) {
+			if (!toRemove.isEmpty()) {
 				EventManager.fireEvent(new SortElementsChangedEvent(project.sortElements, this));
 			}
-			return !toRemove.isEmpty();
-		} else {
-			return false;
 		}
 	}
 
