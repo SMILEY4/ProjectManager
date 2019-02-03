@@ -138,7 +138,7 @@ public class GroupLogic {
 
 
 
-	public void getTaskGroups(Request request) {
+	public void getTaskGroups(Request<TaskGroupData> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			request.respond(new Response<>(Response.State.SUCCESS, project.taskGroupData));
@@ -148,7 +148,7 @@ public class GroupLogic {
 
 
 
-	public void getCustomHeaderString(Request request) {
+	public void getCustomHeaderString(Request<String> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			if (project.useCustomHeaderString) {
@@ -162,7 +162,7 @@ public class GroupLogic {
 
 
 
-	public void getTaskGroupOrder(Request request) {
+	public void getTaskGroupOrder(Request<List<TaskAttribute>> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			request.respond(new Response<>(Response.State.SUCCESS, project.taskGroupOrder));

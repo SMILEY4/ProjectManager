@@ -100,7 +100,7 @@ public class AttributeLogic {
 	/**
 	 * Request a list of all attributes
 	 */
-	public void getAttributes(Request request) {
+	public void getAttributes(Request<List<TaskAttribute>> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			request.respond(new Response<>(Response.State.SUCCESS, project.attributes));
@@ -113,7 +113,7 @@ public class AttributeLogic {
 	/**
 	 * request the attribute with the given name
 	 */
-	public void getAttribute(String name, Request request) {
+	public void getAttribute(String name, Request<TaskAttribute> request) {
 		TaskAttribute attribute = findAttribute(name);
 		if (attribute != null) {
 			request.respond(new Response<>(Response.State.SUCCESS, attribute));
@@ -128,22 +128,35 @@ public class AttributeLogic {
 	/**
 	 * request all attributes of the given type
 	 */
-	public void getAttributes(TaskAttributeType type, Request request) {
+	public void getAttributes(TaskAttributeType type, Request<List<TaskAttribute>> request) {
 		List<TaskAttribute> attributes = findAttributes(type);
 		if (attributes != null && !attributes.isEmpty()) {
 			request.respond(new Response<>(Response.State.SUCCESS, attributes));
 		} else {
-			request.respond(new Response<List<TaskAttribute>>(Response.State.FAIL, "No attributes with type '" + type + "' found.", null));
+			request.respond(new Response<>(Response.State.FAIL, "No attributes with type '" + type + "' found.", null));
 		}
 	}
 
+
+
+	/**
+	 * request the first attribute of the given type
+	 */
+	public void getAttribute(TaskAttributeType type, Request<TaskAttribute> request) {
+		List<TaskAttribute> attributes = findAttributes(type);
+		if (attributes != null && !attributes.isEmpty()) {
+			request.respond(new Response<>(Response.State.SUCCESS, attributes.get(0)));
+		} else {
+			request.respond(new Response<>(Response.State.FAIL, "No attributes with type '" + type + "' found.", null));
+		}
+	}
 
 
 
 	/**
 	 * Checks whether the attributes of the current project are locked
 	 */
-	public void getAttributeLock(Request request) {
+	public void getAttributeLock(Request<Boolean> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			request.respond(new Response<>(Response.State.SUCCESS, project.attributesLocked));

@@ -14,9 +14,9 @@ public class Response<T> {
 
 
 
-	public final State state;
-	public final String message;
-	public final T value;
+	private final State state;
+	private final String message;
+	private final T value;
 
 
 
@@ -43,8 +43,23 @@ public class Response<T> {
 
 
 
+
 	public T getValue() {
 		return value;
+	}
+
+
+
+
+	public State getState() {
+		return state;
+	}
+
+
+
+
+	public String getMessage() {
+		return message;
 	}
 
 }

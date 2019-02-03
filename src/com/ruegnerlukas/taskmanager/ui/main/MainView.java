@@ -96,19 +96,15 @@ public class MainView extends AnchorPane {
 		MenuFunction functionNewProject = new MenuFunction("File", "New Project") {
 			@Override
 			public void onAction() {
-				Logic.project.getIsProjectOpen(new Request() {
+				Logic.project.getIsProjectOpen(new Request<Boolean>(true) {
 					@Override
-					public void onResponse(Response response) {
-						if (response.state == Response.State.SUCCESS) {
-
-							if ((boolean) response.value) {
-								if (handleOpenProject()) {
-									Logic.project.createProject();
-								}
-							} else {
+					public void onResponse(Response<Boolean> response) {
+						if (response.getValue()) {
+							if (handleOpenProject()) {
 								Logic.project.createProject();
 							}
-
+						} else {
+							Logic.project.createProject();
 						}
 					}
 				});
@@ -127,17 +123,15 @@ public class MainView extends AnchorPane {
 
 				if (file != null) {
 
-					Logic.project.getIsProjectOpen(new Request() {
+					Logic.project.getIsProjectOpen(new Request<Boolean>(true) {
 						@Override
-						public void onResponse(Response response) {
-							if (response.state == Response.State.SUCCESS) {
-								if ((boolean) response.value) {
-									if (handleOpenProject()) {
-										Logic.project.loadProject(file);
-									}
-								} else {
+						public void onResponse(Response<Boolean> response) {
+							if (response.getValue()) {
+								if (handleOpenProject()) {
 									Logic.project.loadProject(file);
 								}
+							} else {
+								Logic.project.loadProject(file);
 							}
 						}
 					});
@@ -166,17 +160,15 @@ public class MainView extends AnchorPane {
 				public void onAction() {
 					File file = new File(filepath);
 					if (file.exists()) {
-						Logic.project.getIsProjectOpen(new Request() {
+						Logic.project.getIsProjectOpen(new Request<Boolean>(true) {
 							@Override
-							public void onResponse(Response response) {
-								if (response.state == Response.State.SUCCESS) {
-									if ((boolean) response.value) {
-										if (handleOpenProject()) {
-											Logic.project.loadProject(file);
-										}
-									} else {
+							public void onResponse(Response<Boolean> response) {
+								if (response.getValue()) {
+									if (handleOpenProject()) {
 										Logic.project.loadProject(file);
 									}
+								} else {
+									Logic.project.loadProject(file);
 								}
 							}
 						});
@@ -193,14 +185,12 @@ public class MainView extends AnchorPane {
 			@Override
 			public void onAction() {
 
-				Logic.project.getCurrentProject(new Request() {
+				Logic.project.getCurrentProject(new Request<Project>(true) {
 					@Override
-					public void onResponse(Response response) {
-						if (response.state == Response.State.SUCCESS) {
-							Project project = (Project) response.getValue();
-							Logic.project.saveProject();
-							Alerts.info("Project has been saved.", project.name);
-						}
+					public void onResponse(Response<Project> response) {
+						Project project = response.getValue();
+						Logic.project.saveProject();
+						Alerts.info("Project has been saved.", project.name);
 					}
 				});
 
@@ -214,13 +204,11 @@ public class MainView extends AnchorPane {
 			@Override
 			public void onAction() {
 
-				Logic.project.getIsProjectOpen(new Request() {
+				Logic.project.getIsProjectOpen(new Request<Boolean>(true) {
 					@Override
-					public void onResponse(Response response) {
-						if (response.state == Response.State.SUCCESS) {
-							if ((boolean) response.value) {
-								handleOpenProject();
-							}
+					public void onResponse(Response<Boolean> response) {
+						if (response.getValue()) {
+							handleOpenProject();
 						}
 					}
 				});
@@ -235,19 +223,17 @@ public class MainView extends AnchorPane {
 			@Override
 			public void onAction() {
 
-				Logic.project.getIsProjectOpen(new Request() {
+				Logic.project.getIsProjectOpen(new Request<Boolean>(true) {
 					@Override
-					public void onResponse(Response response) {
-						if (response.state == Response.State.SUCCESS) {
-							if ((boolean) response.value) {
-								if (handleOpenProject()) {
-									// TODO exit application
-									System.out.println("TODO: Exit application");
-								}
-							} else {
+					public void onResponse(Response<Boolean> response) {
+						if (response.getValue()) {
+							if (handleOpenProject()) {
 								// TODO exit application
 								System.out.println("TODO: Exit application");
 							}
+						} else {
+							// TODO exit application
+							System.out.println("TODO: Exit application");
 						}
 					}
 				});
@@ -297,12 +283,12 @@ public class MainView extends AnchorPane {
 	private boolean handleOpenProject() {
 
 		// get project
-		SyncRequest requestProject = new SyncRequest();
+		SyncRequest<Project> requestProject = new SyncRequest<Project>();
 		Logic.project.getCurrentProject(requestProject);
-		if (requestProject.getResponse().state == Response.State.FAIL) {
+		if (requestProject.getResponse().getState() == Response.State.FAIL) {
 			return false;
 		}
-		Project project = (Project) requestProject.getResponse().getValue();
+		Project project = requestProject.getResponse().getValue();
 
 		// handle project
 		ButtonType alertSaveResult = Alerts.confirmation("Save Project current Project before closing?",

@@ -138,7 +138,7 @@ public class TaskLogic {
 	/**
 	 * Requests a list of all tasks
 	 */
-	public void getTasks(Request request) {
+	public void getTasks(Request<List<Task>> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			request.respond(new Response<>(Response.State.SUCCESS, project.tasks));
@@ -151,7 +151,7 @@ public class TaskLogic {
 	/**
 	 * Requests a list of all tasks with the given value for a given attribute
 	 */
-	public void getTasks(TaskAttribute attribute, TaskAttributeValue value, Request request) {
+	public void getTasks(TaskAttribute attribute, TaskAttributeValue value, Request<List<Task>> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 
@@ -181,22 +181,22 @@ public class TaskLogic {
 	 * Request the value of the given task for the given attribute. If the value is not set for the task,
 	 * it returns the default value or "NoValue"
 	 */
-	public void getAttributeValue(Task task, String attributeName, Request request) {
+	public void getAttributeValue(Task task, String attributeName, Request<TaskAttributeValue> request) {
 
 		Project project = Logic.project.getProject();
 		if (project != null) {
 
 			if (task == null) {
-				request.respond(new Response<TaskAttributeType>(Response.State.FAIL, "Task is null."));
+				request.respond(new Response<>(Response.State.FAIL, "Task is null."));
 
 			} else if (!project.tasks.contains(task)) {
-				request.respond(new Response<TaskAttributeType>(Response.State.FAIL, "Task not part of project"));
+				request.respond(new Response<>(Response.State.FAIL, "Task not part of project"));
 
 			} else {
 
 				TaskAttribute attribute = Logic.attribute.findAttribute(attributeName);
 				if (attribute == null) {
-					request.respond(new Response<TaskAttributeType>(Response.State.FAIL, "Attribute with name '" + attributeName + "' not found."));
+					request.respond(new Response<>(Response.State.FAIL, "Attribute with name '" + attributeName + "' not found."));
 
 				} else {
 					TaskAttributeValue value = getValue(task, attribute);

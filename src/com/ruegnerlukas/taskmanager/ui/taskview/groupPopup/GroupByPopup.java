@@ -56,14 +56,12 @@ public class GroupByPopup extends AnchorPane {
 
 		// values
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		Logic.group.getTaskGroupOrder(new Request() {
+		Logic.group.getTaskGroupOrder(new Request<List<TaskAttribute>>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					List<TaskAttribute> order = (List<TaskAttribute>) response.getValue();
-					for (TaskAttribute attribute : order) {
-						boxAttributes.getChildren().add(new GroupByAttributeNode(attribute));
-					}
+			public void onResponse(Response<List<TaskAttribute>> response) {
+				List<TaskAttribute> order = response.getValue();
+				for (TaskAttribute attribute : order) {
+					boxAttributes.getChildren().add(new GroupByAttributeNode(attribute));
 				}
 			}
 		});
@@ -71,25 +69,23 @@ public class GroupByPopup extends AnchorPane {
 
 		// add attribute
 		btnAdd.setOnAction(event -> {
-			Logic.attribute.getAttributes(new Request() {
+			Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
 				@Override
-				public void onResponse(Response response) {
-					if (response.state == Response.State.SUCCESS) {
-						List<TaskAttribute> attributes = (List<TaskAttribute>) response.getValue();
-						boxAttributes.getChildren().add(new GroupByAttributeNode(attributes.get(0)));
-					}
+				public void onResponse(Response<List<TaskAttribute>> response) {
+					List<TaskAttribute> attributes = response.getValue();
+					boxAttributes.getChildren().add(new GroupByAttributeNode(attributes.get(0)));
 				}
 			});
 		});
 
 
 		// custom header string
-		Logic.group.getCustomHeaderString(new Request() {
+		Logic.group.getCustomHeaderString(new Request<String>() {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
+			public void onResponse(Response<String> response) {
+				if (response.getState() == Response.State.SUCCESS) {
 					cbUseHeaderString.setSelected(true);
-					fieldHeaderText.setText((String) response.getValue());
+					fieldHeaderText.setText(response.getValue());
 				} else {
 					cbUseHeaderString.setSelected(false);
 					fieldHeaderText.setText("");

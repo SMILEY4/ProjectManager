@@ -1,48 +1,50 @@
 package com.ruegnerlukas.taskmanager.architecture;
 
-public class SyncRequest extends Request {
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+
+public class SyncRequest<T> extends Request<T> {
 
 
-	public static final long DEFAULT_SLEEP_MS = 4;
+	public static final long DEFAULT_SLEEP_INTERVALL = 2;
 
-	private volatile Response response = null;
-	private final long sleepMS;
+	private volatile Response<T> response;
+	private long sleepIntervall = DEFAULT_SLEEP_INTERVALL;
 
 
 
 
 	public SyncRequest() {
-		this(DEFAULT_SLEEP_MS);
+		this(DEFAULT_SLEEP_INTERVALL);
 	}
 
 
 
 
-	public SyncRequest(long sleepMS) {
-		this.sleepMS = sleepMS;
+	public SyncRequest(long sleepIntervall) {
+		super(false);
+		this.sleepIntervall = sleepIntervall;
 	}
 
 
 
 
 	@Override
-	public void onResponse(Response response) {
+	public void onResponse(Response<T> response) {
 		this.response = response;
 	}
 
 
 
 
-	public Response getResponse() {
+	public Response<T> getResponse() {
 		try {
 			while (response == null) {
-				Thread.sleep(sleepMS);
+				Thread.sleep(sleepIntervall);
 			}
-			return response;
 		} catch (InterruptedException e) {
-			e.printStackTrace();
+			Logger.get().warn(e);
 		}
-		return null;
+		return response;
 	}
 
 }

@@ -105,27 +105,20 @@ public class TaskView extends AnchorPane {
 		);
 		Logic.attribute.updateTaskAttribute(FlagAttributeData.NAME, TaskAttributeData.Var.FLAG_ATT_FLAGS, flags);
 
-		Logic.tasks.getTasks(new Request() {
+		Logic.tasks.getTasks(new Request<List<Task>>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					List<Task> tasks = (List<Task>) response.getValue();
-					for (Task task : tasks) {
+			public void onResponse(Response<List<Task>> response) {
+				List<Task> tasks = response.getValue();
+				for (Task task : tasks) {
 
-						Logic.attribute.getAttributes(TaskAttributeType.FLAG, new Request() {
-							@Override
-							public void onResponse(Response response) {
-								if (response.state == Response.State.SUCCESS) {
-									TaskAttribute flagAttribute = (TaskAttribute) response.getValue();
-									FlagValue value = new FlagValue(((FlagAttributeData) flagAttribute.data).flags[new Random().nextInt(((FlagAttributeData) flagAttribute.data).flags.length)]);
-									Logic.tasks.setAttributeValue(task, flagAttribute, value);
-								}
-
-
-							}
-						});
-
-					}
+					Logic.attribute.getAttribute(TaskAttributeType.FLAG, new Request<TaskAttribute>(false) {
+						@Override
+						public void onResponse(Response<TaskAttribute> response) {
+							TaskAttribute flagAttribute = response.getValue();
+							FlagValue value = new FlagValue(((FlagAttributeData) flagAttribute.data).flags[new Random().nextInt(((FlagAttributeData) flagAttribute.data).flags.length)]);
+							Logic.tasks.setAttributeValue(task, flagAttribute, value);
+						}
+					});
 				}
 			}
 		});
@@ -269,67 +262,63 @@ public class TaskView extends AnchorPane {
 
 		clearTaskList();
 
-		Logic.group.getTaskGroups(new Request() {
+		Logic.group.getTaskGroups(new Request<TaskGroupData>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					TaskGroupData taskGroupData = (TaskGroupData) response.getValue();
+			public void onResponse(Response<TaskGroupData> response) {
+				TaskGroupData taskGroupData = response.getValue();
 
-					// display all filtered tasks
-					if (taskGroupData.attributes.isEmpty()) {
-						Logic.filter.getFilteredTasks(new Request() {
-							@Override
-							public void onResponse(Response response) {
-								if (response.state == Response.State.SUCCESS) {
-									createTaskList("All Tasks", (List<Task>) response.getValue());
-								}
-							}
-						});
-
-						// display grouped-tasks
-					} else {
-
-						for (TaskGroup group : taskGroupData.groups) {
-
-							StringBuilder title = new StringBuilder();
-
-							SyncRequest reqHeaderString = new SyncRequest();
-							Logic.group.getCustomHeaderString(reqHeaderString);
-							Response resHeaderString = reqHeaderString.getResponse();
-
-							boolean useCustomHeaderString = resHeaderString.state == Response.State.SUCCESS;
-
-							if (useCustomHeaderString) {
-								String strCustomHeader = (String) resHeaderString.getValue();
-
-								for (int i = 0; i < taskGroupData.attributes.size(); i++) {
-									TaskAttribute attribute = taskGroupData.attributes.get(i);
-									if (strCustomHeader.contains("{" + attribute.name + "}")) {
-										TaskAttributeValue value = group.values.get(attribute);
-										strCustomHeader = strCustomHeader.replaceAll("\\{" + attribute.name + "\\}", value.toString());
-									}
-								}
-
-								title.append(strCustomHeader);
-
-							} else {
-								for (int i = 0; i < taskGroupData.attributes.size(); i++) {
-									TaskAttribute attribute = taskGroupData.attributes.get(i);
-									TaskAttributeValue value = group.values.get(attribute);
-									title.append(value.toString());
-									if (i != taskGroupData.attributes.size() - 1) {
-										title.append(", ");
-									}
-								}
-							}
-
-							createTaskList(title.toString(), group.tasks);
-
+				// display all filtered tasks
+				if (taskGroupData.attributes.isEmpty()) {
+					Logic.filter.getFilteredTasks(new Request<List<Task>>(true) {
+						@Override
+						public void onResponse(Response<List<Task>> response) {
+							createTaskList("All Tasks", response.getValue());
 						}
+					});
+
+					// display grouped-tasks
+				} else {
+
+					for (TaskGroup group : taskGroupData.groups) {
+
+						StringBuilder title = new StringBuilder();
+
+						SyncRequest<String> reqHeaderString = new SyncRequest<>();
+						Logic.group.getCustomHeaderString(reqHeaderString);
+						Response<String> resHeaderString = reqHeaderString.getResponse();
+
+						boolean useCustomHeaderString = resHeaderString.getState() == Response.State.SUCCESS;
+
+						if (useCustomHeaderString) {
+							String strCustomHeader = resHeaderString.getValue();
+
+							for (int i = 0; i < taskGroupData.attributes.size(); i++) {
+								TaskAttribute attribute = taskGroupData.attributes.get(i);
+								if (strCustomHeader.contains("{" + attribute.name + "}")) {
+									TaskAttributeValue value = group.values.get(attribute);
+									strCustomHeader = strCustomHeader.replaceAll("\\{" + attribute.name + "\\}", value.toString());
+								}
+							}
+
+							title.append(strCustomHeader);
+
+						} else {
+							for (int i = 0; i < taskGroupData.attributes.size(); i++) {
+								TaskAttribute attribute = taskGroupData.attributes.get(i);
+								TaskAttributeValue value = group.values.get(attribute);
+								title.append(value.toString());
+								if (i != taskGroupData.attributes.size() - 1) {
+									title.append(", ");
+								}
+							}
+						}
+
+						createTaskList(title.toString(), group.tasks);
 
 					}
 
 				}
+
 			}
 		});
 
@@ -374,23 +363,21 @@ public class TaskView extends AnchorPane {
 
 
 		// get number to display
-		Logic.project.getCurrentProject(new Request() {
+		Logic.project.getCurrentProject(new Request<Project>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					Project project = (Project) response.getValue();
-					int n = 0;
-					if (button == btnSort) {
-						n = project.sortElements.size();
-					}
-					if (button == btnFilter) {
-						n = project.filterCriteria.size();
-					}
-					if (button == btnGroup) {
-						n = project.taskGroupOrder.size();
-					}
-					setBadgeText(badge, n);
+			public void onResponse(Response<Project> response) {
+				Project project = response.getValue();
+				int n = 0;
+				if (button == btnSort) {
+					n = project.sortElements.size();
 				}
+				if (button == btnFilter) {
+					n = project.filterCriteria.size();
+				}
+				if (button == btnGroup) {
+					n = project.taskGroupOrder.size();
+				}
+				setBadgeText(badge, n);
 			}
 		});
 
@@ -413,24 +400,22 @@ public class TaskView extends AnchorPane {
 			@Override
 			public void onEvent(Event e) {
 
-				Logic.project.getCurrentProject(new Request() {
+				Logic.project.getCurrentProject(new Request<Project>(true) {
 					@Override
-					public void onResponse(Response response) {
-						if (response.state == Response.State.SUCCESS) {
-							Project project = (Project) response.getValue();
-							int n = 0;
-							if (button == btnSort) {
-								n = project.sortElements.size();
-							}
-							if (button == btnFilter) {
-								n = project.filterCriteria.size();
-							}
-							if (button == btnGroup) {
-								n = project.taskGroupOrder.size();
-							}
-							setBadgeText(badge, n);
-
+					public void onResponse(Response<Project> response) {
+						Project project = response.getValue();
+						int n = 0;
+						if (button == btnSort) {
+							n = project.sortElements.size();
 						}
+						if (button == btnFilter) {
+							n = project.filterCriteria.size();
+						}
+						if (button == btnGroup) {
+							n = project.taskGroupOrder.size();
+						}
+						setBadgeText(badge, n);
+
 					}
 				});
 

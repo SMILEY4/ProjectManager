@@ -55,14 +55,12 @@ public class SortPopup extends AnchorPane {
 
 		// elements
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		Logic.sort.getSortElements(new Request() {
+		Logic.sort.getSortElements(new Request<List<SortElement>>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					List<SortElement> elements = (List<SortElement>) response.getValue();
-					for (SortElement element : elements) {
-						boxAttributes.getChildren().add(new SortElementNode(element.attribute, element.sortDir));
-					}
+			public void onResponse(Response<List<SortElement>> response) {
+				List<SortElement> elements = response.getValue();
+				for (SortElement element : elements) {
+					boxAttributes.getChildren().add(new SortElementNode(element.attribute, element.sortDir));
 				}
 			}
 		});
@@ -70,13 +68,11 @@ public class SortPopup extends AnchorPane {
 
 		// add element
 		btnAdd.setOnAction(event -> {
-			Logic.attribute.getAttributes(new Request() {
+			Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
 				@Override
-				public void onResponse(Response response) {
-					if (response.state == Response.State.SUCCESS) {
-						List<TaskAttribute> attributes = (List<TaskAttribute>) response.getValue();
-						boxAttributes.getChildren().add(new SortElementNode(attributes.get(0)));
-					}
+				public void onResponse(Response<List<TaskAttribute>> response) {
+					List<TaskAttribute> attributes = response.getValue();
+					boxAttributes.getChildren().add(new SortElementNode(attributes.get(0)));
 				}
 			});
 		});

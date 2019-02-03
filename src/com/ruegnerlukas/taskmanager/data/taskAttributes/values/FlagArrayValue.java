@@ -84,9 +84,9 @@ public class FlagArrayValue implements TaskAttributeValue {
 		if (o instanceof FlagArrayValue) {
 			final TaskFlag[] oValue = ((FlagArrayValue) o).getFlags();
 
-			SyncRequest request = new SyncRequest();
+			SyncRequest<TaskFlag[]> request = new SyncRequest<>();
 			Logic.taskFlags.getAllFlags(request);
-			TaskFlag[] flags = (TaskFlag[])request.getResponse().value;
+			TaskFlag[] flags = request.getResponse().getValue();
 
 			for (int i = 0; i < Math.min(flags.length, oValue.length); i++) {
 				TaskFlag tf = flags[i];

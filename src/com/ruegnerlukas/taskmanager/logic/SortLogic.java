@@ -44,7 +44,7 @@ public class SortLogic {
 
 
 
-	public void getSortElements(Request request) {
+	public void getSortElements(Request<List<SortElement>> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			request.respond(new Response<>(Response.State.SUCCESS, project.sortElements));

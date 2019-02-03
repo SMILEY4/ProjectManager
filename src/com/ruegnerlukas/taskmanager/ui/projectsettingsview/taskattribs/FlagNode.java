@@ -116,13 +116,11 @@ public class FlagNode extends HBox {
 
 		// flag name
 		label = new EditableLabel();
-		Logic.taskFlags.getDefaultFlag(new Request() {
+		Logic.taskFlags.getDefaultFlag(new Request<TaskFlag>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if(response.state == Response.State.SUCCESS) {
-					TaskFlag defaultFlag = (TaskFlag)response.getValue();
-					label.setEditable(defaultFlag != flag);
-				}
+			public void onResponse(Response<TaskFlag> response) {
+				TaskFlag defaultFlag = response.getValue();
+				label.setEditable(defaultFlag != flag);
 			}
 		});
 		this.getChildren().add(label);

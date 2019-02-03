@@ -22,12 +22,8 @@ public abstract class Request<T> {
 
 
 
-	public void respond(Response response) {
-		if (onlyOnSuccess) {
-			if (response.state == Response.State.SUCCESS) {
-				onResponse(response);
-			}
-		} else {
+	public void respond(Response<T> response) {
+		if(!onlyOnSuccess || response.getState() == Response.State.SUCCESS) {
 			onResponse(response);
 		}
 	}
@@ -35,6 +31,9 @@ public abstract class Request<T> {
 
 
 
-	public abstract void onResponse(Response response);
+	public abstract void onResponse(Response<T> response);
+
 
 }
+
+

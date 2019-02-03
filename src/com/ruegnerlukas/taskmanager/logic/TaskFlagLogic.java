@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
 
 public class TaskFlagLogic {
@@ -20,7 +21,7 @@ public class TaskFlagLogic {
 	//======================//
 
 
-	public void getAllFlags(Request request) {
+	public void getAllFlags(Request<TaskFlag[]> request) {
 		Project project = Logic.project.getProject();
 		if(project != null) {
 			TaskAttribute flagAttribute = Logic.attribute.findAttribute(TaskAttributeType.FLAG);
@@ -36,7 +37,7 @@ public class TaskFlagLogic {
 
 
 
-	public void getDefaultFlag(Request request) {
+	public void getDefaultFlag(Request<TaskFlag> request) {
 		Project project = Logic.project.getProject();
 		if(project != null) {
 			TaskAttribute flagAttribute = Logic.attribute.findAttribute(TaskAttributeType.FLAG);

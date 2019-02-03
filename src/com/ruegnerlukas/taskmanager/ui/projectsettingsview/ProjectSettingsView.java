@@ -75,31 +75,27 @@ public class ProjectSettingsView extends AnchorPane {
 		AnchorPane.setLeftAnchor(labelName, 0.0);
 		AnchorPane.setRightAnchor(labelName, 0.0);
 		paneHeader.getChildren().add(labelName);
-		Logic.project.getCurrentProject(new Request() {
+		Logic.project.getCurrentProject(new Request<Project>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					Project project = (Project) response.getValue();
-					labelName.setText(project.name);
-				}
+			public void onResponse(Response<Project> response) {
+				Project project = response.getValue();
+				labelName.setText(project.name);
 			}
 		});
 
 
 		// lock task values
-		Logic.attribute.getAttributeLock(new Request() {
+		Logic.attribute.getAttributeLock(new Request<Boolean>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					attributesLocked = (boolean) response.getValue();
-					if (attributesLocked) {
-						ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1f, "black");
-					} else {
-						ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_OPEN, 1f, "black");
-					}
-					btnLockAttributes.setOnAction(event -> Logic.attribute.setAttributeLock(!attributesLocked));
-					setAttributeLock(attributesLocked);
+			public void onResponse(Response<Boolean> response) {
+				attributesLocked = response.getValue();
+				if (attributesLocked) {
+					ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1f, "black");
+				} else {
+					ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_OPEN, 1f, "black");
 				}
+				btnLockAttributes.setOnAction(event -> Logic.attribute.setAttributeLock(!attributesLocked));
+				setAttributeLock(attributesLocked);
 			}
 		});
 
@@ -117,15 +113,13 @@ public class ProjectSettingsView extends AnchorPane {
 
 
 		// add initial values
-		Logic.attribute.getAttributes(new Request() {
+		Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					List<TaskAttribute> attributes = (List<TaskAttribute>) response.getValue();
-					for (TaskAttribute attribute : attributes) {
-						TaskAttributeNode attrNode = new TaskAttributeNode(attribute);
-						boxTaskAttribs.getChildren().add(attrNode);
-					}
+			public void onResponse(Response<List<TaskAttribute>> response) {
+				List<TaskAttribute> attributes = response.getValue();
+				for (TaskAttribute attribute : attributes) {
+					TaskAttributeNode attrNode = new TaskAttributeNode(attribute);
+					boxTaskAttribs.getChildren().add(attrNode);
 				}
 			}
 		});

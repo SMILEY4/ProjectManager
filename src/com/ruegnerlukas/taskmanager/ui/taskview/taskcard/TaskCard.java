@@ -6,6 +6,7 @@ import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.TaskValueChangedEvent;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -66,13 +67,11 @@ public class TaskCard extends AnchorPane {
 	private void create() {
 
 		// id
-		Logic.tasks.getAttributeValue(task, IDAttributeData.NAME, new Request() {
+		Logic.tasks.getAttributeValue(task, IDAttributeData.NAME, new Request<TaskAttributeValue>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					NumberValue value = (NumberValue) response.getValue();
-					labelID.setText("T-" + value.getInt());
-				}
+			public void onResponse(Response<TaskAttributeValue> response) {
+				NumberValue value = (NumberValue) response.getValue();
+				labelID.setText("T-" + value.getInt());
 			}
 		});
 
@@ -119,14 +118,12 @@ public class TaskCard extends AnchorPane {
 
 
 	private void updateFlagColor() {
-		Logic.tasks.getAttributeValue(task, FlagAttributeData.NAME, new Request() {
+		Logic.tasks.getAttributeValue(task, FlagAttributeData.NAME, new Request<TaskAttributeValue>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					FlagValue value = (FlagValue) response.getValue();
-					Color flagColor = value.getFlag().color.color;
-					paneFlag.setStyle("-fx-background-color: rgba(" + flagColor.getRed() * 255 + "," + flagColor.getGreen() * 255 + "," + flagColor.getBlue() * 255 + ",1.0);");
-				}
+			public void onResponse(Response<TaskAttributeValue> response) {
+				FlagValue value = (FlagValue) response.getValue();
+				Color flagColor = value.getFlag().color.color;
+				paneFlag.setStyle("-fx-background-color: rgba(" + flagColor.getRed() * 255 + "," + flagColor.getGreen() * 255 + "," + flagColor.getBlue() * 255 + ",1.0);");
 			}
 		});
 	}
@@ -135,13 +132,11 @@ public class TaskCard extends AnchorPane {
 
 
 	private void updateDescription() {
-		Logic.tasks.getAttributeValue(task, DescriptionAttributeData.NAME, new Request() {
+		Logic.tasks.getAttributeValue(task, DescriptionAttributeData.NAME, new Request<TaskAttributeValue>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					TextValue value = (TextValue) response.getValue();
-					areaDescription.setText(value.getText());
-				}
+			public void onResponse(Response<TaskAttributeValue> response) {
+				TextValue value = (TextValue) response.getValue();
+				areaDescription.setText(value.getText());
 			}
 		});
 	}

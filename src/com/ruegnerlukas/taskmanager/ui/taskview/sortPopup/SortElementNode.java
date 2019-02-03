@@ -68,25 +68,21 @@ public class SortElementNode extends HBox {
 		choiceAttrib.setMinSize(250, 32);
 		choiceAttrib.setPrefSize(250, 32);
 		choiceAttrib.setMaxSize(500, 32);
-		Logic.attribute.getAttributes(new Request() {
+		Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					List<TaskAttribute> attributes = (List<TaskAttribute>) response.getValue();
-					for (TaskAttribute attrib : attributes) {
-						choiceAttrib.getItems().add(attrib.name);
-					}
+			public void onResponse(Response<List<TaskAttribute>> response) {
+				List<TaskAttribute> attributes = response.getValue();
+				for (TaskAttribute attrib : attributes) {
+					choiceAttrib.getItems().add(attrib.name);
 				}
 			}
 		});
 		choiceAttrib.getSelectionModel().select(attribute.name);
 		choiceAttrib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			Logic.attribute.getAttribute(choiceAttrib.getValue(), new Request() {
+			Logic.attribute.getAttribute(choiceAttrib.getValue(), new Request<TaskAttribute>(true) {
 				@Override
-				public void onResponse(Response response) {
-					if (response.state == Response.State.SUCCESS) {
-						SortElementNode.this.attribute = (TaskAttribute) response.getValue();
-					}
+				public void onResponse(Response<TaskAttribute> response) {
+					SortElementNode.this.attribute = response.getValue();
 				}
 			});
 		});

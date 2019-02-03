@@ -53,14 +53,12 @@ public class FilterPopup extends AnchorPane {
 
 		// values
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		Logic.filter.getFilterCriteria(new Request() {
+		Logic.filter.getFilterCriteria(new Request<List<FilterCriteria>>(true) {
 			@Override
-			public void onResponse(Response response) {
-				if (response.state == Response.State.SUCCESS) {
-					List<FilterCriteria> filterCriteria = (List<FilterCriteria>) response.getValue();
-					for (FilterCriteria criteria : filterCriteria) {
-						boxAttributes.getChildren().add(new FilterCriteriaNode(criteria.attribute, criteria.comparisonOp, criteria.comparisionValue));
-					}
+			public void onResponse(Response<List<FilterCriteria>> response) {
+				List<FilterCriteria> filterCriteria = response.getValue();
+				for (FilterCriteria criteria : filterCriteria) {
+					boxAttributes.getChildren().add(new FilterCriteriaNode(criteria.attribute, criteria.comparisonOp, criteria.comparisionValue));
 				}
 			}
 		});
@@ -68,13 +66,11 @@ public class FilterPopup extends AnchorPane {
 
 		// add attribute
 		btnAdd.setOnAction(event -> {
-			Logic.attribute.getAttributes(new Request() {
+			Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
 				@Override
-				public void onResponse(Response response) {
-					if (response.state == Response.State.SUCCESS) {
-						List<TaskAttribute> attributes = (List<TaskAttribute>) response.getValue();
-						boxAttributes.getChildren().add(new FilterCriteriaNode(attributes.get(0)));
-					}
+				public void onResponse(Response<List<TaskAttribute>> response) {
+					List<TaskAttribute> attributes = response.getValue();
+					boxAttributes.getChildren().add(new FilterCriteriaNode(attributes.get(0)));
 				}
 			});
 		});
