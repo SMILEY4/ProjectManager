@@ -335,7 +335,7 @@ public class FilterLogic {
 	public void getFilteredTasks(Request request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.onResponse(new Response<>(Response.State.SUCCESS, project.filteredTasks));
+			request.respond(new Response<>(Response.State.SUCCESS, project.filteredTasks));
 		}
 	}
 
@@ -345,7 +345,7 @@ public class FilterLogic {
 	public void getFilterCriteria(Request request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.onResponse(new Response<>(Response.State.SUCCESS, project.filterCriteria));
+			request.respond(new Response<>(Response.State.SUCCESS, project.filterCriteria));
 		}
 	}
 

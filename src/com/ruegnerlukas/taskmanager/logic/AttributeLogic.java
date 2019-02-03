@@ -103,7 +103,7 @@ public class AttributeLogic {
 	public void getAttributes(Request request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.onResponse(new Response<>(Response.State.SUCCESS, project.attributes));
+			request.respond(new Response<>(Response.State.SUCCESS, project.attributes));
 		}
 	}
 
@@ -116,9 +116,9 @@ public class AttributeLogic {
 	public void getAttribute(String name, Request request) {
 		TaskAttribute attribute = findAttribute(name);
 		if (attribute != null) {
-			request.onResponse(new Response<>(Response.State.SUCCESS, attribute));
+			request.respond(new Response<>(Response.State.SUCCESS, attribute));
 		} else {
-			request.onResponse(new Response<TaskAttribute>(Response.State.FAIL, "Attribute '" + name + "' not found.", null));
+			request.respond(new Response<TaskAttribute>(Response.State.FAIL, "Attribute '" + name + "' not found.", null));
 		}
 	}
 
@@ -131,9 +131,9 @@ public class AttributeLogic {
 	public void getAttributes(TaskAttributeType type, Request request) {
 		List<TaskAttribute> attributes = findAttributes(type);
 		if (attributes != null && !attributes.isEmpty()) {
-			request.onResponse(new Response<>(Response.State.SUCCESS, attributes));
+			request.respond(new Response<>(Response.State.SUCCESS, attributes));
 		} else {
-			request.onResponse(new Response<List<TaskAttribute>>(Response.State.FAIL, "No attributes with type '" + type + "' found.", null));
+			request.respond(new Response<List<TaskAttribute>>(Response.State.FAIL, "No attributes with type '" + type + "' found.", null));
 		}
 	}
 
@@ -146,7 +146,7 @@ public class AttributeLogic {
 	public void getAttributeLock(Request request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.onResponse(new Response<>(Response.State.SUCCESS, project.attributesLocked));
+			request.respond(new Response<>(Response.State.SUCCESS, project.attributesLocked));
 		}
 	}
 

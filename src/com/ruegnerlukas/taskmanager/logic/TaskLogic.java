@@ -141,7 +141,7 @@ public class TaskLogic {
 	public void getTasks(Request request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.onResponse(new Response<List<Task>>(Response.State.SUCCESS, project.tasks));
+			request.respond(new Response<>(Response.State.SUCCESS, project.tasks));
 		}
 	}
 
@@ -164,13 +164,13 @@ public class TaskLogic {
 						tasks.add(task);
 					}
 				}
-				request.onResponse(new Response<>(Response.State.SUCCESS, tasks));
+				request.respond(new Response<>(Response.State.SUCCESS, tasks));
 
 			} else {
-				request.onResponse(new Response<List<Task>>(Response.State.FAIL, "Value '" + value + "' is invalid for '" + attribute + "'"));
+				request.respond(new Response<List<Task>>(Response.State.FAIL, "Value '" + value + "' is invalid for '" + attribute + "'"));
 			}
 
-			request.onResponse(new Response<>(Response.State.SUCCESS, project.tasks));
+			request.respond(new Response<>(Response.State.SUCCESS, project.tasks));
 		}
 	}
 
@@ -187,20 +187,20 @@ public class TaskLogic {
 		if (project != null) {
 
 			if (task == null) {
-				request.onResponse(new Response<TaskAttributeType>(Response.State.FAIL, "Task is null."));
+				request.respond(new Response<TaskAttributeType>(Response.State.FAIL, "Task is null."));
 
 			} else if (!project.tasks.contains(task)) {
-				request.onResponse(new Response<TaskAttributeType>(Response.State.FAIL, "Task not part of project"));
+				request.respond(new Response<TaskAttributeType>(Response.State.FAIL, "Task not part of project"));
 
 			} else {
 
 				TaskAttribute attribute = Logic.attribute.findAttribute(attributeName);
 				if (attribute == null) {
-					request.onResponse(new Response<TaskAttributeType>(Response.State.FAIL, "Attribute with name '" + attributeName + "' not found."));
+					request.respond(new Response<TaskAttributeType>(Response.State.FAIL, "Attribute with name '" + attributeName + "' not found."));
 
 				} else {
 					TaskAttributeValue value = getValue(task, attribute);
-					request.onResponse(new Response<>(Response.State.SUCCESS, value));
+					request.respond(new Response<>(Response.State.SUCCESS, value));
 
 				}
 

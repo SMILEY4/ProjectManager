@@ -46,7 +46,7 @@ public class ProjectLogic {
 	 * checks, if a project is currently open
 	 */
 	public void getIsProjectOpen(Request request) {
-		request.onResponse(new Response<>(Response.State.SUCCESS, getProject() != null));
+		request.respond(new Response<>(Response.State.SUCCESS, getProject() != null));
 	}
 
 
@@ -58,9 +58,9 @@ public class ProjectLogic {
 	public void getCurrentProject(Request request) {
 		Project project = getProject();
 		if (project != null) {
-			request.onResponse(new Response<>(Response.State.SUCCESS, project));
+			request.respond(new Response<>(Response.State.SUCCESS, project));
 		} else {
-			request.onResponse(new Response<Project>(Response.State.FAIL, "No project opened."));
+			request.respond(new Response<Project>(Response.State.FAIL, "No project opened."));
 		}
 	}
 

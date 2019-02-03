@@ -141,7 +141,7 @@ public class GroupLogic {
 	public void getTaskGroups(Request request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.onResponse(new Response<>(Response.State.SUCCESS, project.taskGroupData));
+			request.respond(new Response<>(Response.State.SUCCESS, project.taskGroupData));
 		}
 	}
 
@@ -152,9 +152,9 @@ public class GroupLogic {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			if (project.useCustomHeaderString) {
-				request.onResponse(new Response<>(Response.State.SUCCESS, project.taskGroupHeaderString));
+				request.respond(new Response<>(Response.State.SUCCESS, project.taskGroupHeaderString));
 			} else {
-				request.onResponse(new Response<>(Response.State.FAIL, "TaskGroups do not currently use a custom headerString"));
+				request.respond(new Response<>(Response.State.FAIL, "TaskGroups do not currently use a custom headerString"));
 			}
 		}
 	}
@@ -165,7 +165,7 @@ public class GroupLogic {
 	public void getTaskGroupOrder(Request request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.onResponse(new Response<>(Response.State.SUCCESS, project.taskGroupOrder));
+			request.respond(new Response<>(Response.State.SUCCESS, project.taskGroupOrder));
 		}
 	}
 

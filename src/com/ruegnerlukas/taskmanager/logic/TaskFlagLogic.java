@@ -26,9 +26,9 @@ public class TaskFlagLogic {
 			TaskAttribute flagAttribute = Logic.attribute.findAttribute(TaskAttributeType.FLAG);
 			if(flagAttribute != null) {
 				FlagAttributeData flagData = (FlagAttributeData)flagAttribute.data;
-				request.onResponse(new Response<>(Response.State.SUCCESS, flagData.flags));
+				request.respond(new Response<>(Response.State.SUCCESS, flagData.flags));
 			} else {
-				request.onResponse(new Response<>(Response.State.FAIL, "No FlagAttribute found."));
+				request.respond(new Response<>(Response.State.FAIL, "No FlagAttribute found."));
 			}
 		}
 	}
@@ -42,9 +42,9 @@ public class TaskFlagLogic {
 			TaskAttribute flagAttribute = Logic.attribute.findAttribute(TaskAttributeType.FLAG);
 			if(flagAttribute != null) {
 				FlagAttributeData flagData = (FlagAttributeData)flagAttribute.data;
-				request.onResponse(new Response<>(Response.State.SUCCESS, flagData.defaultFlag));
+				request.respond(new Response<>(Response.State.SUCCESS, flagData.defaultFlag));
 			} else {
-				request.onResponse(new Response<>(Response.State.FAIL, "No FlagAttribute found."));
+				request.respond(new Response<>(Response.State.FAIL, "No FlagAttribute found."));
 			}
 		}
 	}
