@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.simplemath.MathUtils;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.data.Project;
@@ -19,21 +19,24 @@ import java.util.List;
 public class FilterLogic {
 
 
+	//======================//
+	//       INTERNAL       //
+	//======================//
+
+
+
+
 	protected FilterLogic() {
 
-		EventManager.registerListener(new EventListener() {
-			@Override
-			public void onEvent(Event e) {
-				AttributeRemovedEvent event = (AttributeRemovedEvent)e;
-				removeFilterCriteria(event.getAttribute());
-			}
+		// when an attribute was deleted
+		EventManager.registerListener(e -> {
+			AttributeRemovedEvent event = (AttributeRemovedEvent) e;
+			onAttributeDeleted(event.getAttribute());
 		}, AttributeRemovedEvent.class);
 
-		EventManager.registerListener(this, new EventListener() {
-			@Override
-			public void onEvent(Event e) {
-				rebuildFilteredList();
-			}
+		// when anything else changed
+		EventManager.registerListener(this, e -> {
+			onChange();
 		}, FilterCriteriaChangedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class);
 
 	}
@@ -41,279 +44,181 @@ public class FilterLogic {
 
 
 
-	public boolean setFilterCriteria(List<FilterCriteria> filterCriteria) {
-		if(Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
-			project.filterCriteria.clear();
-			project.filterCriteria.addAll(filterCriteria);
-			EventManager.fireEvent(new FilterCriteriaChangedEvent(project.filterCriteria, this));
-			return true;
-		} else {
-			return false;
-		}
+	private void onAttributeDeleted(TaskAttribute attribute) {
+		removeFilterCriteria(attribute);
 	}
 
 
 
 
-	public boolean removeFilterCriteria(TaskAttribute attribute) {
-		if(Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
-			List<FilterCriteria> toRemove = new ArrayList<>();
-			for(FilterCriteria element : project.filterCriteria) {
-				if(element.attribute == attribute) {
-					toRemove.add(element);
-				}
-			}
-			project.filterCriteria.removeAll(toRemove);
-			if(!toRemove.isEmpty()) {
-				EventManager.fireEvent(new FilterCriteriaChangedEvent(project.filterCriteria, this));
-			}
-			return !toRemove.isEmpty();
-		} else {
-			return false;
-		}
+	private void onChange() {
+		applyFilters();
 	}
 
 
 
 
+	private boolean match(Task task, List<FilterCriteria> filters) {
 
-	public boolean rebuildFilteredList() {
-		final boolean allowNoValueMatch = false;
-
-		if(Logic.project.isProjectOpen()) {
-			Project project = Logic.project.getProject();
-
-			List<FilterCriteria> filters = project.filterCriteria;
-			List<Task> allTasks = project.tasks;
-			List<Task> filtered = new ArrayList<>();
-
-			for(int i=0, n=allTasks.size(); i<n; i++) {
-				Task task = allTasks.get(i);
-
-				boolean match = match(task, filters, allowNoValueMatch);
-				if(match) {
-					filtered.add(task);
-				}
-
-			}
-
-			project.filteredTasks = filtered;
-			EventManager.fireEvent(new FilteredTasksChangedEvent(this));
-			return true;
-
-		} else {
-			return false;
-		}
-	}
-
-
-
-
-	private boolean match(Task task, List<FilterCriteria> filters, boolean allowNoValueMatch) {
-
-		for(FilterCriteria filter : filters) {
+		for (FilterCriteria filter : filters) {
 
 			final TaskAttribute attribute = filter.attribute;
 			final TaskAttributeType attributeType = attribute.data.getType();
 			final FilterCriteria.ComparisonOp comp = filter.comparisonOp;
 
 			final TaskAttributeValue valueComp = filter.comparisionValue;
-			final TaskAttributeValue valueTask = Logic.tasks.getAttributeValue(task, attribute.name);
+			final TaskAttributeValue valueTask = Logic.tasks.getValue(task, attribute);
 
-			if(!allowNoValueMatch && valueTask instanceof NoValue) {
+			if (valueTask instanceof NoValue) {
 				return false;
 			}
 
-			if(valueTask.getClass() != valueComp.getClass()) {
+			if (valueTask.getClass() != valueComp.getClass()) {
 				return false;
 			}
 
 
-			if(comp == FilterCriteria.ComparisonOp.EQUALITY) {
-				if(valueTask.compareTo(valueComp) == 0) {
+			if (comp == FilterCriteria.ComparisonOp.EQUALITY) {
+				if (valueTask.compareTo(valueComp) == 0) {
 					continue;
 				} else {
 					return false;
 				}
 			}
 
-			if(comp == FilterCriteria.ComparisonOp.INEQUALITY) {
-				if(valueTask.compareTo(valueComp) != 0) {
+			if (comp == FilterCriteria.ComparisonOp.INEQUALITY) {
+				if (valueTask.compareTo(valueComp) != 0) {
 					continue;
 				} else {
 					return false;
 				}
 			}
 
-			if(comp == FilterCriteria.ComparisonOp.LESS_THAN) {
-				if(valueTask.compareTo(valueComp) == -1) {
+			if (comp == FilterCriteria.ComparisonOp.LESS_THAN) {
+				if (valueTask.compareTo(valueComp) == -1) {
 					continue;
 				} else {
 					return false;
 				}
 			}
 
-			if(comp == FilterCriteria.ComparisonOp.LESS_THAN_EQUAL) {
-				if(valueTask.compareTo(valueComp) != +1) {
+			if (comp == FilterCriteria.ComparisonOp.LESS_THAN_EQUAL) {
+				if (valueTask.compareTo(valueComp) != +1) {
 					continue;
 				} else {
 					return false;
 				}
 			}
 
-			if(comp == FilterCriteria.ComparisonOp.GREATER_THAN) {
-				if(valueTask.compareTo(valueComp) == +1) {
+			if (comp == FilterCriteria.ComparisonOp.GREATER_THAN) {
+				if (valueTask.compareTo(valueComp) == +1) {
 					continue;
 				} else {
 					return false;
 				}
 			}
 
-			if(comp == FilterCriteria.ComparisonOp.GREATER_THAN_EQUAL) {
-				if(valueTask.compareTo(valueComp) != -1) {
+			if (comp == FilterCriteria.ComparisonOp.GREATER_THAN_EQUAL) {
+				if (valueTask.compareTo(valueComp) != -1) {
 					continue;
 				} else {
 					return false;
 				}
 			}
 
-			if(comp == FilterCriteria.ComparisonOp.IN_RANGE) {
-				NumberValue value = (NumberValue)valueTask;
-				NumberPairValue range = (NumberPairValue)valueComp;
-				if(range.inRange(value)) {
+			if (comp == FilterCriteria.ComparisonOp.IN_RANGE) {
+				NumberValue value = (NumberValue) valueTask;
+				NumberPairValue range = (NumberPairValue) valueComp;
+				if (range.inRange(value)) {
 					continue;
 				} else {
 					return false;
 				}
 			}
 
-			if(comp == FilterCriteria.ComparisonOp.NOT_IN_RANGE) {
-				NumberValue value = (NumberValue)valueTask;
-				NumberPairValue range = (NumberPairValue)valueComp;
-				if(!range.inRange(value)) {
+			if (comp == FilterCriteria.ComparisonOp.NOT_IN_RANGE) {
+				NumberValue value = (NumberValue) valueTask;
+				NumberPairValue range = (NumberPairValue) valueComp;
+				if (!range.inRange(value)) {
 					continue;
 				} else {
 					return false;
 				}
 			}
 
-			if(comp == FilterCriteria.ComparisonOp.IN_LIST) {
-				if(attributeType == TaskAttributeType.CHOICE || attributeType == TaskAttributeType.TEXT) {
-					TextArrayValue list = (TextArrayValue)valueComp;
-					TextValue textValue = (TextValue)valueTask;
-					boolean inList = false;
-					for(String listElement : list.getText()) {
-						if(listElement.equals(textValue)) {
-							inList = true;
-							break;
-						}
-					}
-					if(inList) {
+			if (comp == FilterCriteria.ComparisonOp.IN_LIST) {
+				if (attributeType == TaskAttributeType.CHOICE || attributeType == TaskAttributeType.TEXT) {
+					if (inTextArray((TextArrayValue) valueComp, (TextValue) valueTask)) {
 						continue;
 					} else {
 						return false;
 					}
 				}
-				if(attributeType == TaskAttributeType.ID || attributeType == TaskAttributeType.NUMBER) {
-					TextArrayValue list = (TextArrayValue)valueComp;
-					NumberValue numberValue = (NumberValue)valueTask;
+				if (attributeType == TaskAttributeType.ID || attributeType == TaskAttributeType.NUMBER) {
+					TextArrayValue list = (TextArrayValue) valueComp;
+					NumberValue numberValue = (NumberValue) valueTask;
+					if (inTextArray(list, numberValue)) {
+						continue;
+					} else {
+						return false;
+					}
+				}
+				if (attributeType == TaskAttributeType.FLAG) {
+					FlagArrayValue list = (FlagArrayValue) valueComp;
+					FlagValue flagValue = (FlagValue) valueTask;
+					if (inFlagArray(list, flagValue)) {
+						continue;
+					} else {
+						return false;
+					}
+				}
+			}
+
+			if (comp == FilterCriteria.ComparisonOp.NOT_IN_LIST) {
+				if (attributeType == TaskAttributeType.CHOICE || attributeType == TaskAttributeType.TEXT) {
+					if (inTextArray((TextArrayValue) valueComp, (TextValue) valueTask)) {
+						return false;
+					} else {
+						continue;
+					}
+				}
+				if (attributeType == TaskAttributeType.ID || attributeType == TaskAttributeType.NUMBER) {
+					TextArrayValue list = (TextArrayValue) valueComp;
+					NumberValue numberValue = (NumberValue) valueTask;
 					boolean inList = false;
-					for(String listElement : list.getText()) {
-						if(numberValue.isInt()) {
+					for (String listElement : list.getText()) {
+						if (numberValue.isInt()) {
 							int element = Integer.parseInt(listElement);
-							if(element == numberValue.getInt()) {
+							if (element == numberValue.getInt()) {
 								inList = true;
 								break;
 							}
 						} else {
 							double element = Double.parseDouble(listElement);
-							int dec = listElement.contains(".") ? listElement.split(".")[1].length() : 0;
-							if(MathUtils.isNearlyEqual(element, numberValue.getDouble(), Math.pow(10,dec))) {
+							int dec = listElement.contains(".") ? listElement.split("\\.")[1].length() : 0;
+							if (MathUtils.isNearlyEqual(element, numberValue.getDouble(), Math.pow(10, dec))) {
 								inList = true;
 								break;
 							}
 						}
 					}
-					if(inList) {
-						continue;
-					} else {
+					if (inList) {
 						return false;
+					} else {
+						continue;
 					}
 				}
-				if(attributeType == TaskAttributeType.FLAG) {
-					FlagArrayValue list = (FlagArrayValue)valueComp;
-					FlagValue flagValue = (FlagValue)valueTask;
+				if (attributeType == TaskAttributeType.FLAG) {
+					FlagArrayValue list = (FlagArrayValue) valueComp;
+					FlagValue flagValue = (FlagValue) valueTask;
 					boolean inList = false;
-					for(TaskFlag flag : list.getFlags()) {
-						if(flag == flagValue.getFlag()) {
+					for (TaskFlag flag : list.getFlags()) {
+						if (flag == flagValue.getFlag()) {
 							inList = true;
 							break;
 						}
 					}
-					if(inList) {
-						continue;
-					} else {
-						return false;
-					}
-				}
-			}
-
-			if(comp == FilterCriteria.ComparisonOp.NOT_IN_LIST) {
-				if(attributeType == TaskAttributeType.CHOICE || attributeType == TaskAttributeType.TEXT) {
-					TextArrayValue list = (TextArrayValue)valueComp;
-					TextValue textValue = (TextValue)valueTask;
-					boolean inList = false;
-					for(String listElement : list.getText()) {
-						if(listElement.equals(textValue)) {
-							inList = true;
-							break;
-						}
-					}
-					if(inList) {
-						return false;
-					} else {
-						continue;
-					}
-				}
-				if(attributeType == TaskAttributeType.ID || attributeType == TaskAttributeType.NUMBER) {
-					TextArrayValue list = (TextArrayValue)valueComp;
-					NumberValue numberValue = (NumberValue)valueTask;
-					boolean inList = false;
-					for(String listElement : list.getText()) {
-						if(numberValue.isInt()) {
-							int element = Integer.parseInt(listElement);
-							if(element == numberValue.getInt()) {
-								inList = true;
-								break;
-							}
-						} else {
-							double element = Double.parseDouble(listElement);
-							int dec = listElement.contains(".") ? listElement.split(".")[1].length() : 0;
-							if(MathUtils.isNearlyEqual(element, numberValue.getDouble(), Math.pow(10,dec))) {
-								inList = true;
-								break;
-							}
-						}
-					}
-					if(inList) {
-						return false;
-					} else {
-						continue;
-					}
-				}
-				if(attributeType == TaskAttributeType.FLAG) {
-					FlagArrayValue list = (FlagArrayValue)valueComp;
-					FlagValue flagValue = (FlagValue)valueTask;
-					boolean inList = false;
-					for(TaskFlag flag : list.getFlags()) {
-						if(flag == flagValue.getFlag()) {
-							inList = true;
-							break;
-						}
-					}
-					if(inList) {
+					if (inList) {
 						return false;
 					} else {
 						continue;
@@ -321,21 +226,21 @@ public class FilterLogic {
 				}
 			}
 
-			if(comp == FilterCriteria.ComparisonOp.CONTAINS) {
-				String strComp = ((TextValue)valueComp).getText();
+			if (comp == FilterCriteria.ComparisonOp.CONTAINS) {
+				String strComp = ((TextValue) valueComp).getText();
 
-				if(attributeType == TaskAttributeType.CHOICE || attributeType == TaskAttributeType.DESCRIPTION || attributeType == TaskAttributeType.TEXT) {
-					String strTask = ((TextValue)valueTask).getText();
-					if(strTask.contains(strComp)) {
+				if (attributeType == TaskAttributeType.CHOICE || attributeType == TaskAttributeType.DESCRIPTION || attributeType == TaskAttributeType.TEXT) {
+					String strTask = ((TextValue) valueTask).getText();
+					if (strTask.contains(strComp)) {
 						continue;
 					} else {
 						return false;
 					}
 				}
 
-				if(attributeType == TaskAttributeType.FLAG) {
-					String strTask = ((FlagValue)valueTask).getFlag().name;
-					if(strTask.contains(strComp)) {
+				if (attributeType == TaskAttributeType.FLAG) {
+					String strTask = ((FlagValue) valueTask).getFlag().name;
+					if (strTask.contains(strComp)) {
 						continue;
 					} else {
 						return false;
@@ -344,21 +249,21 @@ public class FilterLogic {
 
 			}
 
-			if(comp == FilterCriteria.ComparisonOp.CONTAINS_NOT) {
-				String strComp = ((TextValue)valueComp).getText();
+			if (comp == FilterCriteria.ComparisonOp.CONTAINS_NOT) {
+				String strComp = ((TextValue) valueComp).getText();
 
-				if(attributeType == TaskAttributeType.CHOICE || attributeType == TaskAttributeType.DESCRIPTION || attributeType == TaskAttributeType.TEXT) {
-					String strTask = ((TextValue)valueTask).getText();
-					if(strTask.contains(strComp)) {
+				if (attributeType == TaskAttributeType.CHOICE || attributeType == TaskAttributeType.DESCRIPTION || attributeType == TaskAttributeType.TEXT) {
+					String strTask = ((TextValue) valueTask).getText();
+					if (strTask.contains(strComp)) {
 						return false;
 					} else {
 						continue;
 					}
 				}
 
-				if(attributeType == TaskAttributeType.FLAG) {
-					String strTask = ((FlagValue)valueTask).getFlag().name;
-					if(strTask.contains(strComp)) {
+				if (attributeType == TaskAttributeType.FLAG) {
+					String strTask = ((FlagValue) valueTask).getFlag().name;
+					if (strTask.contains(strComp)) {
 						if (strTask.contains(strComp)) {
 							return false;
 						} else {
@@ -375,6 +280,144 @@ public class FilterLogic {
 	}
 
 
+
+
+	private boolean inTextArray(TextArrayValue array, TextValue value) {
+		for (String listElement : array.getText()) {
+			if (listElement.equals(value.getText())) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+
+	private boolean inTextArray(TextArrayValue array, NumberValue value) {
+		for (String listElement : array.getText()) {
+			if (value.isInt()) {
+				int element = Integer.parseInt(listElement);
+				if (element == value.getInt()) {
+					return true;
+				}
+			} else {
+				double element = Double.parseDouble(listElement);
+				int dec = listElement.contains(".") ? listElement.split(".")[1].length() : 0;
+				if (MathUtils.isNearlyEqual(element, value.getDouble(), Math.pow(10, dec))) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+
+
+
+	private boolean inFlagArray(FlagArrayValue array, FlagValue value) {
+		for (TaskFlag flag : array.getFlags()) {
+			if (flag == value.getFlag()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+
+	//======================//
+	//        GETTER        //
+	//======================//
+
+
+
+
+	public void getFilteredTasks(Request request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			request.onResponse(new Response<>(Response.State.SUCCESS, project.filteredTasks));
+		}
+	}
+
+
+
+
+	//======================//
+	//        SETTER        //
+	//======================//
+
+
+
+
+	/**
+	 * Replaces the filterCriteria-list with the new given list<p>
+	 * Events:<p>
+	 * - FilterCriteriaChangedEvent: when the list of criteria changed
+	 */
+	public void setFilterCriteria(List<FilterCriteria> filterCriteria) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			project.filterCriteria.clear();
+			project.filterCriteria.addAll(filterCriteria);
+			EventManager.fireEvent(new FilterCriteriaChangedEvent(project.filterCriteria, this));
+		}
+	}
+
+
+
+
+	/**
+	 * Removes all filter-criteria associated with the given attribute<p>
+	 * Events:<p>
+	 * - FilterCriteriaChangedEvent: when the list of criteria changed
+	 */
+	public void removeFilterCriteria(TaskAttribute attribute) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			List<FilterCriteria> toRemove = new ArrayList<>();
+			for (FilterCriteria element : project.filterCriteria) {
+				if (element.attribute == attribute) {
+					toRemove.add(element);
+				}
+			}
+			project.filterCriteria.removeAll(toRemove);
+			if (!toRemove.isEmpty()) {
+				EventManager.fireEvent(new FilterCriteriaChangedEvent(project.filterCriteria, this));
+			}
+		}
+	}
+
+
+
+
+	/**
+	 * Applies the current filter-criterias to all tasks and saves the result in a new list (Project.filteredTasks)<p>
+	 * Events:<p>
+	 * -FilteredTasksChangedEvent: when the list of filtered tasks has changed
+	 */
+	public void applyFilters() {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+
+			List<FilterCriteria> filters = project.filterCriteria;
+			List<Task> allTasks = project.tasks;
+			List<Task> filtered = new ArrayList<>();
+
+			for (int i = 0, n = allTasks.size(); i < n; i++) {
+				Task task = allTasks.get(i);
+				boolean match = match(task, filters);
+				if (match) {
+					filtered.add(task);
+				}
+			}
+
+			project.filteredTasks = filtered;
+			EventManager.fireEvent(new FilteredTasksChangedEvent(this));
+
+		}
+	}
 
 
 }
