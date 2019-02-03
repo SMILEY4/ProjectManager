@@ -364,9 +364,6 @@ public class AttributeLogic {
 			} else if (project.attributesLocked) {
 				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.NOT_ALLOWED, this));
 
-			} else if (attribute.data.getType().fixed) {
-				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.NOT_ALLOWED, this));
-
 			} else {
 
 

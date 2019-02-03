@@ -67,7 +67,7 @@ public class FlagFilterValue extends FilterValue {
 				String[] values = textField.getText().split(",");
 				TaskFlag[] flags = new TaskFlag[values.length];
 				for (int i = 0; i < values.length; i++) {
-					flags[0] = TaskFlag.findFlag(values[i].trim(), ((FlagAttributeData) data).flags);
+					flags[i] = TaskFlag.findFlag(values[i].trim(), ((FlagAttributeData) data).flags);
 				}
 				value = new FlagArrayValue(flags);
 				onAction();
@@ -77,7 +77,7 @@ public class FlagFilterValue extends FilterValue {
 				String[] values = textField.getText().split(",");
 				TaskFlag[] flags = new TaskFlag[values.length];
 				for (int i = 0; i < values.length; i++) {
-					flags[0] = TaskFlag.findFlag(values[i].trim(), ((FlagAttributeData) data).flags);
+					flags[i] = TaskFlag.findFlag(values[i].trim(), ((FlagAttributeData) data).flags);
 				}
 				value = new FlagArrayValue(flags);
 				onAction();

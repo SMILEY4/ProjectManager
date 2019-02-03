@@ -40,6 +40,7 @@ public class TextAttributeData implements TaskAttributeData {
 						changedVars.put(Var.DEFAULT_VALUE, new TextValue(defaultValue));
 					}
 				}
+				break;
 			}
 
 			case TEXT_MULTILINE: {
@@ -51,6 +52,7 @@ public class TextAttributeData implements TaskAttributeData {
 					}
 					changedVars.put(Var.TEXT_MULTILINE, newValue);
 				}
+				break;
 			}
 
 			case USE_DEFAULT: {
@@ -58,6 +60,7 @@ public class TextAttributeData implements TaskAttributeData {
 					useDefault = ((BoolValue) newValue).getBoolValue();
 					changedVars.put(Var.USE_DEFAULT, newValue);
 				}
+				break;
 			}
 
 			case DEFAULT_VALUE: {
@@ -65,6 +68,7 @@ public class TextAttributeData implements TaskAttributeData {
 					defaultValue = ((TextValue) newValue).getText();
 					changedVars.put(Var.DEFAULT_VALUE, newValue);
 				}
+				break;
 			}
 
 		}

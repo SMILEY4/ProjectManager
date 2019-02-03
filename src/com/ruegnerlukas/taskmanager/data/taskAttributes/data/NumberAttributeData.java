@@ -47,6 +47,7 @@ public class NumberAttributeData implements TaskAttributeData {
 					changedVars.put(Var.NUMBER_ATT_MIN, new NumberValue(min));
 					changedVars.put(Var.NUMBER_ATT_MAX, new NumberValue(max));
 				}
+				break;
 			}
 
 			case NUMBER_ATT_MIN: {
@@ -54,6 +55,7 @@ public class NumberAttributeData implements TaskAttributeData {
 					min = ((NumberValue) newValue).getDouble();
 					changedVars.put(Var.NUMBER_ATT_MIN, newValue);
 				}
+				break;
 			}
 
 			case NUMBER_ATT_MAX: {
@@ -61,6 +63,7 @@ public class NumberAttributeData implements TaskAttributeData {
 					max = ((NumberValue) newValue).getDouble();
 					changedVars.put(Var.NUMBER_ATT_MAX, newValue);
 				}
+				break;
 			}
 
 			case USE_DEFAULT: {
@@ -68,6 +71,7 @@ public class NumberAttributeData implements TaskAttributeData {
 					useDefault = ((BoolValue) newValue).getBoolValue();
 					changedVars.put(Var.USE_DEFAULT, newValue);
 				}
+				break;
 			}
 
 			case DEFAULT_VALUE: {
@@ -75,6 +79,7 @@ public class NumberAttributeData implements TaskAttributeData {
 					defaultValue = ((NumberValue) newValue).getDouble();
 					changedVars.put(Var.DEFAULT_VALUE, newValue);
 				}
+				break;
 			}
 
 		}

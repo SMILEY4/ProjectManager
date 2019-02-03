@@ -105,7 +105,7 @@ public class TaskLogic {
 
 	protected boolean setValue(Task task, TaskAttribute attribute, TaskAttributeValue value) {
 		if (attribute.data.validate(value)) {
-			task.attributes.put(attribute, attribute.data.getDefault());
+			task.attributes.put(attribute, value);
 			return true;
 		} else {
 			return false;

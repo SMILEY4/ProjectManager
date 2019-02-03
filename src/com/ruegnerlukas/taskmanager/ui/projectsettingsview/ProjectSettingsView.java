@@ -75,6 +75,9 @@ public class ProjectSettingsView extends AnchorPane {
 		AnchorPane.setLeftAnchor(labelName, 0.0);
 		AnchorPane.setRightAnchor(labelName, 0.0);
 		paneHeader.getChildren().add(labelName);
+		labelName.addListener((observable, oldValue, newValue) -> {
+			Logic.project.renameProject(newValue);
+		});
 		Logic.project.getCurrentProject(new Request<Project>(true) {
 			@Override
 			public void onResponse(Response<Project> response) {

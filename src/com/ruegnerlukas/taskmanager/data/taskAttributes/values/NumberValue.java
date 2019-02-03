@@ -101,7 +101,7 @@ public class NumberValue implements TaskAttributeValue {
 				return -1;
 			}
 			if ((this.isInt ? this.getInt() : this.getDouble()) > (other.isInt ? other.getInt() : other.getDouble())) {
-				return -1;
+				return +1;
 			}
 			return 0;
 		} else {

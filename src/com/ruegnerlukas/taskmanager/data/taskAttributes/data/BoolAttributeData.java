@@ -36,6 +36,7 @@ public class BoolAttributeData implements TaskAttributeData {
 					useDefault = ((BoolValue) newValue).getBoolValue();
 					changedVars.put(Var.USE_DEFAULT, newValue);
 				}
+				break;
 			}
 
 			case DEFAULT_VALUE: {
@@ -43,6 +44,7 @@ public class BoolAttributeData implements TaskAttributeData {
 					defaultValue = ((BoolValue) newValue).getBoolValue();
 					changedVars.put(Var.DEFAULT_VALUE, newValue);
 				}
+				break;
 			}
 		}
 

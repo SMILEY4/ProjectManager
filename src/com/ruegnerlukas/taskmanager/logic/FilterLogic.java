@@ -36,8 +36,26 @@ public class FilterLogic {
 
 		// when anything else changed
 		EventManager.registerListener(this, e -> {
-			onChange();
+			if (e instanceof AttributeTypeChangedEvent) {
+				AttributeTypeChangedEvent event = (AttributeTypeChangedEvent) e;
+				if (!getFilterCriteria(event.getAttribute()).isEmpty()) {
+					applyFilters();
+				}
+			} else if (e instanceof AttributeUpdatedEvent) {
+				AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
+				if (!getFilterCriteria(event.getAttribute()).isEmpty()) {
+					applyFilters();
+				}
+			} else {
+				applyFilters();
+			}
 		}, FilterCriteriaChangedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class);
+
+		// when a task was added
+		EventManager.registerListener(e -> {
+			TaskCreatedEvent event = (TaskCreatedEvent) e;
+			onTaskCreated(event.getTask());
+		}, TaskCreatedEvent.class);
 
 	}
 
@@ -51,8 +69,12 @@ public class FilterLogic {
 
 
 
-	private void onChange() {
-		applyFilters();
+	private void onTaskCreated(Task task) {
+		Project project = Logic.project.getProject();
+		if(match(task, project.filterCriteria)) {
+			project.filteredTasks.add(task);
+			EventManager.fireEvent(new FilteredTasksChangedEvent(this));
+		}
 	}
 
 
@@ -72,11 +94,6 @@ public class FilterLogic {
 			if (valueTask instanceof NoValue) {
 				return false;
 			}
-
-			if (valueTask.getClass() != valueComp.getClass()) {
-				return false;
-			}
-
 
 			if (comp == FilterCriteria.ComparisonOp.EQUALITY) {
 				if (valueTask.compareTo(valueComp) == 0) {
@@ -322,6 +339,19 @@ public class FilterLogic {
 			}
 		}
 		return false;
+	}
+
+
+
+
+	protected List<FilterCriteria> getFilterCriteria(TaskAttribute attribute) {
+		List<FilterCriteria> list = new ArrayList<>();
+		for (FilterCriteria criteria : Logic.project.getProject().filterCriteria) {
+			if (criteria.attribute == attribute) {
+				list.add(criteria);
+			}
+		}
+		return list;
 	}
 
 

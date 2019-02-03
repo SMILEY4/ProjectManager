@@ -76,8 +76,8 @@ public class FlagAttributeData implements TaskAttributeData {
 							changedVars.put(Var.DEFAULT_VALUE, new FlagValue(defaultFlag));
 						}
 					}
-
 				}
+				break;
 			}
 
 			case DEFAULT_VALUE: {
@@ -85,6 +85,7 @@ public class FlagAttributeData implements TaskAttributeData {
 					defaultFlag = ((FlagValue) newValue).getFlag();
 					changedVars.put(Var.DEFAULT_VALUE, newValue);
 				}
+				break;
 			}
 
 		}

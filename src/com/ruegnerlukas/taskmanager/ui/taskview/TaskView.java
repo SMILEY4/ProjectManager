@@ -248,11 +248,9 @@ public class TaskView extends AnchorPane {
 
 
 	private void setupListeners() {
-
 		EventManager.registerListener(this, e -> {
 			refreshTaskView();
 		}, GroupByRebuildEvent.class, GroupHeaderChangedEvent.class, AttributeRenamedEvent.class);
-
 	}
 
 
@@ -363,23 +361,7 @@ public class TaskView extends AnchorPane {
 
 
 		// get number to display
-		Logic.project.getCurrentProject(new Request<Project>(true) {
-			@Override
-			public void onResponse(Response<Project> response) {
-				Project project = response.getValue();
-				int n = 0;
-				if (button == btnSort) {
-					n = project.sortElements.size();
-				}
-				if (button == btnFilter) {
-					n = project.filterCriteria.size();
-				}
-				if (button == btnGroup) {
-					n = project.taskGroupOrder.size();
-				}
-				setBadgeText(badge, n);
-			}
-		});
+		setBadgeText(button, badge);
 
 
 		// get event to listen to
@@ -399,27 +381,7 @@ public class TaskView extends AnchorPane {
 		EventManager.registerListener(this, new EventListener() {
 			@Override
 			public void onEvent(Event e) {
-
-				Logic.project.getCurrentProject(new Request<Project>(true) {
-					@Override
-					public void onResponse(Response<Project> response) {
-						Project project = response.getValue();
-						int n = 0;
-						if (button == btnSort) {
-							n = project.sortElements.size();
-						}
-						if (button == btnFilter) {
-							n = project.filterCriteria.size();
-						}
-						if (button == btnGroup) {
-							n = project.taskGroupOrder.size();
-						}
-						setBadgeText(badge, n);
-
-					}
-				});
-
-
+				setBadgeText(button, badge);
 			}
 		}, eventClass);
 
@@ -429,17 +391,36 @@ public class TaskView extends AnchorPane {
 
 
 
-	private void setBadgeText(Label badge, int number) {
-		if (0 < number && number < 10) {
-			badge.setText("" + number);
-			badge.setVisible(true);
-		} else if (number >= 10) {
-			badge.setText("!");
-			badge.setVisible(true);
-		} else {
-			badge.setText("");
-			badge.setVisible(false);
-		}
+	private void setBadgeText(Button button, Label badge) {
+
+		Logic.project.getCurrentProject(new Request<Project>(true) {
+			@Override
+			public void onResponse(Response<Project> response) {
+				Project project = response.getValue();
+				int n = 0;
+				if (button == btnSort) {
+					n = project.sortElements.size();
+				}
+				if (button == btnFilter) {
+					n = project.filterCriteria.size();
+				}
+				if (button == btnGroup) {
+					n = project.taskGroupOrder.size();
+				}
+
+				if (0 < n && n < 10) {
+					badge.setText("" + n);
+					badge.setVisible(true);
+				} else if (n >= 10) {
+					badge.setText("!");
+					badge.setVisible(true);
+				} else {
+					badge.setText("");
+					badge.setVisible(false);
+				}
+			}
+		});
+
 	}
 
 

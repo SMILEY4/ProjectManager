@@ -34,10 +34,8 @@ public class ChoiceAttributeData implements TaskAttributeData {
 
 			case CHOICE_ATT_VALUES: {
 				if (newValue instanceof TextArrayValue) {
-
 					this.values = ((TextArrayValue) newValue).getText();
 					changedVars.put(Var.CHOICE_ATT_VALUES, newValue);
-
 					boolean foundDefault = false;
 					for (String value : values) {
 						if (value.equals(defaultValue)) {
@@ -49,8 +47,8 @@ public class ChoiceAttributeData implements TaskAttributeData {
 						this.defaultValue = values.length == 0 ? "" : values[0];
 						changedVars.put(Var.DEFAULT_VALUE, new TextValue(defaultValue));
 					}
-
 				}
+				break;
 			}
 
 			case USE_DEFAULT: {
@@ -60,6 +58,7 @@ public class ChoiceAttributeData implements TaskAttributeData {
 				} else {
 					return null;
 				}
+				break;
 			}
 
 			case DEFAULT_VALUE: {
@@ -69,6 +68,7 @@ public class ChoiceAttributeData implements TaskAttributeData {
 				} else {
 					return null;
 				}
+				break;
 			}
 
 		}

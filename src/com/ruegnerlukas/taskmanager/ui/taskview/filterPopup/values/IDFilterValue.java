@@ -53,12 +53,12 @@ public class IDFilterValue extends FilterValue {
 			outNodes.add(textField);
 
 			textField.setOnAction(event -> {
-				value = new TextArrayValue(textField.getText().split(","));
+				value = new TextArrayValue(textField.getText().replaceAll(" ", "").split(","));
 				onAction();
 			});
 
 			textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-				value = new TextArrayValue(textField.getText().split(","));
+				value = new TextArrayValue(textField.getText().replaceAll(" ", "").split(","));
 				onAction();
 			});
 		}
@@ -100,7 +100,7 @@ public class IDFilterValue extends FilterValue {
 			Spinner<Integer> spinnerMax = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberPairValue) value).getInt1());
 			outNodes.add(spinnerMax);
 			spinnerMax.valueProperty().addListener((observable, oldValue, newValue) -> {
-				value = new NumberPairValue(((NumberPairValue) value).getInt0(), spinnerMin.getValue());
+				value = new NumberPairValue(((NumberPairValue) value).getInt0(), spinnerMax.getValue());
 				onAction();
 			});
 		}
