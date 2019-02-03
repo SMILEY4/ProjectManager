@@ -1,25 +1,19 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedRejection;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedRejection;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TextAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TextAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.spinner.SpinnerUtils;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Spinner;
@@ -69,78 +63,54 @@ public class TextAttributeNode extends AnchorPane implements AttributeRequiremen
 
 
 		// character limit
-		SpinnerUtils.initSpinner(charLimit, attributeData.charLimit, 1, Integer.MAX_VALUE, 1, 0, new ChangeListener() {
-			@Override
-			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.TEXT_CHAR_LIMIT, new NumberValue(charLimit.getValue()));
-			}
+		SpinnerUtils.initSpinner(charLimit, attributeData.charLimit, 1, Integer.MAX_VALUE, 1, 0, (observable, oldValue, newValue) -> {
+			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.TEXT_CHAR_LIMIT, new NumberValue(charLimit.getValue()));
 		});
 
 
 		// multiline
 		multiline.setSelected(attributeData.multiline);
-		multiline.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.TEXT_MULTILINE, new BoolValue(multiline.isSelected()));
-			}
+		multiline.setOnAction(event -> {
+			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.TEXT_MULTILINE, new BoolValue(multiline.isSelected()));
 		});
 
 
 		// use default
 		useDefault.setSelected(attributeData.useDefault);
-		useDefault.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, new BoolValue(useDefault.isSelected()));
-			}
+		useDefault.setOnAction(event -> {
+			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, new BoolValue(useDefault.isSelected()));
 		});
 
 
 		// default value
 		defaultValue.setText(attributeData.defaultValue);
-		defaultValue.textProperty().addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				if (defaultValue.getText().length() > attributeData.charLimit) {
-					defaultValue.setText(defaultValue.getText().substring(0, attributeData.charLimit));
-				}
+		defaultValue.textProperty().addListener((observable, oldValue, newValue) -> {
+			if (defaultValue.getText().length() > attributeData.charLimit) {
+				defaultValue.setText(defaultValue.getText().substring(0, attributeData.charLimit));
 			}
 		});
-		defaultValue.focusedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new TextValue(defaultValue.getText()));
-			}
+		defaultValue.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new TextValue(defaultValue.getText()));
 		});
-		defaultValue.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new TextValue(defaultValue.getText()));
-			}
+		defaultValue.setOnAction(event -> {
+			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new TextValue(defaultValue.getText()));
 		});
 
 
 		// listen for changes
-		EventManager.registerListener(this, new EventListener() {
-			@Override
-			public void onEvent(Event e) {
-				AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
-				if (event.getAttribute() == attribute) {
-					updateData();
-				}
+		EventManager.registerListener(this, e -> {
+			AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
+			if (event.getAttribute() == attribute) {
+				updateData();
 			}
 		}, AttributeUpdatedEvent.class);
 
 
 		// listen for rejections
-		EventManager.registerListener(this, new EventListener() {
-			@Override
-			public void onEvent(Event e) {
-				AttributeUpdatedRejection event = (AttributeUpdatedRejection) e;
-				if (event.getAttribute() == attribute) {
-					updateData();
-				}
+		EventManager.registerListener(this, e -> {
+			AttributeUpdatedRejection event = (AttributeUpdatedRejection) e;
+			if (event.getAttribute() == attribute) {
+				updateData();
 			}
 		}, AttributeUpdatedRejection.class);
 

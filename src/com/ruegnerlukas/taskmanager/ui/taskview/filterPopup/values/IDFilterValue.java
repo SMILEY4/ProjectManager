@@ -1,11 +1,11 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values;
 
-import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberPairValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.NumberValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextArrayValue;
+import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberPairValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextArrayValue;
 import javafx.scene.Node;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
@@ -31,7 +31,7 @@ public class IDFilterValue extends FilterValue {
 				value = compValue;
 			}
 
-			Spinner<Integer> spinner = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberValue)value).getInt());
+			Spinner<Integer> spinner = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberValue) value).getInt());
 			outNodes.add(spinner);
 
 			spinner.valueProperty().addListener((observable, oldValue, newValue) -> {
@@ -49,16 +49,16 @@ public class IDFilterValue extends FilterValue {
 				value = compValue;
 			}
 
-			TextField textField = buildTextField("Comma Separated values", String.join(",", ((TextArrayValue)value).getText() ));
+			TextField textField = buildTextField("Comma Separated values", String.join(",", ((TextArrayValue) value).getText()));
 			outNodes.add(textField);
 
 			textField.setOnAction(event -> {
-				value = new TextArrayValue(textField.getText().split(","));
+				value = new TextArrayValue(textField.getText().replaceAll(" ", "").split(","));
 				onAction();
 			});
 
 			textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-				value = new TextArrayValue(textField.getText().split(","));
+				value = new TextArrayValue(textField.getText().replaceAll(" ", "").split(","));
 				onAction();
 			});
 		}
@@ -90,17 +90,17 @@ public class IDFilterValue extends FilterValue {
 				value = compValue;
 			}
 
-			Spinner<Integer> spinnerMin = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberPairValue)value).getInt0());
+			Spinner<Integer> spinnerMin = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberPairValue) value).getInt0());
 			outNodes.add(spinnerMin);
 			spinnerMin.valueProperty().addListener((observable, oldValue, newValue) -> {
-				value = new NumberPairValue(spinnerMin.getValue(), ((NumberPairValue)value).getInt1());
+				value = new NumberPairValue(spinnerMin.getValue(), ((NumberPairValue) value).getInt1());
 				onAction();
 			});
 
-			Spinner<Integer> spinnerMax = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberPairValue)value).getInt1());
+			Spinner<Integer> spinnerMax = buildIntSpinner(0, Integer.MAX_VALUE, 1, ((NumberPairValue) value).getInt1());
 			outNodes.add(spinnerMax);
 			spinnerMax.valueProperty().addListener((observable, oldValue, newValue) -> {
-				value = new NumberPairValue(((NumberPairValue)value).getInt0(), spinnerMin.getValue());
+				value = new NumberPairValue(((NumberPairValue) value).getInt0(), spinnerMax.getValue());
 				onAction();
 			});
 		}

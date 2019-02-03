@@ -1,25 +1,21 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedRejection;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedRejection;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.ChoiceAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextArrayValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.ChoiceAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.BoolValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextArrayValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.utils.FXEvents;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
@@ -71,35 +67,26 @@ public class ChoiceAttributeNode extends AnchorPane implements AttributeRequirem
 
 		// values
 		values.setText(String.join(",", attributeData.values));
-		values.focusedProperty().addListener(new ChangeListener<Boolean>() {
-			@Override
-			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				Set<String> valuesSet = new HashSet<>();
-				for (String value : values.getText().split(",")) {
-					valuesSet.add(value.trim());
-				}
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.CHOICE_ATT_VALUES, new TextArrayValue(valuesSet));
+		values.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			Set<String> valuesSet = new HashSet<>();
+			for (String value : values.getText().split(",")) {
+				valuesSet.add(value.trim());
 			}
+			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.CHOICE_ATT_VALUES, new TextArrayValue(valuesSet));
 		});
-		values.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Set<String> valuesSet = new HashSet<>();
-				for (String value : values.getText().split(",")) {
-					valuesSet.add(value.trim());
-				}
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.CHOICE_ATT_VALUES, new TextArrayValue(valuesSet));
+		values.setOnAction(event -> {
+			Set<String> valuesSet = new HashSet<>();
+			for (String value : values.getText().split(",")) {
+				valuesSet.add(value.trim());
 			}
+			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.CHOICE_ATT_VALUES, new TextArrayValue(valuesSet));
 		});
 
 
 		// use default
 		useDefault.setSelected(attributeData.useDefault);
-		useDefault.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, new BoolValue(useDefault.isSelected()));
-			}
+		useDefault.setOnAction(event -> {
+			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.USE_DEFAULT, new BoolValue(useDefault.isSelected()));
 		});
 
 
@@ -116,28 +103,18 @@ public class ChoiceAttributeNode extends AnchorPane implements AttributeRequirem
 		defaultValue.setDisable(!useDefault.isSelected());
 
 
-		// listen for changes
-		EventManager.registerListener(this, new EventListener() {
-			@Override
-			public void onEvent(Event e) {
-				AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
-				if (event.getAttribute() == attribute) {
-					updateData();
-				}
+		// listen for changes / rejections
+		EventManager.registerListener(this, e -> {
+			TaskAttribute eventAttribute = null;
+			if(e instanceof  AttributeUpdatedEvent) {
+				eventAttribute = ((AttributeUpdatedEvent) e).getAttribute();
+			} else {
+				eventAttribute = ((AttributeUpdatedRejection) e).getAttribute();
 			}
-		}, AttributeUpdatedEvent.class);
-
-
-		// listen for rejections
-		EventManager.registerListener(this, new EventListener() {
-			@Override
-			public void onEvent(Event e) {
-				AttributeUpdatedRejection event = (AttributeUpdatedRejection) e;
-				if (event.getAttribute() == attribute) {
-					updateData();
-				}
+			if (eventAttribute == attribute) {
+				updateData();
 			}
-		}, AttributeUpdatedRejection.class);
+		}, AttributeUpdatedEvent.class, AttributeUpdatedRejection.class);
 	}
 
 

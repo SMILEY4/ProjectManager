@@ -1,8 +1,10 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.groupPopup;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxDragAndDrop;
@@ -54,27 +56,46 @@ public class GroupByPopup extends AnchorPane {
 
 		// values
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		for (TaskAttribute attribute : Logic.project.getProject().groupByOrder) {
-			boxAttributes.getChildren().add(new GroupByAttributeNode(attribute));
-		}
+		Logic.group.getTaskGroupOrder(new Request<List<TaskAttribute>>(true) {
+			@Override
+			public void onResponse(Response<List<TaskAttribute>> response) {
+				List<TaskAttribute> order = response.getValue();
+				for (TaskAttribute attribute : order) {
+					boxAttributes.getChildren().add(new GroupByAttributeNode(attribute));
+				}
+			}
+		});
 
 
 		// add attribute
 		btnAdd.setOnAction(event -> {
-			boxAttributes.getChildren().add(new GroupByAttributeNode(Logic.project.getProject().attributes.get(0)));
+			Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
+				@Override
+				public void onResponse(Response<List<TaskAttribute>> response) {
+					List<TaskAttribute> attributes = response.getValue();
+					boxAttributes.getChildren().add(new GroupByAttributeNode(attributes.get(0)));
+				}
+			});
 		});
 
 
-		// use custom header string
-		cbUseHeaderString.setSelected(Logic.project.getProject().useCustomHeaderString);
+		// custom header string
+		Logic.group.getCustomHeaderString(new Request<String>() {
+			@Override
+			public void onResponse(Response<String> response) {
+				if (response.getState() == Response.State.SUCCESS) {
+					cbUseHeaderString.setSelected(true);
+					fieldHeaderText.setText(response.getValue());
+				} else {
+					cbUseHeaderString.setSelected(false);
+					fieldHeaderText.setText("");
+				}
+			}
+		});
 		fieldHeaderText.setDisable(!cbUseHeaderString.isSelected());
 		cbUseHeaderString.setOnAction(event -> {
 			fieldHeaderText.setDisable(!cbUseHeaderString.isSelected());
 		});
-
-
-		// list header string
-		fieldHeaderText.setText(Logic.project.getProject().groupByHeaderString);
 
 
 		// accept
@@ -84,9 +105,9 @@ public class GroupByPopup extends AnchorPane {
 				GroupByAttributeNode groupByNode = (GroupByAttributeNode) node;
 				attributes.add(groupByNode.attribute);
 			}
-			Logic.groupBy.setGroupByOrder(attributes);
-			Logic.groupBy.setUseCustomHeaderString(cbUseHeaderString.isSelected());
-			Logic.groupBy.setGroupHeaderString(fieldHeaderText.getText());
+			Logic.group.setGroupOrder(attributes);
+			Logic.group.setUseCustomHeaderString(cbUseHeaderString.isSelected());
+			Logic.group.setGroupHeaderString(fieldHeaderText.getText());
 			this.stage.close();
 		});
 

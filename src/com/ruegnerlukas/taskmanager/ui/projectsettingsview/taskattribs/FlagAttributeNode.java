@@ -1,22 +1,19 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.eventsystem.Event;
-import com.ruegnerlukas.taskmanager.eventsystem.EventListener;
-import com.ruegnerlukas.taskmanager.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedEvent;
-import com.ruegnerlukas.taskmanager.eventsystem.events.AttributeUpdatedRejection;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedRejection;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagArrayValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagArrayValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.utils.FXEvents;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -84,24 +81,21 @@ public class FlagAttributeNode extends AnchorPane implements AttributeRequiremen
 		FlagAttributeData attributeData = (FlagAttributeData) attribute.data;
 
 
-		// flags
+		// taskFlags
 		btnAddFlag = new Button("Add Flag");
 		btnAddFlag.setMinSize(0, 32);
 		btnAddFlag.setPrefSize(100000, 32);
 		btnAddFlag.setMaxSize(100000, 32);
 		boxFlags.getChildren().add(btnAddFlag);
 
-		btnAddFlag.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				TaskFlag flag = new TaskFlag(TaskFlag.FlagColor.GRAY, "Flag " + Integer.toHexString(new Integer(new Random().nextInt()).hashCode()), false);
-				TaskFlag[] flagArray = new TaskFlag[attributeData.flags.length + 1];
-				for (int i = 0; i < flagArray.length - 1; i++) {
-					flagArray[i] = attributeData.flags[i];
-				}
-				flagArray[flagArray.length - 1] = flag;
-				Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flagArray));
+		btnAddFlag.setOnAction(event -> {
+			TaskFlag flag = new TaskFlag(TaskFlag.FlagColor.GRAY, "Flag " + Integer.toHexString(new Integer(new Random().nextInt()).hashCode()));
+			TaskFlag[] flagArray = new TaskFlag[attributeData.flags.length + 1];
+			for (int i = 0; i < flagArray.length - 1; i++) {
+				flagArray[i] = attributeData.flags[i];
 			}
+			flagArray[flagArray.length - 1] = flag;
+			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flagArray));
 		});
 
 		// default flag
@@ -109,40 +103,26 @@ public class FlagAttributeNode extends AnchorPane implements AttributeRequiremen
 			defaultFlag.getItems().add(flag.name);
 		}
 		defaultFlag.getSelectionModel().select(attributeData.defaultFlag.name);
-		defaultFlag.setOnAction(FXEvents.register(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				for (TaskFlag flag : attributeData.flags) {
-					if (flag.name.equals(defaultFlag.getValue())) {
-						Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new FlagValue(flag));
-					}
+		defaultFlag.setOnAction(FXEvents.register(event -> {
+			for (TaskFlag flag : attributeData.flags) {
+				if (flag.name.equals(defaultFlag.getValue())) {
+					Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new FlagValue(flag));
 				}
 			}
 		}, defaultFlag));
 
-
-		// listen for changes
-		EventManager.registerListener(this, new EventListener() {
-			@Override
-			public void onEvent(Event e) {
-				AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
-				if (event.getAttribute() == attribute) {
-					updateData();
-				}
+		// listen for changes / rejections
+		EventManager.registerListener(this, e -> {
+			TaskAttribute eventAttribute = null;
+			if(e instanceof  AttributeUpdatedEvent) {
+				eventAttribute = ((AttributeUpdatedEvent) e).getAttribute();
+			} else {
+				eventAttribute = ((AttributeUpdatedRejection) e).getAttribute();
 			}
-		}, AttributeUpdatedEvent.class);
-
-
-		// listen for rejections
-		EventManager.registerListener(this, new EventListener() {
-			@Override
-			public void onEvent(Event e) {
-				AttributeUpdatedRejection event = (AttributeUpdatedRejection) e;
-				if (event.getAttribute() == attribute) {
-					updateData();
-				}
+			if (eventAttribute == attribute) {
+				updateData();
 			}
-		}, AttributeUpdatedRejection.class);
+		}, AttributeUpdatedEvent.class, AttributeUpdatedRejection.class);
 
 
 		updateData();

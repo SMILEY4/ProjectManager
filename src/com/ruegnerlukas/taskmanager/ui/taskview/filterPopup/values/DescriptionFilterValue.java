@@ -1,15 +1,16 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values;
 
-import com.ruegnerlukas.taskmanager.logic.data.filter.criteria.FilterCriteria;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TaskAttributeValue;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.TextValue;
+import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 
 import java.util.List;
 
 public class DescriptionFilterValue extends FilterValue {
+
 
 	private String value = "";
 
@@ -26,8 +27,8 @@ public class DescriptionFilterValue extends FilterValue {
 				|| FilterCriteria.ComparisonOp.CONTAINS_NOT == compOp) {
 
 			value = "";
-			if(compValue instanceof TextValue) {
-				value = ((TextValue)compValue).getText();
+			if (compValue instanceof TextValue) {
+				value = ((TextValue) compValue).getText();
 			}
 
 			TextField textField = buildTextField("", value);

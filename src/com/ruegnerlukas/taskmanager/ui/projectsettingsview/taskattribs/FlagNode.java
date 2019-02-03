@@ -1,16 +1,16 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag.FlagColor;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagArrayValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.TaskFlag.FlagColor;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.FlagAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.data.TaskAttributeData;
-import com.ruegnerlukas.taskmanager.logic.data.taskAttributes.values.FlagArrayValue;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabel.EditableLabel;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -19,7 +19,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.CustomMenuItem;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -58,17 +57,14 @@ public class FlagNode extends HBox {
 		btnRemoveFlag.setMinSize(32, 32);
 		btnRemoveFlag.setMaxSize(32, 32);
 		ButtonUtils.makeIconButton(btnRemoveFlag, SVGIcons.CROSS, 0.7f, "black");
-		btnRemoveFlag.setOnAction(new EventHandler<ActionEvent>() {
-			@Override
-			public void handle(ActionEvent event) {
-				List<TaskFlag> flags = new ArrayList<>();
-				for (TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
-					if (!f.name.equals(flag.name)) {
-						flags.add(f);
-					}
+		btnRemoveFlag.setOnAction(event -> {
+			List<TaskFlag> flags = new ArrayList<>();
+			for (TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
+				if (!f.name.equals(flag.name)) {
+					flags.add(f);
 				}
-				Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flags));
 			}
+			Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flags));
 		});
 		this.getChildren().add(btnRemoveFlag);
 
@@ -78,69 +74,67 @@ public class FlagNode extends HBox {
 		this.getChildren().add(pane);
 		pane.setMinSize(32, 32);
 		pane.setMaxSize(32, 32);
-		pane.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
+		pane.setOnMouseClicked(event -> {
 
-				// select-color menu
-				if (event.getButton().equals(MouseButton.PRIMARY)) {
-					if (event.getClickCount() == 2) {
-						ContextMenu menu = new ContextMenu();
-						for (int i = 0; i < FlagColor.values().length; i++) {
-							final FlagColor flagColor = FlagColor.values()[i];
-							Color color = flagColor.color;
+			// select-color menu
+			if (event.getButton().equals(MouseButton.PRIMARY)) {
+				if (event.getClickCount() == 2) {
+					ContextMenu menu = new ContextMenu();
+					for (int i = 0; i < FlagColor.values().length; i++) {
+						final FlagColor flagColor = FlagColor.values()[i];
+						Color color = flagColor.color;
 
-							Pane colorPane = new Pane();
-							colorPane.setMinSize(60, 30);
-							colorPane.setPrefSize(60, 30);
-							colorPane.setMaxSize(60, 30);
-							colorPane.setStyle("-fx-background-radius: 5; -fx-background-color: rgba(" + (int) (255 * color.getRed()) + "," + (int) (255 * color.getGreen()) + "," + (int) (255 * color.getBlue()) + ",255);");
+						Pane colorPane = new Pane();
+						colorPane.setMinSize(60, 30);
+						colorPane.setPrefSize(60, 30);
+						colorPane.setMaxSize(60, 30);
+						colorPane.setStyle("-fx-background-radius: 5; -fx-background-color: rgba(" + (int) (255 * color.getRed()) + "," + (int) (255 * color.getGreen()) + "," + (int) (255 * color.getBlue()) + ",255);");
 
-							CustomMenuItem item = new CustomMenuItem();
-							item.setContent(colorPane);
-							item.setOnAction(new EventHandler<ActionEvent>() {
-								@Override
-								public void handle(ActionEvent event) {
-									List<TaskFlag> flags = new ArrayList<>();
-									for (TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
-										if (f.name.equals(flag.name)) {
-											f.color = flagColor;
-										}
-										flags.add(f);
+						CustomMenuItem item = new CustomMenuItem();
+						item.setContent(colorPane);
+						item.setOnAction(new EventHandler<ActionEvent>() {
+							@Override
+							public void handle(ActionEvent event) {
+								List<TaskFlag> flags = new ArrayList<>();
+								for (TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
+									if (f.name.equals(flag.name)) {
+										f.color = flagColor;
 									}
-									Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flags));
+									flags.add(f);
 								}
-							});
-							menu.getItems().add(item);
-						}
-						menu.show(pane, Side.RIGHT, 0, 0);
+								Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flags));
+							}
+						});
+						menu.getItems().add(item);
 					}
+					menu.show(pane, Side.RIGHT, 0, 0);
 				}
-
 			}
+
 		});
 
 
 		// flag name
 		label = new EditableLabel();
-		if (flag.isDefaultFlag) {
-			label.setEditable(false);
-		}
+		Logic.taskFlags.getDefaultFlag(new Request<TaskFlag>(true) {
+			@Override
+			public void onResponse(Response<TaskFlag> response) {
+				TaskFlag defaultFlag = response.getValue();
+				label.setEditable(defaultFlag != flag);
+			}
+		});
 		this.getChildren().add(label);
 		label.setMinWidth(300);
 		label.setMaxWidth(300);
-		label.addListener(new ChangeListener<String>() {
-			@Override
-			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-				List<TaskFlag> flags = new ArrayList<>();
-				for (TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
-					if (f.name.equals(flag.name)) {
-						f.name = newValue;
-					}
-					flags.add(f);
+		label.addListener((observable, oldValue, newValue) -> {
+			List<TaskFlag> flags = new ArrayList<>();
+			for (TaskFlag f : ((FlagAttributeData) parentNode.attribute.data).flags) {
+				if (f.name.equals(flag.name)) {
+					f.name = newValue;
 				}
-				Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flags));
+				flags.add(f);
 			}
+			Logic.attribute.updateTaskAttribute(parentNode.attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flags));
 		});
 
 
