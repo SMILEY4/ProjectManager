@@ -8,11 +8,14 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagArrayValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
+import com.ruegnerlukas.taskmanager.utils.uielements.choicelistfield.ChoiceListField;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class FlagFilterValue extends FilterValue {
 
@@ -60,11 +63,17 @@ public class FlagFilterValue extends FilterValue {
 				startValues[i] = ((FlagArrayValue) value).getFlags()[i].name;
 			}
 
-			TextField textField = buildTextField("Comma Separated values", String.join(",", startValues));
-			outNodes.add(textField);
+			FlagAttributeData flagData = (FlagAttributeData)data;
+			Set<String> entries = new HashSet<>();
+			for(TaskFlag flag : flagData.flags) {
+				entries.add(flag.name);
+			}
 
-			textField.setOnAction(event -> {
-				String[] values = textField.getText().split(",");
+			ChoiceListField choiceField = buildChoiceList("Comma Separated values", startValues, entries);
+			outNodes.add(choiceField);
+
+			choiceField.setOnAction(event -> {
+				String[] values = choiceField.getChoicesArray();
 				TaskFlag[] flags = new TaskFlag[values.length];
 				for (int i = 0; i < values.length; i++) {
 					flags[i] = TaskFlag.findFlag(values[i].trim(), ((FlagAttributeData) data).flags);
@@ -73,8 +82,8 @@ public class FlagFilterValue extends FilterValue {
 				onAction();
 			});
 
-			textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-				String[] values = textField.getText().split(",");
+			choiceField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+				String[] values = choiceField.getChoicesArray();
 				TaskFlag[] flags = new TaskFlag[values.length];
 				for (int i = 0; i < values.length; i++) {
 					flags[i] = TaskFlag.findFlag(values[i].trim(), ((FlagAttributeData) data).flags);

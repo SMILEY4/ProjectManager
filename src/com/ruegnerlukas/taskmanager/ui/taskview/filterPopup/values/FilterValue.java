@@ -3,6 +3,7 @@ package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values;
 import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.utils.uielements.choicelistfield.ChoiceListField;
 import com.ruegnerlukas.taskmanager.utils.uielements.spinner.SpinnerUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -13,6 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.Region;
 
 import java.util.List;
+import java.util.Set;
 
 public abstract class FilterValue {
 
@@ -62,6 +64,16 @@ public abstract class FilterValue {
 		textField.setPromptText(prompt);
 		textField.setText(text);
 		return textField;
+	}
+
+
+
+
+	protected ChoiceListField buildChoiceList(String prompt, String[] values, Set<String> choices) {
+		ChoiceListField choiceField = new ChoiceListField(choices, ",", String.join(",", values));
+		setSizeThin(choiceField);
+		choiceField.setPromptText(prompt);
+		return choiceField;
 	}
 
 

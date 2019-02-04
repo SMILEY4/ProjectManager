@@ -6,10 +6,13 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextArrayValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
+import com.ruegnerlukas.taskmanager.utils.uielements.choicelistfield.ChoiceListField;
 import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 public class ChoiceFilterValue extends FilterValue {
@@ -48,22 +51,17 @@ public class ChoiceFilterValue extends FilterValue {
 				value = compValue;
 			}
 
-			TextField textField = buildTextField("Comma Separated values", String.join(",", ((TextArrayValue) value).getText()));
-			outNodes.add(textField);
+			ChoiceAttributeData choiceData = (ChoiceAttributeData) data;
+			ChoiceListField choiceField = buildChoiceList("Comma Separated values", ((TextArrayValue) value).getText(), new HashSet<>(Arrays.asList(choiceData.values)));
+			outNodes.add(choiceField);
 
-			textField.setOnAction(event -> {
-				String[] values = textField.getText().split(",");
-				for (int i = 0; i < values.length; i++) {
-					values[i] = values[i].trim();
-				}
+			choiceField.setOnAction(event -> {
+				String[] values = choiceField.getChoicesArray();
 				this.value = new TextArrayValue(values);
 				onAction();
 			});
-			textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
-				String[] values = textField.getText().split(",");
-				for (int i = 0; i < values.length; i++) {
-					values[i] = values[i].trim();
-				}
+			choiceField.focusedProperty().addListener((observable, oldValue, newValue) -> {
+				String[] values = choiceField.getChoicesArray();
 				this.value = new TextArrayValue(values);
 				onAction();
 			});

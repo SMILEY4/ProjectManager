@@ -33,7 +33,7 @@ public class TaskManager extends Application {
 	    		Logger.get().close();
 	        }
 	    }, "Shutdown-thread"));
-	    
+
 	    // start application
 		Logger.get().blankLine();
 		Logger.get().info("Starting Application (" + JarLocation.getJarLocation(TaskManager.class));

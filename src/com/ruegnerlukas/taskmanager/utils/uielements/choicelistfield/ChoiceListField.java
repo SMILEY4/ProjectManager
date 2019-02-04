@@ -22,6 +22,15 @@ public class ChoiceListField extends AutocompletionTextField {
 
 
 
+	public ChoiceListField(Set<String> choices, String delimiter, String text) {
+		super(choices, true, delimiter, text);
+		this.delimiter = delimiter;
+		this.choices = choices;
+	}
+
+
+
+
 	public List<String> getChoices() {
 
 		String string = this.getText();
@@ -46,5 +55,13 @@ public class ChoiceListField extends AutocompletionTextField {
 		return new ArrayList<>(new HashSet<>(getChoices()));
 	}
 
+
+
+
+	public String[] getChoicesArray() {
+		String[] choices = new String[getUnqiueChoices().size()];
+		getUnqiueChoices().toArray(choices);
+		return choices;
+	}
 
 }

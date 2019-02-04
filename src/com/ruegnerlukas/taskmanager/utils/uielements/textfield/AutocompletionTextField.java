@@ -44,6 +44,17 @@ public class AutocompletionTextField extends TextField {
 	}
 
 
+	public AutocompletionTextField(Set<String> entries, boolean ignoreCase, String delimiter, String text) {
+		super();
+		this.entries = entries;
+		this.popup = new ContextMenu();
+		this.ignoreCase = ignoreCase;
+		this.delimiter = delimiter;
+		this.setText(text);
+		addListener();
+	}
+
+
 
 
 	public void setMaxEntries(int n) {
@@ -108,21 +119,21 @@ public class AutocompletionTextField extends TextField {
 		this.textProperty().addListener((observable, oldValue, newValue) -> {
 			String enteredText = AutocompletionTextField.this.getText();
 
-			if (enteredText == null || enteredText.isEmpty() || enteredText.charAt(enteredText.length() - 1) == ' ') {
+			if (enteredText == null || enteredText.isEmpty() || enteredText.matches(".*(" + delimiter + ")")) {
 				popup.hide();
 
 			} else {
 				String[] enteredWords = enteredText.split(delimiter);
-				String word = enteredWords[enteredWords.length - 1];
+				String lastWord = enteredWords[enteredWords.length - 1];
 
 				List<String> matches = new ArrayList<>();
 				for (String entry : entries) {
 					if (ignoreCase) {
-						if (entry.toLowerCase().contains(word.toLowerCase())) {
+						if (entry.toLowerCase().contains(lastWord.toLowerCase())) {
 							matches.add(entry);
 						}
 					} else {
-						if (entry.contains(word)) {
+						if (entry.contains(lastWord)) {
 							matches.add(entry);
 						}
 					}
@@ -131,7 +142,7 @@ public class AutocompletionTextField extends TextField {
 				if (matches.isEmpty()) {
 					popup.hide();
 				} else {
-					updatePopup(matches, word);
+					updatePopup(matches, lastWord);
 					if (!popup.isShowing()) {
 						popup.show(AutocompletionTextField.this, Side.BOTTOM, 0, 0);
 					}
@@ -160,11 +171,9 @@ public class AutocompletionTextField extends TextField {
 			items.add(item);
 
 			item.setOnAction(actionEvent -> {
-				if (this.getText().contains(" ")) {
-					this.setText(this.getText().substring(0, this.getText().lastIndexOf(' ')) + " " + entry);
-				} else {
-					this.setText(entry);
-				}
+				String[] enteredWords = this.getText().split(delimiter);
+				String lastWord = enteredWords[enteredWords.length - 1];
+				this.setText(this.getText().replaceAll(lastWord+"$", entry));
 				this.positionCaret(this.getText().length());
 				popup.hide();
 			});
