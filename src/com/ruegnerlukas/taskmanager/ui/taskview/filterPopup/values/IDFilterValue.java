@@ -23,10 +23,9 @@ public class IDFilterValue extends FilterValue {
 	@Override
 	public void update(List<Node> outNodes, TaskAttributeData data, FilterCriteria.ComparisonOp compOp, TaskAttributeValue compValue) {
 
-
 		if (FilterCriteria.ComparisonOp.EQUALITY == compOp || FilterCriteria.ComparisonOp.INEQUALITY == compOp) {
 
-			value = new NumberValue(0);
+			value = new NumberValue(1);
 			if (compValue instanceof NumberValue) {
 				value = compValue;
 			}

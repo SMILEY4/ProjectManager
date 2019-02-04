@@ -195,6 +195,7 @@ public class FilterCriteriaNode extends HBox {
 				this.compValue = filterValue.getValue();
 			});
 			filterValue.update(valueNodes, attribute.data, comparisonOp, compValue);
+			this.compValue = filterValue.getValue();
 		}
 
 
