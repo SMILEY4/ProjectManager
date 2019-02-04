@@ -61,11 +61,12 @@ public class TaskView extends AnchorPane {
 	private Label badgeGroupBy;
 	private Label badgeSort;
 
-
 	@FXML private Button btnFilter;
 	@FXML private Button btnGroup;
 	@FXML private Button btnSort;
 	@FXML private Button btnActions;
+
+	@FXML private Label labelNTasks;
 
 	@FXML private SplitPane splitContent;
 	@FXML private AnchorPane paneContent;
@@ -178,6 +179,13 @@ public class TaskView extends AnchorPane {
 			stage.setScene(scene);
 			stage.show();
 		});
+
+
+		// label number of tasks
+		updateNTaskLabel();
+		EventManager.registerListener(this, event -> {
+			updateNTaskLabel();
+		}, TaskCreatedEvent.class, FilteredTasksChangedEvent.class);
 
 
 		// hamburger menu
@@ -423,6 +431,19 @@ public class TaskView extends AnchorPane {
 
 	}
 
+
+
+	private void updateNTaskLabel() {
+		SyncRequest<List<Task>> requestTotal = new SyncRequest<>();
+		Logic.tasks.getTasks(requestTotal);
+		int nTotal = requestTotal.getResponse().getValue().size();
+
+		SyncRequest<List<Task>> requestDisplay = new SyncRequest<>();
+		Logic.filter.getFilteredTasks(requestDisplay);
+		int nDisplay = requestDisplay.getResponse().getValue().size();
+
+		labelNTasks.setText(nDisplay + "/" + nTotal);
+	}
 
 
 

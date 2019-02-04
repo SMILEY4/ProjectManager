@@ -149,6 +149,10 @@
  	-fx-text-fill: -text-light-1;
  }
 
+#rootTaskView > #paneHeader > HBox > HBox > #labelNTasks {
+    -fx-text-fill: -text-light-0;
+}
+
  #rootTaskView > #paneHeader > HBox > HBox > Button:hover {
   	-fx-border-color: transparent;
   	-fx-background-color: transparent;

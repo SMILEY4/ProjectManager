@@ -22,6 +22,14 @@
                         <Button fx:id="btnGroup" minWidth="85.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Group By" />
                         <Button fx:id="btnSort" minWidth="55.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="55.0" text="Sort" />
                         <Region maxHeight="0.0" maxWidth="100000.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="100000.0" />
+                        <Label fx:id="labelNTasks" alignment="CENTER_RIGHT" minWidth="100.0" prefHeight="21.0" prefWidth="53.0" text="9999/9999">
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                           <padding>
+                              <Insets right="10.0" />
+                           </padding>
+                        </Label>
                         <Button fx:id="btnActions" maxHeight="32.0" maxWidth="32.0" minHeight="32.0" minWidth="32.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="32.0" />
                      </children>
                   </HBox>
