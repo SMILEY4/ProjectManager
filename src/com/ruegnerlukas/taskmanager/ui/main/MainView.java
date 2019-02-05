@@ -11,6 +11,7 @@ import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectClose
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectCreatedEvent;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.ui.TabContent;
 import com.ruegnerlukas.taskmanager.ui.projectsettingsview.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
@@ -56,8 +57,25 @@ public class MainView extends AnchorPane {
 			Logger.get().error("Error loading MainView-FXML: " + e);
 		}
 
+		create();
 		setupMenuFunctions();
 		setupListeners();
+	}
+
+
+
+
+	private void create() {
+
+		tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (oldValue != null && oldValue.getContent() instanceof TabContent) {
+				((TabContent) oldValue.getContent()).onHide();
+			}
+			if (newValue != null && newValue.getContent() instanceof TabContent) {
+				((TabContent) newValue.getContent()).onShow();
+			}
+		});
+
 	}
 
 
@@ -320,20 +338,16 @@ public class MainView extends AnchorPane {
 		Tab tab = new Tab(ProjectSettingsView.TITLE);
 		tab.setContent(viewProjectSettings);
 		tabPane.getTabs().add(tab);
+		viewProjectSettings.onOpen();
 	}
 
 
 
 
 	private void closeTabProjectSettings() {
-		for (int i = 0; i < tabPane.getTabs().size(); i++) {
-			Tab tab = tabPane.getTabs().get(i);
-			if (tab.getContent() == viewProjectSettings) {
-				tabPane.getTabs().remove(tab);
-				viewProjectSettings.close();
-				break;
-			}
-		}
+		Tab tab = findTab(viewProjectSettings);
+		viewProjectSettings.onClose();
+		tabPane.getTabs().remove(tab);
 	}
 
 
@@ -345,20 +359,16 @@ public class MainView extends AnchorPane {
 		Tab tab = new Tab(TaskView.TITLE);
 		tab.setContent(viewTasks);
 		tabPane.getTabs().add(tab);
+		viewTasks.onOpen();
 	}
 
 
 
 
 	private void closeTabTasks() {
-		for (int i = 0; i < tabPane.getTabs().size(); i++) {
-			Tab tab = tabPane.getTabs().get(i);
-			if (tab.getContent() == viewTasks) {
-				viewTasks.close();
-				tabPane.getTabs().remove(tab);
-				break;
-			}
-		}
+		Tab tab = findTab(viewTasks);
+		viewTasks.onClose();
+		tabPane.getTabs().remove(tab);
 	}
 
 
@@ -375,6 +385,19 @@ public class MainView extends AnchorPane {
 	private void closeAllTabs() {
 		closeTabTasks();
 		closeTabProjectSettings();
+	}
+
+
+
+
+	private Tab findTab(TabContent content) {
+		for (int i = 0; i < tabPane.getTabs().size(); i++) {
+			Tab tab = tabPane.getTabs().get(i);
+			if (tab.getContent() == content) {
+				return tab;
+			}
+		}
+		return null;
 	}
 
 

@@ -34,29 +34,6 @@ public class FilterLogic {
 			onAttributeDeleted(event.getAttribute());
 		}, AttributeRemovedEvent.class);
 
-		// when anything else changed
-		EventManager.registerListener(this, e -> {
-			if (e instanceof AttributeTypeChangedEvent) {
-				AttributeTypeChangedEvent event = (AttributeTypeChangedEvent) e;
-				if (!getFilterCriteria(event.getAttribute()).isEmpty()) {
-					applyFilters();
-				}
-			} else if (e instanceof AttributeUpdatedEvent) {
-				AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
-				if (!getFilterCriteria(event.getAttribute()).isEmpty()) {
-					applyFilters();
-				}
-			} else {
-				applyFilters();
-			}
-		}, FilterCriteriaChangedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class);
-
-		// when a task was added
-		EventManager.registerListener(e -> {
-			TaskCreatedEvent event = (TaskCreatedEvent) e;
-			onTaskCreated(event.getTask());
-		}, TaskCreatedEvent.class);
-
 	}
 
 
@@ -69,12 +46,22 @@ public class FilterLogic {
 
 
 
-	private void onTaskCreated(Task task) {
+	protected List<Task> applyFilters(List<Task> tasksInput) {
+
 		Project project = Logic.project.getProject();
-		if(match(task, project.filterCriteria)) {
-			project.filteredTasks.add(task);
-			EventManager.fireEvent(new FilteredTasksChangedEvent(this));
+
+		List<FilterCriteria> filters = project.filterCriteria;
+		List<Task> filtered = new ArrayList<>();
+
+		for (int i = 0, n = tasksInput.size(); i < n; i++) {
+			Task task = tasksInput.get(i);
+			boolean match = match(task, filters);
+			if (match) {
+				filtered.add(task);
+			}
 		}
+
+		return filtered;
 	}
 
 
@@ -362,16 +349,6 @@ public class FilterLogic {
 
 
 
-	public void getFilteredTasks(Request<List<Task>> request) {
-		Project project = Logic.project.getProject();
-		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, project.filteredTasks));
-		}
-	}
-
-
-
-
 	public void getFilterCriteria(Request<List<FilterCriteria>> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
@@ -422,36 +399,6 @@ public class FilterLogic {
 			if (!toRemove.isEmpty()) {
 				EventManager.fireEvent(new FilterCriteriaChangedEvent(project.filterCriteria, this));
 			}
-		}
-	}
-
-
-
-
-	/**
-	 * Applies the current filter-criterias to all tasks and saves the result in a new list (Project.filteredTasks)<p>
-	 * Events:<p>
-	 * -FilteredTasksChangedEvent: when the list of filtered tasks has changed
-	 */
-	public void applyFilters() {
-		Project project = Logic.project.getProject();
-		if (project != null) {
-
-			List<FilterCriteria> filters = project.filterCriteria;
-			List<Task> allTasks = project.tasks;
-			List<Task> filtered = new ArrayList<>();
-
-			for (int i = 0, n = allTasks.size(); i < n; i++) {
-				Task task = allTasks.get(i);
-				boolean match = match(task, filters);
-				if (match) {
-					filtered.add(task);
-				}
-			}
-
-			project.filteredTasks = filtered;
-			EventManager.fireEvent(new FilteredTasksChangedEvent(this));
-
 		}
 	}
 

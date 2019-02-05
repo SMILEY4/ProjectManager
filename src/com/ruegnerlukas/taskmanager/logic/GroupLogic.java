@@ -31,11 +31,6 @@ public class GroupLogic {
 			onAttributeDeleted(event.getAttribute());
 		}, AttributeRemovedEvent.class);
 
-		// any change to attribute-values / tasks
-		EventManager.registerListener(this, e -> {
-			onChange();
-		}, TaskGroupOrderChangedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class, FilteredTasksChangedEvent.class);
-
 	}
 
 
@@ -48,8 +43,45 @@ public class GroupLogic {
 
 
 
-	private void onChange() {
-		rebuildTaskGroups();
+	protected TaskGroupData applyGroups(List<Task> tasksInput) {
+
+		Project project = Logic.project.getProject();
+
+		// create new group data
+		TaskGroupData taskGroupData = new TaskGroupData();
+		taskGroupData.attributes.addAll(project.taskGroupOrder);
+
+		// sort tasks into groups
+		if (project.taskGroupOrder.isEmpty()) {
+			TaskGroup group = new TaskGroup();
+			group.tasks.addAll(tasksInput);
+			taskGroupData.groups.add(group);
+
+		} else {
+
+			// build tree (first element is root)
+			List<Node> tree = buildTree(tasksInput, project.taskGroupOrder);
+			Node root = tree.get(0);
+
+			for (int i = 1; i < tree.size(); i++) {
+				Node node = tree.get(i);
+				TaskGroup group = new TaskGroup();
+
+				Node current = node;
+				while (current != null) {
+					if (current.attribute != null && current.value != null) {
+						group.values.put(current.attribute, current.value);
+					}
+					current = current.parent;
+				}
+
+				group.tasks.addAll(node.tasks);
+				taskGroupData.groups.add(group);
+			}
+
+		}
+
+		return taskGroupData;
 	}
 
 
@@ -138,16 +170,6 @@ public class GroupLogic {
 
 
 
-	public void getTaskGroups(Request<TaskGroupData> request) {
-		Project project = Logic.project.getProject();
-		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, project.taskGroupData));
-		}
-	}
-
-
-
-
 	public void getCustomHeaderString(Request<String> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
@@ -180,14 +202,14 @@ public class GroupLogic {
 	/**
 	 * Set the TaskAttributes and their order to group tasks <p>
 	 * Events <p>
-	 * - TaskGroupOrderChangedEvent: when the attributes where changed
+	 * - GroupOrderChangedEvent: when the attributes where changed
 	 */
 	public void setGroupOrder(List<TaskAttribute> attribOrder) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			project.taskGroupOrder.clear();
 			project.taskGroupOrder.addAll(attribOrder);
-			EventManager.fireEvent(new TaskGroupOrderChangedEvent(project.taskGroupOrder, this));
+			EventManager.fireEvent(new GroupOrderChangedEvent(project.taskGroupOrder, this));
 		}
 	}
 
@@ -233,86 +255,15 @@ public class GroupLogic {
 	/**
 	 * Removes an attribute <p>
 	 * Events <p>
-	 * - TaskGroupOrderChangedEvent: when the list of TaskAttributes has been changed
+	 * - GroupOrderChangedEvent: when the list of TaskAttributes has been changed
 	 */
 	public void removeGroupElement(TaskAttribute attribute) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			if (project.taskGroupOrder.contains(attribute)) {
 				project.taskGroupOrder.remove(attribute);
-				EventManager.fireEvent(new TaskGroupOrderChangedEvent(project.taskGroupOrder, this));
+				EventManager.fireEvent(new GroupOrderChangedEvent(project.taskGroupOrder, this));
 			}
-		}
-	}
-
-
-
-
-	/**
-	 * Groups the (filtered) Tasks by the specified TaskAttributes <p>
-	 * Events <p>
-	 * - GroupByRebuildEvent
-	 */
-	public void rebuildTaskGroups() {
-
-		Project project = Logic.project.getProject();
-		if (project != null) {
-
-			// create new group data
-			TaskGroupData taskGroupData = new TaskGroupData();
-			taskGroupData.attributes.addAll(project.taskGroupOrder);
-
-			// sort tasks into groups
-			if (project.taskGroupOrder.isEmpty()) {
-				// add all task to single group
-
-				TaskGroup group = new TaskGroup();
-				group.tasks.addAll(project.filteredTasks);
-
-			} else {
-				// split task into multiple groups
-
-				// build tree (first element is root)
-				List<Node> tree = buildTree(project.filteredTasks, project.taskGroupOrder);
-				Node root = tree.get(0);
-
-				for (int i = 1; i < tree.size(); i++) {
-					Node node = tree.get(i);
-					TaskGroup group = new TaskGroup();
-
-					Node current = node;
-					while (current != null) {
-						if (current.attribute != null && current.value != null) {
-							group.values.put(current.attribute, current.value);
-						}
-						current = current.parent;
-					}
-
-					group.tasks.addAll(node.tasks);
-					taskGroupData.groups.add(group);
-				}
-
-			}
-
-			// sort groups
-			Comparator<TaskGroup> comp = (a, b) -> {
-				for (int i = 0; i < taskGroupData.attributes.size(); i++) {
-					TaskAttribute attrib = taskGroupData.attributes.get(i);
-					TaskAttributeValue valueA = a.values.get(attrib);
-					TaskAttributeValue valueB = b.values.get(attrib);
-					int cmp = valueA.compareTo(valueB);
-					if (cmp != 0) {
-						return cmp;
-					}
-				}
-				return 0;
-			};
-			taskGroupData.groups.sort(comp);
-
-			// finish
-			project.taskGroupData = taskGroupData;
-			EventManager.fireEvent(new GroupByRebuildEvent(taskGroupData, this));
-
 		}
 	}
 

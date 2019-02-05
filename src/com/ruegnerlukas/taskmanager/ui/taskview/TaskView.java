@@ -21,6 +21,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagArrayValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.ui.TabContent;
 import com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.FilterPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.groupPopup.GroupByPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.sortPopup.SortPopup;
@@ -48,7 +49,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-public class TaskView extends AnchorPane {
+public class TaskView extends AnchorPane implements TabContent {
 
 
 	public static final String TITLE = "Tasks";
@@ -78,6 +79,10 @@ public class TaskView extends AnchorPane {
 	@FXML private Label labelHideSidebar;
 	@FXML private AnchorPane paneSidebar;
 	private boolean sidebarHidden = true;
+
+	private TaskGroupData lastTaskGroupData = null;
+	private boolean taskViewVisible = false;
+	private boolean refreshOnShow = false;
 
 
 
@@ -183,10 +188,6 @@ public class TaskView extends AnchorPane {
 
 		// label number of tasks
 		updateNTaskLabel();
-		EventManager.registerListener(this, event -> {
-			updateNTaskLabel();
-		}, TaskCreatedEvent.class, FilteredTasksChangedEvent.class);
-
 
 		// hamburger menu
 		ButtonUtils.makeIconButton(btnActions, SVGIcons.HAMBURGER, 0.7f, "white");
@@ -257,8 +258,12 @@ public class TaskView extends AnchorPane {
 
 	private void setupListeners() {
 		EventManager.registerListener(this, e -> {
-			refreshTaskView();
-		}, GroupByRebuildEvent.class, GroupHeaderChangedEvent.class, AttributeRenamedEvent.class);
+			if(taskViewVisible) {
+				refreshTaskView();
+			} else {
+				refreshOnShow = true;
+			}
+		}, RefreshTaskDisplayRecommendationEvent.class);
 	}
 
 
@@ -268,25 +273,27 @@ public class TaskView extends AnchorPane {
 
 		clearTaskList();
 
-		Logic.group.getTaskGroups(new Request<TaskGroupData>(true) {
+		Logic.tasks.getTaskGroups(new Request<TaskGroupData>(true) {
 			@Override
 			public void onResponse(Response<TaskGroupData> response) {
 				TaskGroupData taskGroupData = response.getValue();
+				lastTaskGroupData = taskGroupData;
 
-				// display all filtered tasks
+				// display all tasks
 				if (taskGroupData.attributes.isEmpty()) {
-					Logic.filter.getFilteredTasks(new Request<List<Task>>(true) {
-						@Override
-						public void onResponse(Response<List<Task>> response) {
-							createTaskList("All Tasks", response.getValue());
-						}
-					});
+					if (!taskGroupData.groups.isEmpty()) {
+						createTaskList("All Tasks", taskGroupData.groups.get(0).tasks);
+					} else {
+					}
+
 
 					// display grouped-tasks
 				} else {
 
+					// for each group
 					for (TaskGroup group : taskGroupData.groups) {
 
+						// build title
 						StringBuilder title = new StringBuilder();
 
 						SyncRequest<String> reqHeaderString = new SyncRequest<>();
@@ -319,15 +326,16 @@ public class TaskView extends AnchorPane {
 							}
 						}
 
+						// create list
 						createTaskList(title.toString(), group.tasks);
 
 					}
 
 				}
 
+				updateNTaskLabel();
 			}
 		});
-
 
 	}
 
@@ -381,7 +389,7 @@ public class TaskView extends AnchorPane {
 			eventClass = FilterCriteriaChangedEvent.class;
 		}
 		if (button == btnGroup) {
-			eventClass = TaskGroupOrderChangedEvent.class;
+			eventClass = GroupOrderChangedEvent.class;
 		}
 
 
@@ -433,24 +441,56 @@ public class TaskView extends AnchorPane {
 
 
 
+
 	private void updateNTaskLabel() {
 		SyncRequest<List<Task>> requestTotal = new SyncRequest<>();
 		Logic.tasks.getTasks(requestTotal);
 		int nTotal = requestTotal.getResponse().getValue().size();
 
-		SyncRequest<List<Task>> requestDisplay = new SyncRequest<>();
-		Logic.filter.getFilteredTasks(requestDisplay);
-		int nDisplay = requestDisplay.getResponse().getValue().size();
+		int nDisplay = -1;
+		if(lastTaskGroupData != null) {
+			nDisplay = lastTaskGroupData.tasks.size();
+		}
 
 		labelNTasks.setText(nDisplay + "/" + nTotal);
 	}
 
 
 
-	public void close() {
+
+
+	@Override
+	public void onOpen() {
+
+	}
+
+
+
+
+	@Override
+	public void onClose() {
 		EventManager.deregisterListeners(this);
 	}
 
+
+
+
+	@Override
+	public void onShow() {
+		taskViewVisible = true;
+		if(refreshOnShow) {
+			refreshOnShow = false;
+			refreshTaskView();
+		}
+	}
+
+
+
+
+	@Override
+	public void onHide() {
+		taskViewVisible = false;
+	}
 
 }
 

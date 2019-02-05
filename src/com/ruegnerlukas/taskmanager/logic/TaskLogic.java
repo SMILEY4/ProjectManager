@@ -6,6 +6,7 @@ import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.Task;
+import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
@@ -51,6 +52,22 @@ public class TaskLogic {
 			AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
 			onAttributeChanged(event.getAttribute(), event.getChangedVars());
 		}, AttributeUpdatedEvent.class);
+
+		// recommend task-refresh
+		EventManager.registerListener(e -> {
+			EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
+		},
+				AttributeCreatedEvent.class,
+				AttributeRemovedEvent.class,
+				AttributeTypeChangedEvent.class,
+				AttributeUpdatedEvent.class,
+				TaskCreatedEvent.class,
+				//TaskRemovedEvent.class, //TODO
+				TaskValueChangedEvent.class,
+				FilterCriteriaChangedEvent.class,
+				GroupOrderChangedEvent.class,
+				SortElementsChangedEvent.class
+				);
 
 	}
 
@@ -131,6 +148,21 @@ public class TaskLogic {
 	//======================//
 	//        GETTER        //
 	//======================//
+
+
+
+
+	public void getTaskGroups(Request<TaskGroupData> request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			List<Task> allTasks = project.tasks;
+			List<Task> filteredTasks = Logic.filter.applyFilters(allTasks);
+			TaskGroupData groupedTasks = Logic.group.applyGroups(filteredTasks);
+			Logic.sort.applySort(groupedTasks);
+			groupedTasks.tasks.addAll(filteredTasks);
+			request.respond(new Response<>(Response.State.SUCCESS, groupedTasks));
+		}
+	}
 
 
 

@@ -12,6 +12,7 @@ import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.ui.TabContent;
 import com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs.TaskAttributeNode;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
@@ -30,7 +31,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
-public class ProjectSettingsView extends AnchorPane {
+public class ProjectSettingsView extends AnchorPane implements TabContent {
 
 
 	public static final String TITLE = "Project Settings";
@@ -177,13 +178,6 @@ public class ProjectSettingsView extends AnchorPane {
 
 
 
-	public void close() {
-		EventManager.deregisterListeners(this);
-	}
-
-
-
-
 	private void setAttributeLock(boolean locked) {
 		btnAddAttribute.setDisable(locked);
 		for (Node node : boxTaskAttribs.getChildren()) {
@@ -193,5 +187,36 @@ public class ProjectSettingsView extends AnchorPane {
 		}
 	}
 
+
+
+
+	@Override
+	public void onOpen() {
+
+	}
+
+
+
+
+	@Override
+	public void onClose() {
+		EventManager.deregisterListeners(this);
+	}
+
+
+
+
+	@Override
+	public void onShow() {
+
+	}
+
+
+
+
+	@Override
+	public void onHide() {
+
+	}
 
 }

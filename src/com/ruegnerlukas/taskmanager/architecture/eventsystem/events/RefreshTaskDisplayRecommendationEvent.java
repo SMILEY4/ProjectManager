@@ -2,15 +2,11 @@ package com.ruegnerlukas.taskmanager.architecture.eventsystem.events;
 
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
 
-public class FilteredTasksChangedEvent extends Event {
+public class RefreshTaskDisplayRecommendationEvent extends Event {
 
 
-
-
-	public FilteredTasksChangedEvent(Object source) {
+	public RefreshTaskDisplayRecommendationEvent(Object source) {
 		super(source);
 	}
-
-
 
 }

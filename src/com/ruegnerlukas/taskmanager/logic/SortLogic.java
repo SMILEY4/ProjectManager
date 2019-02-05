@@ -6,10 +6,14 @@ import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRemovedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.SortElementsChangedEvent;
 import com.ruegnerlukas.taskmanager.data.Project;
+import com.ruegnerlukas.taskmanager.data.groups.TaskGroup;
+import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class SortLogic {
@@ -34,6 +38,24 @@ public class SortLogic {
 
 	private void onAttributeDeleted(TaskAttribute attribute) {
 		removeSortElement(attribute);
+	}
+
+
+
+
+	protected void applySort(TaskGroupData taskGroupData) {
+		Comparator<TaskGroup> comp = (a, b) -> {
+			for (int i = 0; i < taskGroupData.attributes.size(); i++) {
+				TaskAttribute attrib = taskGroupData.attributes.get(i);
+				TaskAttributeValue valueA = a.values.get(attrib);
+				TaskAttributeValue valueB = b.values.get(attrib);
+				int cmp = valueA.compareTo(valueB);
+				if (cmp != 0) {
+					return cmp;
+				}
+			}
+			return 0;
+		};
 	}
 
 
