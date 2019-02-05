@@ -209,7 +209,7 @@ public class TaskAttributeNode extends AnchorPane {
 			requirementNode = attributeNode;
 
 		} else if (type == TaskAttributeType.TEXT) {
-			TextAttributeNode attributeNode = new TextAttributeNode(attribute);
+			TextAttributeNode attributeNode = new TextAttributeNode(attribute, this);
 			node = attributeNode;
 			requirementNode = attributeNode;
 
@@ -233,6 +233,21 @@ public class TaskAttributeNode extends AnchorPane {
 
 		paneBody.getChildren().clear();
 		paneBody.getChildren().add(node);
+	}
+
+
+
+
+	protected void refresh() {
+		if (isExpanded) {
+			TaskAttributeNode.this.setMinSize(100, requirementNode.getNodeHeight() + 35);
+			TaskAttributeNode.this.setPrefSize(10000, requirementNode.getNodeHeight() + 35);
+			TaskAttributeNode.this.setMaxSize(10000, requirementNode.getNodeHeight() + 35);
+		} else {
+			TaskAttributeNode.this.setMinSize(100, 34);
+			TaskAttributeNode.this.setPrefSize(10000, 34);
+			TaskAttributeNode.this.setMaxSize(10000, 34);
+		}
 	}
 
 

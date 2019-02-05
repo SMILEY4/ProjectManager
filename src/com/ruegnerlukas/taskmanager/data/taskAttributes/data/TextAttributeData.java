@@ -11,6 +11,7 @@ public class TextAttributeData implements TaskAttributeData {
 
 	public int charLimit = 64;
 	public boolean multiline = false;
+	public int nLinesExpected = 2;
 	public boolean useDefault = false;
 	public String defaultValue = "";
 
@@ -51,6 +52,14 @@ public class TextAttributeData implements TaskAttributeData {
 						changedVars.put(Var.DEFAULT_VALUE, new TextValue(defaultValue));
 					}
 					changedVars.put(Var.TEXT_MULTILINE, newValue);
+				}
+				break;
+			}
+
+			case TEXT_N_LINES_EXP: {
+				if (newValue instanceof NumberValue) {
+					nLinesExpected = ((NumberValue) newValue).getInt();
+					changedVars.put(Var.TEXT_N_LINES_EXP, newValue);
 				}
 				break;
 			}

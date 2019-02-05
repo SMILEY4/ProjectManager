@@ -22,7 +22,8 @@ public interface TaskAttributeData {
 		NUMBER_ATT_MAX,
 
 		TEXT_CHAR_LIMIT,
-		TEXT_MULTILINE
+		TEXT_MULTILINE,
+		TEXT_N_LINES_EXP
 	}
 
 
