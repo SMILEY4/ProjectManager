@@ -1,12 +1,14 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.tasklist;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
 import com.ruegnerlukas.taskmanager.ui.taskview.taskcard.TaskCard;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -71,5 +73,16 @@ public class TaskList extends AnchorPane {
 	private void setupListeners() {
 	}
 
+
+
+
+	public void dispose() {
+		for (Node node : boxCards.getChildren()) {
+			if (node instanceof TaskCard) {
+				((TaskCard) node).dispose();
+			}
+		}
+		EventManager.deregisterListeners(this);
+	}
 
 }

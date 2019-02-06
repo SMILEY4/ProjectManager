@@ -153,4 +153,10 @@ public class TaskCard extends AnchorPane {
 	}
 
 
+
+
+	public void dispose() {
+		EventManager.deregisterListeners(this);
+	}
+
 }
