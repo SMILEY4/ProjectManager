@@ -6,8 +6,6 @@ import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.TaskValueChangedEvent;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
-import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
@@ -17,7 +15,10 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.data.IDAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
+import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.ui.taskview.tasklist.TaskList;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabelarea.EditableAreaLabel;
@@ -34,6 +35,7 @@ public class TaskCard extends AnchorPane {
 
 
 	public Task task;
+	public TaskList parent;
 
 	@FXML private Pane paneFlag;
 	@FXML private Pane paneBackground;
@@ -45,8 +47,9 @@ public class TaskCard extends AnchorPane {
 
 
 
-	public TaskCard(Task task) {
+	public TaskCard(Task task, TaskList parent) {
 		this.task = task;
+		this.parent = parent;
 
 		try {
 			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_taskcard.fxml"), this);
@@ -65,6 +68,14 @@ public class TaskCard extends AnchorPane {
 
 
 	private void create() {
+
+		// listen for select
+		this.setOnMouseClicked(event -> {
+			if (parent != null && parent.parent != null) {
+				parent.parent.onTaskCardSelected(TaskCard.this);
+			}
+		});
+
 
 		// id
 		Logic.tasks.getAttributeValue(task, IDAttributeData.NAME, new Request<TaskAttributeValue>(true) {

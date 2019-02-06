@@ -60,7 +60,7 @@
                   </Label>
                </children>
             </AnchorPane>
-            <AnchorPane fx:id="paneSidebar" minHeight="0.0" minWidth="0.0" />
+            <AnchorPane fx:id="paneSidebar" maxHeight="100000.0" maxWidth="100000.0" minHeight="0.0" minWidth="0.0" />
         </items>
       </SplitPane>
    </children>

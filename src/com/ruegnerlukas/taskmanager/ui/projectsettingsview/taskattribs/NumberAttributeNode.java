@@ -20,7 +20,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
-public class NumberAttributeNode extends AnchorPane implements AttributeRequirementNode {
+public class NumberAttributeNode extends AnchorPane implements AttributeDataNode {
 
 
 	private TaskAttribute attribute;
@@ -68,13 +68,13 @@ public class NumberAttributeNode extends AnchorPane implements AttributeRequirem
 
 
 		// min value
-		SpinnerUtils.initSpinner(minValue, attributeData.min, Integer.MIN_VALUE, attributeData.max, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, (observable, oldValue, newValue) -> {
+		SpinnerUtils.initSpinner(minValue, attributeData.min, Integer.MIN_VALUE, attributeData.max, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, true, (observable, oldValue, newValue) -> {
 			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.NUMBER_ATT_MIN, new NumberValue(minValue.getValue()));
 		});
 
 
 		// max value
-		SpinnerUtils.initSpinner(maxValue, attributeData.max, attributeData.min, Integer.MAX_VALUE, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, (observable, oldValue, newValue) -> {
+		SpinnerUtils.initSpinner(maxValue, attributeData.max, attributeData.min, Integer.MAX_VALUE, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, true, (observable, oldValue, newValue) -> {
 			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.NUMBER_ATT_MAX, new NumberValue(maxValue.getValue()));
 		});
 
@@ -87,7 +87,7 @@ public class NumberAttributeNode extends AnchorPane implements AttributeRequirem
 
 
 		// default value
-		SpinnerUtils.initSpinner(defaultValue, attributeData.defaultValue, attributeData.min, attributeData.max, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, (observable, oldValue, newValue) -> {
+		SpinnerUtils.initSpinner(defaultValue, attributeData.defaultValue, attributeData.min, attributeData.max, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, true, (observable, oldValue, newValue) -> {
 			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new NumberValue(defaultValue.getValue()));
 		});
 
@@ -120,10 +120,10 @@ public class NumberAttributeNode extends AnchorPane implements AttributeRequirem
 	private void updateData() {
 		NumberAttributeData attributeData = (NumberAttributeData) attribute.data;
 		SpinnerUtils.initSpinner(decPlaces, attributeData.decPlaces, 0, 10, 1, 0, null);
-		SpinnerUtils.initSpinner(minValue, attributeData.min, Integer.MIN_VALUE, attributeData.max, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, null);
-		SpinnerUtils.initSpinner(maxValue, attributeData.max, attributeData.min, Integer.MAX_VALUE, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, null);
+		SpinnerUtils.initSpinner(minValue, attributeData.min, Integer.MIN_VALUE, attributeData.max, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, true, null);
+		SpinnerUtils.initSpinner(maxValue, attributeData.max, attributeData.min, Integer.MAX_VALUE, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, true, null);
 		useDefault.setSelected(attributeData.useDefault);
-		SpinnerUtils.initSpinner(defaultValue, attributeData.defaultValue, attributeData.min, attributeData.max, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, null);
+		SpinnerUtils.initSpinner(defaultValue, attributeData.defaultValue, attributeData.min, attributeData.max, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, true, null);
 		defaultValue.setDisable(!useDefault.isSelected());
 	}
 

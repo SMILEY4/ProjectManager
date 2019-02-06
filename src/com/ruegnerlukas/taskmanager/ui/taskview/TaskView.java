@@ -7,7 +7,10 @@ import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.FilterCriteriaChangedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupOrderChangedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.RefreshTaskDisplayRecommendationEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.SortElementsChangedEvent;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.groups.TaskGroup;
@@ -24,7 +27,9 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.TabContent;
 import com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.FilterPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.groupPopup.GroupByPopup;
+import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.Sidebar;
 import com.ruegnerlukas.taskmanager.ui.taskview.sortPopup.SortPopup;
+import com.ruegnerlukas.taskmanager.ui.taskview.taskcard.TaskCard;
 import com.ruegnerlukas.taskmanager.ui.taskview.tasklist.TaskList;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
@@ -76,6 +81,7 @@ public class TaskView extends AnchorPane implements TabContent {
 	@FXML private AnchorPane paneTasks;
 	@FXML private HBox boxTasks;
 
+	private Sidebar sidebar;
 	@FXML private Label labelHideSidebar;
 	@FXML private AnchorPane paneSidebar;
 	private boolean sidebarHidden = true;
@@ -250,6 +256,10 @@ public class TaskView extends AnchorPane implements TabContent {
 			}
 		});
 
+		// create content
+		sidebar = new Sidebar();
+		AnchorUtils.setAnchors(sidebar, 0, 0, 0, 0);
+		paneSidebar.getChildren().add(sidebar);
 
 	}
 
@@ -258,7 +268,7 @@ public class TaskView extends AnchorPane implements TabContent {
 
 	private void setupListeners() {
 		EventManager.registerListener(this, e -> {
-			if(taskViewVisible) {
+			if (taskViewVisible) {
 				refreshTaskView();
 			} else {
 				refreshOnShow = true;
@@ -287,8 +297,7 @@ public class TaskView extends AnchorPane implements TabContent {
 					}
 
 
-					// display grouped-tasks
-				} else {
+				} else { // display grouped-tasks
 
 					// for each group
 					for (TaskGroup group : taskGroupData.groups) {
@@ -350,7 +359,7 @@ public class TaskView extends AnchorPane implements TabContent {
 
 
 	private void createTaskList(String name, List<Task> tasks) {
-		TaskList list = new TaskList(name, tasks);
+		TaskList list = new TaskList(name, tasks, this);
 		boxTasks.getChildren().add(list);
 	}
 
@@ -448,7 +457,7 @@ public class TaskView extends AnchorPane implements TabContent {
 		int nTotal = requestTotal.getResponse().getValue().size();
 
 		int nDisplay = -1;
-		if(lastTaskGroupData != null) {
+		if (lastTaskGroupData != null) {
 			nDisplay = lastTaskGroupData.tasks.size();
 		}
 
@@ -458,10 +467,15 @@ public class TaskView extends AnchorPane implements TabContent {
 
 
 
+	public void onTaskCardSelected(TaskCard card) {
+		sidebar.showTaskCard(card);
+	}
+
+
+
 
 	@Override
 	public void onOpen() {
-
 	}
 
 
@@ -478,7 +492,7 @@ public class TaskView extends AnchorPane implements TabContent {
 	@Override
 	public void onShow() {
 		taskViewVisible = true;
-		if(refreshOnShow) {
+		if (refreshOnShow) {
 			refreshOnShow = false;
 			refreshTaskView();
 		}

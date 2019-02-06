@@ -55,8 +55,8 @@ public class TaskLogic {
 
 		// recommend task-refresh
 		EventManager.registerListener(e -> {
-			EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
-		},
+					EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
+				},
 				AttributeCreatedEvent.class,
 				AttributeRemovedEvent.class,
 				AttributeTypeChangedEvent.class,
@@ -67,7 +67,7 @@ public class TaskLogic {
 				FilterCriteriaChangedEvent.class,
 				GroupOrderChangedEvent.class,
 				SortElementsChangedEvent.class
-				);
+		);
 
 	}
 
@@ -141,8 +141,6 @@ public class TaskLogic {
 			return new NoValue();
 		}
 	}
-
-
 
 
 	//======================//
@@ -243,8 +241,6 @@ public class TaskLogic {
 	}
 
 
-
-
 	//======================//
 	//        SETTER        //
 	//======================//
@@ -279,6 +275,23 @@ public class TaskLogic {
 
 		}
 
+	}
+
+
+
+
+	/**
+	 * Sets the value of a given task and attribute to the given value <p>
+	 * Events: <p>
+	 * - TaskValueChangedRejection: when the value could not be changed (NOT_ALLOWED = the value is invalid , NOT_EXISTS = given task, attribute or value is null or is not part of project) <p>
+	 * - TaskValueChangedRejection: when the value of the task and attribute was changed
+	 */
+	public void setAttributeValue(Task task, String attributeName, TaskAttributeValue value) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			TaskAttribute attribute = Logic.attribute.findAttribute(attributeName);
+			setAttributeValue(task, attribute, value);
+		}
 	}
 
 

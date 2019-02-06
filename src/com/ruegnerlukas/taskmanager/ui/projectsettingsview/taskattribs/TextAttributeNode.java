@@ -23,7 +23,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
-public class TextAttributeNode extends AnchorPane implements AttributeRequirementNode {
+public class TextAttributeNode extends AnchorPane implements AttributeDataNode {
 
 
 	private TaskAttribute attribute;

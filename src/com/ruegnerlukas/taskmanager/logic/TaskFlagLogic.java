@@ -21,12 +21,42 @@ public class TaskFlagLogic {
 	//======================//
 
 
+
+
+	public void getFlag(String name, Request<TaskFlag> request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			TaskAttribute flagAttribute = Logic.attribute.findAttribute(TaskAttributeType.FLAG);
+			if (flagAttribute != null) {
+				FlagAttributeData flagData = (FlagAttributeData) flagAttribute.data;
+				TaskFlag flag = null;
+				for (TaskFlag f : flagData.flags) {
+					if (f.name.equals(name)) {
+						flag = f;
+						break;
+					}
+				}
+				if (flag != null) {
+					request.respond(new Response<>(Response.State.SUCCESS, flag));
+				} else {
+					request.respond(new Response<>(Response.State.FAIL, "No Flag with the name '" + name + "' found."));
+				}
+
+			} else {
+				request.respond(new Response<>(Response.State.FAIL, "No FlagAttribute found."));
+			}
+		}
+	}
+
+
+
+
 	public void getAllFlags(Request<TaskFlag[]> request) {
 		Project project = Logic.project.getProject();
-		if(project != null) {
+		if (project != null) {
 			TaskAttribute flagAttribute = Logic.attribute.findAttribute(TaskAttributeType.FLAG);
-			if(flagAttribute != null) {
-				FlagAttributeData flagData = (FlagAttributeData)flagAttribute.data;
+			if (flagAttribute != null) {
+				FlagAttributeData flagData = (FlagAttributeData) flagAttribute.data;
 				request.respond(new Response<>(Response.State.SUCCESS, flagData.flags));
 			} else {
 				request.respond(new Response<>(Response.State.FAIL, "No FlagAttribute found."));
@@ -39,10 +69,10 @@ public class TaskFlagLogic {
 
 	public void getDefaultFlag(Request<TaskFlag> request) {
 		Project project = Logic.project.getProject();
-		if(project != null) {
+		if (project != null) {
 			TaskAttribute flagAttribute = Logic.attribute.findAttribute(TaskAttributeType.FLAG);
-			if(flagAttribute != null) {
-				FlagAttributeData flagData = (FlagAttributeData)flagAttribute.data;
+			if (flagAttribute != null) {
+				FlagAttributeData flagData = (FlagAttributeData) flagAttribute.data;
 				request.respond(new Response<>(Response.State.SUCCESS, flagData.defaultFlag));
 			} else {
 				request.respond(new Response<>(Response.State.FAIL, "No FlagAttribute found."));

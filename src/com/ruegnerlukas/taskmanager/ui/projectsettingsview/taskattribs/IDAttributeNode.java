@@ -7,7 +7,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
-public class IDAttributeNode extends AnchorPane implements AttributeRequirementNode {
+public class IDAttributeNode extends AnchorPane implements AttributeDataNode {
 
 
 	public IDAttributeNode() {

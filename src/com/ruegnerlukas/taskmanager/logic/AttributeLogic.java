@@ -103,7 +103,7 @@ public class AttributeLogic {
 	public void getAttributes(Request<List<TaskAttribute>> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, project.attributes));
+			request.respond(new Response<>(Response.State.SUCCESS, new ArrayList<>(project.attributes)));
 		}
 	}
 
@@ -118,7 +118,7 @@ public class AttributeLogic {
 		if (attribute != null) {
 			request.respond(new Response<>(Response.State.SUCCESS, attribute));
 		} else {
-			request.respond(new Response<TaskAttribute>(Response.State.FAIL, "Attribute '" + name + "' not found.", null));
+			request.respond(new Response<>(Response.State.FAIL, "Attribute '" + name + "' not found.", null));
 		}
 	}
 

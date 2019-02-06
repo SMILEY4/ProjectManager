@@ -27,7 +27,7 @@ import javafx.scene.layout.VBox;
 import java.io.IOException;
 import java.util.Random;
 
-public class FlagAttributeNode extends AnchorPane implements AttributeRequirementNode {
+public class FlagAttributeNode extends AnchorPane implements AttributeDataNode {
 
 
 	public TaskAttribute attribute;

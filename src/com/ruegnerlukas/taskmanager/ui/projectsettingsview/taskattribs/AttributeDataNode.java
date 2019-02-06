@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
-public interface AttributeRequirementNode {
+public interface AttributeDataNode {
 
 	double getNodeHeight();
 

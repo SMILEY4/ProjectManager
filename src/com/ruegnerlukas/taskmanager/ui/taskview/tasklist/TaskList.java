@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.taskview.tasklist;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.Task;
+import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
 import com.ruegnerlukas.taskmanager.ui.taskview.taskcard.TaskCard;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -20,15 +21,17 @@ public class TaskList extends AnchorPane {
 	public String title;
 	public List<Task> tasks;
 
+	public TaskView parent;
 	@FXML private Label labelTitle;
 	@FXML private VBox boxCards;
 
 
 
 
-	public TaskList(String title, List<Task> tasks) {
+	public TaskList(String title, List<Task> tasks, TaskView parent) {
 		this.title = title;
 		this.tasks = tasks;
+		this.parent = parent;
 
 		try {
 			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_tasklist.fxml"), this);
@@ -56,7 +59,7 @@ public class TaskList extends AnchorPane {
 
 		// tasks
 		for (Task task : tasks) {
-			TaskCard card = new TaskCard(task);
+			TaskCard card = new TaskCard(task, this);
 			boxCards.getChildren().add(card);
 		}
 

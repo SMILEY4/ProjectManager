@@ -31,7 +31,7 @@ public class TaskAttributeNode extends AnchorPane {
 	private boolean isExpanded = false;
 
 	private AnchorPane paneBody;
-	public AttributeRequirementNode requirementNode;
+	public AttributeDataNode requirementNode;
 
 
 

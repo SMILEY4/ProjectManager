@@ -18,7 +18,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
-public class BoolAttributeNode extends AnchorPane implements AttributeRequirementNode {
+public class BoolAttributeNode extends AnchorPane implements AttributeDataNode {
 
 
 	private TaskAttribute attribute;
