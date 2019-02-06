@@ -32,7 +32,7 @@ import java.util.List;
 public class Sidebar extends AnchorPane {
 
 
-	private TaskCard currentCard = null;
+	public TaskCard currentCard = null;
 
 	@FXML private VBox boxContent;
 	@FXML private TextArea fieldDesc;
@@ -151,10 +151,10 @@ public class Sidebar extends AnchorPane {
 				List<TaskAttribute> attributes = response.getValue();
 				for(int i=0; i<attributes.size(); i++) {
 					TaskAttribute attribute = attributes.get(i);
-					SidebarItem item = SidebarItem.create(attribute);
+					SidebarItem item = SidebarItem.create(currentCard.task, attribute);
 					if(item != null) {
 						items.add(item);
-						boxAttribs.getChildren().add(SidebarItem.create(attribute));
+						boxAttribs.getChildren().add(item);
 					}
 				}
 			}

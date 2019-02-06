@@ -1,8 +1,15 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item;
 
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.ChoiceAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import javafx.geometry.Pos;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -11,8 +18,8 @@ import javafx.scene.layout.VBox;
 public class ChoiceItem extends SidebarItem {
 
 
-	protected ChoiceItem(TaskAttribute attribute) {
-		super(attribute);
+	protected ChoiceItem(Task task, TaskAttribute attribute) {
+		super(task, attribute);
 
 		// left - label
 		VBox boxLeft = new VBox();
@@ -42,6 +49,21 @@ public class ChoiceItem extends SidebarItem {
 		choiceBox.setPrefSize(200, 32);
 		choiceBox.setMaxSize(200, 32);
 		boxRight.getChildren().add(choiceBox);
+
+		Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>(true) {
+			@Override
+			public void onResponse(Response<TaskAttributeValue> response) {
+				if(response.getValue() instanceof NoValue) {
+					choiceBox.getSelectionModel().select(null);
+				} else {
+					choiceBox.getSelectionModel().select( ((TextValue)response.getValue()).getText() );
+				}
+			}
+		});
+
+		choiceBox.setOnAction(event -> {
+			Logic.tasks.setAttributeValue(task, attribute, new TextValue(choiceBox.getSelectionModel().getSelectedItem()));
+		});
 
 	}
 

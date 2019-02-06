@@ -1,17 +1,26 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item;
 
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import javafx.geometry.Pos;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+
+
 public class BoolItem extends SidebarItem {
 
 
-	protected BoolItem(TaskAttribute attribute) {
-		super(attribute);
+	protected BoolItem(Task task, TaskAttribute attribute) {
+		super(task, attribute);
 
 		// left - label
 		VBox boxLeft = new VBox();
@@ -40,6 +49,22 @@ public class BoolItem extends SidebarItem {
 		checkbox.setPrefSize(-1, 32);
 		checkbox.setMaxSize(10000, 32);
 		boxRight.getChildren().add(checkbox);
+
+		Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>(true) {
+			@Override
+			public void onResponse(Response<TaskAttributeValue> response) {
+				if(response.getValue() instanceof NoValue) {
+					checkbox.setSelected(false);
+				} else {
+					checkbox.setSelected( ((BoolValue)response.getValue()).getBoolValue() );
+				}
+			}
+		});
+
+		checkbox.setOnAction(event -> {
+			Logic.tasks.setAttributeValue(task, attribute, new BoolValue(checkbox.isSelected()));
+		});
+
 	}
 
 

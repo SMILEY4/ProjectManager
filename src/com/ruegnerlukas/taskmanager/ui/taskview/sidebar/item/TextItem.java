@@ -1,8 +1,15 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item;
 
+import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TextAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
+import com.ruegnerlukas.taskmanager.logic.Logic;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -11,8 +18,8 @@ import javafx.scene.layout.VBox;
 public class TextItem extends SidebarItem {
 
 
-	protected TextItem(TaskAttribute attribute) {
-		super(attribute);
+	protected TextItem(Task task, TaskAttribute attribute) {
+		super(task, attribute);
 
 		// left - label
 		VBox boxLeft = new VBox();
@@ -45,6 +52,24 @@ public class TextItem extends SidebarItem {
 
 		this.setPrefSize(10000, -1);
 		this.setMaxSize(10000, 10000);
+
+		Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>(true) {
+			@Override
+			public void onResponse(Response<TaskAttributeValue> response) {
+				if(response.getValue() instanceof NoValue) {
+					textArea.setText("");
+				} else {
+					textArea.setText( ((TextValue)response.getValue()).getText() );
+				}
+			}
+		});
+
+		textArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
+			if(!newValue) {
+				Logic.tasks.setAttributeValue(task, attribute, new TextValue(textArea.getText()));
+			}
+
+		});
 
 	}
 
