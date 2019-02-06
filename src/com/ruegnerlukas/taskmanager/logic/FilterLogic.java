@@ -46,6 +46,19 @@ public class FilterLogic {
 
 
 
+	protected boolean isAttributeRelevant(TaskAttribute attribute) {
+		Project project = Logic.project.getProject();
+		for (FilterCriteria criteria : project.filterCriteria) {
+			if (criteria.attribute == attribute) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+
 	protected List<Task> applyFilters(List<Task> tasksInput) {
 
 		Project project = Logic.project.getProject();

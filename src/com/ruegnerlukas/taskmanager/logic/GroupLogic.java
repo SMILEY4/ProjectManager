@@ -3,15 +3,21 @@ package com.ruegnerlukas.taskmanager.logic;
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRemovedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupHeaderChangedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupHeaderStringChangedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupOrderChangedEvent;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.Task;
-import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.groups.TaskGroup;
+import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class GroupLogic {
 
@@ -38,6 +44,13 @@ public class GroupLogic {
 
 	private void onAttributeDeleted(TaskAttribute attribute) {
 		removeGroupElement(attribute);
+	}
+
+
+
+
+	protected boolean isAttributeRelevant(TaskAttribute attribute) {
+		return Logic.project.getProject().taskGroupOrder.contains(attribute);
 	}
 
 

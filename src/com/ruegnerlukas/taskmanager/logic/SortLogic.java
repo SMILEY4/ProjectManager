@@ -43,6 +43,19 @@ public class SortLogic {
 
 
 
+	protected boolean isAttributeRelevant(TaskAttribute attribute) {
+		Project project = Logic.project.getProject();
+		for (SortElement sortElement : project.sortElements) {
+			if (sortElement.attribute == attribute) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+
+
+
 	protected void applySort(TaskGroupData taskGroupData) {
 		Comparator<TaskGroup> comp = (a, b) -> {
 			for (int i = 0; i < taskGroupData.attributes.size(); i++) {
