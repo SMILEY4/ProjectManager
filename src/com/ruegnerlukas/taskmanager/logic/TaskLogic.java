@@ -59,22 +59,22 @@ public class TaskLogic {
 		}, AttributeRemovedEvent.class, FilterCriteriaChangedEvent.class, GroupOrderChangedEvent.class, SortElementsChangedEvent.class, TaskCreatedEvent.class);
 
 		EventManager.registerListener(e -> {
-			AttributeTypeChangedEvent event = (AttributeTypeChangedEvent)e;
-			if(Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
+			AttributeTypeChangedEvent event = (AttributeTypeChangedEvent) e;
+			if (Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
 				EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
 			}
 		}, AttributeTypeChangedEvent.class);
 
 		EventManager.registerListener(e -> {
-			AttributeUpdatedEvent event = (AttributeUpdatedEvent)e;
-			if(Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
+			AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
+			if (Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
 				EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
 			}
 		}, AttributeUpdatedEvent.class);
 
 		EventManager.registerListener(e -> {
-			TaskValueChangedEvent event = (TaskValueChangedEvent)e;
-			if(Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
+			TaskValueChangedEvent event = (TaskValueChangedEvent) e;
+			if (Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
 				EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
 			}
 		}, TaskValueChangedEvent.class);

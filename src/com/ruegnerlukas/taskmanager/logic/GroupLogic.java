@@ -187,7 +187,7 @@ public class GroupLogic {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			if (project.useCustomHeaderString) {
-				request.respond(new Response<>(Response.State.SUCCESS, project.taskGroupHeaderString));
+				request.respond(new Response<>(Response.State.SUCCESS, "", project.taskGroupHeaderString));
 			} else {
 				request.respond(new Response<>(Response.State.FAIL, "TaskGroups do not currently use a custom headerString"));
 			}
