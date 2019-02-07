@@ -51,13 +51,25 @@ public class TaskCard extends AnchorPane {
 		this.task = task;
 		this.parent = parent;
 
-		try {
-			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_taskcard.fxml"), this);
-			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
-			this.getChildren().add(root);
-		} catch (IOException e) {
-			Logger.get().error("Error loading TaskCard-FXML: " + e);
-		}
+		layout_taskcardBase layout = new layout_taskcardBase();
+		this.paneFlag = layout.paneFlag;
+		this.paneBackground = layout.paneBackground;
+		this.labelID = layout.labelID;
+		this.paneDescription = layout.paneDescription;
+
+		Parent root = layout.root;
+		AnchorUtils.setAnchors(root, 0, 0, 0, 0);
+		this.getChildren().add(root);
+
+
+
+//		try {
+//			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_taskcard.fxml"), this);
+//			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
+//			this.getChildren().add(root);
+//		} catch (IOException e) {
+//			Logger.get().error("Error loading TaskCard-FXML: " + e);
+//		}
 
 		this.setPrefSize(10000, 200);
 
