@@ -3,6 +3,11 @@ package com.ruegnerlukas.taskmanager.ui.taskview.sidebar;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeCreatedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRemovedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeTypeChangedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
@@ -101,6 +106,12 @@ public class Sidebar extends AnchorPane {
 				Logic.tasks.setAttributeValue(currentTask, FlagAttributeData.NAME, new FlagValue(response.getValue()));
 			}
 		}));
+
+
+		// listen for taskAttribute-changes
+		EventManager.registerListener(this, event -> {
+			refresh();
+		}, AttributeRemovedEvent.class, AttributeCreatedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class);
 
 	}
 

@@ -90,6 +90,7 @@ public class NumberAttributeNode extends AnchorPane implements AttributeDataNode
 		SpinnerUtils.initSpinner(defaultValue, attributeData.defaultValue, attributeData.min, attributeData.max, Math.pow(10, -attributeData.decPlaces), attributeData.decPlaces, true, (observable, oldValue, newValue) -> {
 			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new NumberValue(defaultValue.getValue()));
 		});
+		defaultValue.setDisable(!useDefault.isSelected());
 
 		// listen for changes / rejections
 		EventManager.registerListener(this, e -> {

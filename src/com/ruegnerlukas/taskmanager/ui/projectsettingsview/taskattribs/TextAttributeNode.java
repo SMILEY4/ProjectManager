@@ -116,7 +116,7 @@ public class TextAttributeNode extends AnchorPane implements AttributeDataNode {
 
 		// default value
 		defaultValue.setText(attributeData.defaultValue);
-		defaultValue.setDisable(!attributeData.useDefault);
+		defaultValue.setDisable(!useDefault.isSelected());
 		defaultValue.textProperty().addListener((observable, oldValue, newValue) -> {
 			if (defaultValue.getText().length() > attributeData.charLimit) {
 				defaultValue.setText(defaultValue.getText().substring(0, attributeData.charLimit));
