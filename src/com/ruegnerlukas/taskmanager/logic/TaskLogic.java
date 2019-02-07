@@ -60,21 +60,21 @@ public class TaskLogic {
 
 		EventManager.registerListener(e -> {
 			AttributeTypeChangedEvent event = (AttributeTypeChangedEvent) e;
-			if (Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
+			if (isAttributeRelevant(event.getAttribute()) || Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
 				EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
 			}
 		}, AttributeTypeChangedEvent.class);
 
 		EventManager.registerListener(e -> {
 			AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
-			if (Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
+			if (isAttributeRelevant(event.getAttribute()) || Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
 				EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
 			}
 		}, AttributeUpdatedEvent.class);
 
 		EventManager.registerListener(e -> {
 			TaskValueChangedEvent event = (TaskValueChangedEvent) e;
-			if (Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
+			if (isAttributeRelevant(event.getAttribute()) || Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
 				EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
 			}
 		}, TaskValueChangedEvent.class);
@@ -82,8 +82,16 @@ public class TaskLogic {
 	}
 
 
+	
+	
+	private boolean isAttributeRelevant(TaskAttribute attribute) {
+		TaskAttributeType type = attribute.data.getType();
+		return (type == TaskAttributeType.FLAG || type == TaskAttributeType.DESCRIPTION || type == TaskAttributeType.ID);
+	}
 
 
+	
+	
 	protected List<Task> getTasksInternal() {
 		return Logic.project.getProject().tasks;
 	}
