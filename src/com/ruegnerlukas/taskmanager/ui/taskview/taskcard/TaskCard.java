@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.taskcard;
 
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
@@ -19,17 +18,14 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValu
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.taskview.tasklist.TaskList;
-import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabelarea.EditableAreaLabel;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-
-import java.io.IOException;
 
 public class TaskCard extends AnchorPane {
 
@@ -60,16 +56,6 @@ public class TaskCard extends AnchorPane {
 		Parent root = layout.root;
 		AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 		this.getChildren().add(root);
-
-
-
-//		try {
-//			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_taskcard.fxml"), this);
-//			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
-//			this.getChildren().add(root);
-//		} catch (IOException e) {
-//			Logger.get().error("Error loading TaskCard-FXML: " + e);
-//		}
 
 		this.setPrefSize(10000, 200);
 
@@ -162,6 +148,27 @@ public class TaskCard extends AnchorPane {
 				areaDescription.setText(value.getText());
 			}
 		});
+	}
+
+
+
+
+	public void onSelect() {
+		final double borderSize = 4;
+		this.setBorder(new Border(new BorderStroke(
+				Color.web("#50aaff"),
+				BorderStrokeStyle.SOLID,
+				new CornerRadii(borderSize),
+				new BorderWidths(borderSize),
+				new Insets(-(borderSize/2), -(borderSize/2), -(borderSize/2), -(borderSize/2))
+		)));
+	}
+
+
+
+
+	public void onDeselect() {
+		this.setBorder(Border.EMPTY);
 	}
 
 
