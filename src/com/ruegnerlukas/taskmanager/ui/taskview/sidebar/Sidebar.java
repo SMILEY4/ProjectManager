@@ -3,6 +3,7 @@ package com.ruegnerlukas.taskmanager.ui.taskview.sidebar;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
+import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.DescriptionAttributeData;
@@ -14,7 +15,6 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValu
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item.SidebarItem;
-import com.ruegnerlukas.taskmanager.ui.taskview.taskcard.TaskCard;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.fxml.FXML;
@@ -32,7 +32,7 @@ import java.util.List;
 public class Sidebar extends AnchorPane {
 
 
-	public TaskCard currentCard = null;
+	public Task currentTask = null;
 
 	@FXML private VBox boxContent;
 	@FXML private TextArea fieldDesc;
@@ -76,8 +76,8 @@ public class Sidebar extends AnchorPane {
 //			}
 //		});
 		fieldDesc.focusedProperty().addListener((observable, oldValue, newValue) -> {
-			if (currentCard != null && !newValue) {
-				Logic.tasks.setAttributeValue(currentCard.task, DescriptionAttributeData.NAME, new TextValue(fieldDesc.getText()));
+			if (currentTask != null && !newValue) {
+				Logic.tasks.setAttributeValue(currentTask, DescriptionAttributeData.NAME, new TextValue(fieldDesc.getText()));
 			}
 		});
 
@@ -98,7 +98,7 @@ public class Sidebar extends AnchorPane {
 		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Logic.taskFlags.getFlag(newValue, new Request<TaskFlag>(true) {
 			@Override
 			public void onResponse(Response<TaskFlag> response) {
-				Logic.tasks.setAttributeValue(currentCard.task, FlagAttributeData.NAME, new FlagValue(response.getValue()));
+				Logic.tasks.setAttributeValue(currentTask, FlagAttributeData.NAME, new FlagValue(response.getValue()));
 			}
 		}));
 
@@ -108,12 +108,12 @@ public class Sidebar extends AnchorPane {
 
 
 	public void refresh() {
-		if (currentCard == null) {
+		if (currentTask == null) {
 			return;
 		}
 
 		// description
-		Logic.tasks.getAttributeValue(currentCard.task, DescriptionAttributeData.NAME, new Request<TaskAttributeValue>(true) {
+		Logic.tasks.getAttributeValue(currentTask, DescriptionAttributeData.NAME, new Request<TaskAttributeValue>(true) {
 			@Override
 			public void onResponse(Response<TaskAttributeValue> response) {
 				TextValue value = (TextValue)response.getValue();
@@ -122,7 +122,7 @@ public class Sidebar extends AnchorPane {
 		});
 
 		// id
-		Logic.tasks.getAttributeValue(currentCard.task, IDAttributeData.NAME, new Request<TaskAttributeValue>(true) {
+		Logic.tasks.getAttributeValue(currentTask, IDAttributeData.NAME, new Request<TaskAttributeValue>(true) {
 			@Override
 			public void onResponse(Response<TaskAttributeValue> response) {
 				NumberValue value = (NumberValue)response.getValue();
@@ -131,7 +131,7 @@ public class Sidebar extends AnchorPane {
 		});
 
 		// flag
-		Logic.tasks.getAttributeValue(currentCard.task, FlagAttributeData.NAME, new Request<TaskAttributeValue>(true) {
+		Logic.tasks.getAttributeValue(currentTask, FlagAttributeData.NAME, new Request<TaskAttributeValue>(true) {
 			@Override
 			public void onResponse(Response<TaskAttributeValue> response) {
 				FlagValue value = (FlagValue)response.getValue();
@@ -151,7 +151,7 @@ public class Sidebar extends AnchorPane {
 				List<TaskAttribute> attributes = response.getValue();
 				for(int i=0; i<attributes.size(); i++) {
 					TaskAttribute attribute = attributes.get(i);
-					SidebarItem item = SidebarItem.create(currentCard.task, attribute);
+					SidebarItem item = SidebarItem.create(currentTask, attribute);
 					if(item != null) {
 						items.add(item);
 						boxAttribs.getChildren().add(item);
@@ -164,12 +164,12 @@ public class Sidebar extends AnchorPane {
 
 
 
-	public void showTaskCard(TaskCard card) {
-		if (card == null) {
-			this.currentCard = null;
+	public void showTask(Task task) {
+		if (task == null) {
+			this.currentTask = null;
 			this.setVisible(false);
 		} else {
-			this.currentCard = card;
+			this.currentTask = task;
 			this.setVisible(true);
 			refresh();
 		}

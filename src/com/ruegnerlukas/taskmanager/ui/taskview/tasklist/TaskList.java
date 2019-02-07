@@ -76,6 +76,21 @@ public class TaskList extends AnchorPane {
 
 
 
+	public TaskCard findCard(Task task) {
+		for (Node node : boxCards.getChildren()) {
+			if (node instanceof TaskCard) {
+				TaskCard card = (TaskCard) node;
+				if (card.task == task) {
+					return card;
+				}
+			}
+		}
+		return null;
+	}
+
+
+
+
 	public void dispose() {
 		for (Node node : boxCards.getChildren()) {
 			if (node instanceof TaskCard) {

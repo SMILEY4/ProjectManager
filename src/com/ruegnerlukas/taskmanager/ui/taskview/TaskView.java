@@ -344,6 +344,7 @@ public class TaskView extends AnchorPane implements TabContent {
 				}
 
 				updateNTaskLabel();
+				onTaskSelected(sidebar.currentTask);
 			}
 		});
 
@@ -353,9 +354,9 @@ public class TaskView extends AnchorPane implements TabContent {
 
 
 	private void clearTaskList() {
-		for(Node node : boxTasks.getChildren()) {
-			if(node instanceof TaskList) {
-				((TaskList)node).dispose();
+		for (Node node : boxTasks.getChildren()) {
+			if (node instanceof TaskList) {
+				((TaskList) node).dispose();
 			}
 		}
 		boxTasks.getChildren().clear();
@@ -473,14 +474,30 @@ public class TaskView extends AnchorPane implements TabContent {
 
 
 
-	public void onTaskCardSelected(TaskCard card) {
-		if(sidebar.currentCard != null) {
-			sidebar.currentCard.onDeselect();
+	public void onTaskSelected(Task task) {
+		if (sidebar.currentTask != null) {
+			findCard(sidebar.currentTask).onDeselect();
 		}
-		sidebar.showTaskCard(card);
-		if(sidebar.currentCard != null) {
-			sidebar.currentCard.onSelect();
+		sidebar.showTask(task);
+		if (sidebar.currentTask != null) {
+			findCard(sidebar.currentTask).onSelect();
 		}
+	}
+
+
+
+
+	public TaskCard findCard(Task task) {
+		for (Node node : boxTasks.getChildren()) {
+			if (node instanceof TaskList) {
+				TaskList list = (TaskList) node;
+				TaskCard card = list.findCard(task);
+				if (card != null) {
+					return card;
+				}
+			}
+		}
+		return null;
 	}
 
 
