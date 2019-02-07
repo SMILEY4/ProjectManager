@@ -218,22 +218,17 @@ public class TaskView extends AnchorPane implements TabContent {
 
 		// sidebar show/hide
 		if (sidebarHidden) {
-			splitContent.setDividerPosition(0, 1);
-			labelHideSidebar.setText("<");
+			hideSidebar();
 		} else {
-			splitContent.setDividerPosition(0, 0.75);
-			labelHideSidebar.setText(">");
+			showSidebar(true);
 		}
 
 		// listen for dragging
 		splitContent.getDividers().get(0).positionProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue.doubleValue() > 0.95) {
-				splitContent.setDividerPosition(0, 1);
-				labelHideSidebar.setText("<");
-				sidebarHidden = true;
+				hideSidebar();
 			} else {
-				labelHideSidebar.setText(">");
-				sidebarHidden = false;
+				showSidebar(false);
 			}
 		});
 
@@ -247,11 +242,9 @@ public class TaskView extends AnchorPane implements TabContent {
 				}
 				sidebarHidden = !sidebarHidden;
 				if (sidebarHidden) {
-					splitContent.setDividerPosition(0, 1);
-					labelHideSidebar.setText("<");
+					hideSidebar();
 				} else {
-					splitContent.setDividerPosition(0, 0.75);
-					labelHideSidebar.setText(">");
+					showSidebar(true);
 				}
 				event.consume();
 			}
@@ -262,6 +255,28 @@ public class TaskView extends AnchorPane implements TabContent {
 		AnchorUtils.setAnchors(sidebar, 0, 0, 0, 0);
 		paneSidebar.getChildren().add(sidebar);
 
+	}
+
+
+
+
+	private void showSidebar(boolean setDivider) {
+		paneSidebar.setMaxWidth(10000);
+		if(setDivider) {
+			splitContent.setDividerPosition(0, 0.75);
+		}
+		labelHideSidebar.setText(">");
+		sidebarHidden = false;
+	}
+
+
+
+
+	private void hideSidebar() {
+		paneSidebar.setMaxWidth(0);
+		splitContent.setDividerPosition(0, 1);
+		labelHideSidebar.setText("<");
+		sidebarHidden = true;
 	}
 
 
@@ -481,6 +496,9 @@ public class TaskView extends AnchorPane implements TabContent {
 		sidebar.showTask(task);
 		if (sidebar.currentTask != null) {
 			findCard(sidebar.currentTask).onSelect();
+			if (sidebarHidden) {
+				showSidebar(true);
+			}
 		}
 	}
 
