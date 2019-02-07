@@ -98,7 +98,7 @@ public class SortElementNode extends HBox {
 		choiceSortDir.getSelectionModel().select(sortDir.display);
 		choiceSortDir.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			for (SortElement.Sort dir : SortElement.Sort.values()) {
-				if (sortDir.display.equals(choiceSortDir.getValue())) {
+				if (dir.display.equals(newValue)) {
 					this.sortDir = dir;
 					break;
 				}

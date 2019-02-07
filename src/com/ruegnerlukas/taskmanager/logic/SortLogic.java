@@ -6,6 +6,7 @@ import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRemovedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.SortElementsChangedEvent;
 import com.ruegnerlukas.taskmanager.data.Project;
+import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.groups.TaskGroup;
 import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.sorting.SortElement;
@@ -57,7 +58,7 @@ public class SortLogic {
 
 
 	protected void applySort(TaskGroupData taskGroupData) {
-		Comparator<TaskGroup> comp = (a, b) -> {
+		Comparator<TaskGroup> compGroups = (a, b) -> {
 			for (int i = 0; i < taskGroupData.attributes.size(); i++) {
 				TaskAttribute attrib = taskGroupData.attributes.get(i);
 				TaskAttributeValue valueA = a.values.get(attrib);
@@ -69,6 +70,23 @@ public class SortLogic {
 			}
 			return 0;
 		};
+		taskGroupData.groups.sort(compGroups);
+
+		Comparator<Task> compTasks = (a, b) -> {
+			for(SortElement element : Logic.project.getProject().sortElements) {
+				TaskAttribute attrib = element.attribute;
+				TaskAttributeValue valueA = Logic.tasks.getValue(a, attrib);
+				TaskAttributeValue valueB = Logic.tasks.getValue(b, attrib);
+				int cmp = valueA.compareTo(valueB) * (element.sortDir == SortElement.Sort.DESC ? -1 : +1);
+				if (cmp != 0) {
+					return cmp;
+				}
+			}
+			return 0;
+		};
+		for(TaskGroup group : taskGroupData.groups) {
+			group.tasks.sort(compTasks);
+		}
 	}
 
 
