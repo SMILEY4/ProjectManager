@@ -423,9 +423,9 @@ public class FilterLogic {
 			if (project.savedFilters.containsKey(name)) {
 				List<FilterCriteria> list = project.savedFilters.get(name);
 				project.savedFilters.remove(name);
-				EventManager.fireEvent(new FilterCriteriaDeletedEvent(name, list, this));
+				EventManager.fireEvent(new FilterCriteriaDeletedSavedEvent(name, list, this));
 			} else {
-				EventManager.fireEvent(new FilterCriteriaDeletedRejection(name, EventCause.NOT_EXISTS, this));
+				EventManager.fireEvent(new FilterCriteriaDeleteSavedRejection(name, EventCause.NOT_EXISTS, this));
 			}
 		}
 	}

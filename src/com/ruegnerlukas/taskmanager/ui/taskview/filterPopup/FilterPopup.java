@@ -4,7 +4,7 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.FilterCriteriaDeletedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.FilterCriteriaDeletedSavedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.FilterCriteriaSavedEvent;
 import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -116,10 +116,10 @@ public class FilterPopup extends AnchorPane {
 		}, FilterCriteriaSavedEvent.class);
 
 		EventManager.registerListener(e -> {
-			FilterCriteriaDeletedEvent event = (FilterCriteriaDeletedEvent) e;
+			FilterCriteriaDeletedSavedEvent event = (FilterCriteriaDeletedSavedEvent) e;
 			loadSaved();
 			choiceSaved.getSelectionModel().select(null);
-		}, FilterCriteriaDeletedEvent.class);
+		}, FilterCriteriaDeletedSavedEvent.class);
 
 
 		// values
@@ -138,7 +138,9 @@ public class FilterPopup extends AnchorPane {
 				@Override
 				public void onResponse(Response<List<TaskAttribute>> response) {
 					List<TaskAttribute> attributes = response.getValue();
-					boxAttributes.getChildren().add(new FilterCriteriaNode(attributes.get(0), FilterPopup.this));
+					FilterCriteriaNode node = new FilterCriteriaNode(attributes.get(0), FilterPopup.this);
+					boxAttributes.getChildren().add(node);
+					onFiltersChanged(node);
 				}
 			});
 		});

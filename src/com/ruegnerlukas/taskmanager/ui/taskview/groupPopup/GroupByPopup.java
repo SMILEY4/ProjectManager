@@ -4,7 +4,7 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupOrderDeletedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupOrderDeletedSavedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupOrderSavedEvent;
 import com.ruegnerlukas.taskmanager.data.groups.AttributeGroupData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -123,10 +123,10 @@ public class GroupByPopup extends AnchorPane {
 		}, GroupOrderSavedEvent.class);
 
 		EventManager.registerListener(e -> {
-			GroupOrderDeletedEvent event = (GroupOrderDeletedEvent) e;
+			GroupOrderDeletedSavedEvent event = (GroupOrderDeletedSavedEvent) e;
 			loadSaved();
 			choiceSaved.getSelectionModel().select(null);
-		}, GroupOrderDeletedEvent.class);
+		}, GroupOrderDeletedSavedEvent.class);
 
 
 		// values

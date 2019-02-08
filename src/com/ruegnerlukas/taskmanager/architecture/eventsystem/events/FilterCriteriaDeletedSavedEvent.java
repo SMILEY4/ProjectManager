@@ -5,7 +5,7 @@ import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 
 import java.util.List;
 
-public class FilterCriteriaDeletedEvent extends Event {
+public class FilterCriteriaDeletedSavedEvent extends Event {
 
 
 	private String name;
@@ -14,7 +14,7 @@ public class FilterCriteriaDeletedEvent extends Event {
 
 
 
-	public FilterCriteriaDeletedEvent(String name, List<FilterCriteria> filterCriteria, Object source) {
+	public FilterCriteriaDeletedSavedEvent(String name, List<FilterCriteria> filterCriteria, Object source) {
 		super(source);
 		this.name = name;
 		this.filterCriteria = filterCriteria;

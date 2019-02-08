@@ -19,6 +19,8 @@ import java.util.List;
 public class SortElementNode extends HBox {
 
 
+	private SortPopup parent;
+
 	public SortElement.Sort sortDir;
 	public TaskAttribute attribute;
 
@@ -31,17 +33,17 @@ public class SortElementNode extends HBox {
 
 
 
-	public SortElementNode(TaskAttribute attribute) {
-		this(attribute, SortElement.Sort.ASC);
+	public SortElementNode(TaskAttribute attribute, SortPopup parent) {
+		this(attribute, SortElement.Sort.ASC, parent);
 	}
 
 
 
 
-	public SortElementNode(TaskAttribute attribute, SortElement.Sort sortDir) {
+	public SortElementNode(TaskAttribute attribute, SortElement.Sort sortDir, SortPopup parent) {
 		this.attribute = attribute;
 		this.sortDir = sortDir;
-
+		this.parent = parent;
 
 		// root
 		this.setMinSize(100, 34);
@@ -59,6 +61,7 @@ public class SortElementNode extends HBox {
 		btnRemove.setOnAction(event -> {
 			VBox boxAttributes = (VBox) this.getParent();
 			boxAttributes.getChildren().remove(this);
+			parent.onSortChanged(this);
 		});
 		this.getChildren().add(btnRemove);
 
@@ -83,6 +86,7 @@ public class SortElementNode extends HBox {
 				@Override
 				public void onResponse(Response<TaskAttribute> response) {
 					SortElementNode.this.attribute = response.getValue();
+					parent.onSortChanged(SortElementNode.this);
 				}
 			});
 		});
@@ -103,6 +107,7 @@ public class SortElementNode extends HBox {
 					break;
 				}
 			}
+			parent.onSortChanged(SortElementNode.this);
 		});
 		this.getChildren().add(choiceSortDir);
 
@@ -126,6 +131,7 @@ public class SortElementNode extends HBox {
 			int index = boxAttributes.getChildren().indexOf(SortElementNode.this);
 			if (index > 0) {
 				VBoxOrder.moveItem(boxAttributes, SortElementNode.this, -1);
+				parent.onSortChanged(SortElementNode.this);
 			}
 
 		});
@@ -143,6 +149,7 @@ public class SortElementNode extends HBox {
 			int index = boxAttributes.getChildren().indexOf(SortElementNode.this);
 			if (index < boxAttributes.getChildren().size() - 1) {
 				VBoxOrder.moveItem(boxAttributes, SortElementNode.this, +1);
+				parent.onSortChanged(SortElementNode.this);
 			}
 		});
 		this.getChildren().add(btnDown);

@@ -2,7 +2,7 @@ package com.ruegnerlukas.taskmanager.architecture.eventsystem.events;
 
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
 
-public class FilterCriteriaDeletedRejection extends Event {
+public class FilterCriteriaDeleteSavedRejection extends Event {
 
 
 	private String name;
@@ -11,7 +11,7 @@ public class FilterCriteriaDeletedRejection extends Event {
 
 
 
-	public FilterCriteriaDeletedRejection(String name, EventCause cause, Object source) {
+	public FilterCriteriaDeleteSavedRejection(String name, EventCause cause, Object source) {
 		super(source);
 		this.name = name;
 		this.cause = cause;

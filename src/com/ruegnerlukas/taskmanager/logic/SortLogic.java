@@ -3,8 +3,7 @@ package com.ruegnerlukas.taskmanager.logic;
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRemovedEvent;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.SortElementsChangedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.groups.TaskGroup;
@@ -16,6 +15,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValu
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Map;
 
 public class SortLogic {
 
@@ -73,7 +73,7 @@ public class SortLogic {
 		taskGroupData.groups.sort(compGroups);
 
 		Comparator<Task> compTasks = (a, b) -> {
-			for(SortElement element : Logic.project.getProject().sortElements) {
+			for (SortElement element : Logic.project.getProject().sortElements) {
 				TaskAttribute attrib = element.attribute;
 				TaskAttributeValue valueA = Logic.tasks.getValue(a, attrib);
 				TaskAttributeValue valueB = Logic.tasks.getValue(b, attrib);
@@ -84,7 +84,7 @@ public class SortLogic {
 			}
 			return 0;
 		};
-		for(TaskGroup group : taskGroupData.groups) {
+		for (TaskGroup group : taskGroupData.groups) {
 			group.tasks.sort(compTasks);
 		}
 	}
@@ -93,6 +93,30 @@ public class SortLogic {
 	//======================//
 	//        GETTER        //
 	//======================//
+
+
+
+
+	public void getSavedSortElements(Request<Map<String, List<SortElement>>> request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			request.respond(new Response<>(Response.State.SUCCESS, project.savedSortElements));
+		}
+	}
+
+
+
+
+	public void getSavedSortElements(String name, Request<List<SortElement>> request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (project.savedSortElements.containsKey(name)) {
+				request.respond(new Response<>(Response.State.SUCCESS, project.savedSortElements.get(name)));
+			} else {
+				request.respond(new Response<>(Response.State.FAIL, "No saved elements with name '" + name + "' found"));
+			}
+		}
+	}
 
 
 
@@ -108,6 +132,37 @@ public class SortLogic {
 	//======================//
 	//        SETTER        //
 	//======================//
+
+
+
+
+	public void saveSortElements(String name, List<SortElement> elements) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (project.savedSortElements.containsKey(name)) {
+				EventManager.fireEvent(new SortSavedRejection(name, elements, EventCause.NOT_UNIQUE, this));
+			} else {
+				project.savedSortElements.put(name, elements);
+				EventManager.fireEvent(new SortSavedEvent(name, elements, this));
+			}
+		}
+	}
+
+
+
+
+	public void deleteSavedSortElements(String name) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (project.savedSortElements.containsKey(name)) {
+				List<SortElement> elements = project.savedSortElements.get(name);
+				project.savedSortElements.remove(name);
+				EventManager.fireEvent(new SortDeleteSavedEvent(name, elements, this));
+			} else {
+				EventManager.fireEvent(new SortDeleteSavedRejection(name, EventCause.NOT_EXISTS, this));
+			}
+		}
+	}
 
 
 

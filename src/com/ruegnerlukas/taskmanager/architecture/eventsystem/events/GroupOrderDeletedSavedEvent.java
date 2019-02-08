@@ -3,7 +3,7 @@ package com.ruegnerlukas.taskmanager.architecture.eventsystem.events;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.data.groups.AttributeGroupData;
 
-public class GroupOrderDeletedEvent extends Event {
+public class GroupOrderDeletedSavedEvent extends Event {
 
 
 	private String name;
@@ -12,7 +12,7 @@ public class GroupOrderDeletedEvent extends Event {
 
 
 
-	public GroupOrderDeletedEvent(String name, AttributeGroupData data, Object source) {
+	public GroupOrderDeletedSavedEvent(String name, AttributeGroupData data, Object source) {
 		super(source);
 		this.name = name;
 		this.data = data;

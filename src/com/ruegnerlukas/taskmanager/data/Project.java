@@ -36,6 +36,7 @@ public class Project {
 
 	// 4. sort
 	public List<SortElement> sortElements = new ArrayList<>();
+	public Map<String, List<SortElement>> savedSortElements = new HashMap<>();
 
 
 

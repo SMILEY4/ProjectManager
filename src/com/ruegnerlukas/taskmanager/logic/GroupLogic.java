@@ -259,7 +259,7 @@ public class GroupLogic {
 	 * Deletes a saved attribute-order with the given name. <p>
 	 * Events <p>
 	 * - GroupOrderDeletedRejection: when the order could not be deleted (NOT_EXISTS: given name does not exist) <p>
-	 * - GroupOrderDeletedEvent: when the attribute order has been saved
+	 * - GroupOrderDeletedSavedEvent: when the attribute order has been saved
 	 */
 	public void deleteSavedGroupOrder(String name) {
 		Project project = Logic.project.getProject();
@@ -269,7 +269,7 @@ public class GroupLogic {
 			} else {
 				AttributeGroupData groupData = project.savedGroupOrders.get(name);
 				project.savedGroupOrders.remove(name);
-				EventManager.fireEvent(new GroupOrderDeletedEvent(name, groupData, this));
+				EventManager.fireEvent(new GroupOrderDeletedSavedEvent(name, groupData, this));
 			}
 		}
 	}
