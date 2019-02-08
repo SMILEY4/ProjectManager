@@ -3,12 +3,10 @@ package com.ruegnerlukas.taskmanager.logic;
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRemovedEvent;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupHeaderChangedEvent;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupHeaderStringChangedEvent;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupOrderChangedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.Task;
+import com.ruegnerlukas.taskmanager.data.groups.AttributeGroupData;
 import com.ruegnerlukas.taskmanager.data.groups.TaskGroup;
 import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -50,7 +48,7 @@ public class GroupLogic {
 
 
 	protected boolean isAttributeRelevant(TaskAttribute attribute) {
-		return Logic.project.getProject().taskGroupOrder.contains(attribute);
+		return Logic.project.getProject().attribGroupData.attributes.contains(attribute);
 	}
 
 
@@ -62,10 +60,10 @@ public class GroupLogic {
 
 		// create new group data
 		TaskGroupData taskGroupData = new TaskGroupData();
-		taskGroupData.attributes.addAll(project.taskGroupOrder);
+		taskGroupData.attributes.addAll(project.attribGroupData.attributes);
 
 		// sort tasks into groups
-		if (project.taskGroupOrder.isEmpty()) {
+		if (project.attribGroupData.attributes.isEmpty()) {
 			TaskGroup group = new TaskGroup();
 			group.tasks.addAll(tasksInput);
 			taskGroupData.groups.add(group);
@@ -73,7 +71,7 @@ public class GroupLogic {
 		} else {
 
 			// build tree (first element is root)
-			List<Node> tree = buildTree(tasksInput, project.taskGroupOrder);
+			List<Node> tree = buildTree(tasksInput, project.attribGroupData.attributes);
 			Node root = tree.get(0);
 
 			for (int i = 1; i < tree.size(); i++) {
@@ -183,11 +181,35 @@ public class GroupLogic {
 
 
 
+	public void getSavedGroupOrders(Request<Map<String, AttributeGroupData>> request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			request.respond(new Response<>(Response.State.SUCCESS, project.savedGroupOrders));
+		}
+	}
+
+
+
+
+	public void getSavedGroupOrder(String name, Request<AttributeGroupData> request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (project.savedGroupOrders.containsKey(name)) {
+				request.respond(new Response<>(Response.State.SUCCESS, project.savedGroupOrders.get(name)));
+			} else {
+				request.respond(new Response<>(Response.State.FAIL, "No saved group order with name '" + name + "' found."));
+			}
+		}
+	}
+
+
+
+
 	public void getCustomHeaderString(Request<String> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			if (project.useCustomHeaderString) {
-				request.respond(new Response<>(Response.State.SUCCESS, "", project.taskGroupHeaderString));
+			if (project.attribGroupData.useCustomHeader) {
+				request.respond(new Response<>(Response.State.SUCCESS, "", project.attribGroupData.customHeader));
 			} else {
 				request.respond(new Response<>(Response.State.FAIL, "TaskGroups do not currently use a custom headerString"));
 			}
@@ -200,7 +222,7 @@ public class GroupLogic {
 	public void getTaskGroupOrder(Request<List<TaskAttribute>> request) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, project.taskGroupOrder));
+			request.respond(new Response<>(Response.State.SUCCESS, project.attribGroupData.attributes));
 		}
 	}
 
@@ -213,6 +235,49 @@ public class GroupLogic {
 
 
 	/**
+	 * Saves the given attribute-order as the given name. The name has to be unique. <p>
+	 * Events <p>
+	 * - GroupOrderSavedRejection: when the order could not be saved (NOT_UNIQUE: name is not unique) <p>
+	 * - GroupOrderSavedEvent: when the attribute order has been saved
+	 */
+	public void saveGroupOrder(String name, List<TaskAttribute> attribOrder, boolean useCustomHeader, String customHeader) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (project.savedGroupOrders.containsKey(name)) {
+				EventManager.fireEvent(new GroupOrderSavedRejection(name, attribOrder, EventCause.NOT_UNIQUE, this));
+			} else {
+				project.savedGroupOrders.put(name, new AttributeGroupData(name, useCustomHeader, customHeader, attribOrder));
+				EventManager.fireEvent(new GroupOrderSavedEvent(name, attribOrder, this));
+			}
+		}
+	}
+
+
+
+
+	/**
+	 * Deletes a saved attribute-order with the given name. <p>
+	 * Events <p>
+	 * - GroupOrderDeletedRejection: when the order could not be deleted (NOT_EXISTS: given name does not exist) <p>
+	 * - GroupOrderDeletedEvent: when the attribute order has been saved
+	 */
+	public void deleteSavedGroupOrder(String name) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (!project.savedGroupOrders.containsKey(name)) {
+				EventManager.fireEvent(new GroupOrderDeletedRejection(name, EventCause.NOT_EXISTS, this));
+			} else {
+				AttributeGroupData groupData = project.savedGroupOrders.get(name);
+				project.savedGroupOrders.remove(name);
+				EventManager.fireEvent(new GroupOrderDeletedEvent(name, groupData, this));
+			}
+		}
+	}
+
+
+
+
+	/**
 	 * Set the TaskAttributes and their order to group tasks <p>
 	 * Events <p>
 	 * - GroupOrderChangedEvent: when the attributes where changed
@@ -220,9 +285,9 @@ public class GroupLogic {
 	public void setGroupOrder(List<TaskAttribute> attribOrder) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			project.taskGroupOrder.clear();
-			project.taskGroupOrder.addAll(attribOrder);
-			EventManager.fireEvent(new GroupOrderChangedEvent(project.taskGroupOrder, this));
+			project.attribGroupData.attributes.clear();
+			project.attribGroupData.attributes.addAll(attribOrder);
+			EventManager.fireEvent(new GroupOrderChangedEvent(project.attribGroupData.attributes, this));
 		}
 	}
 
@@ -237,8 +302,8 @@ public class GroupLogic {
 	public void setGroupHeaderString(String string) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			String oldString = project.taskGroupHeaderString;
-			project.taskGroupHeaderString = string;
+			String oldString = project.attribGroupData.customHeader;
+			project.attribGroupData.customHeader = string;
 			EventManager.fireEvent(new GroupHeaderChangedEvent(oldString, string, this));
 		}
 	}
@@ -254,9 +319,9 @@ public class GroupLogic {
 	public void setUseCustomHeaderString(boolean useCustomHeaderString) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			final boolean prev = project.useCustomHeaderString;
+			final boolean prev = project.attribGroupData.useCustomHeader;
 			if (prev != useCustomHeaderString) {
-				project.useCustomHeaderString = useCustomHeaderString;
+				project.attribGroupData.useCustomHeader = useCustomHeaderString;
 				EventManager.fireEvent(new GroupHeaderStringChangedEvent(prev, useCustomHeaderString, this));
 			}
 		}
@@ -273,9 +338,9 @@ public class GroupLogic {
 	public void removeGroupElement(TaskAttribute attribute) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			if (project.taskGroupOrder.contains(attribute)) {
-				project.taskGroupOrder.remove(attribute);
-				EventManager.fireEvent(new GroupOrderChangedEvent(project.taskGroupOrder, this));
+			if (project.attribGroupData.attributes.contains(attribute)) {
+				project.attribGroupData.attributes.remove(attribute);
+				EventManager.fireEvent(new GroupOrderChangedEvent(project.attribGroupData.attributes, this));
 			}
 		}
 	}

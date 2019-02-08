@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.data;
 
 import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.groups.AttributeGroupData;
 import com.ruegnerlukas.taskmanager.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
@@ -9,7 +10,9 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.IDAttributeData;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Project {
 
@@ -27,9 +30,8 @@ public class Project {
 	public List<FilterCriteria> filterCriteria = new ArrayList<>();
 
 	// 3. group by
-	public List<TaskAttribute> taskGroupOrder = new ArrayList<>();
-	public boolean useCustomHeaderString = false;
-	public String taskGroupHeaderString = "";
+	public AttributeGroupData attribGroupData = new AttributeGroupData();
+	public Map<String, AttributeGroupData> savedGroupOrders = new HashMap<>();
 
 	// 4. sort
 	public List<SortElement> sortElements = new ArrayList<>();

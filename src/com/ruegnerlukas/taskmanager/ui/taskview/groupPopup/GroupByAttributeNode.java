@@ -20,6 +20,8 @@ public class GroupByAttributeNode extends HBox {
 
 	public TaskAttribute attribute;
 
+	private GroupByPopup parent;
+
 	private Button btnRemove;
 	private ChoiceBox<String> choiceAttrib;
 	private Button btnUp;
@@ -28,8 +30,9 @@ public class GroupByAttributeNode extends HBox {
 
 
 
-	public GroupByAttributeNode(TaskAttribute attribute) {
+	public GroupByAttributeNode(TaskAttribute attribute, GroupByPopup parent) {
 		this.attribute = attribute;
+		this.parent = parent;
 
 
 		// root
@@ -48,6 +51,7 @@ public class GroupByAttributeNode extends HBox {
 		btnRemove.setOnAction(event -> {
 			VBox boxAttributes = (VBox) this.getParent();
 			boxAttributes.getChildren().remove(this);
+			parent.onAttributesChanged(GroupByAttributeNode.this);
 		});
 		this.getChildren().add(btnRemove);
 
@@ -74,6 +78,7 @@ public class GroupByAttributeNode extends HBox {
 				@Override
 				public void onResponse(Response<TaskAttribute> response) {
 					GroupByAttributeNode.this.attribute = response.getValue();
+					parent.onAttributesChanged(GroupByAttributeNode.this);
 				}
 			});
 		});
@@ -99,6 +104,7 @@ public class GroupByAttributeNode extends HBox {
 			int index = boxAttributes.getChildren().indexOf(GroupByAttributeNode.this);
 			if (index > 0) {
 				VBoxOrder.moveItem(boxAttributes, GroupByAttributeNode.this, -1);
+				parent.onAttributesChanged(GroupByAttributeNode.this);
 			}
 
 		});
@@ -116,6 +122,7 @@ public class GroupByAttributeNode extends HBox {
 			int index = boxAttributes.getChildren().indexOf(GroupByAttributeNode.this);
 			if (index < boxAttributes.getChildren().size() - 1) {
 				VBoxOrder.moveItem(boxAttributes, GroupByAttributeNode.this, +1);
+				parent.onAttributesChanged(GroupByAttributeNode.this);
 			}
 		});
 		this.getChildren().add(btnDown);

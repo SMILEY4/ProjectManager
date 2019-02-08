@@ -175,7 +175,7 @@ public class TaskView extends AnchorPane implements TabContent {
 			stage.initModality(Modality.WINDOW_MODAL);
 			stage.initOwner(ViewManager.getPrimaryStage());
 			GroupByPopup popup = new GroupByPopup(stage);
-			Scene scene = new Scene(popup, 500, 300);
+			Scene scene = new Scene(popup, 750, 430);
 			stage.setScene(scene);
 			stage.show();
 		});
@@ -452,7 +452,7 @@ public class TaskView extends AnchorPane implements TabContent {
 					n = project.filterCriteria.size();
 				}
 				if (button == btnGroup) {
-					n = project.taskGroupOrder.size();
+					n = project.attribGroupData.attributes.size(); // TODO
 				}
 
 				if (0 < n && n < 10) {
