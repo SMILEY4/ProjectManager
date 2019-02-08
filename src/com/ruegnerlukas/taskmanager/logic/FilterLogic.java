@@ -15,6 +15,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class FilterLogic {
 
@@ -370,9 +371,64 @@ public class FilterLogic {
 	}
 
 
+
+
+	public void getSavedFilterCriterias(Request<Map<String, List<FilterCriteria>>> request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			request.respond(new Response<>(Response.State.SUCCESS, project.savedFilters));
+		}
+	}
+
+
+
+
+	public void getSavedFilterCriteria(String name, Request<List<FilterCriteria>> request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (project.savedFilters.containsKey(name)) {
+				request.respond(new Response<>(Response.State.SUCCESS, project.savedFilters.get(name)));
+			} else {
+				request.respond(new Response<>(Response.State.FAIL, "No saved filters with name '" + name + "'"));
+			}
+		}
+	}
+
+
 	//======================//
 	//        SETTER        //
 	//======================//
+
+
+
+
+	public void saveFilterCriterias(String name, List<FilterCriteria> filterCriterias) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (project.savedFilters.containsKey(name)) {
+				EventManager.fireEvent(new FilterCriteriaSavedRejection(name, filterCriterias, EventCause.NOT_UNIQUE, this));
+			} else {
+				project.savedFilters.put(name, filterCriterias);
+				EventManager.fireEvent(new FilterCriteriaSavedEvent(name, filterCriterias, this));
+			}
+		}
+	}
+
+
+
+
+	public void deleteSavedFilterCriteria(String name) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (project.savedFilters.containsKey(name)) {
+				List<FilterCriteria> list = project.savedFilters.get(name);
+				project.savedFilters.remove(name);
+				EventManager.fireEvent(new FilterCriteriaDeletedEvent(name, list, this));
+			} else {
+				EventManager.fireEvent(new FilterCriteriaDeletedRejection(name, EventCause.NOT_EXISTS, this));
+			}
+		}
+	}
 
 
 

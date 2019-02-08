@@ -28,6 +28,7 @@ public class Project {
 
 	// 2. filter
 	public List<FilterCriteria> filterCriteria = new ArrayList<>();
+	public Map<String, List<FilterCriteria>> savedFilters = new HashMap<>();
 
 	// 3. group by
 	public AttributeGroupData attribGroupData = new AttributeGroupData();

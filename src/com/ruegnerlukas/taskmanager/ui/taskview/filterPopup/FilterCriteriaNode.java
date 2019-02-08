@@ -24,6 +24,7 @@ import java.util.List;
 
 public class FilterCriteriaNode extends HBox {
 
+	private FilterPopup parent;
 
 	private Button btnRemove;
 	private ChoiceBox<String> choiceAttrib;
@@ -38,17 +39,18 @@ public class FilterCriteriaNode extends HBox {
 
 
 
-	public FilterCriteriaNode(TaskAttribute attribute) {
-		this(attribute, FilterCriteria.getPossibleComparisionOps(attribute)[0], null);
+	public FilterCriteriaNode(TaskAttribute attribute, FilterPopup parent) {
+		this(attribute, FilterCriteria.getPossibleComparisionOps(attribute)[0], null, parent);
 	}
 
 
 
 
-	public FilterCriteriaNode(TaskAttribute attribute, FilterCriteria.ComparisonOp comparisonOp, TaskAttributeValue compValue) {
+	public FilterCriteriaNode(TaskAttribute attribute, FilterCriteria.ComparisonOp comparisonOp, TaskAttributeValue compValue, FilterPopup parent) {
 		this.attribute = attribute;
 		this.comparisonOp = comparisonOp;
 		this.compValue = compValue;
+		this.parent = parent;
 
 
 		// root
@@ -67,8 +69,9 @@ public class FilterCriteriaNode extends HBox {
 		btnRemove.setPrefSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
 		btnRemove.setOnAction(event -> {
-			VBox parent = (VBox) this.getParent();
-			parent.getChildren().remove(this);
+			VBox boxParent = (VBox) this.getParent();
+			boxParent.getChildren().remove(this);
+			parent.onFiltersChanged(FilterCriteriaNode.this);
 		});
 		this.getChildren().add(btnRemove);
 
@@ -96,6 +99,7 @@ public class FilterCriteriaNode extends HBox {
 				public void onResponse(Response<TaskAttribute> response) {
 					FilterCriteriaNode.this.attribute = response.getValue();
 					FilterCriteriaNode.this.compValue = null;
+					parent.onFiltersChanged(FilterCriteriaNode.this);
 					update();
 				}
 			});
@@ -144,6 +148,7 @@ public class FilterCriteriaNode extends HBox {
 					this.comparisonOp = comp;
 					this.compValue = null;
 					updateCompValues();
+					parent.onFiltersChanged(FilterCriteriaNode.this);
 					break;
 				}
 			}
@@ -193,6 +198,7 @@ public class FilterCriteriaNode extends HBox {
 		if (filterValue != null) {
 			filterValue.setOnAction(event -> {
 				this.compValue = filterValue.getValue();
+				parent.onFiltersChanged(FilterCriteriaNode.this);
 			});
 			filterValue.update(valueNodes, attribute.data, comparisonOp, compValue);
 			this.compValue = filterValue.getValue();
