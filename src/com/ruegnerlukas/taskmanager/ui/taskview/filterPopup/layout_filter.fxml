@@ -27,13 +27,13 @@
             </HBox>
             <HBox spacing="1.0">
                <children>
-                  <Label maxHeight="32.0" maxWidth="45.0" minHeight="32.0" minWidth="45.0" prefHeight="32.0" prefWidth="45.0" text="Presets:" />
+                  <Label maxHeight="32.0" maxWidth="60.0" minHeight="32.0" minWidth="60.0" prefHeight="32.0" prefWidth="60.0" text="Presets:" />
                   <ChoiceBox fx:id="choiceSaved" maxHeight="32.0" maxWidth="200.0" minHeight="32.0" minWidth="200.0" prefHeight="32.0" prefWidth="200.0" />
                   <Button fx:id="btnDeleteSaved" maxHeight="32.0" maxWidth="65.0" minHeight="32.0" minWidth="65.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="65.0" text="Delete" />
                   <HBox alignment="TOP_RIGHT" maxWidth="100000.0" minWidth="0.0" prefWidth="100000.0" spacing="1.0">
                      <children>
                         <TextField fx:id="fieldSave" maxWidth="250.0" minWidth="10.0" prefHeight="33.0" prefWidth="250.0" />
-                        <Button fx:id="btnSave" maxHeight="32.0" maxWidth="55.0" minHeight="32.0" minWidth="55.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="55.0" text="Save" />
+                        <Button fx:id="btnSave" maxHeight="32.0" maxWidth="60.0" minHeight="32.0" minWidth="60.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="60.0" text="Save" />
                      </children>
                   </HBox>
                </children>
@@ -63,7 +63,7 @@
             <HBox alignment="CENTER_RIGHT" maxHeight="32.0" minHeight="32.0" prefHeight="32.0" spacing="5.0">
                <children>
                   <Button fx:id="btnCancel" maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="100.0" text="Cancel" />
-                  <Button fx:id="btnAccept" maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="100.0" text="Accept" />
+                  <Button fx:id="btnAccept" maxHeight="32.0" maxWidth="100.0" minHeight="32.0" minWidth="50.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="100.0" text="Apply" />
                </children>
             </HBox>
          </children>
