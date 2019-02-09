@@ -500,11 +500,17 @@ public class TaskView extends AnchorPane implements TabContent {
 
 	public void onTaskSelected(Task task) {
 		if (sidebar.currentTask != null) {
-			findCard(sidebar.currentTask).onDeselect();
+			TaskCard card = findCard(sidebar.currentTask);
+			if(card != null) {
+				card.onDeselect();
+			}
 		}
 		sidebar.showTask(task);
 		if (sidebar.currentTask != null) {
-			findCard(sidebar.currentTask).onSelect();
+			TaskCard card = findCard(sidebar.currentTask);
+			if(card != null) {
+				card.onSelect();
+			}
 			if (sidebarHidden) {
 				showSidebar(true);
 			}
