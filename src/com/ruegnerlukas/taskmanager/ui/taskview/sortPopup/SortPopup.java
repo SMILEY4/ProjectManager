@@ -75,7 +75,7 @@ public class SortPopup extends AnchorPane {
 			setSortElements(new ArrayList<SortElement>());
 		});
 
-		// select saved
+		// select presets
 		loadSaved();
 		choiceSaved.setOnAction(event -> {
 			Logic.sort.getSavedSortElements(choiceSaved.getValue(), new Request<List<SortElement>>(true) {
@@ -86,7 +86,7 @@ public class SortPopup extends AnchorPane {
 			});
 		});
 
-		// delete saved
+		// delete presets
 		btnDeleteSaved.setDisable(choiceSaved.getValue() == null);
 		btnDeleteSaved.setOnAction(event -> {
 			Logic.sort.deleteSavedSortElements(choiceSaved.getValue());
@@ -109,7 +109,7 @@ public class SortPopup extends AnchorPane {
 			Logic.sort.saveSortElements(name, getSortElements());
 		});
 
-		// events saved
+		// events presets
 		EventManager.registerListener(e -> {
 			SortSavedEvent event = (SortSavedEvent) e;
 			loadSaved();

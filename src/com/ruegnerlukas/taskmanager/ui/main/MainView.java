@@ -130,7 +130,7 @@ public class MainView extends AnchorPane {
 		}.addToMenuBar(menuBar);
 
 
-		// Open saved project
+		// Open presets project
 		MenuFunction functionOpenProject = new MenuFunction("File", "Open Project") {
 			@Override
 			public void onAction() {
@@ -208,7 +208,7 @@ public class MainView extends AnchorPane {
 					public void onResponse(Response<Project> response) {
 						Project project = response.getValue();
 						Logic.project.saveProject();
-						Alerts.info("Project has been saved.", project.name);
+						Alerts.info("Project has been presets.", project.name);
 					}
 				});
 

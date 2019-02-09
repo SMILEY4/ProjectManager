@@ -197,7 +197,7 @@ public class GroupLogic {
 			if (project.savedGroupOrders.containsKey(name)) {
 				request.respond(new Response<>(Response.State.SUCCESS, project.savedGroupOrders.get(name)));
 			} else {
-				request.respond(new Response<>(Response.State.FAIL, "No saved group order with name '" + name + "' found."));
+				request.respond(new Response<>(Response.State.FAIL, "No presets group order with name '" + name + "' found."));
 			}
 		}
 	}
@@ -237,8 +237,8 @@ public class GroupLogic {
 	/**
 	 * Saves the given attribute-order as the given name. The name has to be unique. <p>
 	 * Events <p>
-	 * - GroupOrderSavedRejection: when the order could not be saved (NOT_UNIQUE: name is not unique) <p>
-	 * - GroupOrderSavedEvent: when the attribute order has been saved
+	 * - GroupOrderSavedRejection: when the order could not be presets (NOT_UNIQUE: name is not unique) <p>
+	 * - GroupOrderSavedEvent: when the attribute order has been presets
 	 */
 	public void saveGroupOrder(String name, List<TaskAttribute> attribOrder, boolean useCustomHeader, String customHeader) {
 		Project project = Logic.project.getProject();
@@ -256,10 +256,10 @@ public class GroupLogic {
 
 
 	/**
-	 * Deletes a saved attribute-order with the given name. <p>
+	 * Deletes a presets attribute-order with the given name. <p>
 	 * Events <p>
 	 * - GroupOrderDeletedRejection: when the order could not be deleted (NOT_EXISTS: given name does not exist) <p>
-	 * - GroupOrderDeletedSavedEvent: when the attribute order has been saved
+	 * - GroupOrderDeletedSavedEvent: when the attribute order has been presets
 	 */
 	public void deleteSavedGroupOrder(String name) {
 		Project project = Logic.project.getProject();

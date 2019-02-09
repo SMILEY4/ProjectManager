@@ -389,7 +389,7 @@ public class FilterLogic {
 			if (project.savedFilters.containsKey(name)) {
 				request.respond(new Response<>(Response.State.SUCCESS, project.savedFilters.get(name)));
 			} else {
-				request.respond(new Response<>(Response.State.FAIL, "No saved filters with name '" + name + "'"));
+				request.respond(new Response<>(Response.State.FAIL, "No presets filters with name '" + name + "'"));
 			}
 		}
 	}

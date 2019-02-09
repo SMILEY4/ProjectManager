@@ -79,7 +79,7 @@ public class GroupByPopup extends AnchorPane {
 			fieldHeaderText.setText("");
 		});
 
-		// select saved
+		// select presets
 		loadSaved();
 		choiceSaved.setOnAction(event -> {
 			Logic.group.getSavedGroupOrder(choiceSaved.getValue(), new Request<AttributeGroupData>(true) {
@@ -92,7 +92,7 @@ public class GroupByPopup extends AnchorPane {
 			});
 		});
 
-		// delete saved
+		// delete presets
 		btnDeleteSaved.setDisable(choiceSaved.getValue() == null);
 		btnDeleteSaved.setOnAction(event -> {
 			Logic.group.deleteSavedGroupOrder(choiceSaved.getValue());
@@ -115,7 +115,7 @@ public class GroupByPopup extends AnchorPane {
 			Logic.group.saveGroupOrder(name, getAttributes(), cbUseHeaderString.isSelected(), cbUseHeaderString.isSelected() ? fieldHeaderText.getText() : "");
 		});
 
-		// events saved
+		// events presets
 		EventManager.registerListener(e -> {
 			GroupOrderSavedEvent event = (GroupOrderSavedEvent) e;
 			loadSaved();
@@ -191,6 +191,7 @@ public class GroupByPopup extends AnchorPane {
 
 		// cancel
 		btnCancel.setOnAction(event -> {
+			EventManager.deregisterListeners(this);
 			this.stage.close();
 		});
 

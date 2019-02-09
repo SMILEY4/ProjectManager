@@ -10,5 +10,6 @@ public class Logic {
 	public static final SortLogic sort = new SortLogic();
 	public static final TaskLogic tasks = new TaskLogic();
 	public static final TaskFlagLogic taskFlags = new TaskFlagLogic();
+	public static final PresetLogic presets = new PresetLogic();
 
 }

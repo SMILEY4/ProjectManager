@@ -74,7 +74,7 @@ public class FilterPopup extends AnchorPane {
 			setFilterCriterias(new ArrayList<FilterCriteria>());
 		});
 
-		// select saved
+		// select presets
 		loadSaved();
 		choiceSaved.setOnAction(event -> {
 			Logic.filter.getSavedFilterCriteria(choiceSaved.getValue(), new Request<List<FilterCriteria>>(true) {
@@ -85,7 +85,7 @@ public class FilterPopup extends AnchorPane {
 			});
 		});
 
-		// delete saved
+		// delete presets
 		btnDeleteSaved.setDisable(choiceSaved.getValue() == null);
 		btnDeleteSaved.setOnAction(event -> {
 			Logic.filter.deleteSavedFilterCriteria(choiceSaved.getValue());
@@ -108,7 +108,7 @@ public class FilterPopup extends AnchorPane {
 			Logic.filter.saveFilterCriterias(name, getFilterCriteriaList());
 		});
 
-		// events saved
+		// events presets
 		EventManager.registerListener(e -> {
 			FilterCriteriaSavedEvent event = (FilterCriteriaSavedEvent) e;
 			loadSaved();

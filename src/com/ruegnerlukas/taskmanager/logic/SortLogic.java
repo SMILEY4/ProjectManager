@@ -113,7 +113,7 @@ public class SortLogic {
 			if (project.savedSortElements.containsKey(name)) {
 				request.respond(new Response<>(Response.State.SUCCESS, project.savedSortElements.get(name)));
 			} else {
-				request.respond(new Response<>(Response.State.FAIL, "No saved elements with name '" + name + "' found"));
+				request.respond(new Response<>(Response.State.FAIL, "No presets elements with name '" + name + "' found"));
 			}
 		}
 	}

@@ -7,10 +7,7 @@ import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.FilterCriteriaChangedEvent;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupOrderChangedEvent;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.RefreshTaskDisplayRecommendationEvent;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.SortElementsChangedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.groups.TaskGroup;
@@ -27,6 +24,7 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.TabContent;
 import com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.FilterPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.groupPopup.GroupByPopup;
+import com.ruegnerlukas.taskmanager.ui.taskview.presets.PresetsPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.Sidebar;
 import com.ruegnerlukas.taskmanager.ui.taskview.sortPopup.SortPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.taskcard.TaskCard;
@@ -71,6 +69,7 @@ public class TaskView extends AnchorPane implements TabContent {
 	@FXML private Button btnFilter;
 	@FXML private Button btnGroup;
 	@FXML private Button btnSort;
+	@FXML private Button btnPresets;
 	@FXML private Button btnActions;
 
 	@FXML private Label labelNTasks;
@@ -188,6 +187,17 @@ public class TaskView extends AnchorPane implements TabContent {
 			stage.initOwner(ViewManager.getPrimaryStage());
 			SortPopup popup = new SortPopup(stage);
 			Scene scene = new Scene(popup, 600, 300);
+			stage.setScene(scene);
+			stage.show();
+		});
+
+		// button presets
+		btnPresets.setOnAction(event -> {
+			Stage stage = new Stage();
+			stage.initModality(Modality.WINDOW_MODAL);
+			stage.initOwner(ViewManager.getPrimaryStage());
+			PresetsPopup popup = new PresetsPopup(stage);
+			Scene scene = new Scene(popup, 610, 350);
 			stage.setScene(scene);
 			stage.show();
 		});
@@ -315,17 +325,16 @@ public class TaskView extends AnchorPane implements TabContent {
 
 				} else { // display grouped-tasks
 
+					SyncRequest<String> reqHeaderString = new SyncRequest<>();
+					Logic.group.getCustomHeaderString(reqHeaderString);
+					Response<String> resHeaderString = reqHeaderString.getResponse();
+					boolean useCustomHeaderString = resHeaderString.getState() == Response.State.SUCCESS;
+
 					// for each group
 					for (TaskGroup group : taskGroupData.groups) {
 
 						// build title
 						StringBuilder title = new StringBuilder();
-
-						SyncRequest<String> reqHeaderString = new SyncRequest<>();
-						Logic.group.getCustomHeaderString(reqHeaderString);
-						Response<String> resHeaderString = reqHeaderString.getResponse();
-
-						boolean useCustomHeaderString = resHeaderString.getState() == Response.State.SUCCESS;
 
 						if (useCustomHeaderString) {
 							String strCustomHeader = resHeaderString.getValue();
@@ -430,7 +439,7 @@ public class TaskView extends AnchorPane implements TabContent {
 			public void onEvent(Event e) {
 				setBadgeText(button, badge);
 			}
-		}, eventClass);
+		}, eventClass, PresetLoadEvent.class);
 
 		return badge;
 	}

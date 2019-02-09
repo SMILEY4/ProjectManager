@@ -38,6 +38,9 @@ public class Project {
 	public List<SortElement> sortElements = new ArrayList<>();
 	public Map<String, List<SortElement>> savedSortElements = new HashMap<>();
 
+	// presets
+	public Map<String, Preset> presets = new HashMap<>();
+
 
 
 

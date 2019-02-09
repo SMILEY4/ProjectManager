@@ -56,7 +56,7 @@ public class TaskLogic {
 		// recommend task-group-refresh
 		EventManager.registerListener(e -> {
 			EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
-		}, AttributeRemovedEvent.class, FilterCriteriaChangedEvent.class, GroupOrderChangedEvent.class, SortElementsChangedEvent.class, TaskCreatedEvent.class);
+		}, AttributeRemovedEvent.class, FilterCriteriaChangedEvent.class, GroupOrderChangedEvent.class, SortElementsChangedEvent.class, TaskCreatedEvent.class, PresetLoadEvent.class);
 
 		EventManager.registerListener(e -> {
 			AttributeTypeChangedEvent event = (AttributeTypeChangedEvent) e;

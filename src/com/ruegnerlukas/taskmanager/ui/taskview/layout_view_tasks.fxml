@@ -21,6 +21,11 @@
                         <Button fx:id="btnFilter" minWidth="60.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="60.0" text="Filter" />
                         <Button fx:id="btnGroup" minWidth="85.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="85.0" text="Group By" />
                         <Button fx:id="btnSort" minWidth="55.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="55.0" text="Sort" />
+                        <Button fx:id="btnPresets" maxWidth="70.0" minWidth="70.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="70.0" text="Presets">
+                           <HBox.margin>
+                              <Insets left="30.0" />
+                           </HBox.margin>
+                        </Button>
                         <Region maxHeight="0.0" maxWidth="100000.0" minHeight="0.0" minWidth="0.0" prefHeight="0.0" prefWidth="100000.0" />
                         <Label fx:id="labelNTasks" alignment="CENTER_RIGHT" minWidth="100.0" prefHeight="21.0" prefWidth="53.0" text="9999/9999">
                            <HBox.margin>
