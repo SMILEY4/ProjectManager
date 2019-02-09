@@ -150,12 +150,14 @@ public class SortPopup extends AnchorPane {
 		btnAccept.setOnAction(event -> {
 			List<SortElement> elements = getSortElements();
 			Logic.sort.setSort(elements);
+			EventManager.deregisterListeners(this);
 			this.stage.close();
 		});
 
 
 		// cancel
 		btnCancel.setOnAction(event -> {
+			EventManager.deregisterListeners(this);
 			this.stage.close();
 		});
 

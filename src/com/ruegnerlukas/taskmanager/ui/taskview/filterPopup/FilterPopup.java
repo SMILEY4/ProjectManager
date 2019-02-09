@@ -150,12 +150,14 @@ public class FilterPopup extends AnchorPane {
 		btnAccept.setOnAction(event -> {
 			List<FilterCriteria> criteriaList = getFilterCriteriaList();
 			Logic.filter.setFilterCriteria(criteriaList);
+			EventManager.deregisterListeners(this);
 			this.stage.close();
 		});
 
 
 		// cancel
 		btnCancel.setOnAction(event -> {
+			EventManager.deregisterListeners(this);
 			this.stage.close();
 		});
 
