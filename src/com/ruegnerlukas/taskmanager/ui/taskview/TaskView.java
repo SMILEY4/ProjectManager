@@ -260,7 +260,7 @@ public class TaskView extends AnchorPane implements TabContent {
 			}
 		});
 
-		// create content
+		// createItem content
 		sidebar = new Sidebar();
 		AnchorUtils.setAnchors(sidebar, 0, 0, 0, 0);
 		paneSidebar.getChildren().add(sidebar);
@@ -360,7 +360,7 @@ public class TaskView extends AnchorPane implements TabContent {
 							}
 						}
 
-						// create list
+						// createItem list
 						createTaskList(title.toString(), group.tasks);
 
 					}
@@ -399,7 +399,7 @@ public class TaskView extends AnchorPane implements TabContent {
 
 	private Label createButtonBadge(AnchorPane pane, Button button) {
 
-		// create badge-label
+		// createItem badge-label
 		Label badge = new Label("!");
 		badge.setMinSize(14, 14);
 		badge.setPrefSize(14, 14);

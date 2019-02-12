@@ -301,7 +301,7 @@ public class TaskLogic {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 
-			// create task
+			// createItem task
 			Task task = new Task();
 
 			// set default attrib-values

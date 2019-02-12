@@ -51,7 +51,7 @@ public abstract class AttributeDataNode extends AnchorPane {
 
 	private void create(String fxmlPath) throws IOException {
 
-		// load/create fxml
+		// load/createItem fxml
 		final int addHeight = displaySaveButtons ? 42 : 0;
 		AnchorPane root = (AnchorPane) FXMLUtils.loadFXML(getClass().getResource(fxmlPath), this);
 		AnchorUtils.setAnchors(root, 0, 0, addHeight, 0);
@@ -74,7 +74,7 @@ public abstract class AttributeDataNode extends AnchorPane {
 		}, AttributeUpdatedEvent.class, AttributeUpdatedRejection.class);
 
 
-		// create buttons: save/discard changes
+		// createItem buttons: save/discard changes
 		if (displaySaveButtons) {
 			buttonSave = new Button("Save");
 			buttonSave.setPrefSize(100, 32);

@@ -102,7 +102,7 @@ public class ProjectLogic {
 			EventManager.fireEvent(new ProjectClosedEvent(prevProject, this));
 		}
 
-		// create/open new project
+		// createItem/open new project
 		Project newProject = new Project(name);
 		setProject(newProject);
 		EventManager.fireEvent(new ProjectCreatedEvent(newProject, this));

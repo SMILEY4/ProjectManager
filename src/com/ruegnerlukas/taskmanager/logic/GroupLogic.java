@@ -58,7 +58,7 @@ public class GroupLogic {
 
 		Project project = Logic.project.getProject();
 
-		// create new group data
+		// createItem new group data
 		TaskGroupData taskGroupData = new TaskGroupData();
 		taskGroupData.attributes.addAll(project.attribGroupData.attributes);
 

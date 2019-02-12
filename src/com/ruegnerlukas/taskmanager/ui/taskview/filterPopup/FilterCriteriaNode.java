@@ -171,7 +171,7 @@ public class FilterCriteriaNode extends HBox {
 			filterValue.setOnAction(null);
 		}
 
-		// create new filter value
+		// createItem new filter value
 		if (TaskAttributeType.BOOLEAN == attribute.data.getType()) {
 			filterValue = new BoolFilterValue();
 

@@ -13,65 +13,70 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.uielements.spinner.SpinnerUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
+import javafx.scene.Parent;
 import javafx.scene.control.Spinner;
-import javafx.scene.layout.VBox;
 
 public class NumberItem extends SidebarItem {
 
 
+	private Spinner<Double> spinner;
+
+
+
+
 	protected NumberItem(Task task, TaskAttribute attribute) {
 		super(task, attribute);
+	}
 
-		// left - label
-		VBox boxLeft = new VBox();
-		boxLeft.setMinSize(0, 32);
-		boxLeft.setPrefSize(10000, 32);
-		boxLeft.setMaxSize(10000, 32);
-		this.getChildren().add(boxLeft);
 
-		Label label = new Label(attribute.name);
-		label.setAlignment(Pos.CENTER_RIGHT);
-		label.setMinSize(0, 32);
-		label.setPrefSize(-1, 32);
-		label.setMaxSize(10000, 32);
-		boxLeft.getChildren().add(label);
 
-		// right - spinner
-		VBox boxRight = new VBox();
-		boxRight.setMinSize(0, 32);
-		boxRight.setPrefSize(10000, 32);
-		boxRight.setMaxSize(10000, 32);
-		this.getChildren().add(boxRight);
 
-		NumberAttributeData data = (NumberAttributeData)attribute.data;
-		Spinner<Double> spinner = new Spinner<>();
+	@Override
+	protected double getFieldHeight() {
+		return 32;
+	}
+
+
+
+
+	@Override
+	protected Parent createValueField(Task task, TaskAttribute attribute) {
+
+		NumberAttributeData data = (NumberAttributeData) attribute.data;
+		spinner = new Spinner<>();
 		spinner.setEditable(true);
 		SpinnerUtils.initSpinner(spinner, data.defaultValue, data.min, data.max, Math.pow(10, -data.decPlaces), data.decPlaces, true, false, new ChangeListener() {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				Logic.tasks.setAttributeValue(task, attribute, new NumberValue( data.decPlaces == 0 ? spinner.getValue().intValue() : spinner.getValue() ));
+				Logic.tasks.setAttributeValue(task, attribute, new NumberValue(data.decPlaces == 0 ? spinner.getValue().intValue() : spinner.getValue()));
 			}
 		});
 		spinner.setMinSize(0, 32);
 		spinner.setPrefSize(-1, 32);
 		spinner.setMaxSize(10000, 32);
-		boxRight.getChildren().add(spinner);
 
 		Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>(true) {
 			@Override
 			public void onResponse(Response<TaskAttributeValue> response) {
-				if(response.getValue() instanceof NoValue) {
-					NumberAttributeData data = (NumberAttributeData)attribute.data;
-					spinner.getValueFactory().setValue( data.min );
+				if (response.getValue() instanceof NoValue) {
+					NumberAttributeData data = (NumberAttributeData) attribute.data;
+					spinner.getValueFactory().setValue(data.min);
 				} else {
-					spinner.getValueFactory().setValue( ((NumberValue)response.getValue()).getDouble() );
+					spinner.getValueFactory().setValue(((NumberValue) response.getValue()).getDouble());
 				}
 			}
 		});
 
+		return spinner;
+	}
 
+
+
+
+	@Override
+	protected TaskAttributeValue getValue() {
+		NumberAttributeData data = (NumberAttributeData) attribute.data;
+		return new NumberValue(data.decPlaces == 0 ? spinner.getValue().intValue() : spinner.getValue());
 	}
 
 

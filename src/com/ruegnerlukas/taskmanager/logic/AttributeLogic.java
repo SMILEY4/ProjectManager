@@ -201,7 +201,7 @@ public class AttributeLogic {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 
-			// create attribute
+			// createItem attribute
 			TaskAttribute attribute = new TaskAttribute(name, type);
 
 			// try to add attribute to project
