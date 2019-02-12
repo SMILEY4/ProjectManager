@@ -82,16 +82,16 @@ public class TaskLogic {
 	}
 
 
-	
-	
+
+
 	private boolean isAttributeRelevant(TaskAttribute attribute) {
 		TaskAttributeType type = attribute.data.getType();
 		return (type == TaskAttributeType.FLAG || type == TaskAttributeType.DESCRIPTION || type == TaskAttributeType.ID);
 	}
 
 
-	
-	
+
+
 	protected List<Task> getTasksInternal() {
 		return Logic.project.getProject().tasks;
 	}
@@ -161,9 +161,34 @@ public class TaskLogic {
 	}
 
 
+
+
+	protected boolean hasValue(Task task, TaskAttribute attribute) {
+		return task.attributes.containsKey(attribute);
+	}
+
+
 	//======================//
 	//        GETTER        //
 	//======================//
+
+
+
+
+	public void getTaskWithValue(TaskAttribute attribute, Request<List<Task>> request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			List<Task> allTasks = project.tasks;
+			List<Task> tasks = new ArrayList<>();
+			for (int i = 0; i < allTasks.size(); i++) {
+				Task task = allTasks.get(i);
+				if (hasValue(task, attribute)) {
+					tasks.add(task);
+				}
+			}
+			request.respond(new Response<>(Response.State.SUCCESS, tasks));
+		}
+	}
 
 
 
@@ -376,6 +401,50 @@ public class TaskLogic {
 
 			} else {
 				EventManager.fireEvent(new TaskValueChangedRejection(task, attribute, oldValue, null, EventCause.NOT_EXISTS, this));
+
+			}
+
+		}
+
+	}
+
+
+
+	public static final String CORR_BEH_DELETE = "Delete values";
+	public static final String CORR_BEH_DEFAULT = "Set Values to default value";
+
+
+	public void correctTaskValues(TaskAttribute attribute, String behaviour, boolean onlyInvalid) {
+
+		Project project = Logic.project.getProject();
+		if (project != null) {
+
+			List<Task> allTasks = project.tasks;
+			List<Task> affectedTasks = new ArrayList<>();
+			for (int i = 0; i < allTasks.size(); i++) {
+				Task task = allTasks.get(i);
+				if (hasValue(task, attribute)) {
+					affectedTasks.add(task);
+				}
+			}
+
+			for(Task task : affectedTasks) {
+
+				TaskAttributeValue value = getValue(task, attribute);
+				if(onlyInvalid && attribute.data.validate(value)) {
+					continue;
+				}
+
+				if(behaviour.equals(CORR_BEH_DELETE)) {
+					removeAttribute(task, attribute);
+				}
+				if(behaviour.equals(CORR_BEH_DEFAULT)) {
+					if(attribute.data.usesDefault()) {
+						setAttributeValue(task, attribute, attribute.data.getDefault());
+					} else {
+						removeAttribute(task, attribute);
+					}
+				}
 
 			}
 

@@ -1,15 +1,13 @@
 package com.ruegnerlukas.taskmanager.architecture.eventsystem;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class EventManager {
 
 
 	private static Map<Class<? extends Event>, ArrayList<EventListener>> listenerMap = new HashMap<>();
 	private static Map<Object, List<EventListener>> originMap = new HashMap<>();
+	private static Set<EventListener> mutedListeners = new HashSet<>();
 
 
 
@@ -41,7 +39,7 @@ public class EventManager {
 	private static void addListener(EventListener listener, Class<? extends Event> event) {
 		ArrayList<EventListener> listeners = listenerMap.get(event);
 		if (listeners == null) {
-			listeners = new ArrayList<EventListener>();
+			listeners = new ArrayList<>();
 			listenerMap.put(event, listeners);
 		}
 		listeners.add(listener);
@@ -70,6 +68,7 @@ public class EventManager {
 				listeners.remove(listener);
 			}
 		}
+		unmuteListener(listener);
 	}
 
 
@@ -81,7 +80,45 @@ public class EventManager {
 				deregisterListeners(listener);
 			}
 			originMap.remove(origin);
+			unmuteListeners(origin);
 		}
+	}
+
+
+//	private static Map<Class<? extends Event>, ArrayList<EventListener>> listenerMap = new HashMap<>();
+//	private static Map<Object, List<EventListener>> originMap = new HashMap<>();
+//	private static Set<EventListener> mutedListeners = new HashSet<>();
+
+
+
+
+	public static void muteListeners(Object origin) {
+		if (originMap.containsKey(origin)) {
+			mutedListeners.addAll(originMap.get(origin));
+		}
+	}
+
+
+
+
+	public static void muteListener(EventListener listener) {
+		mutedListeners.add(listener);
+	}
+
+
+
+
+	public static void unmuteListeners(Object origin) {
+		if (originMap.containsKey(origin)) {
+			mutedListeners.removeAll(originMap.get(origin));
+		}
+	}
+
+
+
+
+	public static void unmuteListener(EventListener listener) {
+		mutedListeners.remove(listener);
 	}
 
 
@@ -92,10 +129,12 @@ public class EventManager {
 		ArrayList<EventListener> listeners = listenerMap.get(event.getClass());
 		if (listeners != null) {
 			for (int i = 0; i < listeners.size(); i++) {
-				if (event.isConsumed()) {
-					break;
-				} else {
-					listeners.get(i).onEvent(event);
+				if (!mutedListeners.contains(listeners.get(i))) {
+					if (event.isConsumed()) {
+						break;
+					} else {
+						listeners.get(i).onEvent(event);
+					}
 				}
 			}
 		}

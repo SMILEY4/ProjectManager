@@ -1,9 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedRejection;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
@@ -12,25 +8,20 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagArrayValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.FXEvents;
-import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
-import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
-public class FlagAttributeNode extends AnchorPane implements AttributeDataNode {
+public class FlagAttributeNode extends AttributeDataNode {
 
 
-	public TaskAttribute attribute;
+	private List<FlagNode> flagNodes;
+	private FlagNode flagNodeDefault;
 
 	@FXML private VBox boxFlags;
 	@FXML private ComboBox<String> defaultFlag;
@@ -40,46 +31,20 @@ public class FlagAttributeNode extends AnchorPane implements AttributeDataNode {
 
 
 
-	public FlagAttributeNode(TaskAttribute attribute) {
-		try {
-			this.attribute = attribute;
-			loadFromFXML();
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
+	public FlagAttributeNode(TaskAttribute attribute, TaskAttributeNode parent) {
+		super(attribute, parent, "taskattribute_flag.fxml", true);
 	}
 
 
 
 
-	private void loadFromFXML() throws IOException {
-		final String PATH = "taskattribute_flag.fxml";
+	@Override
+	protected void onCreate() {
 
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(PATH));
-		loader.setController(this);
-		AnchorPane root = (AnchorPane) loader.load();
-		root.getStylesheets().add(ViewManager.class.getResource("bootstrap4_2.css").toExternalForm());
-		root.getStylesheets().add(ViewManager.class.getResource("style.css").toExternalForm());
-		root.setOnKeyReleased(new EventHandler<KeyEvent>() {
-			@Override
-			public void handle(KeyEvent event) {
-				if (event.getCode() == KeyCode.R) {
-					root.getStylesheets().clear();
-					root.getStylesheets().add(ViewManager.class.getResource("bootstrap4_2.css").toExternalForm());
-					root.getStylesheets().add(ViewManager.class.getResource("style.css").toExternalForm());
-				}
-			}
-		});
 
-		AnchorUtils.setAnchors(root, 0, 0, 0, 0);
-		this.getChildren().add(root);
+		flagNodes = new ArrayList<>();
 
-		this.setMinSize(root.getMinWidth(), root.getMinHeight());
-		this.setPrefSize(root.getPrefWidth(), root.getPrefHeight());
-		this.setMaxSize(root.getMaxWidth(), root.getMaxHeight());
-
-		FlagAttributeData attributeData = (FlagAttributeData) attribute.data;
-
+		FlagAttributeData attributeData = (FlagAttributeData) getAttribute().data;
 
 		// taskFlags
 		btnAddFlag = new Button("Add Flag");
@@ -90,12 +55,10 @@ public class FlagAttributeNode extends AnchorPane implements AttributeDataNode {
 
 		btnAddFlag.setOnAction(event -> {
 			TaskFlag flag = new TaskFlag(TaskFlag.FlagColor.GRAY, "Flag " + Integer.toHexString(new Integer(new Random().nextInt()).hashCode()));
-			TaskFlag[] flagArray = new TaskFlag[attributeData.flags.length + 1];
-			for (int i = 0; i < flagArray.length - 1; i++) {
-				flagArray[i] = attributeData.flags[i];
-			}
-			flagArray[flagArray.length - 1] = flag;
-			Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flagArray));
+			FlagNode node = new FlagNode(this, flag);
+			flagNodes.add(node);
+			refreshList();
+			setChanged();
 		});
 
 		// default flag
@@ -104,44 +67,59 @@ public class FlagAttributeNode extends AnchorPane implements AttributeDataNode {
 		}
 		defaultFlag.getSelectionModel().select(attributeData.defaultFlag.name);
 		defaultFlag.setOnAction(FXEvents.register(event -> {
-			for (TaskFlag flag : attributeData.flags) {
-				if (flag.name.equals(defaultFlag.getValue())) {
-					Logic.attribute.updateTaskAttribute(attribute.name, TaskAttributeData.Var.DEFAULT_VALUE, new FlagValue(flag));
+			for (FlagNode node : flagNodes) {
+				if (node.name.equals(defaultFlag.getValue())) {
+					node.setDefault(true);
+				} else {
+					node.setDefault(false);
 				}
 			}
+			setChanged();
 		}, defaultFlag));
 
-		// listen for changes / rejections
-		EventManager.registerListener(this, e -> {
-			TaskAttribute eventAttribute = null;
-			if(e instanceof  AttributeUpdatedEvent) {
-				eventAttribute = ((AttributeUpdatedEvent) e).getAttribute();
-			} else {
-				eventAttribute = ((AttributeUpdatedRejection) e).getAttribute();
-			}
-			if (eventAttribute == attribute) {
-				updateData();
-			}
-		}, AttributeUpdatedEvent.class, AttributeUpdatedRejection.class);
+
+		// read values from attribute
+		onChange();
+	}
 
 
-		updateData();
+
+
+	protected void removeFlagNode(FlagNode node) {
+		flagNodes.remove(node);
+		refreshList();
+		setChanged();
+	}
+
+
+
+
+	private void refreshList() {
+
+		// default
+		FXEvents.mute(defaultFlag);
+		defaultFlag.getItems().clear();
+		for (FlagNode node : flagNodes) {
+			defaultFlag.getItems().add(node.flag.name);
+			if (node.isDefaultFlag) {
+				defaultFlag.getSelectionModel().select(node.flag.name);
+			}
+		}
+		FXEvents.unmute(defaultFlag);
+
+		// flags
+		boxFlags.getChildren().clear();
+		boxFlags.getChildren().addAll(flagNodes);
+		boxFlags.getChildren().add(btnAddFlag);
+
 	}
 
 
 
 
 	@Override
-	public void close() {
-		EventManager.deregisterListeners(this);
-	}
-
-
-
-
-	private void updateData() {
-
-		FlagAttributeData attributeData = (FlagAttributeData) attribute.data;
+	protected void onChange() {
+		FlagAttributeData attributeData = (FlagAttributeData) getAttribute().data;
 
 		// default
 		FXEvents.mute(defaultFlag);
@@ -152,14 +130,58 @@ public class FlagAttributeNode extends AnchorPane implements AttributeDataNode {
 		defaultFlag.getSelectionModel().select(attributeData.defaultFlag.name);
 		FXEvents.unmute(defaultFlag);
 
+
 		// flag list
-		boxFlags.getChildren().clear();
+		flagNodes.clear();
 		for (TaskFlag flag : attributeData.flags) {
 			FlagNode flagNode = new FlagNode(this, flag);
-			boxFlags.getChildren().add(flagNode);
+			flagNodes.add(flagNode);
 		}
-		boxFlags.getChildren().add(btnAddFlag);
+		refreshList();
+	}
 
+
+
+
+	@Override
+	protected void onSave() {
+
+		// flags
+		TaskFlag[] flagArray = new TaskFlag[flagNodes.size()];
+		for (int i = 0; i < flagArray.length; i++) {
+			flagArray[i] = flagNodes.get(i).flag;
+			flagArray[i].name = flagNodes.get(i).name;
+			flagArray[i].color = flagNodes.get(i).color;
+		}
+		Logic.attribute.updateTaskAttribute(getAttribute().name, TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(flagArray));
+
+
+		// default flag
+		FlagNode defaultNode = null;
+		for (FlagNode node : flagNodes) {
+			if (node.isDefaultFlag) {
+				defaultNode = node;
+				break;
+			}
+		}
+		if (defaultNode != null) {
+			Logic.attribute.updateTaskAttribute(getAttribute().name, TaskAttributeData.Var.DEFAULT_VALUE, new FlagValue(defaultNode.flag));
+		}
+	}
+
+
+
+
+	@Override
+	protected void onDiscard() {
+		onChange();
+	}
+
+
+
+
+	@Override
+	protected void onClose() {
 	}
 
 
@@ -168,6 +190,14 @@ public class FlagAttributeNode extends AnchorPane implements AttributeDataNode {
 	@Override
 	public double getNodeHeight() {
 		return this.getPrefHeight();
+	}
+
+
+
+
+	@Override
+	public boolean getUseDefault() {
+		return true;
 	}
 
 

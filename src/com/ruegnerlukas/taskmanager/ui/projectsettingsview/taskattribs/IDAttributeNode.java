@@ -1,35 +1,47 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
-import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
-import javafx.scene.layout.AnchorPane;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 
-import java.io.IOException;
-
-public class IDAttributeNode extends AnchorPane implements AttributeDataNode {
+public class IDAttributeNode extends AttributeDataNode {
 
 
-	public IDAttributeNode() {
-		try {
-			loadFromFXML();
-		} catch (IOException e) {
-			Logger.get().error(e);
-		}
+	public IDAttributeNode(TaskAttribute attribute, TaskAttributeNode parent) {
+		super(attribute, parent, "taskattribute_static.fxml", false);
 	}
 
 
 
 
-	private void loadFromFXML() throws IOException {
+	@Override
+	protected void onCreate() {
+	}
 
-		// create root
-		AnchorPane root = (AnchorPane) FXMLUtils.loadFXML(getClass().getResource("taskattribute_static.fxml"), this);
-		AnchorUtils.setAnchors(root, 0, 0, 0, 0);
-		this.getChildren().add(root);
-		this.setMinSize(root.getMinWidth(), root.getMinHeight());
-		this.setPrefSize(root.getPrefWidth(), root.getPrefHeight());
-		this.setMaxSize(root.getMaxWidth(), root.getMaxHeight());
+
+
+
+	@Override
+	protected void onChange() {
+	}
+
+
+
+
+	@Override
+	protected void onSave() {
+	}
+
+
+
+
+	@Override
+	protected void onDiscard() {
+	}
+
+
+
+
+	@Override
+	protected void onClose() {
 	}
 
 
@@ -47,5 +59,10 @@ public class IDAttributeNode extends AnchorPane implements AttributeDataNode {
 		return this.getPrefHeight();
 	}
 
+
+	@Override
+	public boolean getUseDefault() {
+		return false;
+	}
 
 }

@@ -1,20 +1,27 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
 
+import com.ruegnerlukas.taskmanager.architecture.Response;
+import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRenamedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeTypeChangedEvent;
+import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.alert.Alerts;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabel.EditableLabel;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+
+import java.util.List;
 
 public class TaskAttributeNode extends AnchorPane {
 
@@ -77,8 +84,27 @@ public class TaskAttributeNode extends AnchorPane {
 		btnRemove.setMaxSize(32, 32);
 		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f, "black");
 		btnRemove.setOnAction(event -> {
-			Logic.attribute.deleteAttribute(attribute.name);
+
+			SyncRequest<List<Task>> request = new SyncRequest<>();
+			Logic.tasks.getTaskWithValue(attribute, request);
+			Response<List<Task>> response = request.getResponse();
+			List<Task> effectedTasks = response.getValue();
+
+			if (effectedTasks.isEmpty()) {
+				Logic.attribute.deleteAttribute(attribute.name);
+
+			} else {
+				ButtonType alert = Alerts.confirmation(
+						"Deleting \"" + attribute.name + "\" affects " + effectedTasks.size() + " tasks.",
+						"Delete \"" + attribute.name + "\" ?",
+						ButtonType.YES, ButtonType.CANCEL);
+
+				if (alert == ButtonType.YES) {
+					Logic.attribute.deleteAttribute(attribute.name);
+				}
+			}
 		});
+
 		boxHeader.getChildren().add(btnRemove);
 
 
@@ -100,7 +126,26 @@ public class TaskAttributeNode extends AnchorPane {
 		choiceType.setMaxSize(150, 32);
 		choiceType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if (!oldValue.equals(newValue)) {
-				Logic.attribute.setAttributeType(attribute.name, TaskAttributeType.getFromDisplay(newValue));
+
+				SyncRequest<List<Task>> request = new SyncRequest<>();
+				Logic.tasks.getTaskWithValue(attribute, request);
+				Response<List<Task>> response = request.getResponse();
+				List<Task> effectedTasks = response.getValue();
+
+				if(effectedTasks.isEmpty()) {
+					Logic.attribute.setAttributeType(attribute.name, TaskAttributeType.getFromDisplay(newValue));
+
+				} else {
+					ButtonType alert = Alerts.confirmation(
+							"Changing \"" + attribute.name + "\" affects " + effectedTasks.size() + " tasks.",
+							"Change \"" + attribute.name + "\" to " + newValue + "?",
+							ButtonType.YES, ButtonType.CANCEL);
+
+					if (alert == ButtonType.YES) {
+						Logic.attribute.setAttributeType(attribute.name, TaskAttributeType.getFromDisplay(newValue));
+					}
+				}
+
 			}
 		});
 		boxHeader.getChildren().add(choiceType);
@@ -194,17 +239,17 @@ public class TaskAttributeNode extends AnchorPane {
 		Region node = null;
 
 		if (type == TaskAttributeType.BOOLEAN) {
-			BoolAttributeNode attributeNode = new BoolAttributeNode(attribute);
+			BoolAttributeNode attributeNode = new BoolAttributeNode(attribute, this);
 			node = attributeNode;
 			requirementNode = attributeNode;
 
 		} else if (type == TaskAttributeType.CHOICE) {
-			ChoiceAttributeNode attributeNode = new ChoiceAttributeNode(attribute);
+			ChoiceAttributeNode attributeNode = new ChoiceAttributeNode(attribute, this);
 			node = attributeNode;
 			requirementNode = attributeNode;
 
 		} else if (type == TaskAttributeType.NUMBER) {
-			NumberAttributeNode attributeNode = new NumberAttributeNode(attribute);
+			NumberAttributeNode attributeNode = new NumberAttributeNode(attribute, this);
 			node = attributeNode;
 			requirementNode = attributeNode;
 
@@ -214,17 +259,17 @@ public class TaskAttributeNode extends AnchorPane {
 			requirementNode = attributeNode;
 
 		} else if (type == TaskAttributeType.FLAG) {
-			FlagAttributeNode attributeNode = new FlagAttributeNode(attribute);
+			FlagAttributeNode attributeNode = new FlagAttributeNode(attribute, this);
 			node = attributeNode;
 			requirementNode = attributeNode;
 
 		} else if (type == TaskAttributeType.ID) {
-			IDAttributeNode attributeNode = new IDAttributeNode();
+			IDAttributeNode attributeNode = new IDAttributeNode(attribute, this);
 			node = attributeNode;
 			requirementNode = attributeNode;
 
 		} else if (type == TaskAttributeType.DESCRIPTION) {
-			DescriptionAttributeNode attributeNode = new DescriptionAttributeNode();
+			DescriptionAttributeNode attributeNode = new DescriptionAttributeNode(attribute, this);
 			node = attributeNode;
 			requirementNode = attributeNode;
 		}
