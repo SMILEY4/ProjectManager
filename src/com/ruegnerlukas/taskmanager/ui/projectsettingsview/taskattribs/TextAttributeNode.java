@@ -60,6 +60,7 @@ public class TextAttributeNode extends AttributeDataNode {
 				defaultValue.setPrefHeight(33);
 				nodeHeight = 187;
 			}
+			nLines.setDisable(!multiline.isSelected());
 			getParentAttributeNode().refresh();
 			setChanged();
 		});
@@ -77,6 +78,7 @@ public class TextAttributeNode extends AttributeDataNode {
 		// use default
 		useDefault.setSelected(attributeData.useDefault);
 		useDefault.setOnAction(event -> {
+			defaultValue.setDisable(!useDefault.isSelected());
 			setChanged();
 		});
 
@@ -161,7 +163,7 @@ public class TextAttributeNode extends AttributeDataNode {
 
 	@Override
 	public double getNodeHeight() {
-		return this.nodeHeight;
+		return this.nodeHeight + 42; // 42 = height for save,discard-buttons
 	}
 
 

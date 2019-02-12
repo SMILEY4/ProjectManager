@@ -52,13 +52,12 @@ public abstract class AttributeDataNode extends AnchorPane {
 	private void create(String fxmlPath) throws IOException {
 
 		// load/createItem fxml
-		final int addHeight = displaySaveButtons ? 42 : 0;
 		AnchorPane root = (AnchorPane) FXMLUtils.loadFXML(getClass().getResource(fxmlPath), this);
-		AnchorUtils.setAnchors(root, 0, 0, addHeight, 0);
+		AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 		this.getChildren().add(root);
-		this.setMinSize(root.getMinWidth(), root.getMinHeight() + addHeight);
-		this.setPrefSize(root.getPrefWidth(), root.getPrefHeight() + addHeight);
-		this.setMaxSize(root.getMaxWidth(), root.getMaxHeight() + addHeight);
+		this.setMinSize(root.getMinWidth(), root.getMinHeight());
+		this.setPrefSize(root.getPrefWidth(), root.getPrefHeight());
+		this.setMaxSize(root.getMaxWidth(), root.getMaxHeight());
 
 		// listen for changes to attribute
 		EventManager.registerListener(this, e -> {
@@ -125,12 +124,9 @@ public abstract class AttributeDataNode extends AnchorPane {
 							onChange();
 
 							Logic.tasks.correctTaskValues(getAttribute(), result, alert.onlyInvalid);
-
 						}
 
 					}
-
-
 
 				}
 
