@@ -51,7 +51,7 @@ public class AlertSave extends AnchorPane {
 
 	private void create(int affectedTasks, boolean usesDefault) {
 
-		text.setText("Saving these changes affect " + affectedTasks + " Tasks.");
+		text.setText("Saving these changes may affect " + affectedTasks + " Tasks.");
 
 		choice.getItems().add(TaskLogic.CORR_BEH_DELETE);
 		if(usesDefault) {

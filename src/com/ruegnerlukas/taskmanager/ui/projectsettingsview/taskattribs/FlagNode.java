@@ -9,6 +9,7 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabel.EditableLabel;
+import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxOrder;
 import javafx.geometry.Pos;
 import javafx.geometry.Side;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.control.CustomMenuItem;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
 public class FlagNode extends HBox {
@@ -32,6 +34,8 @@ public class FlagNode extends HBox {
 	private Pane pane;
 	private Button btnRemoveFlag;
 	private EditableLabel label;
+	private Button btnUp;
+	private Button btnDown;
 
 
 
@@ -106,7 +110,8 @@ public class FlagNode extends HBox {
 		});
 		this.getChildren().add(label);
 		label.setMinWidth(300);
-		label.setMaxWidth(300);
+		label.setPrefWidth(100000);
+		label.setMaxWidth(100000);
 		label.addListener((observable, oldValue, newValue) -> {
 			this.name = newValue;
 			update();
@@ -114,6 +119,40 @@ public class FlagNode extends HBox {
 		});
 
 		setDefault(((FlagAttributeData) parentNode.getAttribute().data).defaultFlag.name.equals(flag.name));
+
+		// button up
+		btnUp = new Button();
+		ButtonUtils.makeIconButton(btnUp, SVGIcons.LONG_ARROW_UP, 0.7f, "black");
+		btnUp.setMinSize(32, 32);
+		btnUp.setPrefSize(32, 32);
+		btnUp.setMaxSize(32, 32);
+		btnUp.setOnAction(event -> {
+			VBox boxFlags = (VBox) this.getParent();
+			int index = boxFlags.getChildren().indexOf(FlagNode.this);
+			if (index > 0) {
+				VBoxOrder.moveItem(boxFlags, FlagNode.this, -1);
+				parentNode.onFlagOrderChanged();
+			}
+
+		});
+		this.getChildren().add(btnUp);
+
+
+		// button down
+		btnDown = new Button();
+		ButtonUtils.makeIconButton(btnDown, SVGIcons.LONG_ARROW_DOWN, 0.7f, "black");
+		btnDown.setMinSize(32, 32);
+		btnDown.setPrefSize(32, 32);
+		btnDown.setMaxSize(32, 32);
+		btnDown.setOnAction(event -> {
+			VBox boxFlags = (VBox) this.getParent();
+			int index = boxFlags.getChildren().indexOf(FlagNode.this);
+			if (index < boxFlags.getChildren().size() - 2) {
+				VBoxOrder.moveItem(boxFlags, FlagNode.this, +1);
+				parentNode.onFlagOrderChanged();
+			}
+		});
+		this.getChildren().add(btnDown);
 
 		update();
 	}

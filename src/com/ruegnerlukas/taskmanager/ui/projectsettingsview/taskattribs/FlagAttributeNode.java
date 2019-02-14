@@ -9,6 +9,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.FXEvents;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.VBox;
@@ -167,6 +168,19 @@ public class FlagAttributeNode extends AttributeDataNode {
 		if (defaultNode != null) {
 			Logic.attribute.updateTaskAttribute(getAttribute().name, TaskAttributeData.Var.DEFAULT_VALUE, new FlagValue(defaultNode.flag));
 		}
+	}
+
+
+
+
+	protected void onFlagOrderChanged() {
+		flagNodes.clear();
+		for(Node node : boxFlags.getChildren()) {
+			if(node instanceof FlagNode) {
+				flagNodes.add((FlagNode)node);
+			}
+		}
+		setChanged();
 	}
 
 
