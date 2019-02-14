@@ -8,7 +8,9 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -43,8 +45,8 @@ public abstract class SidebarItem extends HBox {
 
 	private Label noValue;
 	private Parent valueNode;
-	private Button button;
-
+	private Button btnAdd;
+	private float btnIconScale = 0.5f;
 
 
 
@@ -80,7 +82,8 @@ public abstract class SidebarItem extends HBox {
 
 		// center - NoValue
 		noValue = new Label("Empty");
-		noValue.setAlignment(Pos.TOP_CENTER);
+		noValue.setDisable(true);
+		noValue.setAlignment(Pos.CENTER);
 		noValue.setPrefSize(10000, 32);
 
 		// pane value
@@ -96,15 +99,15 @@ public abstract class SidebarItem extends HBox {
 		paneValue.getChildren().add(noValue);
 		boxRight.getChildren().add(paneValue);
 
-		// right - button
-		button = new Button();
-		button.setText("-");
-		button.setMinSize(32, 32);
-		button.setPrefSize(32, 32);
-		button.setMaxSize(32, 32);
-		boxRight.getChildren().add(button);
+		// right - btnAdd
+		btnAdd = new Button();
+		ButtonUtils.makeIconButton(btnAdd, SVGIcons.CROSS, btnIconScale, "black");
+		btnAdd.setMinSize(32, 32);
+		btnAdd.setPrefSize(32, 32);
+		btnAdd.setMaxSize(32, 32);
+		boxRight.getChildren().add(btnAdd);
 
-		button.setOnAction(event -> {
+		btnAdd.setOnAction(event -> {
 			if (noValue.isVisible()) {
 				showValue();
 			} else {
@@ -113,8 +116,8 @@ public abstract class SidebarItem extends HBox {
 		});
 
 		if(attribute.data.usesDefault()) {
-			button.setDisable(true);
-			button.setVisible(false);
+			btnAdd.setDisable(true);
+			btnAdd.setVisible(false);
 		}
 
 		Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>() {
@@ -123,11 +126,11 @@ public abstract class SidebarItem extends HBox {
 				if(response.getValue() instanceof NoValue) {
 					noValue.setVisible(true);
 					valueNode.setVisible(false);
-					button.setText("+");
+					ButtonUtils.makeIconButton(btnAdd, SVGIcons.ADD, btnIconScale, "black");
 				} else {
 					noValue.setVisible(false);
 					valueNode.setVisible(true);
-					button.setText("-");
+					ButtonUtils.makeIconButton(btnAdd, SVGIcons.CROSS, btnIconScale, "black");
 				}
 			}
 		});
@@ -139,7 +142,7 @@ public abstract class SidebarItem extends HBox {
 	private void showValue() {
 		noValue.setVisible(false);
 		valueNode.setVisible(true);
-		button.setText("-");
+		ButtonUtils.makeIconButton(btnAdd, SVGIcons.CROSS, btnIconScale, "black");
 		Logic.tasks.setAttributeValue(task, attribute, getValue());
 	}
 
@@ -149,7 +152,7 @@ public abstract class SidebarItem extends HBox {
 	private void emptyValue() {
 		noValue.setVisible(true);
 		valueNode.setVisible(false);
-		button.setText("+");
+		ButtonUtils.makeIconButton(btnAdd, SVGIcons.ADD, btnIconScale, "black");
 		Logic.tasks.removeAttribute(task, attribute);
 	}
 
