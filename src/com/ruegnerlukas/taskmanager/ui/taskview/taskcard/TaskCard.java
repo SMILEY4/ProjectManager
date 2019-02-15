@@ -70,7 +70,7 @@ public class TaskCard extends AnchorPane {
 		// listen for select
 		this.setOnMouseClicked(event -> {
 			if (parent != null && parent.parent != null) {
-				parent.parent.onTaskSelected(TaskCard.this.task);
+				parent.parent.onTaskSelected(TaskCard.this.task, false, true);
 			}
 		});
 

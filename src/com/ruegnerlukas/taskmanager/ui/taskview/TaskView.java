@@ -34,7 +34,9 @@ import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.label.LabelUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.scrollpane.ScrollPaneUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
@@ -42,6 +44,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -134,6 +138,30 @@ public class TaskView extends AnchorPane implements TabContent {
 				}
 			}
 		});
+
+
+		Platform.runLater(() -> {
+
+			getScene().addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+				if (ke.getCode() == KeyCode.J) {
+
+					Logic.tasks.getTasks(new Request<List<Task>>(true) {
+						@Override
+						public void onResponse(Response<List<Task>> response) {
+							List<Task> tasks = response.getValue();
+							int index = new Random().nextInt(tasks.size());
+							Task task = tasks.get(index);
+							System.out.println("JUMP TO TASK: " + index);
+							onTaskSelected(task, true, true);
+						}
+					});
+
+					ke.consume();
+				}
+			});
+
+		});
+
 
 		// END TESTING
 
@@ -261,7 +289,7 @@ public class TaskView extends AnchorPane implements TabContent {
 		});
 
 		// createItem content
-		sidebar = new Sidebar();
+		sidebar = new Sidebar(this);
 		AnchorUtils.setAnchors(sidebar, 0, 0, 0, 0);
 		paneSidebar.getChildren().add(sidebar);
 
@@ -272,7 +300,7 @@ public class TaskView extends AnchorPane implements TabContent {
 
 	private void showSidebar(boolean setDivider) {
 		paneSidebar.setMaxWidth(10000);
-		if(setDivider) {
+		if (setDivider) {
 			splitContent.setDividerPosition(0, 0.75);
 		}
 		labelHideSidebar.setText(">");
@@ -368,7 +396,7 @@ public class TaskView extends AnchorPane implements TabContent {
 				}
 
 				updateNTaskLabel();
-				onTaskSelected(sidebar.currentTask);
+				onTaskSelected(sidebar.currentTask, false, true);
 			}
 		});
 
@@ -498,22 +526,50 @@ public class TaskView extends AnchorPane implements TabContent {
 
 
 
-	public void onTaskSelected(Task task) {
+	public void onTaskSelected(Task task, boolean jumpToTask, boolean addToBreadcrumb) {
+
 		if (sidebar.currentTask != null) {
 			TaskCard card = findCard(sidebar.currentTask);
-			if(card != null) {
+			if (card != null) {
 				card.onDeselect();
 			}
 		}
+
 		sidebar.showTask(task);
+
+		if(jumpToTask) {
+			jumpToTask(task);
+			if(addToBreadcrumb) {
+				sidebar.getBreadcrumb().pushTask(task);
+			}
+
+		} else {
+			if(addToBreadcrumb) {
+				sidebar.getBreadcrumb().clearTasks();
+				sidebar.getBreadcrumb().pushTask(task);
+			}
+		}
+
 		if (sidebar.currentTask != null) {
 			TaskCard card = findCard(sidebar.currentTask);
-			if(card != null) {
+			if (card != null) {
 				card.onSelect();
 			}
 			if (sidebarHidden) {
 				showSidebar(true);
 			}
+		}
+
+	}
+
+
+
+
+	public void jumpToTask(Task task) {
+		TaskList list = findList(task);
+		if (list != null) {
+			ScrollPaneUtils.centerContent(scollTasks, list);
+			list.jumpToTask(task);
 		}
 	}
 
@@ -527,6 +583,21 @@ public class TaskView extends AnchorPane implements TabContent {
 				TaskCard card = list.findCard(task);
 				if (card != null) {
 					return card;
+				}
+			}
+		}
+		return null;
+	}
+
+
+
+
+	public TaskList findList(Task task) {
+		for (Node node : boxTasks.getChildren()) {
+			if (node instanceof TaskList) {
+				TaskList list = (TaskList) node;
+				if (list.findCard(task) != null) {
+					return list;
 				}
 			}
 		}

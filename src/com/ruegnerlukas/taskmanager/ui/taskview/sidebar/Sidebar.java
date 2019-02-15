@@ -19,6 +19,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
 import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item.SidebarItem;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -38,6 +39,10 @@ public class Sidebar extends AnchorPane {
 
 
 	public Task currentTask = null;
+	private TaskView taskView;
+
+	private Breadcrumb breadcrumb;
+	@FXML private AnchorPane paneBreadcrumb;
 
 	@FXML private VBox boxContent;
 	@FXML private TextArea fieldDesc;
@@ -49,7 +54,9 @@ public class Sidebar extends AnchorPane {
 
 
 
-	public Sidebar() {
+
+	public Sidebar(TaskView taskView) {
+		this.taskView = taskView;
 
 		try {
 			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_sidebar.fxml"), this);
@@ -70,16 +77,26 @@ public class Sidebar extends AnchorPane {
 
 	private void create() {
 
+		// breadcrumb
+		breadcrumb = new Breadcrumb() {
+			@Override
+			public boolean onStepBack(Task task) {
+				taskView.onTaskSelected(task, true, false);
+				return true;
+			}
+
+			@Override
+			public boolean onJumpBack(Task task) {
+				taskView.onTaskSelected(task, true, false);
+				return true;
+			}
+		};
+		AnchorUtils.setAnchors(breadcrumb, 0, 0, 0, 0);
+		paneBreadcrumb.getChildren().add(breadcrumb);
+
+
 		// description
 		fieldDesc.setText("");
-//		// update every 10th character
-//		fieldDesc.textProperty().addListener((observable, oldValue, newValue) -> {
-//			if (currentCard != null) {
-//				if (newValue.length() % 10 == 0) {
-//					Logic.tasks.setAttributeValue(currentCard.task, DescriptionAttributeData.NAME, new TextValue(fieldDesc.getText()));
-//				}
-//			}
-//		});
 		fieldDesc.focusedProperty().addListener((observable, oldValue, newValue) -> {
 			if (currentTask != null && !newValue) {
 				Logic.tasks.setAttributeValue(currentTask, DescriptionAttributeData.NAME, new TextValue(fieldDesc.getText()));
@@ -127,7 +144,7 @@ public class Sidebar extends AnchorPane {
 		Logic.tasks.getAttributeValue(currentTask, DescriptionAttributeData.NAME, new Request<TaskAttributeValue>(true) {
 			@Override
 			public void onResponse(Response<TaskAttributeValue> response) {
-				TextValue value = (TextValue)response.getValue();
+				TextValue value = (TextValue) response.getValue();
 				fieldDesc.setText(value.getText());
 			}
 		});
@@ -136,7 +153,7 @@ public class Sidebar extends AnchorPane {
 		Logic.tasks.getAttributeValue(currentTask, IDAttributeData.NAME, new Request<TaskAttributeValue>(true) {
 			@Override
 			public void onResponse(Response<TaskAttributeValue> response) {
-				NumberValue value = (NumberValue)response.getValue();
+				NumberValue value = (NumberValue) response.getValue();
 				labelID.setText("T-" + value.getInt());
 			}
 		});
@@ -145,13 +162,13 @@ public class Sidebar extends AnchorPane {
 		Logic.tasks.getAttributeValue(currentTask, FlagAttributeData.NAME, new Request<TaskAttributeValue>(true) {
 			@Override
 			public void onResponse(Response<TaskAttributeValue> response) {
-				FlagValue value = (FlagValue)response.getValue();
+				FlagValue value = (FlagValue) response.getValue();
 				choiceFlag.getSelectionModel().select(value.getFlag().name);
 			}
 		});
 
 		// task attributes
-		for(SidebarItem item : items) {
+		for (SidebarItem item : items) {
 			item.dispose();
 		}
 		boxAttribs.getChildren().clear();
@@ -160,10 +177,10 @@ public class Sidebar extends AnchorPane {
 			@Override
 			public void onResponse(Response<List<TaskAttribute>> response) {
 				List<TaskAttribute> attributes = response.getValue();
-				for(int i=0; i<attributes.size(); i++) {
+				for (int i = 0; i < attributes.size(); i++) {
 					TaskAttribute attribute = attributes.get(i);
 					SidebarItem item = SidebarItem.createItem(currentTask, attribute);
-					if(item != null) {
+					if (item != null) {
 						items.add(item);
 						boxAttribs.getChildren().add(item);
 					}
@@ -184,6 +201,13 @@ public class Sidebar extends AnchorPane {
 			this.setVisible(true);
 			refresh();
 		}
+	}
+
+
+
+
+	public Breadcrumb getBreadcrumb() {
+		return breadcrumb;
 	}
 
 

@@ -352,7 +352,6 @@ Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > * > HBox > Button {
 	-fx-border-color: transparent;
 }
 
-Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > * > HBox > Button:hover > SVGPath{
+Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > * > HBox > Button:hover > SVGPath {
 	-fx-fill: -gray-dark;
 }
-

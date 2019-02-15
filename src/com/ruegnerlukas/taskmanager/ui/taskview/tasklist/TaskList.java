@@ -7,10 +7,12 @@ import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
 import com.ruegnerlukas.taskmanager.ui.taskview.taskcard.TaskCard;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.scrollpane.ScrollPaneUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
@@ -24,6 +26,7 @@ public class TaskList extends AnchorPane {
 	public List<Task> tasks;
 
 	public TaskView parent;
+	@FXML private ScrollPane scrollTasks;
 	@FXML private Label labelTitle;
 	@FXML private VBox boxCards;
 
@@ -71,6 +74,16 @@ public class TaskList extends AnchorPane {
 
 
 	private void setupListeners() {
+	}
+
+
+
+
+	public void jumpToTask(Task task) {
+		TaskCard card = findCard(task);
+		if(card != null) {
+			ScrollPaneUtils.centerContent(scrollTasks, card);
+		}
 	}
 
 
