@@ -11,5 +11,6 @@ public class Logic {
 	public static final TaskLogic tasks = new TaskLogic();
 	public static final TaskFlagLogic taskFlags = new TaskFlagLogic();
 	public static final PresetLogic presets = new PresetLogic();
+	public static final DependencyLogic dependencies = new DependencyLogic();
 
 }

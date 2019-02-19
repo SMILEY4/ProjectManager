@@ -64,7 +64,7 @@ public class FlagArrayValue implements TaskAttributeValue {
 
 		FlagArrayValue that = (FlagArrayValue) o;
 
-		// Probably incorrect - comparing Object[] arrays with Arrays.equals
+		// TODO: Probably incorrect - comparing Object[] arrays with Arrays.equals
 		return Arrays.equals(flags, that.flags);
 	}
 

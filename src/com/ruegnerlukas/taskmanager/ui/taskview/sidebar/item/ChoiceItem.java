@@ -29,6 +29,14 @@ public class ChoiceItem extends SidebarItem {
 
 
 	@Override
+	protected boolean isComplexItem() {
+		return false;
+	}
+
+
+
+
+	@Override
 	protected double getFieldHeight() {
 		return 32;
 	}

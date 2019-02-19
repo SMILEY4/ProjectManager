@@ -284,6 +284,23 @@ public class TaskLogic {
 	}
 
 
+
+
+	public void getTaskByID(int id, Request<Task> request) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			for (int i = 0, n = getTasksInternal().size(); i < n; i++) {
+				Task task = getTasksInternal().get(i);
+				if (task.getID() == id) {
+					request.respond(new Response<>(Response.State.SUCCESS, task));
+					return;
+				}
+			}
+			request.respond(new Response<>(Response.State.FAIL, "No Task with id'" + id + "' found."));
+		}
+	}
+
+
 	//======================//
 	//        SETTER        //
 	//======================//
@@ -410,8 +427,11 @@ public class TaskLogic {
 
 
 
+
 	public static final String CORR_BEH_DELETE = "Delete values";
 	public static final String CORR_BEH_DEFAULT = "Set Values to default value";
+
+
 
 
 	public void correctTaskValues(TaskAttribute attribute, String behaviour, boolean onlyInvalid) {
@@ -428,18 +448,18 @@ public class TaskLogic {
 				}
 			}
 
-			for(Task task : affectedTasks) {
+			for (Task task : affectedTasks) {
 
 				TaskAttributeValue value = getValue(task, attribute);
-				if(onlyInvalid && attribute.data.validate(value)) {
+				if (onlyInvalid && attribute.data.validate(value)) {
 					continue;
 				}
 
-				if(behaviour.equals(CORR_BEH_DELETE)) {
+				if (behaviour.equals(CORR_BEH_DELETE)) {
 					removeAttribute(task, attribute);
 				}
-				if(behaviour.equals(CORR_BEH_DEFAULT)) {
-					if(attribute.data.usesDefault()) {
+				if (behaviour.equals(CORR_BEH_DEFAULT)) {
+					if (attribute.data.usesDefault()) {
 						setAttributeValue(task, attribute, attribute.data.getDefault());
 					} else {
 						removeAttribute(task, attribute);

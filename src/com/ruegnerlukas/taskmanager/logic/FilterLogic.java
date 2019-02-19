@@ -292,6 +292,68 @@ public class FilterLogic {
 
 			}
 
+			if (comp == FilterCriteria.ComparisonOp.IS_DEPENDENT_ON_FILTER) {
+				if (attributeType == TaskAttributeType.DEPENDENCY) {
+					TaskArrayValue dependsOn = (TaskArrayValue) valueTask;
+					TaskArrayValue input = (TaskArrayValue) valueTask;
+					int nMatches = 0;
+					for (Task tDep : dependsOn.getTasks()) {
+						final int idDep = tDep.getID();
+						for (Task tIn : input.getTasks()) {
+							if (idDep == tIn.getID()) {
+								nMatches++;
+							}
+						}
+					}
+					if (nMatches == 0) {
+						return false;
+					} else {
+						continue;
+					}
+				}
+			}
+
+			if (comp == FilterCriteria.ComparisonOp.IS_PREREQUISITE_OF_FILTER) {
+				if (attributeType == TaskAttributeType.DEPENDENCY) {
+					TaskArrayValue input = (TaskArrayValue) valueTask;
+					List<Task> tasksDep = Logic.dependencies.getDependentOnInternal(task, attribute);
+					int nMatches = 0;
+					for (Task tDep : tasksDep) {
+						int idDep = tDep.getID();
+						for (Task tIn : input.getTasks()) {
+							if (idDep == tIn.getID()) {
+								nMatches++;
+							}
+						}
+					}
+					if (nMatches == 0) {
+						continue;
+					} else {
+						return false;
+					}
+				}
+			}
+
+			if (comp == FilterCriteria.ComparisonOp.IS_INDEPENDENT) {
+				if (attributeType == TaskAttributeType.DEPENDENCY) {
+					TaskArrayValue dependsOn = (TaskArrayValue) valueTask;
+					boolean isIndipendent = ((BoolValue) valueComp).getBoolValue();
+					if (isIndipendent) {
+						if (dependsOn.getTasks().length == 0) {
+							continue;
+						} else {
+							return false;
+						}
+					} else {
+						if (dependsOn.getTasks().length == 0) {
+							return false;
+						} else {
+							continue;
+						}
+					}
+				}
+			}
+
 		}
 
 		return true;

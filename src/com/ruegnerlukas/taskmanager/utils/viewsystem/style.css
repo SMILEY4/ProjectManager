@@ -20,6 +20,8 @@
 	-text-light-0: #b9b9b9;
 	-text-light-1: white;
 
+	-text-link: #3366BB;
+
 }
 
 
@@ -354,4 +356,22 @@ Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > * > HBox > Button {
 
 Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > * > HBox > Button:hover > SVGPath {
 	-fx-fill: -gray-dark;
+}
+
+
+Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > DependencyItem > VBox > Label{
+	-fx-font-weight: bold;
+}
+
+Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > DependencyItem > VBox > VBox > Label{
+	-fx-font-weight: bold;
+	-fx-font-style: italic;
+}
+
+Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > DependencyItem > VBox > VBox > VBox > HBox > Label {
+	-fx-text-fill: -text-link;
+}
+
+Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > DependencyItem > VBox > VBox > VBox > HBox > Label:hover {
+	-fx-underline: true;
 }

@@ -192,6 +192,9 @@ public class FilterCriteriaNode extends HBox {
 
 		} else if (TaskAttributeType.TEXT == attribute.data.getType()) {
 			filterValue = new TextFilterValue();
+
+		} else if (TaskAttributeType.DEPENDENCY == attribute.data.getType()) {
+			filterValue = new DependencyFilterValue();
 		}
 
 		// update new filter value

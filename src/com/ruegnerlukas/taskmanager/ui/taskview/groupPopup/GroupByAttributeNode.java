@@ -3,6 +3,7 @@ package com.ruegnerlukas.taskmanager.ui.taskview.groupPopup;
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
@@ -67,7 +68,9 @@ public class GroupByAttributeNode extends HBox {
 			public void onResponse(Response<List<TaskAttribute>> response) {
 				List<TaskAttribute> attributes = response.getValue();
 				for (TaskAttribute attrib : attributes) {
-					choiceAttrib.getItems().add(attrib.name);
+					if(attrib.data.getType() != TaskAttributeType.DEPENDENCY) {
+						choiceAttrib.getItems().add(attrib.name);
+					}
 				}
 			}
 		});

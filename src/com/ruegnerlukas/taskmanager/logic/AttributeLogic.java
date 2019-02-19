@@ -245,7 +245,7 @@ public class AttributeLogic {
 			} else if (project.attributesLocked) {
 				EventManager.fireEvent(new AttributeRemovedRejection(attribute, EventCause.NOT_ALLOWED, this));
 
-			} else if (attribute.data.getType().fixed) {
+			} else if (attribute.data.getType().type == TaskAttributeType.Type.FIXED) {
 				EventManager.fireEvent(new AttributeRemovedRejection(attribute, EventCause.NOT_ALLOWED, this));
 
 			} else {
@@ -283,7 +283,7 @@ public class AttributeLogic {
 			} else if (project.attributesLocked) {
 				EventManager.fireEvent(new AttributeRenamedRejection(attributeOld, newName, EventCause.NOT_ALLOWED, this));
 
-			} else if (attributeOld.data.getType().fixed) {
+			} else if (attributeOld.data.getType().type == TaskAttributeType.Type.FIXED) {
 				EventManager.fireEvent(new AttributeRenamedRejection(attributeOld, newName, EventCause.NOT_ALLOWED, this));
 
 			} else if (attributeNew != null) {
@@ -323,8 +323,9 @@ public class AttributeLogic {
 			} else if (project.attributesLocked) {
 				EventManager.fireEvent(new AttributeTypeChangedRejection(attribute, type, EventCause.NOT_ALLOWED, this));
 
-			} else if (attribute.data.getType().fixed || type.fixed) {
+			} else if (attribute.data.getType().type == TaskAttributeType.Type.FIXED || type.type == TaskAttributeType.Type.FIXED) {
 				EventManager.fireEvent(new AttributeTypeChangedRejection(attribute, type, EventCause.NOT_ALLOWED, this));
+
 
 			} else {
 				TaskAttributeType prevType = attribute.data.getType();

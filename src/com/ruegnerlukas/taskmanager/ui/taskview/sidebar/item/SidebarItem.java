@@ -17,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public abstract class SidebarItem extends HBox {
 
@@ -33,6 +34,9 @@ public abstract class SidebarItem extends HBox {
 		}
 		if (attribute.data.getType() == TaskAttributeType.TEXT) {
 			return new TextItem(task, attribute);
+		}
+		if (attribute.data.getType() == TaskAttributeType.DEPENDENCY) {
+			return new DependencyItem(task, attribute);
 		}
 		return null;
 	}
@@ -65,81 +69,104 @@ public abstract class SidebarItem extends HBox {
 
 	private void create(Task task, TaskAttribute attribute) {
 
-		// left - label
-		Label label = new Label(attribute.name);
-		label.setAlignment(Pos.CENTER_RIGHT);
-		label.setMinSize(150, 32);
-		label.setPrefSize(150, 32);
-		label.setMaxSize(150, 32);
-		this.getChildren().add(label);
+		if(this.isComplexItem()) {
 
-		// right
-		HBox boxRight = new HBox();
-		this.getChildren().add(boxRight);
+			VBox vBox = new VBox();
+			vBox.setMinWidth(0);
+			vBox.setSpacing(3);
+			this.getChildren().add(vBox);
 
-		// center - value
-		valueNode = createValueField(task, attribute);
+			this.setPrefHeight(-1);
 
-		// center - NoValue
-		noValue = new Label("Empty");
-		noValue.setDisable(true);
-		noValue.setAlignment(Pos.CENTER);
-		noValue.setPrefSize(10000, 32);
+			// top - label
+			Label label = new Label(attribute.name);
+			vBox.getChildren().add(label);
 
-		// pane value
-		AnchorPane paneValue = new AnchorPane();
-		paneValue.setMaxWidth(10000);
-		paneValue.setPrefWidth(10000);
-		paneValue.setMinHeight(32);
-		paneValue.setMaxHeight(10000);
-		paneValue.setPrefHeight(getFieldHeight());
-		AnchorUtils.setAnchors(valueNode, 0, 0, 0, 0);
-		AnchorUtils.setAnchors(noValue, 0, 0, 0, 0);
-		paneValue.getChildren().add(valueNode);
-		paneValue.getChildren().add(noValue);
-		boxRight.getChildren().add(paneValue);
+			// bottom - value/content
+			valueNode = createValueField(task, attribute);
+			vBox.getChildren().add(valueNode);
 
-		// right - btnAdd
-		btnAdd = new Button();
-		ButtonUtils.makeIconButton(btnAdd, SVGIcons.CROSS, btnIconScale, "black");
-		btnAdd.setMinSize(32, 32);
-		btnAdd.setPrefSize(32, 32);
-		btnAdd.setMaxSize(32, 32);
-		boxRight.getChildren().add(btnAdd);
 
-		btnAdd.setOnAction(event -> {
-			if (noValue.isVisible()) {
-				showValue();
-			} else {
-				emptyValue();
+		} else {
+
+			// left - label
+			Label label = new Label(attribute.name);
+			label.setAlignment(Pos.CENTER_LEFT);
+			label.setMinSize(150, 32);
+			label.setPrefSize(150, 32);
+			label.setMaxSize(150, 32);
+			this.getChildren().add(label);
+
+			// right
+			HBox boxRight = new HBox();
+			this.getChildren().add(boxRight);
+
+			// center - value
+			valueNode = createValueField(task, attribute);
+
+			// center - NoValue
+			noValue = new Label("Empty");
+			noValue.setDisable(true);
+			noValue.setAlignment(Pos.CENTER);
+			noValue.setPrefSize(10000, 32);
+
+			// pane value
+			AnchorPane paneValue = new AnchorPane();
+			paneValue.setMaxWidth(10000);
+			paneValue.setPrefWidth(10000);
+			paneValue.setMinHeight(32);
+			paneValue.setMaxHeight(10000);
+			paneValue.setPrefHeight(getFieldHeight());
+			AnchorUtils.setAnchors(valueNode, 0, 0, 0, 0);
+			AnchorUtils.setAnchors(noValue, 0, 0, 0, 0);
+			paneValue.getChildren().add(valueNode);
+			paneValue.getChildren().add(noValue);
+			boxRight.getChildren().add(paneValue);
+
+			// right - btnAdd
+			btnAdd = new Button();
+			ButtonUtils.makeIconButton(btnAdd, SVGIcons.CROSS, btnIconScale, "black");
+			btnAdd.setMinSize(32, 32);
+			btnAdd.setPrefSize(32, 32);
+			btnAdd.setMaxSize(32, 32);
+			boxRight.getChildren().add(btnAdd);
+
+			btnAdd.setOnAction(event -> {
+				if (noValue.isVisible()) {
+					showValue();
+				} else {
+					emptyValue();
+				}
+			});
+
+			if(attribute.data.usesDefault()) {
+				btnAdd.setDisable(true);
+				btnAdd.setVisible(false);
 			}
-		});
 
-		if(attribute.data.usesDefault()) {
-			btnAdd.setDisable(true);
-			btnAdd.setVisible(false);
+			Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>() {
+				@Override
+				public void onResponse(Response<TaskAttributeValue> response) {
+					if(response.getValue() instanceof NoValue) {
+						noValue.setVisible(true);
+						valueNode.setVisible(false);
+						ButtonUtils.makeIconButton(btnAdd, SVGIcons.ADD, btnIconScale, "black");
+					} else {
+						noValue.setVisible(false);
+						valueNode.setVisible(true);
+						ButtonUtils.makeIconButton(btnAdd, SVGIcons.CROSS, btnIconScale, "black");
+					}
+				}
+			});
+
 		}
 
-		Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>() {
-			@Override
-			public void onResponse(Response<TaskAttributeValue> response) {
-				if(response.getValue() instanceof NoValue) {
-					noValue.setVisible(true);
-					valueNode.setVisible(false);
-					ButtonUtils.makeIconButton(btnAdd, SVGIcons.ADD, btnIconScale, "black");
-				} else {
-					noValue.setVisible(false);
-					valueNode.setVisible(true);
-					ButtonUtils.makeIconButton(btnAdd, SVGIcons.CROSS, btnIconScale, "black");
-				}
-			}
-		});
 	}
 
 
 
 
-	private void showValue() {
+	protected void showValue() {
 		noValue.setVisible(false);
 		valueNode.setVisible(true);
 		ButtonUtils.makeIconButton(btnAdd, SVGIcons.CROSS, btnIconScale, "black");
@@ -149,7 +176,7 @@ public abstract class SidebarItem extends HBox {
 
 
 
-	private void emptyValue() {
+	protected void emptyValue() {
 		noValue.setVisible(true);
 		valueNode.setVisible(false);
 		ButtonUtils.makeIconButton(btnAdd, SVGIcons.ADD, btnIconScale, "black");
@@ -157,6 +184,9 @@ public abstract class SidebarItem extends HBox {
 	}
 
 
+
+
+	protected abstract boolean isComplexItem();
 
 
 	protected abstract double getFieldHeight();
@@ -169,6 +199,8 @@ public abstract class SidebarItem extends HBox {
 
 
 	public abstract void dispose();
+
+
 
 
 }

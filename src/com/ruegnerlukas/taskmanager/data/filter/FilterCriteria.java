@@ -19,7 +19,12 @@ public class FilterCriteria {
 		IN_LIST("in list"),
 		NOT_IN_LIST("not in list"),
 		CONTAINS("contains"),
-		CONTAINS_NOT("contains not");
+		CONTAINS_NOT("contains not"),
+
+		IS_DEPENDENT_ON_FILTER("dependent on"),
+		IS_PREREQUISITE_OF_FILTER("prerequisite of"),
+		IS_INDEPENDENT("independent"),
+		;
 
 		public final String display;
 
@@ -124,6 +129,13 @@ public class FilterCriteria {
 					ComparisonOp.INEQUALITY,
 					ComparisonOp.CONTAINS,
 					ComparisonOp.CONTAINS_NOT
+			};
+		}
+		if (attribute.data.getType() == TaskAttributeType.DEPENDENCY) {
+			return new ComparisonOp[]{
+					ComparisonOp.IS_DEPENDENT_ON_FILTER,
+					ComparisonOp.IS_PREREQUISITE_OF_FILTER,
+					ComparisonOp.IS_INDEPENDENT
 			};
 		}
 
