@@ -11,6 +11,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.filter.*;
 import com.ruegnerlukas.taskmanager.logic.attributes.updaters.*;
+import com.ruegnerlukas.taskmanager.logic.attributes.validation.*;
 
 import java.util.*;
 
@@ -24,6 +25,7 @@ public class AttributeLogic {
 
 	public static final Map<TaskAttributeType, AttributeFilter> FILTER_MAP;
 	public static final Map<TaskAttributeType, AttributeUpdater> UPDATER_MAP;
+	public static final Map<TaskAttributeType, AttributeValidator> VALIDATOR_MAP;
 
 
 
@@ -48,6 +50,16 @@ public class AttributeLogic {
 		updaterMap.put(TaskAttributeType.NUMBER, new NumberAttributeUpdater());
 		updaterMap.put(TaskAttributeType.TEXT, new TextAttributeUpdater());
 		UPDATER_MAP = Collections.unmodifiableMap(updaterMap);
+
+		Map<TaskAttributeType, AttributeValidator> validatorMap = new HashMap<>();
+		validatorMap.put(TaskAttributeType.BOOLEAN, new BoolAttributeValidation());
+		validatorMap.put(TaskAttributeType.CHOICE, new ChoiceAttributeValidation());
+		validatorMap.put(TaskAttributeType.DESCRIPTION, new DescriptionAttributeValidation());
+		validatorMap.put(TaskAttributeType.FLAG, new FlagAttributeValidation());
+		validatorMap.put(TaskAttributeType.ID, new IDAttributeValidation());
+		validatorMap.put(TaskAttributeType.NUMBER, new NumberAttributeValidation());
+		validatorMap.put(TaskAttributeType.TEXT, new BoolAttributeValidation());
+		VALIDATOR_MAP = Collections.unmodifiableMap(validatorMap);
 
 	}
 

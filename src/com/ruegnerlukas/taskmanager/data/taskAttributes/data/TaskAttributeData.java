@@ -27,8 +27,6 @@ public interface TaskAttributeData {
 
 	TaskAttributeType getType();
 
-	boolean validate(TaskAttributeValue value);
-
 	boolean usesDefault();
 
 	TaskAttributeValue getDefault();

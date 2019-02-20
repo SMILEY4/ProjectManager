@@ -3,10 +3,6 @@ package com.ruegnerlukas.taskmanager.data.taskAttributes.data;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
-
-import java.util.Arrays;
-import java.util.HashSet;
 
 public class FlagAttributeData implements TaskAttributeData {
 
@@ -43,18 +39,6 @@ public class FlagAttributeData implements TaskAttributeData {
 	@Override
 	public TaskAttributeType getType() {
 		return TaskAttributeType.FLAG;
-	}
-
-
-
-
-	@Override
-	public boolean validate(TaskAttributeValue value) {
-		if (value instanceof FlagValue) {
-			return new HashSet<>(Arrays.asList(flags)).contains(((FlagValue) value).getFlag());
-		} else {
-			return false;
-		}
 	}
 
 

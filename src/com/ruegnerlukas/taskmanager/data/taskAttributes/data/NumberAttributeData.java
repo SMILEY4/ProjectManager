@@ -1,9 +1,7 @@
 package com.ruegnerlukas.taskmanager.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
 public class NumberAttributeData implements TaskAttributeData {
 
@@ -20,23 +18,6 @@ public class NumberAttributeData implements TaskAttributeData {
 	@Override
 	public TaskAttributeType getType() {
 		return TaskAttributeType.NUMBER;
-	}
-
-
-
-
-	@Override
-	public boolean validate(TaskAttributeValue value) {
-		if (value instanceof NoValue) {
-			return !useDefault;
-		} else {
-			if (value instanceof NumberValue) {
-				final double number = ((NumberValue) value).getDouble();
-				return min <= number && number <= max;
-			} else {
-				return false;
-			}
-		}
 	}
 
 

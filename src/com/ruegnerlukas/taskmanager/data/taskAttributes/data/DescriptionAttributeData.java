@@ -1,8 +1,6 @@
 package com.ruegnerlukas.taskmanager.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 
 public class DescriptionAttributeData implements TaskAttributeData {
@@ -16,18 +14,6 @@ public class DescriptionAttributeData implements TaskAttributeData {
 	@Override
 	public TaskAttributeType getType() {
 		return TaskAttributeType.DESCRIPTION;
-	}
-
-
-
-
-	@Override
-	public boolean validate(TaskAttributeValue value) {
-		if (value instanceof NoValue) {
-			return true;
-		} else {
-			return value instanceof TextValue;
-		}
 	}
 
 
