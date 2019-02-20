@@ -2,11 +2,12 @@ package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup;
 
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
-import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.logic.attributes.filter.AttributeFilter;
 import com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values.*;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
@@ -40,7 +41,7 @@ public class FilterCriteriaNode extends HBox {
 
 
 	public FilterCriteriaNode(TaskAttribute attribute, FilterPopup parent) {
-		this(attribute, FilterCriteria.getPossibleComparisionOps(attribute)[0], null, parent);
+		this(attribute, AttributeFilter.getPossibleComparisionOps(attribute)[0], null, parent);
 	}
 
 
@@ -123,12 +124,12 @@ public class FilterCriteriaNode extends HBox {
 	private void update() {
 
 		choiceCompOp.getItems().clear();
-		for (FilterCriteria.ComparisonOp comp : FilterCriteria.getPossibleComparisionOps(attribute)) {
+		for (FilterCriteria.ComparisonOp comp : AttributeFilter.getPossibleComparisionOps(attribute)) {
 			choiceCompOp.getItems().add(comp.display);
 		}
 
 		boolean foundCompOp = false;
-		for (FilterCriteria.ComparisonOp c : FilterCriteria.getPossibleComparisionOps(attribute)) {
+		for (FilterCriteria.ComparisonOp c : AttributeFilter.getPossibleComparisionOps(attribute)) {
 			if (c == comparisonOp) {
 				foundCompOp = true;
 				break;
@@ -138,12 +139,12 @@ public class FilterCriteriaNode extends HBox {
 		if (foundCompOp) {
 			choiceCompOp.getSelectionModel().select(comparisonOp.display);
 		} else {
-			this.comparisonOp = FilterCriteria.getPossibleComparisionOps(attribute)[0];
+			this.comparisonOp = AttributeFilter.getPossibleComparisionOps(attribute)[0];
 			choiceCompOp.getSelectionModel().select(comparisonOp.display);
 		}
 
 		choiceCompOp.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			for (FilterCriteria.ComparisonOp comp : FilterCriteria.getPossibleComparisionOps(attribute)) {
+			for (FilterCriteria.ComparisonOp comp : AttributeFilter.getPossibleComparisionOps(attribute)) {
 				if (comp.display.equals(choiceCompOp.getValue())) {
 					this.comparisonOp = comp;
 					this.compValue = null;

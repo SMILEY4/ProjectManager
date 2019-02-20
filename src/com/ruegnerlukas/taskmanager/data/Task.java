@@ -8,9 +8,8 @@ import java.util.Map;
 
 public class Task {
 
+
 	public Map<TaskAttribute, TaskAttributeValue> attributes = new HashMap<>();
-
-
 
 
 }

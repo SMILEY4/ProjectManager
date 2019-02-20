@@ -1,13 +1,18 @@
 package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.taskmanager.architecture.Request;
+import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectClosedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectCreatedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectRenamedEvent;
-import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.Project;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.DescriptionAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.data.IDAttributeData;
 
 import java.io.File;
 
@@ -104,6 +109,9 @@ public class ProjectLogic {
 
 		// createItem/open new project
 		Project newProject = new Project(name);
+		newProject.attributes.add(new TaskAttribute(IDAttributeData.NAME, TaskAttributeType.ID));
+		newProject.attributes.add(new TaskAttribute(FlagAttributeData.NAME, TaskAttributeType.FLAG));
+		newProject.attributes.add(new TaskAttribute(DescriptionAttributeData.NAME, TaskAttributeType.DESCRIPTION));
 		setProject(newProject);
 		EventManager.fireEvent(new ProjectCreatedEvent(newProject, this));
 	}
