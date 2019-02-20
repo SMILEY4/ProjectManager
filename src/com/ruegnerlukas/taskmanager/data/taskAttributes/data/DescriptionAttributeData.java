@@ -5,9 +5,6 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class DescriptionAttributeData implements TaskAttributeData {
 
 
@@ -19,14 +16,6 @@ public class DescriptionAttributeData implements TaskAttributeData {
 	@Override
 	public TaskAttributeType getType() {
 		return TaskAttributeType.DESCRIPTION;
-	}
-
-
-
-
-	@Override
-	public Map<Var, TaskAttributeValue> update(Var var, TaskAttributeValue newValue) {
-		return new HashMap<>();
 	}
 
 

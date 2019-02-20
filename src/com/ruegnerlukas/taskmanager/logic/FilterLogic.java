@@ -8,11 +8,9 @@ import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.logic.attributes.filter.*;
+import com.ruegnerlukas.taskmanager.logic.attributes.filter.AttributeFilter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,21 +22,9 @@ public class FilterLogic {
 	//======================//
 
 
-	private Map<TaskAttributeType, AttributeFilter> filterMap = new HashMap<>();
-
-
 
 
 	protected FilterLogic() {
-
-		// load filters
-		filterMap.put(TaskAttributeType.BOOLEAN, new BoolAttributeFilter());
-		filterMap.put(TaskAttributeType.CHOICE, new ChoiceAttributeFilter());
-		filterMap.put(TaskAttributeType.DESCRIPTION, new DescriptionAttributeFilter());
-		filterMap.put(TaskAttributeType.FLAG, new FlagAttributeFilter());
-		filterMap.put(TaskAttributeType.ID, new IDAttributeFilter());
-		filterMap.put(TaskAttributeType.NUMBER, new NumberAttributeFilter());
-		filterMap.put(TaskAttributeType.TEXT, new TextAttributeFilter());
 
 		// when an attribute was deleted
 		EventManager.registerListener(e -> {
@@ -94,7 +80,7 @@ public class FilterLogic {
 
 	private boolean match(Task task, List<FilterCriteria> filters) {
 		for (FilterCriteria filter : filters) {
-			AttributeFilter attributeFilter = filterMap.get(filter.attribute.data.getType());
+			AttributeFilter attributeFilter = AttributeLogic.FILTER_MAP.get(filter.attribute.data.getType());
 			boolean isMatch = attributeFilter.match(task, filter);
 			if (isMatch) {
 				continue;
@@ -117,8 +103,6 @@ public class FilterLogic {
 		}
 		return list;
 	}
-
-
 
 
 	//======================//

@@ -9,10 +9,10 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.logic.attributes.filter.*;
+import com.ruegnerlukas.taskmanager.logic.attributes.updaters.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AttributeLogic {
 
@@ -20,6 +20,36 @@ public class AttributeLogic {
 	//======================//
 	//       INTERNAL       //
 	//======================//
+
+
+	public static final Map<TaskAttributeType, AttributeFilter> FILTER_MAP;
+	public static final Map<TaskAttributeType, AttributeUpdater> UPDATER_MAP;
+
+
+
+
+	static {
+		Map<TaskAttributeType, AttributeFilter> filterMap = new HashMap<>();
+		filterMap.put(TaskAttributeType.BOOLEAN, new BoolAttributeFilter());
+		filterMap.put(TaskAttributeType.CHOICE, new ChoiceAttributeFilter());
+		filterMap.put(TaskAttributeType.DESCRIPTION, new DescriptionAttributeFilter());
+		filterMap.put(TaskAttributeType.FLAG, new FlagAttributeFilter());
+		filterMap.put(TaskAttributeType.ID, new IDAttributeFilter());
+		filterMap.put(TaskAttributeType.NUMBER, new NumberAttributeFilter());
+		filterMap.put(TaskAttributeType.TEXT, new TextAttributeFilter());
+		FILTER_MAP = Collections.unmodifiableMap(filterMap);
+
+		Map<TaskAttributeType, AttributeUpdater> updaterMap = new HashMap<>();
+		updaterMap.put(TaskAttributeType.BOOLEAN, new BoolAttributeUpdater());
+		updaterMap.put(TaskAttributeType.CHOICE, new ChoiceAttributeUpdater());
+		updaterMap.put(TaskAttributeType.DESCRIPTION, new DescriptionAttributeUpdater());
+		updaterMap.put(TaskAttributeType.FLAG, new FlagAttributeUpdater());
+		updaterMap.put(TaskAttributeType.ID, new IDAttributeUpdater());
+		updaterMap.put(TaskAttributeType.NUMBER, new NumberAttributeUpdater());
+		updaterMap.put(TaskAttributeType.TEXT, new TextAttributeUpdater());
+		UPDATER_MAP = Collections.unmodifiableMap(updaterMap);
+
+	}
 
 
 
@@ -139,6 +169,7 @@ public class AttributeLogic {
 
 
 
+
 	/**
 	 * request the first attribute of the given type
 	 */
@@ -150,6 +181,7 @@ public class AttributeLogic {
 			request.respond(new Response<>(Response.State.FAIL, "No attributes with type '" + type + "' found.", null));
 		}
 	}
+
 
 
 
@@ -366,8 +398,9 @@ public class AttributeLogic {
 
 			} else {
 
+				AttributeUpdater updater = UPDATER_MAP.get(attribute.data.getType());
 
-				Map<TaskAttributeData.Var, TaskAttributeValue> changedVars = attribute.data.update(var, value);
+				Map<TaskAttributeData.Var, TaskAttributeValue> changedVars = updater.update(attribute.data, var, value);
 				if (changedVars == null || changedVars.isEmpty()) {
 					EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.INVALID, this));
 				} else {

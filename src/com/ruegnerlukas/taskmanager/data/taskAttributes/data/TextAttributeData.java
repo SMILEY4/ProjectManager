@@ -1,10 +1,9 @@
 package com.ruegnerlukas.taskmanager.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.*;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 
 public class TextAttributeData implements TaskAttributeData {
 
@@ -21,68 +20,6 @@ public class TextAttributeData implements TaskAttributeData {
 	@Override
 	public TaskAttributeType getType() {
 		return TaskAttributeType.TEXT;
-	}
-
-
-
-
-	@Override
-	public Map<Var, TaskAttributeValue> update(Var var, TaskAttributeValue newValue) {
-		Map<Var, TaskAttributeValue> changedVars = new HashMap<>();
-
-		switch (var) {
-
-			case TEXT_CHAR_LIMIT: {
-				if (newValue instanceof NumberValue) {
-					charLimit = ((NumberValue) newValue).getInt();
-					changedVars.put(Var.TEXT_CHAR_LIMIT, newValue);
-					if (defaultValue.length() > charLimit) {
-						defaultValue = defaultValue.substring(0, charLimit);
-						changedVars.put(Var.DEFAULT_VALUE, new TextValue(defaultValue));
-					}
-				}
-				break;
-			}
-
-			case TEXT_MULTILINE: {
-				if (newValue instanceof BoolValue) {
-					multiline = ((BoolValue) newValue).getBoolValue();
-					if (multiline && defaultValue.contains(System.lineSeparator())) {
-						defaultValue = defaultValue.replaceAll(System.lineSeparator(), " ");
-						changedVars.put(Var.DEFAULT_VALUE, new TextValue(defaultValue));
-					}
-					changedVars.put(Var.TEXT_MULTILINE, newValue);
-				}
-				break;
-			}
-
-			case TEXT_N_LINES_EXP: {
-				if (newValue instanceof NumberValue) {
-					nLinesExpected = ((NumberValue) newValue).getInt();
-					changedVars.put(Var.TEXT_N_LINES_EXP, newValue);
-				}
-				break;
-			}
-
-			case USE_DEFAULT: {
-				if (newValue instanceof BoolValue) {
-					useDefault = ((BoolValue) newValue).getBoolValue();
-					changedVars.put(Var.USE_DEFAULT, newValue);
-				}
-				break;
-			}
-
-			case DEFAULT_VALUE: {
-				if (newValue instanceof TextValue) {
-					defaultValue = ((TextValue) newValue).getText();
-					changedVars.put(Var.DEFAULT_VALUE, newValue);
-				}
-				break;
-			}
-
-		}
-
-		return changedVars;
 	}
 
 

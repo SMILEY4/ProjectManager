@@ -5,9 +5,6 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.BoolValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class BoolAttributeData implements TaskAttributeData {
 
 
@@ -20,35 +17,6 @@ public class BoolAttributeData implements TaskAttributeData {
 	@Override
 	public TaskAttributeType getType() {
 		return TaskAttributeType.BOOLEAN;
-	}
-
-
-
-
-	@Override
-	public Map<Var, TaskAttributeValue> update(Var var, TaskAttributeValue newValue) {
-		Map<Var, TaskAttributeValue> changedVars = new HashMap<>();
-
-		switch (var) {
-
-			case USE_DEFAULT: {
-				if (newValue instanceof BoolValue) {
-					useDefault = ((BoolValue) newValue).getBoolValue();
-					changedVars.put(Var.USE_DEFAULT, newValue);
-				}
-				break;
-			}
-
-			case DEFAULT_VALUE: {
-				if (newValue instanceof BoolValue) {
-					defaultValue = ((BoolValue) newValue).getBoolValue();
-					changedVars.put(Var.DEFAULT_VALUE, newValue);
-				}
-				break;
-			}
-		}
-
-		return changedVars;
 	}
 
 
