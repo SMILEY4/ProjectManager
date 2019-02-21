@@ -6,7 +6,7 @@ public class IDAttributeNode extends AttributeDataNode {
 
 
 	public IDAttributeNode(TaskAttribute attribute, TaskAttributeNode parent) {
-		super(attribute, parent, "taskattribute_static.fxml", false);
+		super(attribute, parent, "fxmlfiles/taskattribute_static.fxml", false);
 	}
 
 

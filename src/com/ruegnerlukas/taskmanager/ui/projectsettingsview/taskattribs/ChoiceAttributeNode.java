@@ -27,7 +27,7 @@ public class ChoiceAttributeNode extends AttributeDataNode {
 
 
 	public ChoiceAttributeNode(TaskAttribute attribute, TaskAttributeNode parent) {
-		super(attribute, parent, "taskattribute_choice.fxml", true);
+		super(attribute, parent, "fxmlfiles/taskattribute_choice.fxml", true);
 	}
 
 

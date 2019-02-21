@@ -111,9 +111,10 @@ public class ProjectSettingsView extends AnchorPane implements TabContent {
 
 
 		// add attribute
-		btnAddAttribute.setOnAction(event -> Logic.attribute.createAttribute(
-				"Attribute " + Integer.toHexString(new Integer(new Random().nextInt()).hashCode()),
-				TaskAttributeType.TEXT));
+		btnAddAttribute.setOnAction(event -> {
+			Logic.attribute.createAttribute(
+					"Attribute " + Integer.toHexString(new Integer(new Random().nextInt()).hashCode()), TaskAttributeType.TEXT);
+		});
 
 
 		// add initial values
@@ -153,14 +154,14 @@ public class ProjectSettingsView extends AnchorPane implements TabContent {
 			setAttributeLock(attributesLocked);
 		}, AttributeLockEvent.class);
 
-		// listen for added values
+		// listen for added attributes
 		EventManager.registerListener(this, e -> {
 			AttributeCreatedEvent event = (AttributeCreatedEvent) e;
 			TaskAttributeNode attrNode = new TaskAttributeNode(event.getAttribute());
 			boxTaskAttribs.getChildren().add(attrNode);
 		}, AttributeCreatedEvent.class);
 
-		// listen for removed values
+		// listen for removed attributes
 		EventManager.registerListener(this, e -> {
 			AttributeRemovedEvent event = (AttributeRemovedEvent) e;
 			for (Node node : boxTaskAttribs.getChildren()) {

@@ -33,7 +33,7 @@ public class FlagAttributeNode extends AttributeDataNode {
 
 
 	public FlagAttributeNode(TaskAttribute attribute, TaskAttributeNode parent) {
-		super(attribute, parent, "taskattribute_flag.fxml", true);
+		super(attribute, parent, "fxmlfiles/taskattribute_flag.fxml", true);
 	}
 
 

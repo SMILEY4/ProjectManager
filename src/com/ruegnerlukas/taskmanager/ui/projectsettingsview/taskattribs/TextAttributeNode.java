@@ -29,7 +29,7 @@ public class TextAttributeNode extends AttributeDataNode {
 
 
 	public TextAttributeNode(TaskAttribute attribute, TaskAttributeNode parent) {
-		super(attribute, parent, "taskattribute_text.fxml", true);
+		super(attribute, parent, "fxmlfiles/taskattribute_text.fxml", true);
 	}
 
 

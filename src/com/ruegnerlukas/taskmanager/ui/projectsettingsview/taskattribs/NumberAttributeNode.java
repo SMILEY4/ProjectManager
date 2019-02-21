@@ -25,7 +25,7 @@ public class NumberAttributeNode extends AttributeDataNode {
 
 
 	public NumberAttributeNode(TaskAttribute attribute, TaskAttributeNode parent) {
-		super(attribute, parent, "taskattribute_number.fxml", true);
+		super(attribute, parent, "fxmlfiles/taskattribute_number.fxml", true);
 	}
 
 

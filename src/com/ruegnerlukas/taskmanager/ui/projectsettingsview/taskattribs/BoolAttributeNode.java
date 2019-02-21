@@ -19,7 +19,7 @@ public class BoolAttributeNode extends AttributeDataNode {
 
 
 	public BoolAttributeNode(TaskAttribute attribute, TaskAttributeNode parent) {
-		super(attribute, parent, "taskattribute_bool.fxml", true);
+		super(attribute, parent, "fxmlfiles/taskattribute_bool.fxml", true);
 	}
 
 
