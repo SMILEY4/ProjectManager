@@ -12,16 +12,14 @@ public class AttributeUpdatedEvent extends Event {
 
 	private TaskAttribute attribute;
 	private Map<TaskAttributeData.Var, TaskAttributeValue> changedVars;
-	private Object newMainValue;
 
 
 
 
-	public AttributeUpdatedEvent(TaskAttribute attribute, Map<TaskAttributeData.Var, TaskAttributeValue> changedVars, Object newMainValue, Object source) {
+	public AttributeUpdatedEvent(TaskAttribute attribute, Map<TaskAttributeData.Var, TaskAttributeValue> changedVars, Object source) {
 		super(source);
 		this.attribute = attribute;
 		this.changedVars = changedVars;
-		this.newMainValue = newMainValue;
 	}
 
 
@@ -36,13 +34,6 @@ public class AttributeUpdatedEvent extends Event {
 
 	public Map<TaskAttributeData.Var, TaskAttributeValue> getChangedVars() {
 		return changedVars;
-	}
-
-
-
-
-	public Object getChangedMainValue() {
-		return newMainValue;
 	}
 
 

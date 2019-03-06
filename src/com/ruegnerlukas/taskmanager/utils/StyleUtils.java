@@ -1,8 +1,11 @@
 package com.ruegnerlukas.taskmanager.utils;
 
+import javafx.scene.Node;
 import javafx.scene.Parent;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class StyleUtils {
@@ -47,5 +50,27 @@ public class StyleUtils {
 //		root.getStylesheets().add(ViewManager.class.getResource("style.css").toExternalForm());
 	}
 
+
+
+
+	public static void showAllBorders(Parent parent, String colorParent, String colorNode) {
+		List<Parent> open = new ArrayList<>();
+		open.add(parent);
+
+		while(!open.isEmpty()) {
+			Parent p = open.remove(0);
+			p.setStyle("-fx-border-color: " + colorParent + ";");
+
+			for(Node node : p.getChildrenUnmodifiable()) {
+				if(node instanceof Parent) {
+					open.add((Parent)node);
+				} else {
+					node.setStyle("-fx-border-color: " + colorNode + ";");
+				}
+			}
+
+		}
+
+	}
 
 }

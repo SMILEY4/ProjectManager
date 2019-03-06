@@ -95,14 +95,14 @@
 	-fx-border-color: transparent;
 }
 
-#boxTaskAttribs > TaskAttributeNode {
+#boxTaskAttribs > AttributeNode {
 	-fx-background-color: white;
 	-fx-border-color: -gray-mid-0;
 	-fx-border-radius: 5;
 }
 
 
-#boxTaskAttribs > TaskAttributeNode > AnchorPane > HBox > ChoiceBox {
+#boxTaskAttribs > AttributeNode > AnchorPane > HBox > ChoiceBox {
 	-fx-background-color: white;
 	-fx-border-color: -gray-mid-0;
 	-fx-border-radius: 0;
@@ -110,41 +110,41 @@
 	-fx-border-insets: 0 0 5 0;
 }
 
-#boxTaskAttribs > TaskAttributeNode > AnchorPane > HBox {
+#boxTaskAttribs > AttributeNode > AnchorPane > HBox {
 	-fx-border-color: -gray-mid-0;
 	-fx-border-radius: 5;
 	-fx-border-width: 0 0 1 0;
 }
 
 
-#boxTaskAttribs > TaskAttributeNode > AnchorPane > HBox > Button {
+#boxTaskAttribs > AttributeNode > AnchorPane > HBox > Button {
 	-fx-background-color: transparent;
 	-fx-border-color: transparent;
 }
 
-#boxTaskAttribs > TaskAttributeNode > AnchorPane > HBox > Button:hover > SVGPath {
+#boxTaskAttribs > AttributeNode > AnchorPane > HBox > Button:hover > SVGPath {
 	-fx-fill: -gray-dark;
 }
 
-#boxTaskAttribs > TaskAttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode {
+#boxTaskAttribs > AttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode {
 	-fx-border-color: -gray-mid-0;
 	-fx-background-color: white;
 	-fx-border-radius: 5;
 	-fx-background-radius: 5;
 }
 
-#boxTaskAttribs > TaskAttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode:hover {
+#boxTaskAttribs > AttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode:hover {
 	/*-fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.4), 7, 0, 0, 0);*/
 	-fx-background-color: -gray-light;
 }
 
 
-#boxTaskAttribs > TaskAttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode > Button {
+#boxTaskAttribs > AttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode > Button {
 	-fx-background-color: transparent;
 	-fx-border-color: transparent;
 }
 
-#boxTaskAttribs > TaskAttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode > Button:hover > SVGPath {
+#boxTaskAttribs > AttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode > Button:hover > SVGPath {
 	-fx-fill: -gray-dark;
 }
 

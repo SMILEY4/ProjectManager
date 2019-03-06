@@ -13,7 +13,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.TabContent;
-import com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs.TaskAttributeNode;
+import com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattributes.AttributeNode;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -117,13 +117,13 @@ public class ProjectSettingsView extends AnchorPane implements TabContent {
 		});
 
 
-		// add initial values
+		// add initial attributes
 		Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
 			@Override
 			public void onResponse(Response<List<TaskAttribute>> response) {
 				List<TaskAttribute> attributes = response.getValue();
 				for (TaskAttribute attribute : attributes) {
-					TaskAttributeNode attrNode = new TaskAttributeNode(attribute);
+					AttributeNode attrNode = new AttributeNode(attribute);
 					boxTaskAttribs.getChildren().add(attrNode);
 				}
 			}
@@ -157,7 +157,7 @@ public class ProjectSettingsView extends AnchorPane implements TabContent {
 		// listen for added attributes
 		EventManager.registerListener(this, e -> {
 			AttributeCreatedEvent event = (AttributeCreatedEvent) e;
-			TaskAttributeNode attrNode = new TaskAttributeNode(event.getAttribute());
+			AttributeNode attrNode = new AttributeNode(event.getAttribute());
 			boxTaskAttribs.getChildren().add(attrNode);
 		}, AttributeCreatedEvent.class);
 
@@ -165,11 +165,10 @@ public class ProjectSettingsView extends AnchorPane implements TabContent {
 		EventManager.registerListener(this, e -> {
 			AttributeRemovedEvent event = (AttributeRemovedEvent) e;
 			for (Node node : boxTaskAttribs.getChildren()) {
-				TaskAttributeNode attributeNode = (TaskAttributeNode) node;
-
-				if (attributeNode.attribute == event.getAttribute()) {
+				AttributeNode attributeNode = (AttributeNode) node;
+				if (attributeNode.getAttribute() == event.getAttribute()) {
 					boxTaskAttribs.getChildren().remove(node);
-					attributeNode.close();
+					attributeNode.dispose();
 					break;
 				}
 			}
@@ -182,8 +181,8 @@ public class ProjectSettingsView extends AnchorPane implements TabContent {
 	private void setAttributeLock(boolean locked) {
 		btnAddAttribute.setDisable(locked);
 		for (Node node : boxTaskAttribs.getChildren()) {
-			if (node instanceof TaskAttributeNode) {
-				((TaskAttributeNode) node).setLocked(locked);
+			if (node instanceof AttributeNode) {
+				((AttributeNode) node).setLocked(locked);
 			}
 		}
 	}

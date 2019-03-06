@@ -386,14 +386,15 @@ public class AttributeLogic {
 
 
 
-	/**
-	 * Updates a variable of a given task with a new value <p>
-	 * Events <p>
-	 * - AttributeUpdatedRejection: when the type could not be changed (NOT_ALLOWED = values are locked / attribute is fixed,
-	 * NOT_EXISTS = attribute with given name does not exist, INVALID: new value / variable is invalid) <p>
-	 * - AttributeUpdatedEvent: when the value was changed <p>
-	 */
 	public void updateTaskAttribute(String name, TaskAttributeData.Var var, TaskAttributeValue value) {
+		HashMap<TaskAttributeData.Var, TaskAttributeValue> map = new HashMap<>();
+		updateTaskAttribute(name, map);
+	}
+
+
+
+
+	public void updateTaskAttribute(String name, Map<TaskAttributeData.Var, TaskAttributeValue> values) {
 
 		Project project = Logic.project.getProject();
 		if (project != null) {
@@ -403,21 +404,29 @@ public class AttributeLogic {
 
 			// try to update variable
 			if (attribute == null) {
-				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.NOT_EXISTS, this));
+				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, values, EventCause.NOT_EXISTS, this));
 
 			} else if (project.attributesLocked) {
-				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.NOT_ALLOWED, this));
+				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, values, EventCause.NOT_ALLOWED, this));
 
 			} else {
 
 				AttributeUpdater updater = UPDATER_MAP.get(attribute.data.getType());
+				Map<TaskAttributeData.Var, TaskAttributeValue> changedVars = new HashMap<>();
 
-				Map<TaskAttributeData.Var, TaskAttributeValue> changedVars = updater.update(attribute.data, var, value);
-				if (changedVars == null || changedVars.isEmpty()) {
-					EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.INVALID, this));
-				} else {
-					EventManager.fireEvent(new AttributeUpdatedEvent(attribute, changedVars, value, this));
+				for (Map.Entry<TaskAttributeData.Var, TaskAttributeValue> entry : values.entrySet()) {
+
+					boolean valid = updater.update(attribute.data, entry.getKey(), entry.getValue(), changedVars);
+
+					if (!valid) {
+						HashMap<TaskAttributeData.Var, TaskAttributeValue> invalidPair = new HashMap<>();
+						invalidPair.put(entry.getKey(), entry.getValue());
+						EventManager.fireEvent(new AttributeUpdatedRejection(attribute, invalidPair, EventCause.INVALID, this));
+					}
+
 				}
+
+				EventManager.fireEvent(new AttributeUpdatedEvent(attribute, changedVars, this));
 
 			}
 

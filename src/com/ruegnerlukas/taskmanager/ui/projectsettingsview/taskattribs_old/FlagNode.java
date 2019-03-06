@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs;
+package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattribs_old;
 
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;

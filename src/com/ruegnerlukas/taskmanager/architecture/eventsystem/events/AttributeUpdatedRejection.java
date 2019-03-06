@@ -3,24 +3,25 @@ package com.ruegnerlukas.taskmanager.architecture.eventsystem.events;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+
+import java.util.Map;
 
 public class AttributeUpdatedRejection extends Event {
 
 
 	private EventCause cause;
 	private TaskAttribute attribute;
-	private TaskAttributeData.Var var;
-	private Object newValue;
+	private Map<TaskAttributeData.Var, TaskAttributeValue> values;
 
 
 
 
-	public AttributeUpdatedRejection(TaskAttribute attribute, TaskAttributeData.Var var,
-									 Object newValue, EventCause cause, Object source) {
+	public AttributeUpdatedRejection(
+			TaskAttribute attribute, Map<TaskAttributeData.Var, TaskAttributeValue> values, EventCause cause, Object source) {
 		super(source);
 		this.attribute = attribute;
-		this.var = var;
-		this.newValue = newValue;
+		this.values = values;
 		this.cause = cause;
 	}
 
@@ -34,16 +35,10 @@ public class AttributeUpdatedRejection extends Event {
 
 
 
-	public TaskAttributeData.Var getVar() {
-		return var;
+	public Map<TaskAttributeData.Var, TaskAttributeValue> getValues() {
+		return values;
 	}
 
-
-
-
-	public Object getNewValue() {
-		return newValue;
-	}
 
 
 
