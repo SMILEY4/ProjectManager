@@ -125,6 +125,7 @@ public class Sidebar extends AnchorPane {
 		}));
 
 
+
 		// listen for taskAttribute-changes
 		EventManager.registerListener(this, event -> {
 			refresh();
@@ -159,6 +160,15 @@ public class Sidebar extends AnchorPane {
 		});
 
 		// flag
+		Logic.taskFlags.getAllFlags(new Request<TaskFlag[]>(true) {
+			@Override
+			public void onResponse(Response<TaskFlag[]> response) {
+				choiceFlag.getItems().clear();
+				for (TaskFlag flag : response.getValue()) {
+					choiceFlag.getItems().add(flag.name);
+				}
+			}
+		});
 		Logic.tasks.getAttributeValue(currentTask, FlagAttributeData.NAME, new Request<TaskAttributeValue>(true) {
 			@Override
 			public void onResponse(Response<TaskAttributeValue> response) {

@@ -132,6 +132,18 @@ public class AttributeLogic {
 	}
 
 
+
+
+	protected AttributeValidator getAttributeValidator(TaskAttributeType type) {
+		return VALIDATOR_MAP.get(type);
+	}
+
+
+	protected AttributeUpdater getAttributeUpdater(TaskAttributeType type) {
+		return UPDATER_MAP.get(type);
+	}
+
+
 	//======================//
 	//        GETTER        //
 	//======================//

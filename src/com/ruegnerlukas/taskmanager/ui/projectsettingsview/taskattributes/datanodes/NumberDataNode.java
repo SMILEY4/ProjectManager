@@ -174,13 +174,17 @@ public class NumberDataNode extends DataNode {
 		valuesMap.put(TaskAttributeData.Var.NUMBER_ATT_MAX, new NumberValue(itemMax.getValue()));
 		valuesMap.put(TaskAttributeData.Var.USE_DEFAULT, new BoolValue(itemUseDefault.getValue()));
 		valuesMap.put(TaskAttributeData.Var.DEFAULT_VALUE, new NumberValue(itemDefault.getValue()));
-		Logic.attribute.updateTaskAttribute(getAttribute().name, valuesMap);
-		itemDecPlaces.setChanged(false);
-		itemMin.setChanged(false);
-		itemMax.setChanged(false);
-		itemUseDefault.setChanged(false);
-		itemDefault.setChanged(false);
-		onChange();
+
+		if (warningOnSave(valuesMap)) {
+			Logic.attribute.updateTaskAttribute(getAttribute().name, valuesMap);
+			itemDecPlaces.setChanged(false);
+			itemMin.setChanged(false);
+			itemMax.setChanged(false);
+			itemUseDefault.setChanged(false);
+			itemDefault.setChanged(false);
+			onChange();
+		}
+
 	}
 
 

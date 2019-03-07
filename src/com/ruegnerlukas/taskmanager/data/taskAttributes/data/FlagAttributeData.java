@@ -2,7 +2,7 @@ package com.ruegnerlukas.taskmanager.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.*;
 
 public class FlagAttributeData implements TaskAttributeData {
 
@@ -56,5 +56,31 @@ public class FlagAttributeData implements TaskAttributeData {
 	public FlagValue getDefault() {
 		return new FlagValue(defaultFlag);
 	}
+
+
+
+
+	@Override
+	public TaskAttributeValue getValue(Var var) {
+		if (var == Var.FLAG_ATT_FLAGS) {
+			return new FlagArrayValue(flags);
+		}
+		if (var == Var.DEFAULT_VALUE) {
+			return getDefault();
+		}
+		return null;
+	}
+
+
+
+
+	@Override
+	public FlagAttributeData copy() {
+		FlagAttributeData copy = new FlagAttributeData();
+		copy.flags = this.flags;
+		copy.defaultFlag = this.defaultFlag;
+		return copy;
+	}
+
 
 }

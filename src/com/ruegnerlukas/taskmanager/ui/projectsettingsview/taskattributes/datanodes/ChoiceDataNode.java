@@ -149,10 +149,14 @@ public class ChoiceDataNode extends DataNode {
 		valuesMap.put(TaskAttributeData.Var.CHOICE_ATT_VALUES, new TextArrayValue(getValuesCleaned()));
 		valuesMap.put(TaskAttributeData.Var.USE_DEFAULT, new BoolValue(itemUseDefault.getValue()));
 		valuesMap.put(TaskAttributeData.Var.DEFAULT_VALUE, new TextValue(itemDefault.getValue()));
-		Logic.attribute.updateTaskAttribute(getAttribute().name, valuesMap);
-		itemUseDefault.setChanged(false);
-		itemDefault.setChanged(false);
-		onChange();
+
+		if (warningOnSave(valuesMap)) {
+			Logic.attribute.updateTaskAttribute(getAttribute().name, valuesMap);
+			itemUseDefault.setChanged(false);
+			itemDefault.setChanged(false);
+			onChange();
+		}
+
 	}
 
 

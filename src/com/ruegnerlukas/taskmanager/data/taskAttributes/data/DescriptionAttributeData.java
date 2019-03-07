@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 
 public class DescriptionAttributeData implements TaskAttributeData {
@@ -30,6 +31,23 @@ public class DescriptionAttributeData implements TaskAttributeData {
 	@Override
 	public TextValue getDefault() {
 		return new TextValue("");
+	}
+
+
+
+
+	@Override
+	public TaskAttributeValue getValue(Var var) {
+		return null;
+	}
+
+
+
+
+	@Override
+	public DescriptionAttributeData copy() {
+		DescriptionAttributeData copy = new DescriptionAttributeData();
+		return copy;
 	}
 
 }

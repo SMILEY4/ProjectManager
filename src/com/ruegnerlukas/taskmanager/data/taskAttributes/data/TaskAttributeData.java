@@ -31,4 +31,7 @@ public interface TaskAttributeData {
 
 	TaskAttributeValue getDefault();
 
+	TaskAttributeValue getValue(Var var);
+
+	TaskAttributeData copy();
 }

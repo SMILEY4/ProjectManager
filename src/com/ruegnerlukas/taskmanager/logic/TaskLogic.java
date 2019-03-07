@@ -413,8 +413,11 @@ public class TaskLogic {
 
 
 
+
 	public static final String CORR_BEH_DELETE = "Delete values";
 	public static final String CORR_BEH_DEFAULT = "Set Values to default value";
+
+
 
 
 	public void correctTaskValues(TaskAttribute attribute, String behaviour, boolean onlyInvalid) {
@@ -431,19 +434,19 @@ public class TaskLogic {
 				}
 			}
 
-			for(Task task : affectedTasks) {
+			for (Task task : affectedTasks) {
 
 				TaskAttributeValue value = getValue(task, attribute);
 				AttributeValidator validator = AttributeLogic.VALIDATOR_MAP.get(attribute.data.getType());
-				if(onlyInvalid && validator.validate(attribute.data, value)) {
+				if (onlyInvalid && validator.validate(attribute.data, value)) {
 					continue;
 				}
 
-				if(behaviour.equals(CORR_BEH_DELETE)) {
+				if (behaviour.equals(CORR_BEH_DELETE)) {
 					removeAttribute(task, attribute);
 				}
-				if(behaviour.equals(CORR_BEH_DEFAULT)) {
-					if(attribute.data.usesDefault()) {
+				if (behaviour.equals(CORR_BEH_DEFAULT)) {
+					if (attribute.data.usesDefault()) {
 						setAttributeValue(task, attribute, attribute.data.getDefault());
 					} else {
 						removeAttribute(task, attribute);

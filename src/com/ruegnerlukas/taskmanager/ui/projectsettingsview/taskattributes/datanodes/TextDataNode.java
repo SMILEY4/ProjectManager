@@ -46,7 +46,7 @@ public class TextDataNode extends DataNode {
 		itemCharLimit = new IntegerValueItem("Character Limit:", data.charLimit, 0, Integer.MAX_VALUE, 1) {
 			@Override
 			public void onChanged() {
-				if(itemDefault.getValue().length() > itemCharLimit.getValue()) {
+				if (itemDefault.getValue().length() > itemCharLimit.getValue()) {
 					itemDefault.setValue(itemDefault.getValue().substring(0, itemCharLimit.getValue()));
 				}
 				onChange();
@@ -86,7 +86,7 @@ public class TextDataNode extends DataNode {
 		itemDefault = new MLTextValueItem("Default Value:", data.defaultValue, "", data.nLinesExpected) {
 			@Override
 			public void onChanged() {
-				if(itemDefault.getValue().length() > itemCharLimit.getValue()) {
+				if (itemDefault.getValue().length() > itemCharLimit.getValue()) {
 					itemDefault.setValue(itemDefault.getValue().substring(0, itemCharLimit.getValue()));
 				}
 				onChange();
@@ -170,13 +170,17 @@ public class TextDataNode extends DataNode {
 		valuesMap.put(TaskAttributeData.Var.TEXT_N_LINES_EXP, new NumberValue(itemNumLines.getValue()));
 		valuesMap.put(TaskAttributeData.Var.USE_DEFAULT, new BoolValue(itemUseDefault.getValue()));
 		valuesMap.put(TaskAttributeData.Var.DEFAULT_VALUE, new TextValue(itemDefault.getValue()));
-		Logic.attribute.updateTaskAttribute(getAttribute().name, valuesMap);
-		itemCharLimit.setChanged(false);
-		itemMultiline.setChanged(false);
-		itemNumLines.setChanged(false);
-		itemUseDefault.setChanged(false);
-		itemDefault.setChanged(false);
-		onChange();
+
+		if (warningOnSave(valuesMap)) {
+			Logic.attribute.updateTaskAttribute(getAttribute().name, valuesMap);
+			itemCharLimit.setChanged(false);
+			itemMultiline.setChanged(false);
+			itemNumLines.setChanged(false);
+			itemUseDefault.setChanged(false);
+			itemDefault.setChanged(false);
+			onChange();
+		}
+
 	}
 
 

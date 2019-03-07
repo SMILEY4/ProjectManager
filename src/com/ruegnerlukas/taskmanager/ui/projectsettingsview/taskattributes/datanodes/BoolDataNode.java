@@ -100,10 +100,12 @@ public class BoolDataNode extends DataNode {
 		Map<TaskAttributeData.Var, TaskAttributeValue> valuesMap = new HashMap<>();
 		valuesMap.put(TaskAttributeData.Var.USE_DEFAULT, new BoolValue(itemUseDefault.getValue()));
 		valuesMap.put(TaskAttributeData.Var.DEFAULT_VALUE, new BoolValue(itemDefault.getValue()));
-		Logic.attribute.updateTaskAttribute(getAttribute().name, valuesMap);
-		itemUseDefault.setChanged(false);
-		itemDefault.setChanged(false);
-		onChange();
+		if (warningOnSave(valuesMap)) {
+			Logic.attribute.updateTaskAttribute(getAttribute().name, valuesMap);
+			itemUseDefault.setChanged(false);
+			itemDefault.setChanged(false);
+			onChange();
+		}
 	}
 
 

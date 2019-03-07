@@ -148,10 +148,14 @@ public class FlagDataNode extends DataNode {
 		}
 		valuesMap.put(TaskAttributeData.Var.FLAG_ATT_FLAGS, new FlagArrayValue(itemFlags.getValue()));
 		valuesMap.put(TaskAttributeData.Var.DEFAULT_VALUE, new FlagValue(flagDefault));
-		Logic.attribute.updateTaskAttribute(getAttribute().name, valuesMap);
-		itemDefault.setChanged(false);
-		itemFlags.setChanged(false);
-		onChange();
+
+		if (warningOnSave(valuesMap)) {
+			Logic.attribute.updateTaskAttribute(getAttribute().name, valuesMap);
+			itemDefault.setChanged(false);
+			itemFlags.setChanged(false);
+			onChange();
+		}
+
 	}
 
 

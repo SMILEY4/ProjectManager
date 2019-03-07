@@ -1,7 +1,9 @@
 package com.ruegnerlukas.taskmanager.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.BoolValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
 public class NumberAttributeData implements TaskAttributeData {
 
@@ -34,6 +36,43 @@ public class NumberAttributeData implements TaskAttributeData {
 	@Override
 	public NumberValue getDefault() {
 		return new NumberValue(defaultValue);
+	}
+
+
+
+
+	@Override
+	public TaskAttributeValue getValue(Var var) {
+		if (var == Var.NUMBER_ATT_DEC_PLACES) {
+			return new NumberValue(decPlaces);
+		}
+		if (var == Var.NUMBER_ATT_MIN) {
+			return new NumberValue(min);
+		}
+		if (var == Var.NUMBER_ATT_MAX) {
+			return new NumberValue(max);
+		}
+		if (var == Var.USE_DEFAULT) {
+			return new BoolValue(useDefault);
+		}
+		if (var == Var.DEFAULT_VALUE) {
+			return getDefault();
+		}
+		return null;
+	}
+
+
+
+
+	@Override
+	public NumberAttributeData copy() {
+		NumberAttributeData copy = new NumberAttributeData();
+		copy.decPlaces = this.decPlaces;
+		copy.min = this.min;
+		copy.max = this.max;
+		copy.useDefault = this.useDefault;
+		copy.defaultValue = this.defaultValue;
+		return copy;
 	}
 
 }
