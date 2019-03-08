@@ -16,6 +16,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.logic.attributes.validation.AttributeValidator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -139,7 +140,8 @@ public class TaskLogic {
 
 
 	protected boolean setValue(Task task, TaskAttribute attribute, TaskAttributeValue value) {
-		if (attribute.data.validate(value)) {
+		AttributeValidator validator = AttributeLogic.VALIDATOR_MAP.get(attribute.data.getType());
+		if (validator.validate(attribute.data, value)) {
 			task.attributes.put(attribute, value);
 			return true;
 		} else {
@@ -228,7 +230,8 @@ public class TaskLogic {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 
-			if (attribute.data.validate(value)) {
+			AttributeValidator validator = AttributeLogic.VALIDATOR_MAP.get(attribute.data.getType());
+			if (validator.validate(attribute.data, value)) {
 				List<Task> tasks = new ArrayList<>();
 				for (int i = 0; i < project.tasks.size(); i++) {
 					Task task = project.tasks.get(i);
@@ -451,7 +454,8 @@ public class TaskLogic {
 			for (Task task : affectedTasks) {
 
 				TaskAttributeValue value = getValue(task, attribute);
-				if (onlyInvalid && attribute.data.validate(value)) {
+				AttributeValidator validator = AttributeLogic.VALIDATOR_MAP.get(attribute.data.getType());
+				if (onlyInvalid && validator.validate(attribute.data, value)) {
 					continue;
 				}
 

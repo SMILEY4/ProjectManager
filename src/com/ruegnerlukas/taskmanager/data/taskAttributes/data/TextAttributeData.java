@@ -1,10 +1,10 @@
 package com.ruegnerlukas.taskmanager.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.*;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.BoolValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 
 public class TextAttributeData implements TaskAttributeData {
 
@@ -27,80 +27,6 @@ public class TextAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public Map<Var, TaskAttributeValue> update(Var var, TaskAttributeValue newValue) {
-		Map<Var, TaskAttributeValue> changedVars = new HashMap<>();
-
-		switch (var) {
-
-			case TEXT_CHAR_LIMIT: {
-				if (newValue instanceof NumberValue) {
-					charLimit = ((NumberValue) newValue).getInt();
-					changedVars.put(Var.TEXT_CHAR_LIMIT, newValue);
-					if (defaultValue.length() > charLimit) {
-						defaultValue = defaultValue.substring(0, charLimit);
-						changedVars.put(Var.DEFAULT_VALUE, new TextValue(defaultValue));
-					}
-				}
-				break;
-			}
-
-			case TEXT_MULTILINE: {
-				if (newValue instanceof BoolValue) {
-					multiline = ((BoolValue) newValue).getBoolValue();
-					if (multiline && defaultValue.contains(System.lineSeparator())) {
-						defaultValue = defaultValue.replaceAll(System.lineSeparator(), " ");
-						changedVars.put(Var.DEFAULT_VALUE, new TextValue(defaultValue));
-					}
-					changedVars.put(Var.TEXT_MULTILINE, newValue);
-				}
-				break;
-			}
-
-			case TEXT_N_LINES_EXP: {
-				if (newValue instanceof NumberValue) {
-					nLinesExpected = ((NumberValue) newValue).getInt();
-					changedVars.put(Var.TEXT_N_LINES_EXP, newValue);
-				}
-				break;
-			}
-
-			case USE_DEFAULT: {
-				if (newValue instanceof BoolValue) {
-					useDefault = ((BoolValue) newValue).getBoolValue();
-					changedVars.put(Var.USE_DEFAULT, newValue);
-				}
-				break;
-			}
-
-			case DEFAULT_VALUE: {
-				if (newValue instanceof TextValue) {
-					defaultValue = ((TextValue) newValue).getText();
-					changedVars.put(Var.DEFAULT_VALUE, newValue);
-				}
-				break;
-			}
-
-		}
-
-		return changedVars;
-	}
-
-
-
-
-	@Override
-	public boolean validate(TaskAttributeValue value) {
-		if (value instanceof NoValue) {
-			return !useDefault;
-		} else {
-			return value instanceof TextValue && (((TextValue) value).getText().length() <= charLimit);
-		}
-	}
-
-
-
-
-	@Override
 	public boolean usesDefault() {
 		return useDefault;
 	}
@@ -112,5 +38,43 @@ public class TextAttributeData implements TaskAttributeData {
 	public TextValue getDefault() {
 		return new TextValue(defaultValue);
 	}
+
+
+
+
+	@Override
+	public TaskAttributeValue getValue(Var var) {
+		if (var == Var.TEXT_CHAR_LIMIT) {
+			return new NumberValue(charLimit);
+		}
+		if (var == Var.TEXT_MULTILINE) {
+			return new BoolValue(multiline);
+		}
+		if (var == Var.TEXT_N_LINES_EXP) {
+			return new NumberValue(nLinesExpected);
+		}
+		if (var == Var.USE_DEFAULT) {
+			return new BoolValue(useDefault);
+		}
+		if (var == Var.DEFAULT_VALUE) {
+			return getDefault();
+		}
+		return null;
+	}
+
+
+
+
+	@Override
+	public TextAttributeData copy() {
+		TextAttributeData copy = new TextAttributeData();
+		copy.charLimit = this.charLimit;
+		copy.multiline = this.multiline;
+		copy.nLinesExpected = this.nLinesExpected;
+		copy.useDefault = this.useDefault;
+		copy.defaultValue = this.defaultValue;
+		return copy;
+	}
+
 
 }

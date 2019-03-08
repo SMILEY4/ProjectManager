@@ -2,14 +2,7 @@ package com.ruegnerlukas.taskmanager.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagArrayValue;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
-
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.values.*;
 
 public class FlagAttributeData implements TaskAttributeData {
 
@@ -52,63 +45,6 @@ public class FlagAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public Map<Var, TaskAttributeValue> update(Var var, TaskAttributeValue newValue) {
-		Map<Var, TaskAttributeValue> changedVars = new HashMap<>();
-
-		switch (var) {
-
-			case FLAG_ATT_FLAGS: {
-				if (newValue instanceof FlagArrayValue) {
-					if (((FlagArrayValue) newValue).getFlags().length != 0) {
-
-						this.flags = ((FlagArrayValue) newValue).getFlags();
-						changedVars.put(Var.FLAG_ATT_FLAGS, newValue);
-
-						boolean foundDefault = false;
-						for (TaskFlag flag : flags) {
-							if (flag == defaultFlag) {
-								foundDefault = true;
-								break;
-							}
-						}
-						if (!foundDefault) {
-							defaultFlag = flags[0];
-							changedVars.put(Var.DEFAULT_VALUE, new FlagValue(defaultFlag));
-						}
-					}
-				}
-				break;
-			}
-
-			case DEFAULT_VALUE: {
-				if (newValue instanceof FlagValue) {
-					defaultFlag = ((FlagValue) newValue).getFlag();
-					changedVars.put(Var.DEFAULT_VALUE, newValue);
-				}
-				break;
-			}
-
-		}
-
-		return changedVars;
-	}
-
-
-
-
-	@Override
-	public boolean validate(TaskAttributeValue value) {
-		if (value instanceof FlagValue) {
-			return new HashSet<>(Arrays.asList(flags)).contains(((FlagValue) value).getFlag());
-		} else {
-			return false;
-		}
-	}
-
-
-
-
-	@Override
 	public boolean usesDefault() {
 		return true;
 	}
@@ -120,5 +56,31 @@ public class FlagAttributeData implements TaskAttributeData {
 	public FlagValue getDefault() {
 		return new FlagValue(defaultFlag);
 	}
+
+
+
+
+	@Override
+	public TaskAttributeValue getValue(Var var) {
+		if (var == Var.FLAG_ATT_FLAGS) {
+			return new FlagArrayValue(flags);
+		}
+		if (var == Var.DEFAULT_VALUE) {
+			return getDefault();
+		}
+		return null;
+	}
+
+
+
+
+	@Override
+	public FlagAttributeData copy() {
+		FlagAttributeData copy = new FlagAttributeData();
+		copy.flags = this.flags;
+		copy.defaultFlag = this.defaultFlag;
+		return copy;
+	}
+
 
 }

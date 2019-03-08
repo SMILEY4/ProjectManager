@@ -4,10 +4,6 @@ import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.groups.AttributeGroupData;
 import com.ruegnerlukas.taskmanager.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.data.DescriptionAttributeData;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.data.IDAttributeData;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,9 +42,6 @@ public class Project {
 
 	public Project(String name) {
 		this.name = name;
-		attributes.add(new TaskAttribute(IDAttributeData.NAME, TaskAttributeType.ID));
-		attributes.add(new TaskAttribute(FlagAttributeData.NAME, TaskAttributeType.FLAG));
-		attributes.add(new TaskAttribute(DescriptionAttributeData.NAME, TaskAttributeType.DESCRIPTION));
 	}
 
 

@@ -1,7 +1,6 @@
 package com.ruegnerlukas.taskmanager.data.filter;
 
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 
 public class FilterCriteria {
@@ -19,14 +18,11 @@ public class FilterCriteria {
 		IN_LIST("in list"),
 		NOT_IN_LIST("not in list"),
 		CONTAINS("contains"),
-		CONTAINS_NOT("contains not"),
-
-		IS_DEPENDENT_ON_FILTER("dependent on"),
-		IS_PREREQUISITE_OF_FILTER("prerequisite of"),
-		IS_INDEPENDENT("independent"),
-		;
+		CONTAINS_NOT("contains not");
 
 		public final String display;
+
+
 
 
 		ComparisonOp(String display) {
@@ -51,95 +47,6 @@ public class FilterCriteria {
 		this.attribute = attribute;
 		this.comparisonOp = comparisonOp;
 		this.comparisionValue = comparisionValue;
-	}
-
-
-
-
-	public static ComparisonOp[] getPossibleComparisionOps(TaskAttribute attribute) {
-		if (attribute == null) {
-			return new ComparisonOp[]{};
-		}
-
-		if (attribute.data.getType() == TaskAttributeType.BOOLEAN) {
-			return new ComparisonOp[]{
-					ComparisonOp.EQUALITY,
-					ComparisonOp.INEQUALITY
-			};
-		}
-		if (attribute.data.getType() == TaskAttributeType.CHOICE) {
-			return new ComparisonOp[]{
-					ComparisonOp.EQUALITY,
-					ComparisonOp.INEQUALITY,
-					ComparisonOp.IN_LIST,
-					ComparisonOp.NOT_IN_LIST,
-					ComparisonOp.CONTAINS,
-					ComparisonOp.CONTAINS_NOT
-			};
-		}
-		if (attribute.data.getType() == TaskAttributeType.DESCRIPTION) {
-			return new ComparisonOp[]{
-					ComparisonOp.EQUALITY,
-					ComparisonOp.INEQUALITY,
-					ComparisonOp.CONTAINS,
-					ComparisonOp.CONTAINS_NOT
-			};
-		}
-		if (attribute.data.getType() == TaskAttributeType.FLAG) {
-			return new ComparisonOp[]{
-					ComparisonOp.EQUALITY,
-					ComparisonOp.INEQUALITY,
-					ComparisonOp.IN_LIST,
-					ComparisonOp.NOT_IN_LIST,
-					ComparisonOp.CONTAINS,
-					ComparisonOp.CONTAINS_NOT
-			};
-		}
-		if (attribute.data.getType() == TaskAttributeType.ID) {
-			return new ComparisonOp[]{
-					ComparisonOp.EQUALITY,
-					ComparisonOp.INEQUALITY,
-					ComparisonOp.IN_LIST,
-					ComparisonOp.NOT_IN_LIST,
-					ComparisonOp.GREATER_THAN,
-					ComparisonOp.GREATER_THAN_EQUAL,
-					ComparisonOp.LESS_THAN,
-					ComparisonOp.LESS_THAN_EQUAL,
-					ComparisonOp.IN_RANGE,
-					ComparisonOp.NOT_IN_RANGE
-			};
-		}
-		if (attribute.data.getType() == TaskAttributeType.NUMBER) {
-			return new ComparisonOp[]{
-					ComparisonOp.EQUALITY,
-					ComparisonOp.INEQUALITY,
-					ComparisonOp.IN_LIST,
-					ComparisonOp.NOT_IN_LIST,
-					ComparisonOp.GREATER_THAN,
-					ComparisonOp.GREATER_THAN_EQUAL,
-					ComparisonOp.LESS_THAN,
-					ComparisonOp.LESS_THAN_EQUAL,
-					ComparisonOp.IN_RANGE,
-					ComparisonOp.NOT_IN_RANGE
-			};
-		}
-		if (attribute.data.getType() == TaskAttributeType.TEXT) {
-			return new ComparisonOp[]{
-					ComparisonOp.EQUALITY,
-					ComparisonOp.INEQUALITY,
-					ComparisonOp.CONTAINS,
-					ComparisonOp.CONTAINS_NOT
-			};
-		}
-		if (attribute.data.getType() == TaskAttributeType.DEPENDENCY) {
-			return new ComparisonOp[]{
-					ComparisonOp.IS_DEPENDENT_ON_FILTER,
-					ComparisonOp.IS_PREREQUISITE_OF_FILTER,
-					ComparisonOp.IS_INDEPENDENT
-			};
-		}
-
-		return new ComparisonOp[]{};
 	}
 
 

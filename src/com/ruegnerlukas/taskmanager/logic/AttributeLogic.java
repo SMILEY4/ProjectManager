@@ -9,10 +9,11 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
+import com.ruegnerlukas.taskmanager.logic.attributes.filter.*;
+import com.ruegnerlukas.taskmanager.logic.attributes.updaters.*;
+import com.ruegnerlukas.taskmanager.logic.attributes.validation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class AttributeLogic {
 
@@ -20,6 +21,47 @@ public class AttributeLogic {
 	//======================//
 	//       INTERNAL       //
 	//======================//
+
+
+	public static final Map<TaskAttributeType, AttributeFilter> FILTER_MAP;
+	public static final Map<TaskAttributeType, AttributeUpdater> UPDATER_MAP;
+	public static final Map<TaskAttributeType, AttributeValidator> VALIDATOR_MAP;
+
+
+
+
+	static {
+		Map<TaskAttributeType, AttributeFilter> filterMap = new HashMap<>();
+		filterMap.put(TaskAttributeType.BOOLEAN, new BoolAttributeFilter());
+		filterMap.put(TaskAttributeType.CHOICE, new ChoiceAttributeFilter());
+		filterMap.put(TaskAttributeType.DESCRIPTION, new DescriptionAttributeFilter());
+		filterMap.put(TaskAttributeType.FLAG, new FlagAttributeFilter());
+		filterMap.put(TaskAttributeType.ID, new IDAttributeFilter());
+		filterMap.put(TaskAttributeType.NUMBER, new NumberAttributeFilter());
+		filterMap.put(TaskAttributeType.TEXT, new TextAttributeFilter());
+		FILTER_MAP = Collections.unmodifiableMap(filterMap);
+
+		Map<TaskAttributeType, AttributeUpdater> updaterMap = new HashMap<>();
+		updaterMap.put(TaskAttributeType.BOOLEAN, new BoolAttributeUpdater());
+		updaterMap.put(TaskAttributeType.CHOICE, new ChoiceAttributeUpdater());
+		updaterMap.put(TaskAttributeType.DESCRIPTION, new DescriptionAttributeUpdater());
+		updaterMap.put(TaskAttributeType.FLAG, new FlagAttributeUpdater());
+		updaterMap.put(TaskAttributeType.ID, new IDAttributeUpdater());
+		updaterMap.put(TaskAttributeType.NUMBER, new NumberAttributeUpdater());
+		updaterMap.put(TaskAttributeType.TEXT, new TextAttributeUpdater());
+		UPDATER_MAP = Collections.unmodifiableMap(updaterMap);
+
+		Map<TaskAttributeType, AttributeValidator> validatorMap = new HashMap<>();
+		validatorMap.put(TaskAttributeType.BOOLEAN, new BoolAttributeValidation());
+		validatorMap.put(TaskAttributeType.CHOICE, new ChoiceAttributeValidation());
+		validatorMap.put(TaskAttributeType.DESCRIPTION, new DescriptionAttributeValidation());
+		validatorMap.put(TaskAttributeType.FLAG, new FlagAttributeValidation());
+		validatorMap.put(TaskAttributeType.ID, new IDAttributeValidation());
+		validatorMap.put(TaskAttributeType.NUMBER, new NumberAttributeValidation());
+		validatorMap.put(TaskAttributeType.TEXT, new BoolAttributeValidation());
+		VALIDATOR_MAP = Collections.unmodifiableMap(validatorMap);
+
+	}
 
 
 
@@ -90,6 +132,18 @@ public class AttributeLogic {
 	}
 
 
+
+
+	protected AttributeValidator getAttributeValidator(TaskAttributeType type) {
+		return VALIDATOR_MAP.get(type);
+	}
+
+
+	protected AttributeUpdater getAttributeUpdater(TaskAttributeType type) {
+		return UPDATER_MAP.get(type);
+	}
+
+
 	//======================//
 	//        GETTER        //
 	//======================//
@@ -139,6 +193,7 @@ public class AttributeLogic {
 
 
 
+
 	/**
 	 * request the first attribute of the given type
 	 */
@@ -150,6 +205,7 @@ public class AttributeLogic {
 			request.respond(new Response<>(Response.State.FAIL, "No attributes with type '" + type + "' found.", null));
 		}
 	}
+
 
 
 
@@ -343,14 +399,15 @@ public class AttributeLogic {
 
 
 
-	/**
-	 * Updates a variable of a given task with a new value <p>
-	 * Events <p>
-	 * - AttributeUpdatedRejection: when the type could not be changed (NOT_ALLOWED = values are locked / attribute is fixed,
-	 * NOT_EXISTS = attribute with given name does not exist, INVALID: new value / variable is invalid) <p>
-	 * - AttributeUpdatedEvent: when the value was changed <p>
-	 */
 	public void updateTaskAttribute(String name, TaskAttributeData.Var var, TaskAttributeValue value) {
+		HashMap<TaskAttributeData.Var, TaskAttributeValue> map = new HashMap<>();
+		updateTaskAttribute(name, map);
+	}
+
+
+
+
+	public void updateTaskAttribute(String name, Map<TaskAttributeData.Var, TaskAttributeValue> values) {
 
 		Project project = Logic.project.getProject();
 		if (project != null) {
@@ -360,20 +417,29 @@ public class AttributeLogic {
 
 			// try to update variable
 			if (attribute == null) {
-				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.NOT_EXISTS, this));
+				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, values, EventCause.NOT_EXISTS, this));
 
 			} else if (project.attributesLocked) {
-				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.NOT_ALLOWED, this));
+				EventManager.fireEvent(new AttributeUpdatedRejection(attribute, values, EventCause.NOT_ALLOWED, this));
 
 			} else {
 
+				AttributeUpdater updater = UPDATER_MAP.get(attribute.data.getType());
+				Map<TaskAttributeData.Var, TaskAttributeValue> changedVars = new HashMap<>();
 
-				Map<TaskAttributeData.Var, TaskAttributeValue> changedVars = attribute.data.update(var, value);
-				if (changedVars == null || changedVars.isEmpty()) {
-					EventManager.fireEvent(new AttributeUpdatedRejection(attribute, var, value, EventCause.INVALID, this));
-				} else {
-					EventManager.fireEvent(new AttributeUpdatedEvent(attribute, changedVars, value, this));
+				for (Map.Entry<TaskAttributeData.Var, TaskAttributeValue> entry : values.entrySet()) {
+
+					boolean valid = updater.update(attribute.data, entry.getKey(), entry.getValue(), changedVars);
+
+					if (!valid) {
+						HashMap<TaskAttributeData.Var, TaskAttributeValue> invalidPair = new HashMap<>();
+						invalidPair.put(entry.getKey(), entry.getValue());
+						EventManager.fireEvent(new AttributeUpdatedRejection(attribute, invalidPair, EventCause.INVALID, this));
+					}
+
 				}
+
+				EventManager.fireEvent(new AttributeUpdatedEvent(attribute, changedVars, this));
 
 			}
 

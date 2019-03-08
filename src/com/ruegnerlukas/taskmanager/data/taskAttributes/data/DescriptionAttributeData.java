@@ -1,12 +1,8 @@
 package com.ruegnerlukas.taskmanager.data.taskAttributes.data;
 
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class DescriptionAttributeData implements TaskAttributeData {
 
@@ -25,26 +21,6 @@ public class DescriptionAttributeData implements TaskAttributeData {
 
 
 	@Override
-	public Map<Var, TaskAttributeValue> update(Var var, TaskAttributeValue newValue) {
-		return new HashMap<>();
-	}
-
-
-
-
-	@Override
-	public boolean validate(TaskAttributeValue value) {
-		if (value instanceof NoValue) {
-			return true;
-		} else {
-			return value instanceof TextValue;
-		}
-	}
-
-
-
-
-	@Override
 	public boolean usesDefault() {
 		return true;
 	}
@@ -55,6 +31,23 @@ public class DescriptionAttributeData implements TaskAttributeData {
 	@Override
 	public TextValue getDefault() {
 		return new TextValue("");
+	}
+
+
+
+
+	@Override
+	public TaskAttributeValue getValue(Var var) {
+		return null;
+	}
+
+
+
+
+	@Override
+	public DescriptionAttributeData copy() {
+		DescriptionAttributeData copy = new DescriptionAttributeData();
+		return copy;
 	}
 
 }
