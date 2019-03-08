@@ -50,4 +50,8 @@ public enum TaskAttributeType {
 	}
 
 
+	public boolean fixed() {
+		return this.type == Type.FIXED;
+	}
+
 }

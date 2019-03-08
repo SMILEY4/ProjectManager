@@ -53,7 +53,7 @@ public class AttributeNode extends AnchorPane {
 
 	public AttributeNode(TaskAttribute attribute) {
 		this.attribute = attribute;
-		this.hasSaveButtons = !attribute.data.getType().fixed || attribute.data.getType() == TaskAttributeType.FLAG;
+		this.hasSaveButtons = !attribute.data.getType().fixed() || attribute.data.getType() == TaskAttributeType.FLAG;
 		createFrame();
 		createListeners();
 		insertTaskAttribute(attribute);
@@ -126,11 +126,11 @@ public class AttributeNode extends AnchorPane {
 
 		// choice attribute-type
 		choiceType = new ChoiceBox<>();
-		if (attribute.data.getType().fixed) {
+		if (attribute.data.getType().fixed()) {
 			choiceType.getItems().add(attribute.data.getType().display);
 		} else {
 			for (TaskAttributeType type : TaskAttributeType.values()) {
-				if (!type.fixed) {
+				if (!type.fixed()) {
 					choiceType.getItems().add(type.display);
 				}
 			}
@@ -348,9 +348,9 @@ public class AttributeNode extends AnchorPane {
 
 		TaskAttributeType type = attribute.data.getType();
 
-		btnRemove.setDisable(type.fixed);
-		labelName.setDisable(type.fixed);
-		choiceType.setDisable(type.fixed);
+		btnRemove.setDisable(type.fixed());
+		labelName.setDisable(type.fixed());
+		choiceType.setDisable(type.fixed());
 
 		if (dataNode != null) {
 			dataNode.dispose();
@@ -419,7 +419,7 @@ public class AttributeNode extends AnchorPane {
 
 
 	public void setLocked(boolean locked) {
-		if (!attribute.data.getType().fixed) {
+		if (!attribute.data.getType().fixed()) {
 			btnRemove.setDisable(locked);
 			choiceType.setDisable(locked);
 			labelName.setDisable(locked);

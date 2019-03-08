@@ -50,10 +50,6 @@ public class TaskAttribute {
 				data = new ChoiceAttributeData();
 				return true;
 			}
-			case DEPENDENCY: {
-				data = new DependencyAttributeData();
-				return true;
-			}
 			default: {
 				return false;
 			}
