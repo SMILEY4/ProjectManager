@@ -34,6 +34,7 @@ import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.label.LabelUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.menu.MenuFunction;
 import com.ruegnerlukas.taskmanager.utils.uielements.scrollpane.ScrollPaneUtils;
 import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
 import javafx.application.Platform;
@@ -263,12 +264,15 @@ public class TaskView extends AnchorPane implements TabContent {
 		ButtonUtils.makeIconButton(btnActions, SVGIcons.HAMBURGER, 0.7f, "white");
 		btnActions.setOnAction(event -> {
 			ContextMenu popup = new ContextMenu();
-			/*
-			for(int i=0; i<actionFunctions.size(); i++) {
-				MenuFunction func = actionFunctions.get(i);
-				func.addToContextMenu(popup);
-			}
-			*/
+
+			MenuFunction funcCreateTask = new MenuFunction("Create Task") {
+				@Override
+				public void onAction() {
+					onCreateTask();
+				}
+			};
+			funcCreateTask.addToContextMenu(popup);
+
 			popup.show(btnActions, Side.BOTTOM, 0, 0);
 		});
 
@@ -359,6 +363,8 @@ public class TaskView extends AnchorPane implements TabContent {
 
 
 	private void refreshTaskView() {
+
+		System.out.println("REFRESH");
 
 		clearTaskList();
 
@@ -551,6 +557,21 @@ public class TaskView extends AnchorPane implements TabContent {
 
 
 
+	public void onCreateTask() {
+		Logic.tasks.createNewTask(new Request<Task>(true) {
+			@Override
+			public void onResponse(Response<Task> response) {
+				Platform.runLater( () -> {
+					sidebar.getBreadcrumb().clearTasks();
+					onTaskSelected(response.getValue(), true, true);
+				});
+			}
+		});
+	}
+
+
+
+
 	public void onTaskSelected(Task task, boolean jumpToTask, boolean addToBreadcrumb) {
 
 		if (sidebar.currentTask != null) {
@@ -562,14 +583,14 @@ public class TaskView extends AnchorPane implements TabContent {
 
 		sidebar.showTask(task);
 
-		if(jumpToTask) {
+		if (jumpToTask) {
 			jumpToTask(task);
-			if(addToBreadcrumb) {
+			if (addToBreadcrumb) {
 				sidebar.getBreadcrumb().pushTask(task);
 			}
 
 		} else {
-			if(addToBreadcrumb) {
+			if (addToBreadcrumb) {
 				sidebar.getBreadcrumb().clearTasks();
 				sidebar.getBreadcrumb().pushTask(task);
 			}

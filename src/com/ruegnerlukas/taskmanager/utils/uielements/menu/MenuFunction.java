@@ -1,17 +1,12 @@
 package com.ruegnerlukas.taskmanager.utils.uielements.menu;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class MenuFunction {
 
@@ -20,7 +15,7 @@ public abstract class MenuFunction {
 	
 	protected MenuItem item;
 	
-	private Map<String,Object> map = new HashMap<String,Object>();
+	private Map<String,Object> map = new HashMap<>();
 	
 	
 	

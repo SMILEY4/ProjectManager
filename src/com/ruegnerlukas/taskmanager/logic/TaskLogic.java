@@ -317,6 +317,18 @@ public class TaskLogic {
 	 * - TaskCreatedEvent: when the task was created
 	 */
 	public void createNewTask() {
+		createNewTask(null);
+	}
+
+
+
+
+	/**
+	 * Creates a new Task <p>
+	 * Events: <p>
+	 * - TaskCreatedEvent: when the task was created
+	 */
+	public void createNewTask(Request<Task> request) {
 
 		Project project = Logic.project.getProject();
 		if (project != null) {
@@ -336,8 +348,11 @@ public class TaskLogic {
 			project.tasks.add(task);
 			EventManager.fireEvent(new TaskCreatedEvent(task, this));
 
-		}
+			if (request != null) {
+				request.respond(new Response<>(Response.State.SUCCESS, task));
+			}
 
+		}
 	}
 
 
