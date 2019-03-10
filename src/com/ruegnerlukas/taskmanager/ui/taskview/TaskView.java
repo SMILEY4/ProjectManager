@@ -140,6 +140,31 @@ public class TaskView extends AnchorPane implements TabContent {
 		});
 
 
+		Logic.attribute.createAttribute("Dependency", TaskAttributeType.DEPENDENCY);
+//		Logic.tasks.getTasks(new Request<List<Task>>(true) {
+//			@Override
+//			public void onResponse(Response<List<Task>> response) {
+//				List<Task> tasks = response.getValue();
+//				Logic.attribute.getAttribute(TaskAttributeType.DEPENDENCY, new Request<TaskAttribute>() {
+//					@Override
+//					public void onResponse(Response<TaskAttribute> response) {
+//						Random random = new Random();
+//						for(int i=0; i<30; i++) {
+//							int i0 = random.nextInt(tasks.size());
+//							int i1 = random.nextInt(tasks.size());
+//							if(i0 == i1) {
+//								continue;
+//							}
+//							Logic.dependencies.createDependency(tasks.get(i0), tasks.get(i1), response.getValue());
+//						}
+//
+//					}
+//				});
+//			}
+//		});
+//
+
+
 		Platform.runLater(() -> {
 
 			getScene().addEventFilter(KeyEvent.KEY_PRESSED, ke -> {

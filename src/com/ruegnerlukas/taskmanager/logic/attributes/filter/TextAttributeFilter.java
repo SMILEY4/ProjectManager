@@ -19,7 +19,7 @@ public class TextAttributeFilter extends AttributeFilter {
 
 
 	@Override
-	protected boolean match(Task task, TaskAttributeValue taskValue, FilterCriteria.ComparisonOp cmp, TaskAttributeValue filterValue) {
+	protected boolean match(Task task, TaskAttributeValue taskValue, FilterCriteria.ComparisonOp cmp, TaskAttributeValue filterValue, FilterCriteria filter) {
 		switch (cmp) {
 			case CONTAINS:
 				return matchContains(taskValue, filterValue);

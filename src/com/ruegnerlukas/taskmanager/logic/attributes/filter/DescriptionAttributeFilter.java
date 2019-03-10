@@ -20,7 +20,7 @@ public class DescriptionAttributeFilter extends AttributeFilter {
 
 
 	@Override
-	protected boolean match(Task task, TaskAttributeValue taskValue, FilterCriteria.ComparisonOp cmp, TaskAttributeValue filterValue) {
+	protected boolean match(Task task, TaskAttributeValue taskValue, FilterCriteria.ComparisonOp cmp, TaskAttributeValue filterValue, FilterCriteria filter) {
 		switch (cmp) {
 			case EQUALITY:
 				return matchEquality(taskValue, filterValue);

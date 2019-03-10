@@ -101,10 +101,10 @@ public class TaskLogic {
 
 
 	private void onAttributeCreated(TaskAttribute attribute) {
-		List<Task> tasks = getTasksInternal();
-		for (int i = 0; i < tasks.size(); i++) {
-			setAttributeValue(tasks.get(i), attribute, new NoValue());
-		}
+//		List<Task> tasks = getTasksInternal();
+//		for (int i = 0; i < tasks.size(); i++) {
+//			setAttributeValue(tasks.get(i), attribute, new NoValue());
+//		}
 	}
 
 

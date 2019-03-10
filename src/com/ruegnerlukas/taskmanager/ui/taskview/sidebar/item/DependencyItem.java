@@ -10,6 +10,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskArrayValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.Sidebar;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
@@ -31,8 +32,8 @@ public class DependencyItem extends SidebarItem {
 
 
 
-	protected DependencyItem(Task task, TaskAttribute attribute) {
-		super(task, attribute);
+	protected DependencyItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
+		super(task, attribute, sidebar);
 	}
 
 
@@ -104,7 +105,7 @@ public class DependencyItem extends SidebarItem {
 			Logic.tasks.getTaskByID(id, new Request<Task>(true) {
 				@Override
 				public void onResponse(Response<Task> response) {
-					// TODO: call to Logic
+					Logic.dependencies.createDependency(task, response.getValue(), attribute);
 					addDependsOn(response.getValue());
 				}
 			});
@@ -123,6 +124,14 @@ public class DependencyItem extends SidebarItem {
 		boxTasksPre.setPadding(new Insets(0, 0, 0, 10));
 		content.getChildren().add(boxTasksPre);
 
+		// fill
+		for(Task t : Logic.dependencies.getPrerequisitesOfInternal(task, attribute)) {
+			addDependsOn(t);
+		}
+		for(Task t : Logic.dependencies.getDependentOnInternal(task, attribute)) {
+			addAsPrerequisite(t);
+		}
+
 		return content;
 	}
 
@@ -140,6 +149,10 @@ public class DependencyItem extends SidebarItem {
 		labelID.setText("T-" + task.getID());
 		box.getChildren().add(labelID);
 
+		labelID.setOnMouseClicked(event -> {
+			sidebar.taskView.onTaskSelected(task, true, true);
+		});
+
 	}
 
 
@@ -155,6 +168,10 @@ public class DependencyItem extends SidebarItem {
 		Label labelID = new Label();
 		labelID.setText("T-" + task.getID());
 		box.getChildren().add(labelID);
+
+		labelID.setOnMouseClicked(event -> {
+			sidebar.taskView.onTaskSelected(task, true, true);
+		});
 
 	}
 
@@ -191,7 +208,6 @@ public class DependencyItem extends SidebarItem {
 		choiceTask.getItems().clear();
 
 		List<Task> exclude = getDependencies();
-		System.out.println("EXCLUDE: " + exclude.size());
 
 		Logic.tasks.getTasks(new Request<List<Task>>(true) {
 			@Override

@@ -36,6 +36,9 @@ public abstract class AttributeFilter {
 		if (type == TaskAttributeType.TEXT) {
 			return TextAttributeFilter.CMP_OPS;
 		}
+		if (type == TaskAttributeType.DEPENDENCY) {
+			return DependencyAttributeFilter.CMP_OPS;
+		}
 		return new FilterCriteria.ComparisonOp[]{};
 	}
 
@@ -47,14 +50,14 @@ public abstract class AttributeFilter {
 		if (taskValue instanceof NoValue) {
 			return false;
 		} else {
-			return match(task, getTaskValue(filter, task), getComparisonOp(filter), getFilterValue(filter));
+			return match(task, getTaskValue(filter, task), getComparisonOp(filter), getFilterValue(filter), filter);
 		}
 	}
 
 
 
 
-	abstract boolean match(Task task, TaskAttributeValue taskValue, FilterCriteria.ComparisonOp cmp, TaskAttributeValue filterValue);
+	abstract boolean match(Task task, TaskAttributeValue taskValue, FilterCriteria.ComparisonOp cmp, TaskAttributeValue filterValue, FilterCriteria filterCriteria);
 
 
 

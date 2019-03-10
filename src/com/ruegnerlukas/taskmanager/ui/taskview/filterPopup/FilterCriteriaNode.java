@@ -195,28 +195,31 @@ public class FilterCriteriaNode extends HBox {
 		} else if (TaskAttributeType.TEXT == attribute.data.getType()) {
 			filterValue = new TextFilterValue();
 
-			// update new filter value
-			if (filterValue != null) {
-				filterValue.setOnAction(event -> {
-					this.compValue = filterValue.getValue();
-					parent.onFiltersChanged(FilterCriteriaNode.this);
-				});
-				filterValue.update(valueNodes, attribute.data, comparisonOp, compValue);
-				this.compValue = filterValue.getValue();
-			}
-
-
-			if (valueNodes.isEmpty()) {
-				Label label = new Label("Undefined");
-				label.setMinSize(10, 32);
-				label.setPrefSize(100000, 32);
-				label.setMaxSize(100000, 32);
-				label.setDisable(true);
-				valueNodes.add(label);
-			}
-
-			this.getChildren().addAll(valueNodes);
+		} else if (TaskAttributeType.DEPENDENCY == attribute.data.getType()) {
+			filterValue = new DependencyFilterValue();
 		}
+
+		// update new filter value
+		if (filterValue != null) {
+			filterValue.setOnAction(event -> {
+				this.compValue = filterValue.getValue();
+				parent.onFiltersChanged(FilterCriteriaNode.this);
+			});
+			filterValue.update(valueNodes, attribute.data, comparisonOp, compValue);
+			this.compValue = filterValue.getValue();
+		}
+
+
+		if (valueNodes.isEmpty()) {
+			Label label = new Label("Undefined");
+			label.setMinSize(10, 32);
+			label.setPrefSize(100000, 32);
+			label.setMaxSize(100000, 32);
+			label.setDisable(true);
+			valueNodes.add(label);
+		}
+
+		this.getChildren().addAll(valueNodes);
 	}
 
 }

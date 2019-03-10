@@ -2,15 +2,15 @@ package com.ruegnerlukas.taskmanager.data.taskAttributes;
 
 public enum TaskAttributeType {
 
-	FLAG("Flag", Type.FIXED),
-	ID("ID", Type.FIXED),
-	DESCRIPTION("Description", Type.FIXED),
+	FLAG("Flag", Type.FIXED, true),
+	ID("ID", Type.FIXED, true),
+	DESCRIPTION("Description", Type.FIXED, true),
+	NUMBER("Number", Type.CUSTOM, true),
+	TEXT("Text", Type.CUSTOM, true),
+	BOOLEAN("Boolean", Type.CUSTOM, true),
+	CHOICE("Choice", Type.CUSTOM, true),
+	DEPENDENCY("Dependency", Type.CUSTOM, false);
 
-	NUMBER("Number", Type.CUSTOM),
-	TEXT("Text", Type.CUSTOM),
-	BOOLEAN("Boolean", Type.CUSTOM),
-	CHOICE("Choice", Type.CUSTOM),
-	DEPENDENCY("Dependency", Type.CUSTOM);
 
 
 
@@ -28,13 +28,15 @@ public enum TaskAttributeType {
 
 	public final String display;
 	public final Type type;
+	public final boolean groupable;
 
 
 
 
-	TaskAttributeType(String display, Type type) {
+	TaskAttributeType(String display, Type type, boolean groupable) {
 		this.display = display;
 		this.type = type;
+		this.groupable = groupable;
 	}
 
 
@@ -48,6 +50,8 @@ public enum TaskAttributeType {
 		}
 		return null;
 	}
+
+
 
 
 	public boolean fixed() {

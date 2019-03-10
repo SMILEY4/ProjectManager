@@ -10,6 +10,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.Sidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.spinner.SpinnerUtils;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -24,8 +25,8 @@ public class NumberItem extends SidebarItem {
 
 
 
-	protected NumberItem(Task task, TaskAttribute attribute) {
-		super(task, attribute);
+	protected NumberItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
+		super(task, attribute, sidebar);
 	}
 
 

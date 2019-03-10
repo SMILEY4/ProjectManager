@@ -9,6 +9,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.BoolValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.Sidebar;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.CheckBox;
@@ -22,8 +23,8 @@ public class BoolItem extends SidebarItem {
 
 
 
-	protected BoolItem(Task task, TaskAttribute attribute) {
-		super(task, attribute);
+	protected BoolItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
+		super(task, attribute, sidebar);
 	}
 
 

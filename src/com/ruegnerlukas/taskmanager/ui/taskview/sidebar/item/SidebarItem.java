@@ -8,6 +8,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.Sidebar;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
@@ -22,21 +23,21 @@ import javafx.scene.layout.VBox;
 public abstract class SidebarItem extends HBox {
 
 
-	public static SidebarItem createItem(Task task, TaskAttribute attribute) {
+	public static SidebarItem createItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
 		if (attribute.data.getType() == TaskAttributeType.BOOLEAN) {
-			return new BoolItem(task, attribute);
+			return new BoolItem(task, attribute, sidebar);
 		}
 		if (attribute.data.getType() == TaskAttributeType.CHOICE) {
-			return new ChoiceItem(task, attribute);
+			return new ChoiceItem(task, attribute, sidebar);
 		}
 		if (attribute.data.getType() == TaskAttributeType.NUMBER) {
-			return new NumberItem(task, attribute);
+			return new NumberItem(task, attribute, sidebar);
 		}
 		if (attribute.data.getType() == TaskAttributeType.TEXT) {
-			return new TextItem(task, attribute);
+			return new TextItem(task, attribute, sidebar);
 		}
 		if (attribute.data.getType() == TaskAttributeType.DEPENDENCY) {
-			return new DependencyItem(task, attribute);
+			return new DependencyItem(task, attribute, sidebar);
 		}
 		return null;
 	}
@@ -46,6 +47,7 @@ public abstract class SidebarItem extends HBox {
 
 	public Task task;
 	public TaskAttribute attribute;
+	public Sidebar sidebar;
 
 	private Label noValue;
 	private Parent valueNode;
@@ -54,9 +56,10 @@ public abstract class SidebarItem extends HBox {
 
 
 
-	protected SidebarItem(Task task, TaskAttribute attribute) {
+	protected SidebarItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
 		this.attribute = attribute;
 		this.task = task;
+		this.sidebar = sidebar;
 		this.setMinSize(0, 32);
 		this.setPrefSize(10000, 32);
 		this.setMaxSize(10000, 10000);

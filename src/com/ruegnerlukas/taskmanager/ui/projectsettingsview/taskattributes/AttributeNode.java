@@ -383,6 +383,11 @@ public class AttributeNode extends AnchorPane {
 			}
 		}
 
+		this.hasSaveButtons = !attribute.data.getType().fixed() || attribute.data.getType() == TaskAttributeType.FLAG;
+		if(dataNode instanceof EmptyDataNode) {
+			hasSaveButtons = false;
+		}
+
 		AnchorUtils.setAnchors(dataNode, 0, 0, hasSaveButtons ? 42 : 0, 0);
 		contentPane.getChildren().clear();
 		contentPane.getChildren().add(dataNode);

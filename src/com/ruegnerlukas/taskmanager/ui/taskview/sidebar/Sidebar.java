@@ -39,7 +39,7 @@ public class Sidebar extends AnchorPane {
 
 
 	public Task currentTask = null;
-	private TaskView taskView;
+	public TaskView taskView;
 
 	private Breadcrumb breadcrumb;
 	@FXML private AnchorPane paneBreadcrumb;
@@ -189,7 +189,7 @@ public class Sidebar extends AnchorPane {
 				List<TaskAttribute> attributes = response.getValue();
 				for (int i = 0; i < attributes.size(); i++) {
 					TaskAttribute attribute = attributes.get(i);
-					SidebarItem item = SidebarItem.createItem(currentTask, attribute);
+					SidebarItem item = SidebarItem.createItem(currentTask, attribute, Sidebar.this);
 					if (item != null) {
 						items.add(item);
 						boxAttribs.getChildren().add(item);

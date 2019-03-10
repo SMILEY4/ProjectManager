@@ -10,6 +10,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.Sidebar;
 import javafx.scene.Parent;
 import javafx.scene.control.TextArea;
 
@@ -22,8 +23,8 @@ public class TextItem extends SidebarItem {
 
 
 
-	protected TextItem(Task task, TaskAttribute attribute) {
-		super(task, attribute);
+	protected TextItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
+		super(task, attribute, sidebar);
 	}
 
 

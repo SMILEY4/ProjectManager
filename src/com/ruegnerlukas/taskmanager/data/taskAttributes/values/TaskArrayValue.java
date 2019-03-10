@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.Task;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 public class TaskArrayValue implements TaskAttributeValue {
 
@@ -21,10 +22,36 @@ public class TaskArrayValue implements TaskAttributeValue {
 
 
 
+	public TaskArrayValue(Task[] values0, Task... values1) {
+		this.value = new Task[values0.length + values1.length];
+		int i = 0;
+		for (int j = 0; j < values0.length; j++) {
+			this.value[i++] = values0[j];
+		}
+		for (int j = 0; j < values1.length; j++) {
+			this.value[i++] = values1[j];
+		}
+
+	}
+
+
+
+
 	public TaskArrayValue(List<Task> value) {
 		this.value = new Task[value.size()];
 		for (int i = 0; i < value.size(); i++) {
 			this.value[i] = value.get(i);
+		}
+	}
+
+
+
+
+	public TaskArrayValue(Set<Task> value) {
+		this.value = new Task[value.size()];
+		int i = 0;
+		for (Task task : value) {
+			this.value[i++] = task;
 		}
 	}
 

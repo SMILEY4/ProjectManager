@@ -39,6 +39,7 @@ public class AttributeLogic {
 		filterMap.put(TaskAttributeType.ID, new IDAttributeFilter());
 		filterMap.put(TaskAttributeType.NUMBER, new NumberAttributeFilter());
 		filterMap.put(TaskAttributeType.TEXT, new TextAttributeFilter());
+		filterMap.put(TaskAttributeType.DEPENDENCY, new DependencyAttributeFilter());
 		FILTER_MAP = Collections.unmodifiableMap(filterMap);
 
 		Map<TaskAttributeType, AttributeUpdater> updaterMap = new HashMap<>();
@@ -49,6 +50,7 @@ public class AttributeLogic {
 		updaterMap.put(TaskAttributeType.ID, new IDAttributeUpdater());
 		updaterMap.put(TaskAttributeType.NUMBER, new NumberAttributeUpdater());
 		updaterMap.put(TaskAttributeType.TEXT, new TextAttributeUpdater());
+		updaterMap.put(TaskAttributeType.DEPENDENCY, new DependencyAttributeUpdater());
 		UPDATER_MAP = Collections.unmodifiableMap(updaterMap);
 
 		Map<TaskAttributeType, AttributeValidator> validatorMap = new HashMap<>();
@@ -59,6 +61,7 @@ public class AttributeLogic {
 		validatorMap.put(TaskAttributeType.ID, new IDAttributeValidation());
 		validatorMap.put(TaskAttributeType.NUMBER, new NumberAttributeValidation());
 		validatorMap.put(TaskAttributeType.TEXT, new BoolAttributeValidation());
+		validatorMap.put(TaskAttributeType.DEPENDENCY, new DependencyAttributeValidation());
 		VALIDATOR_MAP = Collections.unmodifiableMap(validatorMap);
 
 	}
