@@ -25,6 +25,7 @@ import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -49,6 +50,8 @@ public class Sidebar extends AnchorPane {
 	@FXML private Label labelID;
 	@FXML private ChoiceBox<String> choiceFlag;
 	@FXML private VBox boxAttribs;
+
+	@FXML private Button btnDeleteTask;
 
 	private List<SidebarItem> items = new ArrayList<>();
 
@@ -125,11 +128,18 @@ public class Sidebar extends AnchorPane {
 		}));
 
 
-
 		// listen for taskAttribute-changes
 		EventManager.registerListener(this, event -> {
 			refresh();
 		}, AttributeRemovedEvent.class, AttributeCreatedEvent.class, AttributeTypeChangedEvent.class, AttributeUpdatedEvent.class);
+
+
+		// Delete Task
+		btnDeleteTask.setOnAction(event -> {
+			if(currentTask != null) {
+				Logic.tasks.deleteTask(currentTask);
+			}
+		});
 
 	}
 
@@ -137,6 +147,9 @@ public class Sidebar extends AnchorPane {
 
 
 	public void refresh() {
+
+		System.out.println("refresh " + currentTask + "  " + (currentTask != null ? currentTask.getID() : "noid") );
+
 		if (currentTask == null) {
 			return;
 		}

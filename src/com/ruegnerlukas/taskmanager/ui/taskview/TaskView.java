@@ -364,8 +364,6 @@ public class TaskView extends AnchorPane implements TabContent {
 
 	private void refreshTaskView() {
 
-		System.out.println("REFRESH");
-
 		clearTaskList();
 
 		Logic.tasks.getTaskGroups(new Request<TaskGroupData>(true) {
@@ -427,7 +425,16 @@ public class TaskView extends AnchorPane implements TabContent {
 				}
 
 				updateNTaskLabel();
-				onTaskSelected(sidebar.currentTask, false, true);
+
+				// select last selected task (if still exists)
+				SyncRequest<List<Task>> request = new SyncRequest<>();
+				Logic.tasks.getTasks(request);
+				List<Task> tasksProject = request.getResponse().getValue();
+				if(tasksProject.contains(sidebar.currentTask)) {
+					onTaskSelected(sidebar.currentTask, false, true);
+				} else {
+					onTaskSelected(null, false, false);
+				}
 			}
 		});
 

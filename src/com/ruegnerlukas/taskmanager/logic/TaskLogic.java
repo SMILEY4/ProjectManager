@@ -57,7 +57,7 @@ public class TaskLogic {
 		// recommend task-group-refresh
 		EventManager.registerListener(e -> {
 			EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
-		}, AttributeRemovedEvent.class, FilterCriteriaChangedEvent.class, GroupOrderChangedEvent.class, SortElementsChangedEvent.class, TaskCreatedEvent.class, PresetLoadEvent.class);
+		}, AttributeRemovedEvent.class, FilterCriteriaChangedEvent.class, GroupOrderChangedEvent.class, SortElementsChangedEvent.class, TaskCreatedEvent.class, TaskDeletedEvent.class, PresetLoadEvent.class);
 
 		EventManager.registerListener(e -> {
 			AttributeTypeChangedEvent event = (AttributeTypeChangedEvent) e;
@@ -352,6 +352,38 @@ public class TaskLogic {
 				request.respond(new Response<>(Response.State.SUCCESS, task));
 			}
 
+		}
+	}
+
+
+
+
+	/**
+	 * Deletes the given task. The task is still saved in the archived-task-list <p>
+	 * Events: <p>
+	 * - TaskDeletedEvent: when the task was deleted
+	 */
+	public void deleteTask(Task task) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			boolean removed = project.tasks.remove(task);
+			if (removed) {
+
+				project.archivedTasks.add(task);
+				if (project.archivedTasks.size() > project.archivedTasksLimit) {
+					project.archivedTasks.remove(0);
+				}
+
+				List<TaskAttribute> attributes = Logic.attribute.findAttributes(TaskAttributeType.DEPENDENCY);
+				for (TaskAttribute attribute : attributes) {
+					List<Task> dependOn = Logic.dependencies.getDependentOnInternal(task, attribute);
+					for (Task dep : dependOn) {
+						Logic.dependencies.deleteDependency(dep, task, attribute);
+					}
+				}
+
+				EventManager.fireEvent(new TaskDeletedEvent(task, this));
+			}
 		}
 	}
 

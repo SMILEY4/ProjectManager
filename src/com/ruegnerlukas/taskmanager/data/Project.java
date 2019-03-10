@@ -21,6 +21,8 @@ public class Project {
 	// 1. tasks
 	public List<Task> tasks = new ArrayList<>();
 	public int idCounter = 1;
+	public List<Task> archivedTasks = new ArrayList<>();
+	public int archivedTasksLimit = 16;
 
 	// 2. filter
 	public List<FilterCriteria> filterCriteria = new ArrayList<>();

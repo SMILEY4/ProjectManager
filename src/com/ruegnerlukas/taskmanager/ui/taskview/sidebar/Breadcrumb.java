@@ -2,6 +2,9 @@ package com.ruegnerlukas.taskmanager.ui.taskview.sidebar;
 
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
+import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.TaskDeletedEvent;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.IDAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
@@ -45,8 +48,8 @@ public class Breadcrumb extends AnchorPane {
 		this.getChildren().add(btnBack);
 
 		btnBack.setOnAction(event -> {
-			if(onStepBack(queue.get(queue.size() - 2))) {
-				queue.remove(queue.size()-1);
+			if (onStepBack(queue.get(queue.size() - 2))) {
+				queue.remove(queue.size() - 1);
 				refresh();
 			}
 		});
@@ -58,6 +61,16 @@ public class Breadcrumb extends AnchorPane {
 		AnchorUtils.setAnchors(content, 0, 0, 0, 32);
 		this.getChildren().add(content);
 
+		EventManager.registerListener(this, e -> {
+			TaskDeletedEvent event = (TaskDeletedEvent) e;
+			if (queue.contains(event.getTask())) {
+				while (queue.contains(event.getTask())) {
+					queue.remove(event.getTask());
+				}
+				refresh();
+			}
+		}, TaskDeletedEvent.class);
+
 	}
 
 
@@ -67,6 +80,19 @@ public class Breadcrumb extends AnchorPane {
 
 		content.getChildren().clear();
 
+		// refresh queue
+		SyncRequest<List<Task>> request = new SyncRequest<>();
+		Logic.tasks.getTasks(request);
+ 		List<Task> tasksProject = request.getResponse().getValue();
+ 		List<Task> invalidTasks = new ArrayList<>();
+ 		for(Task task : queue) {
+ 			if(!tasksProject.contains(task)) {
+ 				invalidTasks.add(task);
+			}
+		}
+ 		queue.removeAll(invalidTasks);
+
+		// create labels
 		for (int i = 0; i < queue.size(); i++) {
 			Task task = queue.get(i);
 
@@ -95,8 +121,8 @@ public class Breadcrumb extends AnchorPane {
 
 				int index = i;
 				label.setOnMouseClicked(event -> {
-					if(onJumpBack(queue.get(index))) {
-						queue = queue.subList(0, index+1);
+					if (onJumpBack(queue.get(index))) {
+						queue = queue.subList(0, index + 1);
 						refresh();
 					}
 				});
@@ -182,5 +208,6 @@ public class Breadcrumb extends AnchorPane {
 	public boolean onJumpBack(Task task) {
 		return false; // return true to allow jump
 	}
+
 
 }

@@ -4,7 +4,6 @@ import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.data.DependencyAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskArrayValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
@@ -54,11 +53,11 @@ public class DependencyLogic {
 	public void createDependency(Task task, Task prerequisite, TaskAttribute attribute) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			if (project.tasks.contains(task) && project.tasks.contains(prerequisite) && attribute.data.getType() == TaskAttributeType.DEPENDENCY) {
+			if (attribute.data.getType() == TaskAttributeType.DEPENDENCY) {
 				TaskAttributeValue value = Logic.tasks.getValue(task, attribute);
 				TaskArrayValue newValue = (value == null || value instanceof NoValue) ?
 						new TaskArrayValue(prerequisite) :
-						new TaskArrayValue(((TaskArrayValue)value).getTasks(), prerequisite);
+						new TaskArrayValue(((TaskArrayValue) value).getTasks(), prerequisite);
 				Logic.tasks.setValue(task, attribute, newValue);
 			}
 		}
@@ -67,8 +66,34 @@ public class DependencyLogic {
 
 
 
-	public void deleteDependency(Task task, Task prerequisite, DependencyAttributeData dependency) {
-		// TODO
+	public void deleteDependency(Task task, Task prerequisite, TaskAttribute attribute) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (attribute.data.getType() == TaskAttributeType.DEPENDENCY) {
+				TaskAttributeValue value = Logic.tasks.getValue(task, attribute);
+				TaskArrayValue taskArray = (value == null || value instanceof NoValue) ? new TaskArrayValue() : (TaskArrayValue) value;
+
+				boolean existsDependency = false;
+				for (Task t : taskArray.getTasks()) {
+					if (t == prerequisite) {
+						existsDependency = true;
+						break;
+					}
+				}
+
+				if (existsDependency) {
+					List<Task> newList = new ArrayList<>();
+					for (Task t : taskArray.getTasks()) {
+						if (t != prerequisite) {
+							newList.add(t);
+						} else {
+						}
+					}
+					Logic.tasks.setValue(task, attribute, new TaskArrayValue(newList));
+				}
+
+			}
+		}
 	}
 
 
