@@ -8,7 +8,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextArrayValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.utils.uielements.choicelistfield.ChoiceListField;
 import javafx.scene.Node;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 import java.util.Arrays;
@@ -34,7 +34,7 @@ public class ChoiceFilterValue extends FilterValue {
 				value = compValue;
 			}
 
-			ChoiceBox<String> choice = buildChoiceBox(((TextValue) value).getText(), ((ChoiceAttributeData) data).values);
+			ComboBox<String> choice = buildComboxString(((TextValue) value).getText(), ((ChoiceAttributeData) data).values);
 			outNodes.add(choice);
 			choice.setOnAction(event -> {
 				value = new TextValue(choice.getSelectionModel().getSelectedItem());

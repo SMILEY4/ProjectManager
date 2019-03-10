@@ -4,13 +4,13 @@ import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.combobox.ComboboxUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxOrder;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -26,8 +26,8 @@ public class SortElementNode extends HBox {
 	public TaskAttribute attribute;
 
 	private Button btnRemove;
-	private ChoiceBox<String> choiceAttrib;
-	private ChoiceBox<String> choiceSortDir;
+	private ComboBox<TaskAttribute> choiceAttrib;
+	private ComboBox<SortElement.Sort> choiceSortDir;
 	private Button btnUp;
 	private Button btnDown;
 
@@ -68,48 +68,37 @@ public class SortElementNode extends HBox {
 
 
 		// choice attribute
-		choiceAttrib = new ChoiceBox<>();
+		choiceAttrib = new ComboBox<>();
+		choiceAttrib.setButtonCell(ComboboxUtils.createListCellAttribute());
+		choiceAttrib.setCellFactory(param -> ComboboxUtils.createListCellAttribute());
 		choiceAttrib.setMinSize(250, 32);
 		choiceAttrib.setPrefSize(250, 32);
 		choiceAttrib.setMaxSize(500, 32);
 		Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
 			@Override
 			public void onResponse(Response<List<TaskAttribute>> response) {
-				List<TaskAttribute> attributes = response.getValue();
-				for (TaskAttribute attrib : attributes) {
-					if(attrib.data.getType() != TaskAttributeType.DEPENDENCY) {
-						choiceAttrib.getItems().add(attrib.name);
-					}
-				}
+				choiceAttrib.getItems().addAll(response.getValue());
 			}
 		});
-		choiceAttrib.getSelectionModel().select(attribute.name);
+		choiceAttrib.getSelectionModel().select(attribute);
 		choiceAttrib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			Logic.attribute.getAttribute(choiceAttrib.getValue(), new Request<TaskAttribute>(true) {
-				@Override
-				public void onResponse(Response<TaskAttribute> response) {
-					SortElementNode.this.attribute = response.getValue();
-					parent.onSortChanged(SortElementNode.this);
-				}
-			});
+			SortElementNode.this.attribute = choiceAttrib.getValue();
+			parent.onSortChanged(SortElementNode.this);
 		});
 		this.getChildren().add(choiceAttrib);
 
 
 		// choice sort dir
-		choiceSortDir = new ChoiceBox<>();
+		choiceSortDir = new ComboBox<>();
+		choiceSortDir.setButtonCell(ComboboxUtils.createListCellSortDir());
+		choiceSortDir.setCellFactory(param -> ComboboxUtils.createListCellSortDir());
 		choiceSortDir.setMinSize(150, 32);
 		choiceSortDir.setPrefSize(150, 32);
 		choiceSortDir.setMaxSize(150, 32);
-		choiceSortDir.getItems().addAll(SortElement.Sort.ASC.display, SortElement.Sort.DESC.display);
-		choiceSortDir.getSelectionModel().select(sortDir.display);
+		choiceSortDir.getItems().addAll(SortElement.Sort.values());
+		choiceSortDir.getSelectionModel().select(sortDir);
 		choiceSortDir.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			for (SortElement.Sort dir : SortElement.Sort.values()) {
-				if (dir.display.equals(newValue)) {
-					this.sortDir = dir;
-					break;
-				}
-			}
+			this.sortDir = choiceSortDir.getValue();
 			parent.onSortChanged(SortElementNode.this);
 		});
 		this.getChildren().add(choiceSortDir);

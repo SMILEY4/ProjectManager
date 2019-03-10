@@ -16,7 +16,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -34,7 +34,7 @@ public class FilterPopup extends AnchorPane {
 
 	@FXML private Button btnReset;
 
-	@FXML private ChoiceBox<String> choiceSaved;
+	@FXML private ComboBox<String> choiceSaved;
 	@FXML private Button btnDeleteSaved;
 	@FXML private TextField fieldSave;
 	@FXML private Button btnSave;
@@ -71,7 +71,7 @@ public class FilterPopup extends AnchorPane {
 		btnReset.setOnAction(event -> {
 			choiceSaved.getSelectionModel().select(null);
 			fieldSave.setText("");
-			setFilterCriterias(new ArrayList<FilterCriteria>());
+			setFilterCriterias(new ArrayList<>());
 		});
 
 		// select presets

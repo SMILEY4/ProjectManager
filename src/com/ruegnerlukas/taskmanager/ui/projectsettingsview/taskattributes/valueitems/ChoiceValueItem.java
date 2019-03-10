@@ -2,7 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattributes.value
 
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.geometry.Pos;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -13,7 +13,7 @@ public abstract class ChoiceValueItem extends AttributeValueItem {
 	private String value;
 	private String[] values;
 
-	private ChoiceBox<String> choiceBox;
+	private ComboBox<String> choices;
 
 
 
@@ -48,15 +48,15 @@ public abstract class ChoiceValueItem extends AttributeValueItem {
 		boxValue.setMaxSize(10000, 32);
 		box.getChildren().add(boxValue);
 
-		choiceBox = new ChoiceBox<>();
-		choiceBox.getItems().addAll(values);
-		choiceBox.getSelectionModel().select(selectedValue);
-		choiceBox.setMinSize(50, 32);
-		choiceBox.setPrefSize(200, 32);
-		choiceBox.setMaxSize(200, 32);
-		boxValue.getChildren().add(choiceBox);
+		choices = new ComboBox<>();
+		choices.getItems().addAll(values);
+		choices.getSelectionModel().select(selectedValue);
+		choices.setMinSize(50, 32);
+		choices.setPrefSize(200, 32);
+		choices.setMaxSize(200, 32);
+		boxValue.getChildren().add(choices);
 
-		choiceBox.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+		choices.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			setValue(newValue);
 		});
 
@@ -81,7 +81,7 @@ public abstract class ChoiceValueItem extends AttributeValueItem {
 	public void setValue(String value) {
 		if (!this.value.equals(value) && containsValue(value)) {
 			this.value = value;
-			choiceBox.getSelectionModel().select(value);
+			choices.getSelectionModel().select(value);
 			setChanged(true);
 		}
 	}
@@ -90,8 +90,8 @@ public abstract class ChoiceValueItem extends AttributeValueItem {
 
 
 	public void setChoices(String... values) {
-		choiceBox.getItems().setAll(values);
-		choiceBox.getSelectionModel().select(value);
+		choices.getItems().setAll(values);
+		choices.getSelectionModel().select(value);
 		this.values = values;
 		setChanged(true);
 	}

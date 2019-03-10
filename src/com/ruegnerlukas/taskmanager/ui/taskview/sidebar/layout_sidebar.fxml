@@ -12,6 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+<?import javafx.scene.control.ComboBox?>
 <AnchorPane maxHeight="100000.0" maxWidth="100000.0" minHeight="0.0" minWidth="0.0" prefHeight="902.0" prefWidth="409.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane fx:id="paneBreadcrumb" maxHeight="32.0" maxWidth="1000000.0" minHeight="32.0" minWidth="0.0" prefHeight="32.0" prefWidth="1000000.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
@@ -55,7 +56,7 @@
                                  </padding>
                                  <children>
                                     <Label fx:id="labelID" maxHeight="32.0" minHeight="32.0" minWidth="0.0" prefHeight="32.0" text="T-19" />
-                                    <ChoiceBox fx:id="choiceFlag" maxHeight="32.0" minHeight="32.0" prefHeight="32.0" prefWidth="200.0" />
+                                    <ComboBox fx:id="choiceFlag" maxHeight="32.0" minHeight="32.0" prefHeight="32.0" prefWidth="200.0" />
                                  </children>
                               </VBox>
                            </children>

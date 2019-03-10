@@ -11,7 +11,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValu
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.uielements.choicelistfield.ChoiceListField;
 import javafx.scene.Node;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 
 import java.util.HashSet;
 import java.util.List;
@@ -58,11 +58,11 @@ public class DependencyFilterValue extends FilterValue {
 				value = compValue;
 			}
 
-			ChoiceBox<String> choice = buildChoiceBox((((BoolValue) value).getBoolValue() ? "True" : "False"), "True", "False");
+			ComboBox<Boolean> choice = buildComboxBoolean( ((BoolValue)value).getBoolValue() );
 			outNodes.add(choice);
 
 			choice.setOnAction(event -> {
-				value = new BoolValue(choice.getSelectionModel().getSelectedItem().equals("True"));
+				value = new BoolValue(choice.getSelectionModel().getSelectedItem());
 				this.onAction();
 			});
 		}

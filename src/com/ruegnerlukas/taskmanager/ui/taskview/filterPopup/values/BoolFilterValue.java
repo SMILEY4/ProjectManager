@@ -5,7 +5,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.BoolValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import javafx.scene.Node;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 
 import java.util.List;
 
@@ -26,11 +26,11 @@ public class BoolFilterValue extends FilterValue {
 			if (compValue instanceof BoolValue) {
 				value = ((BoolValue) compValue).getBoolValue();
 			}
-			ChoiceBox<String> choice = buildChoiceBox((value ? "True" : "False"), "True", "False");
+			ComboBox<Boolean> choice = buildComboxBoolean(value);
 			outNodes.add(choice);
 
 			choice.setOnAction(event -> {
-				value = choice.getSelectionModel().getSelectedItem().equals("True");
+				value = choice.getSelectionModel().getSelectedItem();
 				this.onAction();
 			});
 		}

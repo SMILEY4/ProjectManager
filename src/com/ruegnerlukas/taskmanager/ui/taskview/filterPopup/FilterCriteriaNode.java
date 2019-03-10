@@ -11,11 +11,12 @@ import com.ruegnerlukas.taskmanager.logic.attributes.filter.AttributeFilter;
 import com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values.*;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.combobox.ComboboxUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -29,8 +30,8 @@ public class FilterCriteriaNode extends HBox {
 	private FilterPopup parent;
 
 	private Button btnRemove;
-	private ChoiceBox<String> choiceAttrib;
-	private ChoiceBox<String> choiceCompOp;
+	private ComboBox<TaskAttribute> choiceAttrib;
+	private ComboBox<FilterCriteria.ComparisonOp> choiceCompOp;
 	private List<Node> valueNodes = new ArrayList<>();
 
 	public FilterValue filterValue;
@@ -79,38 +80,34 @@ public class FilterCriteriaNode extends HBox {
 
 
 		// choice attribute
-		choiceAttrib = new ChoiceBox<>();
+		choiceAttrib = new ComboBox<>();
+		choiceAttrib.setButtonCell(ComboboxUtils.createListCellAttribute());
+		choiceAttrib.setCellFactory(param -> ComboboxUtils.createListCellAttribute());
 		choiceAttrib.setMinSize(250, 32);
 		choiceAttrib.setPrefSize(250, 32);
 		choiceAttrib.setMaxSize(250, 32);
 		Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
 			@Override
 			public void onResponse(Response<List<TaskAttribute>> response) {
-				List<TaskAttribute> attributes = response.getValue();
-				for (TaskAttribute attrib : attributes) {
-					choiceAttrib.getItems().add(attrib.name);
-				}
+				choiceAttrib.getItems().addAll(response.getValue());
 			}
 		});
 
 
-		choiceAttrib.getSelectionModel().select(attribute.name);
+		choiceAttrib.getSelectionModel().select(attribute);
 		choiceAttrib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			Logic.attribute.getAttribute(choiceAttrib.getValue(), new Request<TaskAttribute>(true) {
-				@Override
-				public void onResponse(Response<TaskAttribute> response) {
-					FilterCriteriaNode.this.attribute = response.getValue();
-					FilterCriteriaNode.this.compValue = null;
-					parent.onFiltersChanged(FilterCriteriaNode.this);
-					update();
-				}
-			});
+			this.attribute = choiceAttrib.getValue();
+			this.compValue = null;
+			parent.onFiltersChanged(FilterCriteriaNode.this);
+			update();
 		});
 		this.getChildren().add(choiceAttrib);
 
 
 		// choice comparision
-		choiceCompOp = new ChoiceBox<>();
+		choiceCompOp = new ComboBox<>();
+		choiceCompOp.setButtonCell(ComboboxUtils.createListCellComparisonOp());
+		choiceCompOp.setCellFactory(param -> ComboboxUtils.createListCellComparisonOp());
 		choiceCompOp.setMinSize(200, 32);
 		choiceCompOp.setPrefSize(200, 32);
 		choiceCompOp.setMaxSize(200, 32);
@@ -124,10 +121,7 @@ public class FilterCriteriaNode extends HBox {
 
 	private void update() {
 
-		choiceCompOp.getItems().clear();
-		for (FilterCriteria.ComparisonOp comp : AttributeFilter.getPossibleComparisionOps(attribute)) {
-			choiceCompOp.getItems().add(comp.display);
-		}
+		choiceCompOp.getItems().setAll(AttributeFilter.getPossibleComparisionOps(attribute));
 
 		boolean foundCompOp = false;
 		for (FilterCriteria.ComparisonOp c : AttributeFilter.getPossibleComparisionOps(attribute)) {
@@ -138,22 +132,17 @@ public class FilterCriteriaNode extends HBox {
 		}
 
 		if (foundCompOp) {
-			choiceCompOp.getSelectionModel().select(comparisonOp.display);
+			choiceCompOp.getSelectionModel().select(comparisonOp);
 		} else {
 			this.comparisonOp = AttributeFilter.getPossibleComparisionOps(attribute)[0];
-			choiceCompOp.getSelectionModel().select(comparisonOp.display);
+			choiceCompOp.getSelectionModel().select(comparisonOp);
 		}
 
 		choiceCompOp.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			for (FilterCriteria.ComparisonOp comp : AttributeFilter.getPossibleComparisionOps(attribute)) {
-				if (comp.display.equals(choiceCompOp.getValue())) {
-					this.comparisonOp = comp;
-					this.compValue = null;
-					updateCompValues();
-					parent.onFiltersChanged(FilterCriteriaNode.this);
-					break;
-				}
-			}
+			this.comparisonOp = choiceCompOp.getValue();
+			this.compValue = null;
+			updateCompValues();
+			parent.onFiltersChanged(FilterCriteriaNode.this);
 		});
 
 

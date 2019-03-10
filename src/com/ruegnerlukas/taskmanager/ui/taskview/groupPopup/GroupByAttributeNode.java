@@ -6,9 +6,10 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.combobox.ComboboxUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxOrder;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
@@ -23,7 +24,7 @@ public class GroupByAttributeNode extends HBox {
 	private GroupByPopup parent;
 
 	private Button btnRemove;
-	private ChoiceBox<String> choiceAttrib;
+	private ComboBox<TaskAttribute> choiceAttrib;
 	private Button btnUp;
 	private Button btnDown;
 
@@ -57,7 +58,9 @@ public class GroupByAttributeNode extends HBox {
 
 
 		// choice attribute
-		choiceAttrib = new ChoiceBox<>();
+		choiceAttrib = new ComboBox<>();
+		choiceAttrib.setButtonCell(ComboboxUtils.createListCellAttribute());
+		choiceAttrib.setCellFactory(param -> ComboboxUtils.createListCellAttribute());
 		choiceAttrib.setMinSize(250, 32);
 		choiceAttrib.setPrefSize(250, 32);
 		choiceAttrib.setMaxSize(500, 32);
@@ -65,24 +68,14 @@ public class GroupByAttributeNode extends HBox {
 		Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
 			@Override
 			public void onResponse(Response<List<TaskAttribute>> response) {
-				List<TaskAttribute> attributes = response.getValue();
-				for (TaskAttribute attrib : attributes) {
-					if(attrib.data.getType().groupable) {
-						choiceAttrib.getItems().add(attrib.name);
-					}
-				}
+				choiceAttrib.getItems().addAll(response.getValue());
 			}
 		});
 
-		choiceAttrib.getSelectionModel().select(attribute.name);
+		choiceAttrib.getSelectionModel().select(attribute);
 		choiceAttrib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			Logic.attribute.getAttribute(choiceAttrib.getValue(), new Request<TaskAttribute>(true) {
-				@Override
-				public void onResponse(Response<TaskAttribute> response) {
-					GroupByAttributeNode.this.attribute = response.getValue();
-					parent.onAttributesChanged(GroupByAttributeNode.this);
-				}
-			});
+			GroupByAttributeNode.this.attribute = choiceAttrib.getValue();
+			parent.onAttributesChanged(GroupByAttributeNode.this);
 		});
 		this.getChildren().add(choiceAttrib);
 

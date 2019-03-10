@@ -10,7 +10,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValu
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.utils.uielements.choicelistfield.ChoiceListField;
 import javafx.scene.Node;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 
 import java.util.HashSet;
@@ -35,17 +35,11 @@ public class FlagFilterValue extends FilterValue {
 				value = compValue;
 			}
 
-			String[] flagNames = new String[((FlagAttributeData) data).flags.length];
-			for (int i = 0; i < flagNames.length; i++) {
-				flagNames[i] = ((FlagAttributeData) data).flags[i].name;
-			}
-
-			ChoiceBox<String> choice = buildChoiceBox(((FlagValue) value).getFlag().name, flagNames);
+			ComboBox<TaskFlag> choice = buildComboxFlag(((FlagValue) value).getFlag(), ((FlagAttributeData) data).flags);
 			outNodes.add(choice);
 
 			choice.setOnAction(event -> {
-				String name = choice.getSelectionModel().getSelectedItem();
-				value = new FlagValue(TaskFlag.findFlag(name, ((FlagAttributeData) data).flags));
+				value = new FlagValue(choice.getSelectionModel().getSelectedItem());
 				onAction();
 			});
 		}
@@ -63,9 +57,9 @@ public class FlagFilterValue extends FilterValue {
 				startValues[i] = ((FlagArrayValue) value).getFlags()[i].name;
 			}
 
-			FlagAttributeData flagData = (FlagAttributeData)data;
+			FlagAttributeData flagData = (FlagAttributeData) data;
 			Set<String> entries = new HashSet<>();
-			for(TaskFlag flag : flagData.flags) {
+			for (TaskFlag flag : flagData.flags) {
 				entries.add(flag.name);
 			}
 

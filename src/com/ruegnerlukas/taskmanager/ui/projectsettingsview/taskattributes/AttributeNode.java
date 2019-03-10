@@ -14,11 +14,12 @@ import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.alert.Alerts;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.combobox.ComboboxUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabel.EditableLabel;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
@@ -34,7 +35,7 @@ public class AttributeNode extends AnchorPane {
 	private HBox headerBox;
 
 	private Button btnRemove;
-	private ChoiceBox<String> choiceType;
+	private ComboBox<TaskAttributeType> choiceType;
 	private EditableLabel labelName;
 	private Button btnExpand;
 
@@ -125,24 +126,26 @@ public class AttributeNode extends AnchorPane {
 
 
 		// choice attribute-type
-		choiceType = new ChoiceBox<>();
+		choiceType = new ComboBox<>();
+		choiceType.setButtonCell(ComboboxUtils.createListCellAttributeType());
+		choiceType.setCellFactory(param -> ComboboxUtils.createListCellAttributeType());
 		if (attribute.data.getType().fixed()) {
-			choiceType.getItems().add(attribute.data.getType().display);
+			choiceType.getItems().add(attribute.data.getType());
 		} else {
 			for (TaskAttributeType type : TaskAttributeType.values()) {
 				if (!type.fixed()) {
-					choiceType.getItems().add(type.display);
+					choiceType.getItems().add(type);
 				}
 			}
 		}
-		choiceType.getSelectionModel().select(this.attribute.data.getType().display);
+		choiceType.getSelectionModel().select(this.attribute.data.getType());
 		choiceType.setMinSize(150, 32);
 		choiceType.setPrefSize(150, 32);
 		choiceType.setMaxSize(150, 32);
 		headerBox.getChildren().add(choiceType);
 		choiceType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if (!oldValue.equals(newValue)) {
-				onTypeSelected(TaskAttributeType.getFromDisplay(newValue));
+				onTypeSelected(newValue);
 			}
 		});
 
@@ -323,7 +326,7 @@ public class AttributeNode extends AnchorPane {
 		EventManager.registerListener(this, e -> {
 			AttributeTypeChangedEvent event = (AttributeTypeChangedEvent) e;
 			if (event.getAttribute() == attribute) {
-				choiceType.getSelectionModel().select(event.getAttribute().data.getType().display);
+				choiceType.getSelectionModel().select(event.getAttribute().data.getType());
 				insertTaskAttribute(attribute);
 				if (isExpanded) {
 					onExpand();

@@ -1,16 +1,16 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values;
 
 import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.utils.uielements.choicelistfield.ChoiceListField;
+import com.ruegnerlukas.taskmanager.utils.uielements.combobox.ComboboxUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.spinner.SpinnerUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Region;
 
 import java.util.List;
@@ -49,6 +49,43 @@ public abstract class FilterValue {
 
 	protected ChoiceBox<String> buildChoiceBox(String selected, String... values) {
 		ChoiceBox<String> choice = new ChoiceBox<>();
+		setSize(choice);
+		choice.getItems().addAll(values);
+		choice.getSelectionModel().select(selected);
+		return choice;
+	}
+
+
+
+
+	protected ComboBox<String> buildComboxString(String selected, String... values) {
+		ComboBox<String> choice = new ComboBox<>();
+		setSize(choice);
+		choice.getItems().addAll(values);
+		choice.getSelectionModel().select(selected);
+		return choice;
+	}
+
+
+
+
+	protected ComboBox<Boolean> buildComboxBoolean(boolean selected) {
+		ComboBox<Boolean> choice = new ComboBox<>();
+		choice.setButtonCell(ComboboxUtils.createListCellBoolean());
+		choice.setCellFactory(param -> ComboboxUtils.createListCellBoolean());
+		setSize(choice);
+		choice.getItems().addAll(true, false);
+		choice.getSelectionModel().select(selected);
+		return choice;
+	}
+
+
+
+
+	protected ComboBox<TaskFlag> buildComboxFlag(TaskFlag selected, TaskFlag... values) {
+		ComboBox<TaskFlag> choice = new ComboBox<>();
+		choice.setButtonCell(ComboboxUtils.createListCellFlag());
+		choice.setCellFactory(param -> ComboboxUtils.createListCellFlag());
 		setSize(choice);
 		choice.getItems().addAll(values);
 		choice.getSelectionModel().select(selected);

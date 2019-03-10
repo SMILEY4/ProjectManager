@@ -15,10 +15,7 @@ import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxDragAndDrop;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -35,7 +32,7 @@ public class GroupByPopup extends AnchorPane {
 
 	@FXML private Button btnReset;
 
-	@FXML private ChoiceBox<String> choiceSaved;
+	@FXML private ComboBox<String> choiceSaved;
 	@FXML private Button btnDeleteSaved;
 	@FXML private TextField fieldSave;
 	@FXML private Button btnSave;

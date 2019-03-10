@@ -12,12 +12,12 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.Sidebar;
 import javafx.scene.Parent;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 
 public class ChoiceItem extends SidebarItem {
 
 
-	private ChoiceBox<String> choiceBox;
+	private ComboBox<String> choiceBox;
 
 
 
@@ -48,7 +48,7 @@ public class ChoiceItem extends SidebarItem {
 	@Override
 	protected Parent createValueField(Task task, TaskAttribute attribute) {
 
-		choiceBox = new ChoiceBox<>();
+		choiceBox = new ComboBox<>();
 		ChoiceAttributeData data = (ChoiceAttributeData) attribute.data;
 		choiceBox.getItems().addAll(data.values);
 		choiceBox.setMinSize(0, 32);

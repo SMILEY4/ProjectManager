@@ -11,11 +11,12 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskArrayValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.Sidebar;
+import com.ruegnerlukas.taskmanager.utils.uielements.combobox.ComboboxUtils;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -83,7 +84,9 @@ public class DependencyItem extends SidebarItem {
 		content.getChildren().add(boxAdd);
 
 		// choice add depends on
-		ChoiceBox<String> choiceTask = new ChoiceBox<>();
+		ComboBox<Task> choiceTask = new ComboBox<>();
+		choiceTask.setButtonCell(ComboboxUtils.createListCellTask());
+		choiceTask.setCellFactory(param -> ComboboxUtils.createListCellTask());
 		boxAdd.getChildren().add(choiceTask);
 		choiceTask.setPrefWidth(150);
 		setPossibleTasks(choiceTask);
@@ -100,15 +103,8 @@ public class DependencyItem extends SidebarItem {
 		boxAdd.getChildren().add(btnAdd);
 
 		btnAdd.setOnAction(event -> {
-			String strID = choiceTask.getValue();
-			int id = Integer.parseInt(strID.split("-")[1]);
-			Logic.tasks.getTaskByID(id, new Request<Task>(true) {
-				@Override
-				public void onResponse(Response<Task> response) {
-					Logic.dependencies.createDependency(task, response.getValue(), attribute);
-					addDependsOn(response.getValue());
-				}
-			});
+			Logic.dependencies.createDependency(task, choiceTask.getValue(), attribute);
+			addDependsOn(choiceTask.getValue());
 			setPossibleTasks(choiceTask);
 		});
 
@@ -203,7 +199,7 @@ public class DependencyItem extends SidebarItem {
 
 
 
-	private void setPossibleTasks(ChoiceBox<String> choiceTask) {
+	private void setPossibleTasks(ComboBox<Task> choiceTask) {
 
 		choiceTask.getItems().clear();
 
@@ -214,7 +210,7 @@ public class DependencyItem extends SidebarItem {
 			public void onResponse(Response<List<Task>> response) {
 				for (Task t : response.getValue()) {
 					if (t != task && !exclude.contains(t)) {
-						choiceTask.getItems().add("T-" + t.getID());
+						choiceTask.getItems().add(t);
 					}
 				}
 			}

@@ -23,10 +23,11 @@ import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
 import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item.SidebarItem;
 import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.combobox.ComboboxUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
@@ -48,7 +49,7 @@ public class Sidebar extends AnchorPane {
 	@FXML private VBox boxContent;
 	@FXML private TextArea fieldDesc;
 	@FXML private Label labelID;
-	@FXML private ChoiceBox<String> choiceFlag;
+	@FXML private ComboBox<TaskFlag> choiceFlag;
 	@FXML private VBox boxAttribs;
 
 	@FXML private Button btnDeleteTask;
@@ -88,6 +89,9 @@ public class Sidebar extends AnchorPane {
 				return true;
 			}
 
+
+
+
 			@Override
 			public boolean onJumpBack(Task task) {
 				taskView.onTaskSelected(task, true, false);
@@ -112,20 +116,17 @@ public class Sidebar extends AnchorPane {
 
 
 		// flag
+		choiceFlag.setButtonCell(ComboboxUtils.createListCellFlag());
+		choiceFlag.setCellFactory(param -> ComboboxUtils.createListCellFlag());
 		Logic.taskFlags.getAllFlags(new Request<TaskFlag[]>(true) {
 			@Override
 			public void onResponse(Response<TaskFlag[]> response) {
-				for (TaskFlag flag : response.getValue()) {
-					choiceFlag.getItems().add(flag.name);
-				}
+				choiceFlag.getItems().addAll(response.getValue());
 			}
 		});
-		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> Logic.taskFlags.getFlag(newValue, new Request<TaskFlag>(true) {
-			@Override
-			public void onResponse(Response<TaskFlag> response) {
-				Logic.tasks.setAttributeValue(currentTask, FlagAttributeData.NAME, new FlagValue(response.getValue()));
-			}
-		}));
+		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			Logic.tasks.setAttributeValue(currentTask, FlagAttributeData.NAME, new FlagValue(choiceFlag.getValue()));
+		});
 
 
 		// listen for taskAttribute-changes
@@ -136,7 +137,7 @@ public class Sidebar extends AnchorPane {
 
 		// Delete Task
 		btnDeleteTask.setOnAction(event -> {
-			if(currentTask != null) {
+			if (currentTask != null) {
 				Logic.tasks.deleteTask(currentTask);
 			}
 		});
@@ -147,8 +148,6 @@ public class Sidebar extends AnchorPane {
 
 
 	public void refresh() {
-
-		System.out.println("refresh " + currentTask + "  " + (currentTask != null ? currentTask.getID() : "noid") );
 
 		if (currentTask == null) {
 			return;
@@ -176,17 +175,14 @@ public class Sidebar extends AnchorPane {
 		Logic.taskFlags.getAllFlags(new Request<TaskFlag[]>(true) {
 			@Override
 			public void onResponse(Response<TaskFlag[]> response) {
-				choiceFlag.getItems().clear();
-				for (TaskFlag flag : response.getValue()) {
-					choiceFlag.getItems().add(flag.name);
-				}
+				choiceFlag.getItems().setAll(response.getValue());
 			}
 		});
 		Logic.tasks.getAttributeValue(currentTask, FlagAttributeData.NAME, new Request<TaskAttributeValue>(true) {
 			@Override
 			public void onResponse(Response<TaskAttributeValue> response) {
 				FlagValue value = (FlagValue) response.getValue();
-				choiceFlag.getSelectionModel().select(value.getFlag().name);
+				choiceFlag.getSelectionModel().select(value.getFlag());
 			}
 		});
 

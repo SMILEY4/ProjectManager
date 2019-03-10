@@ -15,10 +15,7 @@ import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -32,16 +29,16 @@ public class PresetsPopup extends AnchorPane {
 
 	private Stage stage;
 
-	@FXML private ChoiceBox<String> choiceSaved;
+	@FXML private ComboBox<String> choiceSaved;
 	@FXML private Button btnDeleteSaved;
 	@FXML private TextField fieldSave;
 	@FXML private Button btnSave;
 
 	@FXML CheckBox useIndPresets;
 	@FXML VBox boxIndPresets;
-	@FXML ChoiceBox<String> choiceFilter;
-	@FXML ChoiceBox<String> choiceTaskGroup;
-	@FXML ChoiceBox<String> choiceSort;
+	@FXML ComboBox<String> choiceFilter;
+	@FXML ComboBox<String> choiceTaskGroup;
+	@FXML ComboBox<String> choiceSort;
 
 	@FXML private Button btnCancel;
 	@FXML private Button btnAccept;
