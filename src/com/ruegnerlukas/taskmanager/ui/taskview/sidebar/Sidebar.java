@@ -21,7 +21,8 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
 import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item.SidebarItem;
-import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
+import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.combobox.ComboboxUtils;
 import javafx.fxml.FXML;
@@ -63,7 +64,7 @@ public class Sidebar extends AnchorPane {
 		this.taskView = taskView;
 
 		try {
-			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_sidebar.fxml"), this);
+			Parent root = UIDataHandler.loadFXML(UIModule.ELEMENT_SIDEBAR, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {

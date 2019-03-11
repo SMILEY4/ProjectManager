@@ -9,13 +9,17 @@ import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupOrderSa
 import com.ruegnerlukas.taskmanager.data.groups.AttributeGroupData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
+import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxDragAndDrop;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -52,7 +56,7 @@ public class GroupByPopup extends AnchorPane {
 	public GroupByPopup(Stage stage) {
 		this.stage = stage;
 		try {
-			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_groupBy.fxml"), this);
+			Parent root = UIDataHandler.loadFXML(UIModule.POPUP_GROUPBY, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {

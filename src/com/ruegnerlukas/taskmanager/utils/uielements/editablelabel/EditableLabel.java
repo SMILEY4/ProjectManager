@@ -1,9 +1,10 @@
 package com.ruegnerlukas.taskmanager.utils.uielements.editablelabel;
 
+import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
-import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -132,19 +133,9 @@ public class EditableLabel extends AnchorPane {
 				exitEditMode(true);
 			}
 		});
-		
-		getStylesheets().add(ViewManager.class.getResource("bootstrap4_2.css").toExternalForm());
-		getStylesheets().add(ViewManager.class.getResource("style.css").toExternalForm());
-		
-		setOnKeyReleased(new EventHandler<KeyEvent>() {
-			@Override public void handle(KeyEvent event) {
-				if(event.getCode() == KeyCode.R) {
-					getStylesheets().clear();
-					getStylesheets().add(ViewManager.class.getResource("bootstrap4_2.css").toExternalForm());
-					getStylesheets().add(ViewManager.class.getResource("style.css").toExternalForm());
-				}
-			}
-		});
+
+		UIDataHandler.addRoot(this, UIModule.STYLE_GENERAL);
+		UIDataHandler.setStyle(this, UIModule.STYLE_GENERAL);
 	}
 	
 	

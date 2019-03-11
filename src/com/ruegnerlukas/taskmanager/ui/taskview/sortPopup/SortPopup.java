@@ -9,7 +9,8 @@ import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.SortSavedEve
 import com.ruegnerlukas.taskmanager.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
+import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxDragAndDrop;
 import javafx.fxml.FXML;
@@ -52,7 +53,7 @@ public class SortPopup extends AnchorPane {
 		this.stage = stage;
 
 		try {
-			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_sort.fxml"), this);
+			Parent root = UIDataHandler.loadFXML(UIModule.POPUP_SORT, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {

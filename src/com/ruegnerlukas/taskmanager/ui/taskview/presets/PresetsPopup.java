@@ -11,11 +11,15 @@ import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.groups.AttributeGroupData;
 import com.ruegnerlukas.taskmanager.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
+import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -50,7 +54,7 @@ public class PresetsPopup extends AnchorPane {
 		this.stage = stage;
 
 		try {
-			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_presets.fxml"), this);
+			Parent root = UIDataHandler.loadFXML(UIModule.POPUP_PRESETS, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {

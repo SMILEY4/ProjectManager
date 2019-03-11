@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.taskview;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.TaskManager;
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
@@ -29,14 +30,14 @@ import com.ruegnerlukas.taskmanager.ui.taskview.sidebar.Sidebar;
 import com.ruegnerlukas.taskmanager.ui.taskview.sortPopup.SortPopup;
 import com.ruegnerlukas.taskmanager.ui.taskview.taskcard.TaskCard;
 import com.ruegnerlukas.taskmanager.ui.taskview.tasklist.TaskList;
-import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
+import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.label.LabelUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.menu.MenuFunction;
 import com.ruegnerlukas.taskmanager.utils.uielements.scrollpane.ScrollPaneUtils;
-import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -100,7 +101,7 @@ public class TaskView extends AnchorPane implements TabContent {
 
 	public TaskView() {
 		try {
-			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_view_tasks.fxml"), this);
+			Parent root = UIDataHandler.loadFXML(UIModule.VIEW_TASKS, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {
@@ -214,7 +215,7 @@ public class TaskView extends AnchorPane implements TabContent {
 		btnFilter.setOnAction(event -> {
 			Stage stage = new Stage();
 			stage.initModality(Modality.WINDOW_MODAL);
-			stage.initOwner(ViewManager.getPrimaryStage());
+			stage.initOwner(TaskManager.getPrimaryStage());
 			FilterPopup popup = new FilterPopup(stage);
 			Scene scene = new Scene(popup, 1000, 400);
 			stage.setScene(scene);
@@ -226,7 +227,7 @@ public class TaskView extends AnchorPane implements TabContent {
 		btnGroup.setOnAction(event -> {
 			Stage stage = new Stage();
 			stage.initModality(Modality.WINDOW_MODAL);
-			stage.initOwner(ViewManager.getPrimaryStage());
+			stage.initOwner(TaskManager.getPrimaryStage());
 			GroupByPopup popup = new GroupByPopup(stage);
 			Scene scene = new Scene(popup, 750, 430);
 			stage.setScene(scene);
@@ -238,7 +239,7 @@ public class TaskView extends AnchorPane implements TabContent {
 		btnSort.setOnAction(event -> {
 			Stage stage = new Stage();
 			stage.initModality(Modality.WINDOW_MODAL);
-			stage.initOwner(ViewManager.getPrimaryStage());
+			stage.initOwner(TaskManager.getPrimaryStage());
 			SortPopup popup = new SortPopup(stage);
 			Scene scene = new Scene(popup, 600, 300);
 			stage.setScene(scene);
@@ -249,7 +250,7 @@ public class TaskView extends AnchorPane implements TabContent {
 		btnPresets.setOnAction(event -> {
 			Stage stage = new Stage();
 			stage.initModality(Modality.WINDOW_MODAL);
-			stage.initOwner(ViewManager.getPrimaryStage());
+			stage.initOwner(TaskManager.getPrimaryStage());
 			PresetsPopup popup = new PresetsPopup(stage);
 			Scene scene = new Scene(popup, 610, 350);
 			stage.setScene(scene);

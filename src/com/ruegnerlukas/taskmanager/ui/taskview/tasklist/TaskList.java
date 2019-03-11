@@ -5,7 +5,8 @@ import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
 import com.ruegnerlukas.taskmanager.ui.taskview.taskcard.TaskCard;
-import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
+import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.scrollpane.ScrollPaneUtils;
 import javafx.fxml.FXML;
@@ -39,7 +40,7 @@ public class TaskList extends AnchorPane {
 		this.parent = parent;
 
 		try {
-			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_tasklist.fxml"), this);
+			Parent root = UIDataHandler.loadFXML(UIModule.ELEMENT_TASKLIST, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {

@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.main;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.TaskManager;
 import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
@@ -14,12 +15,12 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.TabContent;
 import com.ruegnerlukas.taskmanager.ui.projectsettingsview.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
-import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
+import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.LoremIpsum;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.alert.Alerts;
 import com.ruegnerlukas.taskmanager.utils.uielements.menu.MenuFunction;
-import com.ruegnerlukas.taskmanager.utils.viewsystem.ViewManager;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -50,7 +51,7 @@ public class MainView extends AnchorPane {
 	public MainView() {
 		try {
 
-			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_view_main.fxml"), this);
+			Parent root = UIDataHandler.loadFXML(UIModule.VIEW_MAIN, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {
@@ -137,7 +138,7 @@ public class MainView extends AnchorPane {
 				FileChooser fileChooser = new FileChooser();
 				fileChooser.setTitle("Select project root-file.");
 				fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-				File file = fileChooser.showOpenDialog(ViewManager.getPrimaryStage());
+				File file = fileChooser.showOpenDialog(TaskManager.getPrimaryStage());
 
 				if (file != null) {
 

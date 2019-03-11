@@ -1,0 +1,21 @@
+package com.ruegnerlukas.taskmanager.uidata;
+
+public enum UIModule {
+
+	VIEW_MAIN,
+	VIEW_TASKS,
+	VIEW_PROJECTSETTINGS,
+
+	ELEMENT_SIDEBAR,
+	ELEMENT_TASKLIST,
+	ELEMENT_TASKCARD,
+
+	POPUP_SORT,
+	POPUP_GROUPBY,
+	POPUP_PRESETS,
+	POPUP_FILTER,
+
+	STYLE_BASE,
+	STYLE_GENERAL
+
+}

@@ -9,7 +9,8 @@ import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.FilterCriter
 import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.utils.FXMLUtils;
+import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.vbox.VBoxDragAndDrop;
 import javafx.fxml.FXML;
@@ -52,7 +53,7 @@ public class FilterPopup extends AnchorPane {
 	public FilterPopup(Stage stage) {
 		this.stage = stage;
 		try {
-			Parent root = FXMLUtils.loadFXML(getClass().getResource("layout_filter.fxml"), this);
+			Parent root = UIDataHandler.loadFXML(UIModule.POPUP_FILTER, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {
