@@ -148,6 +148,9 @@ public abstract class SidebarItem extends HBox {
 			if (attribute.data.usesDefault()) {
 				btnAdd.setDisable(true);
 				btnAdd.setVisible(false);
+				showValue();
+			} else {
+				emptyValue();
 			}
 
 			Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>() {

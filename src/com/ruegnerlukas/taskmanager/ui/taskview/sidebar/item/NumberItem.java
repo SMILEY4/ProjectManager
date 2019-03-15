@@ -53,6 +53,7 @@ public class NumberItem extends SidebarItem {
 	protected Parent createValueField(Task task, TaskAttribute attribute) {
 
 		NumberAttributeData data = (NumberAttributeData) attribute.data;
+
 		spinner = new Spinner<>();
 		spinner.setEditable(true);
 		SpinnerUtils.initSpinner(spinner, data.defaultValue, data.min, data.max, Math.pow(10, -data.decPlaces), data.decPlaces, true, false, new ChangeListener() {
