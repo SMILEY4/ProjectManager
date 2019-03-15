@@ -19,11 +19,11 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.taskview.tasklist.TaskList;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
-import com.ruegnerlukas.taskmanager.utils.uielements.editablelabelarea.EditableAreaLabel;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
@@ -38,7 +38,7 @@ public class TaskCard extends AnchorPane {
 	@FXML private Label labelID;
 	@FXML private AnchorPane paneDescription;
 
-	private EditableAreaLabel areaDescription;
+	private TextArea areaDescription;
 
 
 
@@ -100,18 +100,17 @@ public class TaskCard extends AnchorPane {
 
 
 		// description
-		areaDescription = new EditableAreaLabel();
-		updateDescription();
+		areaDescription = new TextArea();
+		areaDescription.setEditable(false);
 		AnchorUtils.setAnchors(areaDescription, 0, 0, 0, 0);
 		paneDescription.getChildren().add(areaDescription);
-		areaDescription.addListener((observable, oldValue, newValue) -> {
-			updateDescription();
-		});
+		paneDescription.setMouseTransparent(true);
+
+		updateDescription();
 
 		EventManager.registerListener(this, e -> {
 			TaskValueChangedEvent event = (TaskValueChangedEvent) e;
 			if (event.getTask() == task) {
-
 				TaskAttribute attribute = event.getAttribute();
 				if (attribute.data.getType() == TaskAttributeType.DESCRIPTION) {
 					TextValue newDescription = (TextValue) event.getNewValue();
@@ -160,7 +159,7 @@ public class TaskCard extends AnchorPane {
 				BorderStrokeStyle.SOLID,
 				new CornerRadii(borderSize),
 				new BorderWidths(borderSize),
-				new Insets(-(borderSize/2), -(borderSize/2), -(borderSize/2), -(borderSize/2))
+				new Insets(-(borderSize / 2), -(borderSize / 2), -(borderSize / 2), -(borderSize / 2))
 		)));
 	}
 
