@@ -43,22 +43,25 @@ public class FlagDataNode extends DataNode {
 		itemFlags = new FlagListValueItem("Flags:", data.flags, data.defaultFlag) {
 			@Override
 			public void onChanged() {
-				TaskFlag[] flags =  itemFlags.getValue();
+				TaskFlag[] flags = itemFlags.getValue();
 				TaskFlag flagDefault = null;
-				for(TaskFlag flag : flags) {
-					if(flag.name.equals(itemDefault.getValue())) {
+				for (TaskFlag flag : flags) {
+					if (flag.name.equals(itemDefault.getValue())) {
 						flagDefault = flag;
 						break;
 					}
 				}
 				itemDefault.setChoices(getAsNames(flags));
-				if(flagDefault == null) {
+				if (flagDefault == null) {
 					itemDefault.setValue(flags[0].name);
+					flagDefault = flags[0];
 				} else {
 					itemDefault.setValue(flagDefault.name);
 				}
+
 				itemFlags.unlockAll();
 				itemFlags.lockFlag(flagDefault);
+
 				onChange();
 			}
 		};
@@ -67,8 +70,8 @@ public class FlagDataNode extends DataNode {
 			@Override
 			public void onChanged() {
 				itemFlags.unlockAll();
-				for(TaskFlag flag : itemFlags.getValue()) {
-					if(flag.name.equals(itemDefault.getValue())) {
+				for (TaskFlag flag : itemFlags.getValue()) {
+					if (flag.name.equals(itemDefault.getValue())) {
 						itemFlags.lockFlag(flag);
 					}
 				}
@@ -140,8 +143,8 @@ public class FlagDataNode extends DataNode {
 	public void writeChanges() {
 		Map<TaskAttributeData.Var, TaskAttributeValue> valuesMap = new HashMap<>();
 		TaskFlag flagDefault = null;
-		for(TaskFlag flag : itemFlags.getValue()) {
-			if(flag.name.equals(itemDefault.getValue())) {
+		for (TaskFlag flag : itemFlags.getValue()) {
+			if (flag.name.equals(itemDefault.getValue())) {
 				flagDefault = flag;
 				break;
 			}
