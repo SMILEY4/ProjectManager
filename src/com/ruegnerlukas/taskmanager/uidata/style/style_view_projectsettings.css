@@ -167,7 +167,6 @@ ChoiceValueItem #item_choice
 
 #attribute:hover {
 	-fx-border-color: -gray-dark;
-	/*-fx-border-color: -selected-dark;*/
 }
 
 
@@ -194,6 +193,17 @@ ChoiceValueItem #item_choice
 	-fx-border-radius:     0;
 	-fx-border-width:      0 0 1 0;
 	-fx-border-insets:     0 0 5 0;
+}
+
+
+#unsafed_changes_header {
+	-fx-border-color: transparent;
+	-fx-background-color: -warning;
+	-fx-border-radius: 9;
+	-fx-background-radius: 9;
+	-fx-text-fill: white;
+	-fx-font-weight: bold;
+	-fx-font-size: 80%;
 }
 
 
@@ -235,7 +245,6 @@ ChoiceValueItem #item_choice
 
 #item_flag:hover {
 	-fx-border-color: -gray-dark;
-	/*-fx-border-color:      -selected-dark;*/
 }
 
 
@@ -273,4 +282,9 @@ ChoiceValueItem #item_choice
 
 
 #item_text {
+}
+
+
+
+#pane_header {
 }

@@ -21,6 +21,7 @@ import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
@@ -39,6 +40,8 @@ public class AttributeNode extends AnchorPane {
 	private ComboBox<TaskAttributeType> choiceType;
 	private EditableLabel labelName;
 	private Button btnExpand;
+
+	private Label labelUnsafed;
 
 	private AnchorPane contentPane;
 	private DataNode dataNode;
@@ -101,6 +104,19 @@ public class AttributeNode extends AnchorPane {
 		AnchorPane.setTopAnchor(headerPane, 0.0);
 		AnchorPane.setLeftAnchor(headerPane, 0.0);
 		AnchorPane.setRightAnchor(headerPane, 0.0);
+
+
+		// badge unsafed changes
+		labelUnsafed = new Label("!");
+		labelUnsafed.setVisible(false);
+		labelUnsafed.setAlignment(Pos.TOP_CENTER);
+		labelUnsafed.setId("unsafed_changes_header");
+		labelUnsafed.setMinSize(18, 18);
+		labelUnsafed.setPrefSize(18, 18);
+		labelUnsafed.setMaxSize(18, 18);
+		AnchorPane.setTopAnchor(labelUnsafed, -9.0);
+		AnchorPane.setRightAnchor(labelUnsafed, -9.0);
+		headerPane.getChildren().add(labelUnsafed);
 
 
 		// box header
@@ -312,8 +328,10 @@ public class AttributeNode extends AnchorPane {
 
 	public void setChanged(boolean changed) {
 		if (changed) {
+			labelUnsafed.setVisible(true);
 			boxButtons.setDisable(false);
 		} else {
+			labelUnsafed.setVisible(false);
 			boxButtons.setDisable(true);
 		}
 		fitToContentSize();
