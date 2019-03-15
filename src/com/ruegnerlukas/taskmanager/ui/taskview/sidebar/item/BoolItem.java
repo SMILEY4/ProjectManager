@@ -25,6 +25,7 @@ public class BoolItem extends SidebarItem {
 
 	protected BoolItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
 		super(task, attribute, sidebar);
+		this.setId("item_bool");
 	}
 
 

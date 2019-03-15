@@ -21,6 +21,7 @@ public abstract class MLTextValueItem extends AttributeValueItem {
 		super();
 		this.value = value;
 		this.nLines = nLines;
+		this.setId("item_mltext");
 
 		HBox box = new HBox();
 		box.setSpacing(20);

@@ -52,6 +52,7 @@ public class FilterPopup extends AnchorPane {
 
 	public FilterPopup(Stage stage) {
 		this.stage = stage;
+
 		try {
 			Parent root = UIDataHandler.loadFXML(UIModule.POPUP_FILTER, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);

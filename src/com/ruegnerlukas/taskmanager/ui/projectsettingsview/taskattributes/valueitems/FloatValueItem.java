@@ -31,7 +31,7 @@ public abstract class FloatValueItem extends AttributeValueItem {
 		this.max = max;
 		this.step = step;
 		this.decPlaces = decPlaces;
-
+		this.setId("item_float");
 
 		HBox box = new HBox();
 		box.setSpacing(20);

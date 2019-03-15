@@ -24,6 +24,7 @@ public class ChoiceItem extends SidebarItem {
 
 	protected ChoiceItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
 		super(task, attribute, sidebar);
+		this.setId("item_choice");
 	}
 
 

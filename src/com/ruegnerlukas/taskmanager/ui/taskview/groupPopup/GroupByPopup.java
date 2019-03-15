@@ -55,6 +55,7 @@ public class GroupByPopup extends AnchorPane {
 
 	public GroupByPopup(Stage stage) {
 		this.stage = stage;
+
 		try {
 			Parent root = UIDataHandler.loadFXML(UIModule.POPUP_GROUPBY, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);

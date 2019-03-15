@@ -35,7 +35,6 @@ public class GroupByAttributeNode extends HBox {
 		this.attribute = attribute;
 		this.parent = parent;
 
-
 		// root
 		this.setMinSize(100, 34);
 		this.setPrefSize(10000, 34);

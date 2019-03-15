@@ -18,6 +18,7 @@ public abstract class BoolValueItem extends AttributeValueItem {
 	public BoolValueItem(String name, boolean value) {
 		super();
 		this.value = value;
+		this.setId("item_boolean");
 
 		HBox box = new HBox();
 		box.setSpacing(20);

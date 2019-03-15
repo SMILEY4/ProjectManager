@@ -35,6 +35,7 @@ public class DependencyItem extends SidebarItem {
 
 	protected DependencyItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
 		super(task, attribute, sidebar);
+		this.setId("item_dependency");
 	}
 
 
@@ -88,7 +89,7 @@ public class DependencyItem extends SidebarItem {
 		choiceTask.setButtonCell(ComboboxUtils.createListCellTask());
 		choiceTask.setCellFactory(param -> ComboboxUtils.createListCellTask());
 		boxAdd.getChildren().add(choiceTask);
-		choiceTask.setPrefWidth(150);
+		choiceTask.setPrefWidth(85);
 		setPossibleTasks(choiceTask);
 
 		EventManager.registerListener(this, event -> {

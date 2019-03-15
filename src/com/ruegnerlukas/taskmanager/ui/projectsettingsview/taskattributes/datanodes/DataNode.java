@@ -75,7 +75,7 @@ public abstract class DataNode extends VBox {
 
 
 	public double getNodeHeight() {
-		double sum = 10 + 5 * (Math.max(0, items.size() - 1) * 5);
+		double sum = 10 + (Math.max(0, items.size() - 1) * 5);
 		for (AttributeValueItem item : items) {
 			sum += item.getItemHeight();
 		}

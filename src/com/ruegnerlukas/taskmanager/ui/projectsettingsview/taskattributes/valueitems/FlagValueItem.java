@@ -34,6 +34,7 @@ public abstract class FlagValueItem extends AttributeValueItem {
 		super();
 		this.color = flag.color;
 		this.flagName = flag.name;
+		this.setId("item_flag");
 
 		HBox box = new HBox();
 		box.setSpacing(5);
@@ -57,8 +58,8 @@ public abstract class FlagValueItem extends AttributeValueItem {
 		// flag color
 		paneColor = new Pane();
 		box.getChildren().add(paneColor);
-		paneColor.setMinSize(32, 32);
-		paneColor.setMaxSize(32, 32);
+		paneColor.setMinSize(22, 22);
+		paneColor.setMaxSize(22, 22);
 		paneColor.setOnMouseClicked(event -> {
 			// select-color menu
 			if (event.getButton().equals(MouseButton.PRIMARY)) {
@@ -72,7 +73,7 @@ public abstract class FlagValueItem extends AttributeValueItem {
 						colorItem.setMinSize(60, 30);
 						colorItem.setPrefSize(60, 30);
 						colorItem.setMaxSize(60, 30);
-						colorItem.setStyle("-fx-background-radius: 5; -fx-background-color: rgba(" + (int) (255 * color.getRed()) + "," + (int) (255 * color.getGreen()) + "," + (int) (255 * color.getBlue()) + ",255);");
+						colorItem.setStyle("-fx-background-color: rgba(" + (int) (255 * color.getRed()) + "," + (int) (255 * color.getGreen()) + "," + (int) (255 * color.getBlue()) + ",255);");
 
 						CustomMenuItem item = new CustomMenuItem();
 						item.setContent(colorItem);
@@ -126,7 +127,7 @@ public abstract class FlagValueItem extends AttributeValueItem {
 
 		this.setPrefSize(10000, 32);
 
-		paneColor.setStyle("-fx-background-color: " + color.asHex() + "; -fx-background-radius: 5;");
+		paneColor.setStyle("-fx-background-color: " + color.asHex() + ";");
 		labelName.setText(flagName);
 
 	}
@@ -186,7 +187,7 @@ public abstract class FlagValueItem extends AttributeValueItem {
 		if (!flagName.equals(name) || this.color != color) {
 			this.flagName = name;
 			this.color = color;
-			paneColor.setStyle("-fx-background-color: " + color.asHex() + "; -fx-background-radius: 5;");
+			paneColor.setStyle("-fx-background-color: " + color.asHex() + ";");
 			labelName.setText(name);
 			setChanged(true);
 			onSetValue();

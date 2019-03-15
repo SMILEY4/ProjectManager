@@ -39,7 +39,6 @@ import com.ruegnerlukas.taskmanager.utils.uielements.label.LabelUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.menu.MenuFunction;
 import com.ruegnerlukas.taskmanager.utils.uielements.scrollpane.ScrollPaneUtils;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Node;
@@ -49,9 +48,9 @@ import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.shape.SVGPath;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -218,6 +217,12 @@ public class TaskView extends AnchorPane implements TabContent {
 			stage.initOwner(TaskManager.getPrimaryStage());
 			FilterPopup popup = new FilterPopup(stage);
 			Scene scene = new Scene(popup, 1000, 400);
+			scene.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+				if (ke.getCode() == KeyCode.R) {
+					UIDataHandler.reloadAll();
+					ke.consume();
+				}
+			});
 			stage.setScene(scene);
 			stage.show();
 		});
@@ -230,6 +235,12 @@ public class TaskView extends AnchorPane implements TabContent {
 			stage.initOwner(TaskManager.getPrimaryStage());
 			GroupByPopup popup = new GroupByPopup(stage);
 			Scene scene = new Scene(popup, 750, 430);
+			scene.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+				if (ke.getCode() == KeyCode.R) {
+					UIDataHandler.reloadAll();
+					ke.consume();
+				}
+			});
 			stage.setScene(scene);
 			stage.show();
 		});
@@ -242,6 +253,12 @@ public class TaskView extends AnchorPane implements TabContent {
 			stage.initOwner(TaskManager.getPrimaryStage());
 			SortPopup popup = new SortPopup(stage);
 			Scene scene = new Scene(popup, 600, 300);
+			scene.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+				if (ke.getCode() == KeyCode.R) {
+					UIDataHandler.reloadAll();
+					ke.consume();
+				}
+			});
 			stage.setScene(scene);
 			stage.show();
 		});
@@ -252,7 +269,13 @@ public class TaskView extends AnchorPane implements TabContent {
 			stage.initModality(Modality.WINDOW_MODAL);
 			stage.initOwner(TaskManager.getPrimaryStage());
 			PresetsPopup popup = new PresetsPopup(stage);
-			Scene scene = new Scene(popup, 610, 350);
+			Scene scene = new Scene(popup, 760, 425);
+			scene.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+				if (ke.getCode() == KeyCode.R) {
+					UIDataHandler.reloadAll();
+					ke.consume();
+				}
+			});
 			stage.setScene(scene);
 			stage.show();
 		});
@@ -302,20 +325,17 @@ public class TaskView extends AnchorPane implements TabContent {
 
 
 		// transform label into button
-		LabelUtils.makeAsButton(labelHideSidebar, "-fx-background-color: #c9c9c9;", "-fx-background-color: #bcbcbc;", new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (event.getButton() != MouseButton.PRIMARY) {
-					return;
-				}
-				sidebarHidden = !sidebarHidden;
-				if (sidebarHidden) {
-					hideSidebar();
-				} else {
-					showSidebar(true);
-				}
-				event.consume();
+		LabelUtils.makeAsButton(labelHideSidebar, "", "", event -> {
+			if (event.getButton() != MouseButton.PRIMARY) {
+				return;
 			}
+			sidebarHidden = !sidebarHidden;
+			if (sidebarHidden) {
+				hideSidebar();
+			} else {
+				showSidebar(true);
+			}
+			event.consume();
 		});
 
 		// createItem content
@@ -333,7 +353,14 @@ public class TaskView extends AnchorPane implements TabContent {
 		if (setDivider) {
 			splitContent.setDividerPosition(0, 0.75);
 		}
-		labelHideSidebar.setText(">");
+
+		SVGPath svg = new SVGPath();
+		svg.setContent(SVGIcons.ARROW_RIGHT.data);
+		labelHideSidebar.setGraphic(svg);
+		labelHideSidebar.setText("");
+		svg.scaleXProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_RIGHT.width/0.8));
+		svg.scaleYProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_RIGHT.height/0.8));
+
 		sidebarHidden = false;
 	}
 
@@ -343,7 +370,14 @@ public class TaskView extends AnchorPane implements TabContent {
 	private void hideSidebar() {
 		paneSidebar.setMaxWidth(0);
 		splitContent.setDividerPosition(0, 1);
-		labelHideSidebar.setText("<");
+
+		SVGPath svg = new SVGPath();
+		svg.setContent(SVGIcons.ARROW_LEFT.data);
+		labelHideSidebar.setGraphic(svg);
+		labelHideSidebar.setText("");
+		svg.scaleXProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_LEFT.width/0.8));
+		svg.scaleYProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_LEFT.height/0.8));
+
 		sidebarHidden = true;
 	}
 

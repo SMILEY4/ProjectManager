@@ -79,8 +79,8 @@ public class EditableAreaLabel extends AnchorPane {
 			}
 		});
 
-		UIDataHandler.addRoot(this, UIModule.STYLE_GENERAL);
-		UIDataHandler.setStyle(this, UIModule.STYLE_GENERAL);
+		UIDataHandler.addRoot(this, UIModule.CONTROL_EDITABLE_AREA);
+		UIDataHandler.setStyle(this, UIModule.CONTROL_EDITABLE_AREA);
 	}
 	
 

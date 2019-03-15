@@ -6,19 +6,15 @@
 <?import javafx.scene.text.Font?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="344.0" prefWidth="613.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox layoutX="10.0" layoutY="5.0" prefHeight="425.0" prefWidth="612.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <VBox fx:id="boxContent" layoutX="10.0" layoutY="5.0" prefHeight="425.0" prefWidth="612.0" spacing="10.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox>
+            <HBox fx:id="boxHeader">
                <children>
-                  <Label maxHeight="32.0" maxWidth="100000.0" minHeight="32.0" minWidth="0.0" prefHeight="32.0" prefWidth="100000.0" text="Filter by Task-Attributes">
-                     <font>
-                        <Font name="System Bold" size="15.0" />
-                     </font>
-                  </Label>
+                  <Label maxHeight="32.0" maxWidth="100000.0" minHeight="32.0" minWidth="0.0" prefHeight="32.0" prefWidth="100000.0" text="Filter by Task-Attributes"/>
                   <Button fx:id="btnReset" maxHeight="32.0" maxWidth="60.0" minHeight="32.0" minWidth="60.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="60.0" text="Reset" />
                </children>
             </HBox>
-            <HBox spacing="1.0">
+            <HBox fx:id="boxPresets" spacing="1.0">
                <children>
                   <Label maxHeight="32.0" maxWidth="60.0" minHeight="32.0" minWidth="60.0" prefHeight="32.0" prefWidth="60.0" text="Presets:" />
                   <ComboBox fx:id="choiceSaved" maxHeight="32.0" maxWidth="200.0" minHeight="32.0" minWidth="200.0" prefHeight="32.0" prefWidth="200.0" />

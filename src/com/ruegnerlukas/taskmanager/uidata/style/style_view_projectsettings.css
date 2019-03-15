@@ -1,377 +1,276 @@
+/*
+
+- AnchorPane #rootProjectSettingsView
+	- AnchorPane ... // project name
+	- ScrollPane
+		- ... VBox
+			- HBox
+				- Button #btnLockAttributes
+			- VBox
+				- VBox #box_attributes
+					- AttributeNode #attribute
+						- AnchorPane #pane_header
+							- HBox
+								- Button // remove
+								- ComboBox // type
+								- EditableLabel // name
+								- Button // expand/collapse
+						- AnchorPane #pane_content
+							- XYZDataNode
+							- HBox [opt]
+								- Button // discard
+								- Button // save
+				- Button // add attribute
+
+
+EmptyLabelItem #item_empty
+	- Label // "this attribute can not be changed"
+
+
+FlagListValueItem #item_flaglist
+	- AnchorPane
+		- Label // "Flags:"
+		- ScrollPane
+		- ... VBox
+			- FlagValueItem
+				- HBox
+					- Button // remove
+					- Pane // FlagColor
+					- EditableLabel // flag name
+					- Button // up
+					- Button // down
+
+
+FlagValueItem #item_flag
+	- HBox
+		- Button // remove
+		- Pane // FlagColor
+		- EditableLabel // flag name
+		- Button // up
+		- Button // down
+
+
+ChoiceValueItem #item_choice
+	- HBox
+		- VBox
+			- Label
+		- VBox
+			- ComboBox
+
+
+IntegerValueItem #item_integer
+	- HBox
+		- VBox
+			- Label
+		- VBox
+			- Spinner
+
+
+FloatValueItem #item_float
+	- HBox
+		- VBox
+			- Label
+		- VBox
+			- Spinner
+
+
+BoolValueItem #item_boolean
+	- HBox
+		- VBox
+			- Label
+		- VBox
+			- CheckBox
+
+
+MLTextValueItem #item_mltext
+	- HBox
+		- VBox
+			- Label
+		- VBox
+			- TextArea
+
+
+TextValueItem #item_text
+	- HBox
+		- VBox
+			- Label
+		- VBox
+			- TextField
+
+
+ChoiceValueItem #item_choice
+	- HBox
+		- VBox
+			- Label
+		- VBox
+			- ComboBox
+
+ */
+
 
 * {
-	-primary-0: #29323c;
-	-primary-1: #2f3c48;
-	-primary-2: #3e4d59;
+	-primary-0:      #29323c;
+	-primary-1:      #2f3c48;
+	-primary-2:      #3e4d59;
 
-	-secondary: #6f7f8c;
-	-info: #5c8f94;
-	-danger: #cc330d;
-	-success: #3e4d59;
-	-warning: #6e9fa5;
-	-light: #eceeec;
-	-dark: #1e2b37;
+	-secondary:      #6f7f8c;
+	-info:           #5c8f94;
+	-danger:         #cc330d;
+	-success:        #3e4d59;
+	-warning:        #6e9fa5;
+	-light:          #eceeec;
+	-dark:           #1e2b37;
 
-	-gray-dark: #767676;
-	-gray-mid-1: #b9b9b9;
-	-gray-mid-0: #cccccc;
-	-gray-light: #ededed;
+	-gray-dark:      #767676;
+	-gray-mid-1:     #b9b9b9;
+	-gray-mid-0:     #cccccc;
+	-gray-light:     #ededed;
 
-	-text-light-0: #b9b9b9;
-	-text-light-1: white;
+	-text-light-0:   #b9b9b9;
+	-text-light-1:   white;
 
-	-text-link: #3366BB;
+	-text-link:      #3366bb;
+
+	-selected-light: #50aaff;
+	-selected-dark:  #0084ff;
+
+
+	-mouse-over:     #787878;
+	-mouse-down:     #a4a4a4;
 
 }
 
-
-/* MAIN VIEW */
-
-/* menubar*/
-#menuBar {
-	-fx-background-color: -primary-0;
-}
-
-#menuBar > * > .menu {
-	-fx-background-color: -primary-0;
-}
-
-#menuBar > * > .menu:pressed {
-	-fx-effect: null;
-}
-
-#menuBar > * > .menu > .label {
-	-fx-text-fill: -text-light-0;
-}
-
-#menuBar > * > .menu > .label:hover {
-	-fx-text-fill: -text-light-1;
-}
-
-
-/* tabpane */
-#tabPane .tab-header-area .tab-header-background {
-	-fx-background-color: -primary-1;
-}
-
-#tabPane .tab {
-	-fx-background-color: -primary-1;
-}
-
-#tabPane .tab .tab-label {
-	-fx-text-fill: -text-light-0;
-}
-
-#tabPane .tab .tab-label:hover {
-	-fx-text-fill: -text-light-1;
-}
-
-#tabPane .tab:selected .tab-label {
-	-fx-text-fill: -text-light-1;
-}
-
-#tabPane .tab:selected {
-	-fx-background-color: -primary-2;
-	-fx-border-color: transparent;
-}
-
-
-/* info bar */
-#paneInfobar {
-	-fx-background-color: -secondary;
-}
-
-#paneInfobar > #labelInfobar {
-	-fx-text-fill: -text-light-1;
-}
-
-
-/* PROJECT SETTINGS*/
-#rootProjectSettingsView > AnchorPane > EditableLabel {
-	-fx-font-weight: bold;
-	-fx-font-size: 20;
-}
 
 #btnLockAttributes {
 	-fx-background-color: transparent;
-	-fx-border-color: transparent;
-}
-
-#boxTaskAttribs > AttributeNode {
-	-fx-background-color: white;
-	-fx-border-color: -gray-mid-0;
-	-fx-border-radius: 5;
+	-fx-border-color:     transparent;
 }
 
 
-#boxTaskAttribs > AttributeNode > AnchorPane > HBox > ChoiceBox {
-	-fx-background-color: white;
-	-fx-border-color: -gray-mid-0;
-	-fx-border-radius: 0;
-	-fx-border-width: 0 0 1 0;
-	-fx-border-insets: 0 0 5 0;
-}
-
-#boxTaskAttribs > AttributeNode > AnchorPane > HBox {
-	-fx-border-color: -gray-mid-0;
-	-fx-border-radius: 5;
-	-fx-border-width: 0 0 1 0;
+#btnLockAttributes:hover > SVGPath {
+	-fx-fill: -mouse-over;
 }
 
 
-#boxTaskAttribs > AttributeNode > AnchorPane > HBox > Button {
+#btnLockAttributes:pressed > SVGPath {
+	-fx-fill: -mouse-down;
+}
+
+
+#attribute {
+	-fx-background-color:  white;
+	-fx-background-radius: 5;
+	-fx-border-color:      -gray-mid-0;
+	-fx-border-radius:     5;
+}
+
+
+#attribute:hover {
+	-fx-border-color: -gray-dark;
+	/*-fx-border-color: -selected-dark;*/
+}
+
+
+#pane_header > * > .button {
 	-fx-background-color: transparent;
-	-fx-border-color: transparent;
+	-fx-border-color:     transparent;
 }
 
-#boxTaskAttribs > AttributeNode > AnchorPane > HBox > Button:hover > SVGPath {
-	-fx-fill: -gray-dark;
+
+#pane_header > * > .button:hover > SVGPath {
+	-fx-fill: -mouse-over;
 }
 
-#boxTaskAttribs > AttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode {
-	-fx-border-color: -gray-mid-0;
-	-fx-background-color: white;
-	-fx-border-radius: 5;
+
+#pane_header > * > .button:pressed > SVGPath {
+	-fx-fill: -mouse-down;
+}
+
+
+#pane_header > * > .combo-box {
+	-fx-background-color:  transparent;
+	-fx-background-insets: 0 0 5 0;
+	-fx-border-color:      -gray-mid-0;
+	-fx-border-radius:     0;
+	-fx-border-width:      0 0 1 0;
+	-fx-border-insets:     0 0 5 0;
+}
+
+
+#pane_content {
+}
+
+
+
+#item_boolean {
+}
+
+
+#item_choice {
+}
+
+
+#item_empty {
+}
+
+
+#item_flaglist > * > .scroll-pane {
 	-fx-background-radius: 5;
 }
 
-#boxTaskAttribs > AttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode:hover {
-	/*-fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.4), 7, 0, 0, 0);*/
-	-fx-background-color: -gray-light;
-}
 
-
-#boxTaskAttribs > AttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode > Button {
-	-fx-background-color: transparent;
-	-fx-border-color: transparent;
-}
-
-#boxTaskAttribs > AttributeNode > AnchorPane > FlagAttributeNode > * > * > * > * > * > #boxFlags > FlagNode > Button:hover > SVGPath {
-	-fx-fill: -gray-dark;
-}
-
-
-/* TASK VIEW */
-
-/* header */
-#rootTaskView > #paneHeader {
-	-fx-background-color: -primary-2;
-}
-
-/* buttons */
-#rootTaskView > #paneHeader > HBox > HBox > Button {
-	-fx-border-color: transparent;
-	-fx-background-color: transparent;
-	-fx-text-fill: -text-light-1;
-}
-
-#rootTaskView > #paneHeader > HBox > HBox > #labelNTasks {
-	-fx-text-fill: -text-light-0;
-}
-
-#rootTaskView > #paneHeader > HBox > HBox > Button:hover {
-	-fx-border-color: transparent;
-	-fx-background-color: transparent;
-	-fx-text-fill: -text-light-0;
-}
-
-#rootTaskView > #paneHeader > HBox > HBox > Button > SVGPath {
-	-fx-fill: -text-light-1;
-}
-
-#rootTaskView > #paneHeader > HBox > HBox > Button:hover > SVGPath {
-	-fx-fill: -text-light-0;
-}
-
-
-/* taskview-header hamburger-button */
-#rootTaskView > #paneHeader > HBox > Button {
-	-fx-border-color: transparent;
-	-fx-background-color: transparent;
-}
-
-#rootTaskView > #paneHeader > HBox > Button > SVGPath {
-	-fx-fill: -text-light-1;
-}
-
-#rootTaskView > #paneHeader > HBox > Button:hover > SVGPath {
-	-fx-fill: -text-light-0;
-}
-
-
-/* removes border between header and content */
-#rootTaskView > SplitPane > * > AnchorPane > ScrollPane {
-	-fx-padding: 0;
-}
-
-#splitContent {
-	-fx-padding: 0;
-}
-
-
-/* task-view background (of lists) */
-#paneContent > ScrollPane > .viewport {
-	-fx-background-color: -gray-light;
-}
-
-
-/* Badges for filter/group/sort */
-#paneHeaderBadges > Label {
-	-fx-background-color: -warning;
-	-fx-background-radius: 7;
-	-fx-text-fill: -text-light-1;
-	-fx-alignment: center;
-	-fx-font-size: 11;
-	-fx-font-weight: bold;
-}
-
-
-/* FILTER */
-
-#boxAttributes > FilterCriteriaNode {
-	-fx-background-color: white;
-	-fx-border-color: -gray-mid-0;
-	-fx-border-radius: 5;
-}
-
-#boxAttributes > FilterCriteriaNode > Button {
-	-fx-background-color: transparent;
-	-fx-border-color: transparent;
-}
-
-#boxAttributes > FilterCriteriaNode > Button:hover > SVGPath {
-	-fx-fill: -gray-dark;
-}
-
-#boxAttributes > FilterCriteriaNode > ChoiceBox {
-	-fx-background-color: transparent;
-	-fx-border-color: -gray-mid-0;
-	-fx-border-radius: 0;
-	-fx-border-width: 0 0 1 0;
-	-fx-border-insets: 0 0 5 0;
-}
-
-
-/* GROUP BY */
-
-#boxAttributes > GroupByAttributeNode {
-	-fx-background-color: white;
-	-fx-border-color: -gray-mid-0;
-	-fx-border-radius: 5;
-}
-
-#boxAttributes > GroupByAttributeNode > Button {
-	-fx-background-color: transparent;
-	-fx-border-color: transparent;
-}
-
-#boxAttributes > GroupByAttributeNode > Button:hover > SVGPath {
-	-fx-fill: -gray-dark;
-}
-
-#boxAttributes > GroupByAttributeNode > ChoiceBox {
-	-fx-background-color: transparent;
-	-fx-border-color: -gray-mid-0;
-	-fx-border-radius: 0;
-	-fx-border-width: 0 0 1 0;
-	-fx-border-insets: 0 0 5 0;
-}
-
-
-/* SORT */
-
-#boxAttributes > SortElementNode {
-	-fx-background-color: white;
-	-fx-border-color: -gray-mid-0;
-	-fx-border-radius: 5;
-}
-
-#boxAttributes > SortElementNode > Button {
-	-fx-background-color: transparent;
-	-fx-border-color: transparent;
-}
-
-#boxAttributes > SortElementNode > Button:hover > SVGPath {
-	-fx-fill: -gray-dark;
-}
-
-#boxAttributes > SortElementNode > ChoiceBox {
-	-fx-background-color: transparent;
-	-fx-border-color: -gray-mid-0;
-	-fx-border-radius: 0;
-	-fx-border-width: 0 0 1 0;
-	-fx-border-insets: 0 0 5 0;
-}
-
-
-/* TASK LISTS */
-
-#boxTasks > TaskList > AnchorPane > #labelTitle {
-	-fx-background-color: -primary-0;
-	-fx-border-color: -primary-2;
-	-fx-border-width: 0 2 0 2;
-	-fx-font-weight: bold;
-	-fx-text-fill: -text-light-1;
-}
-
-#boxTasks > TaskList > AnchorPane > ScrollPane {
-	-fx-border-color: -gray-mid-1;
-	-fx-border-width: 0 2 0 2;
-}
-
-
-/* TASK CARDS */
-
-TaskCard {
+#item_flaglist > * > .scroll-pane > * {
 	-fx-background-radius: 5;
 }
 
-TaskCard > AnchorPane > {
-	-fx-effect: dropshadow(gaussian, rgba(0.0, 0.0, 0.0, 0.6), 7, 0, 0, 0);
-}
 
-TaskCard > AnchorPane > Pane {
-	-fx-background-color: -gray-light;
-}
 
-TaskCard > AnchorPane > VBox > Label {
-	-fx-text-fill: -info;
-}
-
-TaskCard > AnchorPane > VBox > AnchorPane > EditableAreaLabel {
-	-fx-border-color: -gray-mid-0;
-	-fx-border-radius: 6;
+#item_flag {
+	-fx-background-color:  white;
+	-fx-background-radius: 5;
+	-fx-border-color:      -gray-mid-0;
+	-fx-border-radius:     5;
 }
 
 
-/*SIDEBAR*/
-Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > * > Label {
-	-fx-font-weight: bold;
+#item_flag:hover {
+	-fx-border-color: -gray-dark;
+	/*-fx-border-color:      -selected-dark;*/
 }
 
-Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > * > HBox > Button {
+
+#item_flag > * > Button {
 	-fx-background-color: transparent;
-	-fx-border-color: transparent;
-}
-
-Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > * > HBox > Button:hover > SVGPath {
-	-fx-fill: -gray-dark;
+	-fx-border-color:     transparent;
 }
 
 
-Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > DependencyItem > VBox > Label{
-	-fx-font-weight: bold;
+#item_flag > * > Button:hover > SVGPath {
+	-fx-fill: -mouse-over;
 }
 
-Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > DependencyItem > VBox > VBox > Label{
-	-fx-font-weight: bold;
-	-fx-font-style: italic;
+
+#item_flag > * > Button:pressed > SVGPath {
+	-fx-fill: -mouse-down;
 }
 
-Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > DependencyItem > VBox > VBox > VBox > HBox > Label {
-	-fx-text-fill: -text-link;
+
+#item_flag > * > Pane {
+	-fx-background-radius: 6;
 }
 
-Sidebar > * > * > * > * > * > #boxContent > #boxAttribs > DependencyItem > VBox > VBox > VBox > HBox > Label:hover {
-	-fx-underline: true;
+
+#item_float {
+}
+
+
+#item_integer {
+}
+
+
+#item_mltext {
+}
+
+
+#item_text {
 }

@@ -13,9 +13,7 @@ import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
-import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
-import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -107,17 +105,19 @@ public class Breadcrumb extends AnchorPane {
 			label.setMinHeight(32);
 			label.setMaxHeight(32);
 			if (i == queue.size() - 1) {
-				label.setStyle("-fx-font-weight: bold;");
+				label.setId("breadcrumb_current");
+//				label.setStyle("-fx-font-weight: bold;");
 			} else {
-				label.styleProperty().bind(Bindings.when(label.hoverProperty())
-						.then("-fx-text-fill: #3366BB; -fx-underline: true;")
-						.otherwise("-fx-text-fill: #3366BB;"));
-				label.setOnMouseEntered(event -> {
-					getScene().setCursor(Cursor.HAND);
-				});
-				label.setOnMouseExited(event -> {
-					getScene().setCursor(Cursor.DEFAULT);
-				});
+				label.setId("breadcrumb_task");
+//				label.styleProperty().bind(Bindings.when(label.hoverProperty())
+//						.then("-fx-text-fill: #3366BB; -fx-underline: true;")
+//						.otherwise("-fx-text-fill: #3366BB;"));
+//				label.setOnMouseEntered(event -> {
+//					getScene().setCursor(Cursor.HAND);
+//				});
+//				label.setOnMouseExited(event -> {
+//					getScene().setCursor(Cursor.DEFAULT);
+//				});
 
 				int index = i;
 				label.setOnMouseClicked(event -> {
@@ -133,6 +133,7 @@ public class Breadcrumb extends AnchorPane {
 			// arrow Label
 			if (i != queue.size() - 1) {
 				Label labelArrow = new Label(">");
+				labelArrow.setId("breadcrumb_seperator");
 				labelArrow.setMinSize(13, 32);
 				labelArrow.setMaxSize(13, 32);
 				content.getChildren().add(labelArrow);

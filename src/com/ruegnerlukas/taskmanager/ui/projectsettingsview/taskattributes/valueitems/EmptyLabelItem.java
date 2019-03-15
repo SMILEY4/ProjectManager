@@ -10,8 +10,10 @@ public abstract class EmptyLabelItem extends AttributeValueItem {
 	public EmptyLabelItem() {
 		super();
 
+		this.setId("item_empty");
+
 		Label label = new Label("This Attribute can not be changed.");
-		label.setAlignment(Pos.CENTER);
+		label.setAlignment(Pos.TOP_CENTER);
 		label.setDisable(true);
 		AnchorUtils.setAnchors(label, 0, 0, 0, 0);
 		this.getChildren().add(label);

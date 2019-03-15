@@ -27,6 +27,7 @@ public class NumberItem extends SidebarItem {
 
 	protected NumberItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
 		super(task, attribute, sidebar);
+		this.setId("item_number");
 	}
 
 

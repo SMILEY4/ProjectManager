@@ -18,6 +18,7 @@ public abstract class TextValueItem extends AttributeValueItem {
 	public TextValueItem(String name, String value, String prompt) {
 		super();
 		this.value = value;
+		this.setId("item_text");
 
 		HBox box = new HBox();
 		box.setSpacing(20);

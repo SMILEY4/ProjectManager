@@ -25,6 +25,7 @@ public class TextItem extends SidebarItem {
 
 	protected TextItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
 		super(task, attribute, sidebar);
+		this.setId("item_text");
 	}
 
 
@@ -40,7 +41,7 @@ public class TextItem extends SidebarItem {
 
 	@Override
 	protected double getFieldHeight() {
-		return fieldHeight;
+		return fieldHeight + 6;
 	}
 
 

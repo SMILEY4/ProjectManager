@@ -22,6 +22,7 @@ public abstract class ChoiceValueItem extends AttributeValueItem {
 		super();
 		this.value = selectedValue;
 		this.values = values;
+		this.setId("item_choice");
 
 		HBox box = new HBox();
 		box.setSpacing(20);

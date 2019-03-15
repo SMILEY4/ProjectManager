@@ -30,6 +30,7 @@ public abstract class IntegerValueItem extends AttributeValueItem {
 		this.min = min;
 		this.max = max;
 		this.step = step;
+		this.setId("item_integer");
 
 		HBox box = new HBox();
 		box.setSpacing(20);

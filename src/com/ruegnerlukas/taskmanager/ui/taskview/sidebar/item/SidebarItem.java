@@ -56,14 +56,16 @@ public abstract class SidebarItem extends HBox {
 
 
 
+
 	protected SidebarItem(Task task, TaskAttribute attribute, Sidebar sidebar) {
 		this.attribute = attribute;
 		this.task = task;
 		this.sidebar = sidebar;
-		this.setMinSize(0, 32);
-		this.setPrefSize(10000, 32);
+		this.setMinSize(0, 40);
+		this.setPrefSize(10000, 40);
 		this.setMaxSize(10000, 10000);
 		this.setSpacing(10);
+		this.setAlignment(Pos.CENTER_LEFT);
 		create(task, attribute);
 	}
 
@@ -72,7 +74,7 @@ public abstract class SidebarItem extends HBox {
 
 	private void create(Task task, TaskAttribute attribute) {
 
-		if(this.isComplexItem()) {
+		if (this.isComplexItem()) {
 
 			VBox vBox = new VBox();
 			vBox.setMinWidth(0);
@@ -102,6 +104,7 @@ public abstract class SidebarItem extends HBox {
 
 			// right
 			HBox boxRight = new HBox();
+			boxRight.setAlignment(Pos.CENTER_RIGHT);
 			this.getChildren().add(boxRight);
 
 			// center - value
@@ -118,7 +121,7 @@ public abstract class SidebarItem extends HBox {
 			paneValue.setMaxWidth(10000);
 			paneValue.setPrefWidth(10000);
 			paneValue.setMinHeight(32);
-			paneValue.setMaxHeight(10000);
+			paneValue.setMaxHeight(this.getFieldHeight());
 			paneValue.setPrefHeight(getFieldHeight());
 			AnchorUtils.setAnchors(valueNode, 0, 0, 0, 0);
 			AnchorUtils.setAnchors(noValue, 0, 0, 0, 0);
@@ -142,7 +145,7 @@ public abstract class SidebarItem extends HBox {
 				}
 			});
 
-			if(attribute.data.usesDefault()) {
+			if (attribute.data.usesDefault()) {
 				btnAdd.setDisable(true);
 				btnAdd.setVisible(false);
 			}
@@ -150,7 +153,7 @@ public abstract class SidebarItem extends HBox {
 			Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>() {
 				@Override
 				public void onResponse(Response<TaskAttributeValue> response) {
-					if(response.getValue() instanceof NoValue) {
+					if (response.getValue() instanceof NoValue) {
 						noValue.setVisible(true);
 						valueNode.setVisible(false);
 						ButtonUtils.makeIconButton(btnAdd, SVGIcons.ADD, btnIconScale, "black");
@@ -202,8 +205,6 @@ public abstract class SidebarItem extends HBox {
 
 
 	public abstract void dispose();
-
-
 
 
 }

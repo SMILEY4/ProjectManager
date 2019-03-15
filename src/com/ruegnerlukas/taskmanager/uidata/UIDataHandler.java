@@ -22,7 +22,6 @@ public class UIDataHandler {
 
 		// stylsheets
 		stylesheetPaths.put(UIModule.STYLE_BASE, "style/bootstrap4_2.css");
-		stylesheetPaths.put(UIModule.STYLE_GENERAL, "style/style.css");
 
 		stylesheetPaths.put(UIModule.VIEW_MAIN, "style/style_view_main.css");
 		stylesheetPaths.put(UIModule.VIEW_PROJECTSETTINGS, "style/style_view_projectsettings.css");
@@ -34,7 +33,8 @@ public class UIDataHandler {
 		stylesheetPaths.put(UIModule.POPUP_GROUPBY, "style/style_popup_groupby.css");
 		stylesheetPaths.put(UIModule.POPUP_PRESETS, "style/style_popup_presets.css");
 		stylesheetPaths.put(UIModule.POPUP_FILTER, "style/style_popup_filter.css");
-
+		stylesheetPaths.put(UIModule.CONTROL_EDITABLE_AREA, "style/style_control_editablearea.css");
+		stylesheetPaths.put(UIModule.CONTROL_EDITABLE_LABEL, "style/style_control_editablelabel.css");
 
 		// fxml-files
 		fxmlPaths.put(UIModule.VIEW_MAIN, "fxml/layout_view_main.fxml");
@@ -53,6 +53,7 @@ public class UIDataHandler {
 
 
 	public static Parent loadFXML(UIModule module, Object controller) throws IOException {
+		System.out.println("load module fxml: " + module + "   " + controller);
 		javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getFXMLAsURL(module));
 		loader.setController(controller);
 		Parent root = loader.load();
@@ -65,9 +66,14 @@ public class UIDataHandler {
 
 
 	public static void setStyle(Parent root, UIModule module) {
+		System.out.println("set style: " + module);
 		root.getStylesheets().clear();
-		root.getStylesheets().add(getStylesheetAsURL(UIModule.STYLE_BASE).toExternalForm());
-		root.getStylesheets().add(getStylesheetAsURL(module).toExternalForm());
+//		root.getStylesheets().add(getStylesheetAsURL(UIModule.STYLE_BASE).toExternalForm());
+//		root.getStylesheets().add(getStylesheetAsURL(module).toExternalForm());
+		// use this for hot-reload
+		root.getStylesheets().add("file:D:/LukasRuegner/Programmieren/Java/Workspace/SimpleTaskManager/src/com/ruegnerlukas/taskmanager/uidata/" + getStylesheetAsPath(UIModule.STYLE_BASE));
+		root.getStylesheets().add("file:D:/LukasRuegner/Programmieren/Java/Workspace/SimpleTaskManager/src/com/ruegnerlukas/taskmanager/uidata/" + getStylesheetAsPath(module));
+
 	}
 
 
@@ -88,6 +94,7 @@ public class UIDataHandler {
 
 
 	public static void reloadAll() {
+		System.out.println("Reload Styles: All");
 		for (Parent root : roots.keySet()) {
 			setStyle(root, roots.get(root));
 		}

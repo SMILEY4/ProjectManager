@@ -54,6 +54,7 @@ public class Sidebar extends AnchorPane {
 	@FXML private VBox boxAttribs;
 
 	@FXML private Button btnDeleteTask;
+	private int deleteTaskStep = 0;
 
 	private List<SidebarItem> items = new ArrayList<>();
 
@@ -137,9 +138,28 @@ public class Sidebar extends AnchorPane {
 
 
 		// Delete Task
+		btnDeleteTask.getStyleClass().add("delete-task-default");
 		btnDeleteTask.setOnAction(event -> {
 			if (currentTask != null) {
-				Logic.tasks.deleteTask(currentTask);
+				switch (deleteTaskStep) {
+					case 0: {
+						deleteTaskStep = 1;
+						btnDeleteTask.setText("Delete Task ?");
+						btnDeleteTask.getStyleClass().removeAll("delete-task-confirm", "delete-task-default");
+						btnDeleteTask.getStyleClass().add("delete-task-confirm");
+						break;
+					}
+					case 1: {
+						Logic.tasks.deleteTask(currentTask);
+						deleteTaskStep = 0;
+						btnDeleteTask.setText("Delete Task");
+						btnDeleteTask.getStyleClass().removeAll("delete-task-confirm", "delete-task-default");
+						btnDeleteTask.getStyleClass().add("delete-task-default");
+						break;
+					}
+
+				}
+
 			}
 		});
 
@@ -149,6 +169,11 @@ public class Sidebar extends AnchorPane {
 
 
 	public void refresh() {
+
+		deleteTaskStep = 0;
+		btnDeleteTask.setText("Delete Task");
+		btnDeleteTask.getStyleClass().removeAll("delete-task-confirm", "delete-task-default");
+		btnDeleteTask.getStyleClass().add("delete-task-default");
 
 		if (currentTask == null) {
 			return;

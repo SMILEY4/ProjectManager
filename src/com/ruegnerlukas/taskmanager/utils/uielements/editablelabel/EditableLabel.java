@@ -134,8 +134,8 @@ public class EditableLabel extends AnchorPane {
 			}
 		});
 
-		UIDataHandler.addRoot(this, UIModule.STYLE_GENERAL);
-		UIDataHandler.setStyle(this, UIModule.STYLE_GENERAL);
+		UIDataHandler.addRoot(this, UIModule.CONTROL_EDITABLE_LABEL);
+		UIDataHandler.setStyle(this, UIModule.CONTROL_EDITABLE_LABEL);
 	}
 	
 	

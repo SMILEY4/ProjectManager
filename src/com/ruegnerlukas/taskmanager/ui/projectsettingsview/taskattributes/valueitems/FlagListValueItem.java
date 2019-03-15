@@ -28,6 +28,7 @@ public abstract class FlagListValueItem extends AttributeValueItem {
 	public FlagListValueItem(String name, TaskFlag[] flags, TaskFlag defaultFlag) {
 		super();
 		this.mute();
+		this.setId("item_flaglist");
 
 		AnchorPane pane = new AnchorPane();
 		pane.setMinSize(0, 240);

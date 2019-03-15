@@ -16,6 +16,7 @@ import com.ruegnerlukas.taskmanager.utils.uielements.alert.Alerts;
 import com.ruegnerlukas.taskmanager.utils.uielements.button.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.combobox.ComboboxUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.editablelabel.EditableLabel;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
@@ -86,10 +87,12 @@ public class AttributeNode extends AnchorPane {
 		this.setMinSize(100, 34);
 		this.setPrefSize(10000, 34);
 		this.setMaxSize(10000, 34);
+		this.setId("attribute");
 
 
 		// header pane
 		headerPane = new AnchorPane();
+		headerPane.setId("pane_header");
 		headerPane.setMinSize(100, HEADER_HEIGHT);
 		headerPane.setPrefSize(10000, HEADER_HEIGHT);
 		headerPane.setMaxSize(10000, HEADER_HEIGHT);
@@ -181,6 +184,8 @@ public class AttributeNode extends AnchorPane {
 
 		// content pane
 		contentPane = new AnchorPane();
+		contentPane.setPadding(new Insets(0, 10, 0, 10));
+		contentPane.setId("pane_content");
 		contentPane.setVisible(isExpanded);
 		contentPane.setMinSize(0, 0);
 		contentPane.setPrefSize(10000, 10000);
@@ -195,9 +200,9 @@ public class AttributeNode extends AnchorPane {
 			boxButtons = new HBox();
 			boxButtons.setAlignment(Pos.CENTER_RIGHT);
 			boxButtons.setSpacing(5);
-			boxButtons.setMinSize(0, 42);
-			boxButtons.setPrefSize(10000, 42);
-			boxButtons.setMaxSize(10000, 42);
+			boxButtons.setMinSize(0, 32);
+			boxButtons.setPrefSize(10000, 32);
+			boxButtons.setMaxSize(10000, 32);
 			AnchorPane.setLeftAnchor(boxButtons, 0.0);
 			AnchorPane.setRightAnchor(boxButtons, 0.0);
 			AnchorPane.setBottomAnchor(boxButtons, 5.0);
@@ -286,9 +291,6 @@ public class AttributeNode extends AnchorPane {
 		ButtonUtils.makeIconButton(btnExpand, SVGIcons.ARROW_UP, 0.75f, "black");
 		if (dataNode != null) {
 			fitToContentSize();
-			this.setMinSize(100, dataNode.getNodeHeight() + HEADER_HEIGHT);
-			this.setPrefSize(10000, dataNode.getNodeHeight() + HEADER_HEIGHT);
-			this.setMaxSize(10000, dataNode.getNodeHeight() + HEADER_HEIGHT);
 		}
 	}
 
@@ -391,7 +393,7 @@ public class AttributeNode extends AnchorPane {
 			hasSaveButtons = false;
 		}
 
-		AnchorUtils.setAnchors(dataNode, 0, 0, hasSaveButtons ? 42 : 0, 0);
+		AnchorUtils.setAnchors(dataNode, 0, 0, (hasSaveButtons ? 42 : 0), 0);
 		contentPane.getChildren().clear();
 		contentPane.getChildren().add(dataNode);
 		if(hasSaveButtons) {
@@ -410,9 +412,9 @@ public class AttributeNode extends AnchorPane {
 			this.setMinHeight(HEADER_HEIGHT + nodeHeight + (hasSaveButtons ? 42 : 0));
 			this.setPrefHeight(HEADER_HEIGHT + nodeHeight + (hasSaveButtons ? 42 : 0));
 			this.setMaxHeight(HEADER_HEIGHT + nodeHeight + (hasSaveButtons ? 42 : 0));
-			contentPane.setMinHeight(nodeHeight);
-			contentPane.setPrefHeight(nodeHeight);
-			contentPane.setMaxHeight(nodeHeight);
+			contentPane.setMinHeight(nodeHeight + (hasSaveButtons ? 42+10 : 0));
+			contentPane.setPrefHeight(nodeHeight + (hasSaveButtons ? 42+10 : 0));
+			contentPane.setMaxHeight(nodeHeight + (hasSaveButtons ? 42+10 : 0));
 		} else {
 			this.setMinHeight(HEADER_HEIGHT);
 			this.setPrefHeight(HEADER_HEIGHT);
