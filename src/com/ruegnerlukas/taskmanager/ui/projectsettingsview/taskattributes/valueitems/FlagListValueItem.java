@@ -206,6 +206,7 @@ public abstract class FlagListValueItem extends AttributeValueItem {
 
 				@Override
 				public void onChanged() {
+					FlagListValueItem.this.setChanged(true);
 				}
 
 

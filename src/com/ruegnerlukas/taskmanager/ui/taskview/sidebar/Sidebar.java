@@ -165,6 +165,7 @@ public class Sidebar extends AnchorPane {
 
 	public void refresh() {
 
+		// delete task style
 		deleteTaskStep = 0;
 		btnDeleteTask.setText("Delete Task");
 		btnDeleteTask.getStyleClass().removeAll("delete-task-confirm", "delete-task-default");
@@ -183,9 +184,9 @@ public class Sidebar extends AnchorPane {
 		labelID.setText("T-" + valueID.getInt());
 
 		// flag
-		if(!suppressFlagRefesh) {
-			choiceFlag.getItems().setAll(Logic.taskFlags.getAllFlags().getValue());
+		if (!suppressFlagRefesh) {
 			FlagValue valueFlag = (FlagValue) Logic.tasks.getAttributeValue(currentTask, FlagAttributeData.NAME).getValue();
+			choiceFlag.getItems().setAll(Logic.taskFlags.getAllFlags().getValue());
 			choiceFlag.getSelectionModel().select(valueFlag.getFlag());
 		}
 
