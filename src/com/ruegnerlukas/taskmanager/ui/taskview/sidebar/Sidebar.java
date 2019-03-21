@@ -54,6 +54,7 @@ public class Sidebar extends AnchorPane {
 	private int deleteTaskStep = 0;
 
 	private List<SidebarItem> items = new ArrayList<>();
+	private boolean suppressFlagRefesh = false;
 
 
 
@@ -119,7 +120,9 @@ public class Sidebar extends AnchorPane {
 		choiceFlag.setCellFactory(param -> ComboboxUtils.createListCellFlag());
 		choiceFlag.getItems().addAll(Logic.taskFlags.getAllFlags().getValue());
 		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			suppressFlagRefesh = true;
 			Logic.tasks.setAttributeValue(currentTask, FlagAttributeData.NAME, new FlagValue(choiceFlag.getValue()));
+			suppressFlagRefesh = false;
 		});
 
 
@@ -180,10 +183,11 @@ public class Sidebar extends AnchorPane {
 		labelID.setText("T-" + valueID.getInt());
 
 		// flag
-		choiceFlag.getItems().setAll(Logic.taskFlags.getAllFlags().getValue());
-
-		FlagValue valueFlag = (FlagValue) Logic.tasks.getAttributeValue(currentTask, FlagAttributeData.NAME).getValue();
-		choiceFlag.getSelectionModel().select(valueFlag.getFlag());
+		if(!suppressFlagRefesh) {
+			choiceFlag.getItems().setAll(Logic.taskFlags.getAllFlags().getValue());
+			FlagValue valueFlag = (FlagValue) Logic.tasks.getAttributeValue(currentTask, FlagAttributeData.NAME).getValue();
+			choiceFlag.getSelectionModel().select(valueFlag.getFlag());
+		}
 
 		// task attributes
 		for (SidebarItem item : items) {
