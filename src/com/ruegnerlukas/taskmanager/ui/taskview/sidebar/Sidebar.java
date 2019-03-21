@@ -1,8 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sidebar;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.architecture.Request;
-import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeCreatedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRemovedEvent;
@@ -16,7 +14,6 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.IDAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.taskview.TaskView;
@@ -120,12 +117,7 @@ public class Sidebar extends AnchorPane {
 		// flag
 		choiceFlag.setButtonCell(ComboboxUtils.createListCellFlag());
 		choiceFlag.setCellFactory(param -> ComboboxUtils.createListCellFlag());
-		Logic.taskFlags.getAllFlags(new Request<TaskFlag[]>(true) {
-			@Override
-			public void onResponse(Response<TaskFlag[]> response) {
-				choiceFlag.getItems().addAll(response.getValue());
-			}
-		});
+		choiceFlag.getItems().addAll(Logic.taskFlags.getAllFlags().getValue());
 		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			Logic.tasks.setAttributeValue(currentTask, FlagAttributeData.NAME, new FlagValue(choiceFlag.getValue()));
 		});
@@ -180,37 +172,18 @@ public class Sidebar extends AnchorPane {
 		}
 
 		// description
-		Logic.tasks.getAttributeValue(currentTask, DescriptionAttributeData.NAME, new Request<TaskAttributeValue>(true) {
-			@Override
-			public void onResponse(Response<TaskAttributeValue> response) {
-				TextValue value = (TextValue) response.getValue();
-				fieldDesc.setText(value.getText());
-			}
-		});
+		TextValue valueDesc = (TextValue) Logic.tasks.getAttributeValue(currentTask, DescriptionAttributeData.NAME).getValue();
+		fieldDesc.setText(valueDesc.getText());
 
 		// id
-		Logic.tasks.getAttributeValue(currentTask, IDAttributeData.NAME, new Request<TaskAttributeValue>(true) {
-			@Override
-			public void onResponse(Response<TaskAttributeValue> response) {
-				NumberValue value = (NumberValue) response.getValue();
-				labelID.setText("T-" + value.getInt());
-			}
-		});
+		NumberValue valueID = (NumberValue) Logic.tasks.getAttributeValue(currentTask, IDAttributeData.NAME).getValue();
+		labelID.setText("T-" + valueID.getInt());
 
 		// flag
-		Logic.taskFlags.getAllFlags(new Request<TaskFlag[]>(true) {
-			@Override
-			public void onResponse(Response<TaskFlag[]> response) {
-				choiceFlag.getItems().setAll(response.getValue());
-			}
-		});
-		Logic.tasks.getAttributeValue(currentTask, FlagAttributeData.NAME, new Request<TaskAttributeValue>(true) {
-			@Override
-			public void onResponse(Response<TaskAttributeValue> response) {
-				FlagValue value = (FlagValue) response.getValue();
-				choiceFlag.getSelectionModel().select(value.getFlag());
-			}
-		});
+		choiceFlag.getItems().setAll(Logic.taskFlags.getAllFlags().getValue());
+
+		FlagValue valueFlag = (FlagValue) Logic.tasks.getAttributeValue(currentTask, FlagAttributeData.NAME).getValue();
+		choiceFlag.getSelectionModel().select(valueFlag.getFlag());
 
 		// task attributes
 		for (SidebarItem item : items) {
@@ -218,20 +191,16 @@ public class Sidebar extends AnchorPane {
 		}
 		boxAttribs.getChildren().clear();
 		items.clear();
-		Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
-			@Override
-			public void onResponse(Response<List<TaskAttribute>> response) {
-				List<TaskAttribute> attributes = response.getValue();
-				for (int i = 0; i < attributes.size(); i++) {
-					TaskAttribute attribute = attributes.get(i);
-					SidebarItem item = SidebarItem.createItem(currentTask, attribute, Sidebar.this);
-					if (item != null) {
-						items.add(item);
-						boxAttribs.getChildren().add(item);
-					}
-				}
+
+		List<TaskAttribute> attributes = Logic.attribute.getAttributes().getValue();
+		for (int i = 0; i < attributes.size(); i++) {
+			TaskAttribute attribute = attributes.get(i);
+			SidebarItem item = SidebarItem.createItem(currentTask, attribute, Sidebar.this);
+			if (item != null) {
+				items.add(item);
+				boxAttribs.getChildren().add(item);
 			}
-		});
+		}
 	}
 
 

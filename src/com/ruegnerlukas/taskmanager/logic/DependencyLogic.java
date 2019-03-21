@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.logic;
 
+import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -18,7 +19,7 @@ public class DependencyLogic {
 	/**
 	 * @return a list of tasks that depend on given task
 	 */
-	public List<Task> getDependentOnInternal(Task task, TaskAttribute dependencyAttribute) {
+	protected List<Task> getDependentOnInternal(Task task, TaskAttribute dependencyAttribute) {
 
 		List<Task> list = new ArrayList<>();
 
@@ -40,11 +41,41 @@ public class DependencyLogic {
 
 
 	/**
+	 * @return a list of tasks that depend on given task
+	 */
+	public Response<List<Task>> getDependentOn(Task task, TaskAttribute dependencyAttribute) {
+		Project project = Logic.project.getProject();
+		if (project != null || dependencyAttribute.data.getType() != TaskAttributeType.DEPENDENCY) {
+			return new Response<List<Task>>().complete(getDependentOnInternal(task, dependencyAttribute));
+		} else {
+			return new Response<List<Task>>().complete(new ArrayList<>(), Response.State.FAIL);
+		}
+	}
+
+
+
+
+	/**
 	 * @return a list of tasks that the given task depends on
 	 */
-	public List<Task> getPrerequisitesOfInternal(Task task, TaskAttribute dependencyAttribute) {
+	protected List<Task> getPrerequisitesOfInternal(Task task, TaskAttribute dependencyAttribute) {
 		TaskArrayValue value = (TaskArrayValue) Logic.tasks.getValue(task, dependencyAttribute);
 		return new ArrayList<>(Arrays.asList(value.getTasks()));
+	}
+
+
+
+
+	/**
+	 * @return a list of tasks that the given task depends on
+	 */
+	public Response<List<Task>> getPrerequisitesOf(Task task, TaskAttribute dependencyAttribute) {
+		Project project = Logic.project.getProject();
+		if (project != null || dependencyAttribute.data.getType() != TaskAttributeType.DEPENDENCY) {
+			return new Response<List<Task>>().complete(getPrerequisitesOfInternal(task, dependencyAttribute));
+		} else {
+			return new Response<List<Task>>().complete(new ArrayList<>(), Response.State.FAIL);
+		}
 	}
 
 

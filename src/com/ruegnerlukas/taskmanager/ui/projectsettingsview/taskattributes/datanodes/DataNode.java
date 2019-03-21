@@ -1,7 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattributes.datanodes;
 
-import com.ruegnerlukas.taskmanager.architecture.Response;
-import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
@@ -86,10 +84,8 @@ public abstract class DataNode extends VBox {
 
 
 	protected boolean warningOnSave(Map<TaskAttributeData.Var, TaskAttributeValue> valuesMap) {
-		SyncRequest<Boolean> request = new SyncRequest<>();
-		Logic.attributeWarning.requiresWarning(getAttribute(), valuesMap, request);
-		Response<Boolean> response = request.getResponse();
-		if (response.getValue()) {
+		Boolean requiresWarning = Logic.attributeWarning.requiresWarning(getAttribute(), valuesMap).getValue();
+		if (requiresWarning != null && requiresWarning) {
 			ButtonType result = Alerts.confirmation("Some Tasks are affected by the changes to this Attribute.", "Continue ?", ButtonType.CANCEL, ButtonType.APPLY);
 			return result == ButtonType.APPLY;
 		} else {

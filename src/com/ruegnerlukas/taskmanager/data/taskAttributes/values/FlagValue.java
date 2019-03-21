@@ -1,7 +1,6 @@
 package com.ruegnerlukas.taskmanager.data.taskAttributes.values;
 
 import com.ruegnerlukas.simplemath.MathUtils;
-import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 
@@ -72,9 +71,7 @@ public class FlagValue implements TaskAttributeValue {
 			int indexThis = 0;
 			int indexOther = 0;
 
-			SyncRequest<TaskFlag[]> request = new SyncRequest<>();
-			Logic.taskFlags.getAllFlags(request);
-			TaskFlag[] flags = request.getResponse().getValue();
+			TaskFlag[] flags = Logic.taskFlags.getAllFlags().getValue();
 
 			for (int i = 0; i < flags.length; i++) {
 				if (this.getFlag() == flags[i]) {

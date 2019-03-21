@@ -2,7 +2,6 @@ package com.ruegnerlukas.taskmanager.logic.attributes.filter;
 
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.taskmanager.architecture.Response;
-import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -91,9 +90,7 @@ public abstract class AttributeFilter {
 
 
 	static TaskAttributeValue getTaskValue(FilterCriteria filter, Task task) {
-		SyncRequest<TaskAttributeValue> request = new SyncRequest<>();
-		Logic.tasks.getAttributeValue(task, filter.attribute.name, request);
-		Response<TaskAttributeValue> response = request.getResponse();
+		Response<TaskAttributeValue> response = Logic.tasks.getAttributeValue(task, filter.attribute.name);
 		if (response.getState() == Response.State.SUCCESS) {
 			return response.getValue();
 		} else {

@@ -1,7 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.groupPopup;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.GroupOrderDeletedSavedEvent;
@@ -84,14 +83,13 @@ public class GroupByPopup extends AnchorPane {
 		// select presets
 		loadSaved();
 		choiceSaved.setOnAction(event -> {
-			Logic.group.getSavedGroupOrder(choiceSaved.getValue(), new Request<AttributeGroupData>(true) {
-				@Override
-				public void onResponse(Response<AttributeGroupData> response) {
-					setAttributes(response.getValue().attributes);
-					cbUseHeaderString.setSelected(response.getValue().useCustomHeader);
-					fieldHeaderText.setText(response.getValue().customHeader);
-				}
-			});
+
+			AttributeGroupData groupData = Logic.group.getSavedGroupOrder(choiceSaved.getValue()).getValue();
+			if (groupData != null) {
+				setAttributes(groupData.attributes);
+				cbUseHeaderString.setSelected(groupData.useCustomHeader);
+				fieldHeaderText.setText(groupData.customHeader);
+			}
 		});
 
 		// delete presets
@@ -133,41 +131,27 @@ public class GroupByPopup extends AnchorPane {
 
 		// values
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		Logic.group.getTaskGroupOrder(new Request<List<TaskAttribute>>(true) {
-			@Override
-			public void onResponse(Response<List<TaskAttribute>> response) {
-				setAttributes(response.getValue());
-			}
-		});
+		setAttributes(Logic.group.getTaskGroupOrder().getValue());
 
 
 		// add attribute
 		btnAdd.setOnAction(event -> {
-			Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
-				@Override
-				public void onResponse(Response<List<TaskAttribute>> response) {
-					List<TaskAttribute> attributes = response.getValue();
-					GroupByAttributeNode node = new GroupByAttributeNode(attributes.get(0), GroupByPopup.this);
-					boxAttributes.getChildren().add(node);
-					onAttributesChanged(node);
-				}
-			});
+			List<TaskAttribute> attributes = Logic.attribute.getAttributes().getValue();
+			GroupByAttributeNode node = new GroupByAttributeNode(attributes.get(0), GroupByPopup.this);
+			boxAttributes.getChildren().add(node);
+			onAttributesChanged(node);
 		});
 
 
 		// custom header string
-		Logic.group.getCustomHeaderString(new Request<String>() {
-			@Override
-			public void onResponse(Response<String> response) {
-				if (response.getState() == Response.State.SUCCESS) {
-					cbUseHeaderString.setSelected(true);
-					fieldHeaderText.setText(response.getValue());
-				} else {
-					cbUseHeaderString.setSelected(false);
-					fieldHeaderText.setText("");
-				}
-			}
-		});
+		Response<String> response = Logic.group.getCustomHeaderString();
+		if (response.getState() == Response.State.SUCCESS) {
+			cbUseHeaderString.setSelected(true);
+			fieldHeaderText.setText(response.getValue());
+		} else {
+			cbUseHeaderString.setSelected(false);
+			fieldHeaderText.setText("");
+		}
 
 		fieldHeaderText.textProperty().addListener((observable, oldValue, newValue) -> {
 			choiceSaved.getSelectionModel().select(null);
@@ -203,20 +187,16 @@ public class GroupByPopup extends AnchorPane {
 
 
 	private void loadSaved() {
-		Logic.group.getSavedGroupOrders(new Request<Map<String, AttributeGroupData>>(true) {
-			@Override
-			public void onResponse(Response<Map<String, AttributeGroupData>> response) {
-				choiceSaved.getItems().clear();
-				if (response.getValue().isEmpty()) {
-					btnDeleteSaved.setDisable(true);
-				} else {
-					btnDeleteSaved.setDisable(false);
-					for (String name : response.getValue().keySet()) {
-						choiceSaved.getItems().add(name);
-					}
-				}
+		Response<Map<String, AttributeGroupData>> response = Logic.group.getSavedGroupOrders();
+		choiceSaved.getItems().clear();
+		if (response.getValue().isEmpty()) {
+			btnDeleteSaved.setDisable(true);
+		} else {
+			btnDeleteSaved.setDisable(false);
+			for (String name : response.getValue().keySet()) {
+				choiceSaved.getItems().add(name);
 			}
-		});
+		}
 	}
 
 

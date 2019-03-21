@@ -1,8 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
-import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.TaskCreatedEvent;
 import com.ruegnerlukas.taskmanager.data.Task;
@@ -122,10 +120,10 @@ public class DependencyItem extends SidebarItem {
 		content.getChildren().add(boxTasksPre);
 
 		// fill
-		for(Task t : Logic.dependencies.getPrerequisitesOfInternal(task, attribute)) {
+		for(Task t : Logic.dependencies.getPrerequisitesOf(task, attribute).getValue()) {
 			addDependsOn(t);
 		}
-		for(Task t : Logic.dependencies.getDependentOnInternal(task, attribute)) {
+		for(Task t : Logic.dependencies.getDependentOn(task, attribute).getValue()) {
 			addAsPrerequisite(t);
 		}
 
@@ -184,9 +182,7 @@ public class DependencyItem extends SidebarItem {
 				if (box.getChildren().get(0) instanceof Label) {
 					Label label = (Label) box.getChildren().get(0);
 					int id = Integer.parseInt(label.getText().trim().split("-")[1]);
-					SyncRequest<Task> request = new SyncRequest<>();
-					Logic.tasks.getTaskByID(id, request);
-					Response<Task> response = request.getResponse();
+					Response<Task> response = Logic.tasks.getTaskByID(id);
 					if (response.getState() == Response.State.SUCCESS) {
 						list.add(response.getValue());
 					}
@@ -206,16 +202,11 @@ public class DependencyItem extends SidebarItem {
 
 		List<Task> exclude = getDependencies();
 
-		Logic.tasks.getTasks(new Request<List<Task>>(true) {
-			@Override
-			public void onResponse(Response<List<Task>> response) {
-				for (Task t : response.getValue()) {
-					if (t != task && !exclude.contains(t)) {
-						choiceTask.getItems().add(t);
-					}
-				}
+		for (Task t : Logic.tasks.getTasks().getValue()) {
+			if (t != task && !exclude.contains(t)) {
+				choiceTask.getItems().add(t);
 			}
-		});
+		}
 
 		choiceTask.getSelectionModel().select(0);
 	}

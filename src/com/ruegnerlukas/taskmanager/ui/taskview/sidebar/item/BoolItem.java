@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.data.Task;
@@ -56,16 +55,12 @@ public class BoolItem extends SidebarItem {
 		checkbox.setPrefSize(-1, 32);
 		checkbox.setMaxSize(10000, 32);
 
-		Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>(true) {
-			@Override
-			public void onResponse(Response<TaskAttributeValue> response) {
-				if (response.getValue() instanceof NoValue) {
-					checkbox.setSelected(false);
-				} else {
-					checkbox.setSelected(((BoolValue) response.getValue()).getBoolValue());
-				}
-			}
-		});
+		Response<TaskAttributeValue> response = Logic.tasks.getAttributeValue(task, attribute.name);
+		if (response.getValue() instanceof NoValue) {
+			checkbox.setSelected(false);
+		} else {
+			checkbox.setSelected(((BoolValue) response.getValue()).getBoolValue());
+		}
 
 		checkbox.setOnAction(event -> {
 			Logic.tasks.setAttributeValue(task, attribute, new BoolValue(checkbox.isSelected()));

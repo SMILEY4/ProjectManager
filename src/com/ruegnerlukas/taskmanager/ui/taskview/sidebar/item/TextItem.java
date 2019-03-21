@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.data.Task;
@@ -71,16 +70,12 @@ public class TextItem extends SidebarItem {
 			this.setPrefSize(10000, -1);
 			this.setMaxSize(10000, 10000);
 
-			Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>(true) {
-				@Override
-				public void onResponse(Response<TaskAttributeValue> response) {
-					if (response.getValue() instanceof NoValue) {
-						textArea.setText("");
-					} else {
-						textArea.setText(((TextValue) response.getValue()).getText());
-					}
-				}
-			});
+			Response<TaskAttributeValue> response = Logic.tasks.getAttributeValue(task, attribute.name);
+			if (response.getValue() instanceof NoValue) {
+				textArea.setText("");
+			} else {
+				textArea.setText(((TextValue) response.getValue()).getText());
+			}
 
 			textArea.focusedProperty().addListener((observable, oldValue, newValue) -> {
 				if (!newValue) {
@@ -100,16 +95,12 @@ public class TextItem extends SidebarItem {
 			textField.setPrefSize(10000, 32);
 			textField.setMaxSize(10000, 32);
 
-			Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>(true) {
-				@Override
-				public void onResponse(Response<TaskAttributeValue> response) {
-					if (response.getValue() instanceof NoValue) {
-						textField.setText("");
-					} else {
-						textField.setText(((TextValue) response.getValue()).getText());
-					}
-				}
-			});
+			Response<TaskAttributeValue> response = Logic.tasks.getAttributeValue(task, attribute.name);
+			if (response.getValue() instanceof NoValue) {
+				textField.setText("");
+			} else {
+				textField.setText(((TextValue) response.getValue()).getText());
+			}
 
 			textField.focusedProperty().addListener((observable, oldValue, newValue) -> {
 				if (!newValue) {

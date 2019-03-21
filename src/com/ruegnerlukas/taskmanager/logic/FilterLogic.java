@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
@@ -11,6 +10,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.attributes.filter.AttributeFilter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -112,34 +112,40 @@ public class FilterLogic {
 
 
 
-	public void getFilterCriteria(Request<List<FilterCriteria>> request) {
+	public Response<List<FilterCriteria>> getFilterCriteria() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, project.filterCriteria));
+			return new Response<List<FilterCriteria>>().complete(project.filterCriteria);
+		} else {
+			return new Response<List<FilterCriteria>>().complete(new ArrayList<>(), Response.State.FAIL);
 		}
 	}
 
 
 
 
-	public void getSavedFilterCriterias(Request<Map<String, List<FilterCriteria>>> request) {
+	public Response<Map<String, List<FilterCriteria>>> getSavedFilterCriterias() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, project.savedFilters));
+			return new Response<Map<String, List<FilterCriteria>>>().complete(project.savedFilters);
+		} else {
+			return new Response<Map<String, List<FilterCriteria>>>().complete(new HashMap<>(), Response.State.FAIL);
 		}
 	}
 
 
 
 
-	public void getSavedFilterCriteria(String name, Request<List<FilterCriteria>> request) {
+	public Response<List<FilterCriteria>> getSavedFilterCriteria(String name) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			if (project.savedFilters.containsKey(name)) {
-				request.respond(new Response<>(Response.State.SUCCESS, project.savedFilters.get(name)));
+				return new Response<List<FilterCriteria>>().complete(project.savedFilters.get(name));
 			} else {
-				request.respond(new Response<>(Response.State.FAIL, "No presets filters with name '" + name + "'"));
+				return new Response<List<FilterCriteria>>().complete(new ArrayList<>(), Response.State.FAIL);
 			}
+		} else {
+			return new Response<List<FilterCriteria>>().complete(new ArrayList<>(), Response.State.FAIL);
 		}
 	}
 

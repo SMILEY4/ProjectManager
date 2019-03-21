@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectClosedEvent;
@@ -38,8 +37,6 @@ public class ProjectLogic {
 	}
 
 
-
-
 	//======================//
 	//        GETTER        //
 	//======================//
@@ -50,8 +47,8 @@ public class ProjectLogic {
 	/**
 	 * checks, if a project is currently open
 	 */
-	public void getIsProjectOpen(Request<Boolean> request) {
-		request.respond(new Response<>(Response.State.SUCCESS, getProject() != null));
+	public Response<Boolean> getIsProjectOpen() {
+		return new Response<Boolean>().complete(getProject() != null);
 	}
 
 
@@ -60,16 +57,10 @@ public class ProjectLogic {
 	/**
 	 * request the currently opened project. Returns FAIL, if no project opened.
 	 */
-	public void getCurrentProject(Request<Project> request) {
+	public Response<Project> getCurrentProject() {
 		Project project = getProject();
-		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, project));
-		} else {
-			request.respond(new Response<Project>(Response.State.FAIL, "No project opened."));
-		}
+		return new Response<Project>().complete(project, project != null ? Response.State.SUCCESS : Response.State.FAIL);
 	}
-
-
 
 
 	//======================//
@@ -121,7 +112,7 @@ public class ProjectLogic {
 
 	/**
 	 * TODO: load project oes nothing
-	 * */
+	 */
 	public void loadProject(File rootFile) {
 		// TODO load project
 	}
@@ -131,7 +122,7 @@ public class ProjectLogic {
 
 	/**
 	 * TODO: save project oes nothing
-	 * */
+	 */
 	public void saveProject() {
 		// TODO save project
 	}
@@ -164,7 +155,7 @@ public class ProjectLogic {
 
 		// get project
 		Project project = getProject();
-		if(project == null) {
+		if (project == null) {
 			return;
 		}
 

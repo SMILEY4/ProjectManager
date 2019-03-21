@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.data;
 
-import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
@@ -18,11 +17,13 @@ public class Task {
 
 
 	public int getID() {
-		SyncRequest<TaskAttribute> request = new SyncRequest<>();
-		Logic.attribute.getAttribute(TaskAttributeType.ID, request);
-		TaskAttribute attribute = request.getResponse().getValue();
-		NumberValue value = (NumberValue) attributes.get(attribute);
-		return value.getInt();
+		TaskAttribute attribute = Logic.attribute.getAttribute(TaskAttributeType.ID).getValue();
+		if(attribute == null) {
+			return -1;
+		} else {
+			NumberValue value = (NumberValue) attributes.get(attribute);
+			return value.getInt();
+		}
 	}
 
 

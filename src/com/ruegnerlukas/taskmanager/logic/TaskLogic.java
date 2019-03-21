@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
@@ -177,7 +176,7 @@ public class TaskLogic {
 
 
 
-	public void getTaskWithValue(TaskAttribute attribute, Request<List<Task>> request) {
+	public Response<List<Task>> getTaskWithValue(TaskAttribute attribute) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			List<Task> allTasks = project.tasks;
@@ -188,14 +187,17 @@ public class TaskLogic {
 					tasks.add(task);
 				}
 			}
-			request.respond(new Response<>(Response.State.SUCCESS, tasks));
+			return new Response<List<Task>>().complete(tasks);
+
+		} else {
+			return new Response<List<Task>>().complete(new ArrayList<>(), Response.State.FAIL);
 		}
 	}
 
 
 
 
-	public void getTaskGroups(Request<TaskGroupData> request) {
+	public Response<TaskGroupData> getTaskGroups() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			List<Task> allTasks = project.tasks;
@@ -203,7 +205,9 @@ public class TaskLogic {
 			TaskGroupData groupedTasks = Logic.group.applyGroups(filteredTasks);
 			Logic.sort.applySort(groupedTasks);
 			groupedTasks.tasks.addAll(filteredTasks);
-			request.respond(new Response<>(Response.State.SUCCESS, groupedTasks));
+			return new Response<TaskGroupData>().complete(groupedTasks);
+		} else {
+			return new Response<TaskGroupData>().complete(null, Response.State.FAIL);
 		}
 	}
 
@@ -213,10 +217,12 @@ public class TaskLogic {
 	/**
 	 * Requests a list of all tasks
 	 */
-	public void getTasks(Request<List<Task>> request) {
+	public Response<List<Task>> getTasks() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, project.tasks));
+			return new Response<List<Task>>().complete(project.tasks);
+		} else {
+			return new Response<List<Task>>().complete(new ArrayList<>(), Response.State.FAIL);
 		}
 	}
 
@@ -226,7 +232,7 @@ public class TaskLogic {
 	/**
 	 * Requests a list of all tasks with the given value for a given attribute
 	 */
-	public void getTasks(TaskAttribute attribute, TaskAttributeValue value, Request<List<Task>> request) {
+	public Response<List<Task>> getTasks(TaskAttribute attribute, TaskAttributeValue value) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 
@@ -240,13 +246,16 @@ public class TaskLogic {
 						tasks.add(task);
 					}
 				}
-				request.respond(new Response<>(Response.State.SUCCESS, tasks));
 
 			} else {
-				request.respond(new Response<List<Task>>(Response.State.FAIL, "Value '" + value + "' is invalid for '" + attribute + "'"));
+				return new Response<List<Task>>().complete(new ArrayList<>(), Response.State.FAIL);
 			}
 
-			request.respond(new Response<>(Response.State.SUCCESS, project.tasks));
+			return new Response<List<Task>>().complete(project.tasks);
+
+
+		} else {
+			return new Response<List<Task>>().complete(new ArrayList<>(), Response.State.FAIL);
 		}
 	}
 
@@ -257,31 +266,32 @@ public class TaskLogic {
 	 * Request the value of the given task for the given attribute. If the value is not set for the task,
 	 * it returns the default value or "NoValue"
 	 */
-	public void getAttributeValue(Task task, String attributeName, Request<TaskAttributeValue> request) {
+	public Response<TaskAttributeValue> getAttributeValue(Task task, String attributeName) {
 
 		Project project = Logic.project.getProject();
 		if (project != null) {
 
 			if (task == null) {
-				request.respond(new Response<>(Response.State.FAIL, "Task is null."));
+				return new Response<TaskAttributeValue>().complete(null, Response.State.FAIL);
 
 			} else if (!project.tasks.contains(task)) {
-				request.respond(new Response<>(Response.State.FAIL, "Task not part of project"));
+				return new Response<TaskAttributeValue>().complete(null, Response.State.FAIL);
 
 			} else {
 
 				TaskAttribute attribute = Logic.attribute.findAttribute(attributeName);
 				if (attribute == null) {
-					request.respond(new Response<>(Response.State.FAIL, "Attribute with name '" + attributeName + "' not found."));
+					return new Response<TaskAttributeValue>().complete(null, Response.State.FAIL);
 
 				} else {
 					TaskAttributeValue value = getValue(task, attribute);
-					request.respond(new Response<>(Response.State.SUCCESS, value));
-
+					return new Response<TaskAttributeValue>().complete(value);
 				}
 
 			}
 
+		} else {
+			return new Response<TaskAttributeValue>().complete(null, Response.State.FAIL);
 		}
 
 	}
@@ -289,17 +299,18 @@ public class TaskLogic {
 
 
 
-	public void getTaskByID(int id, Request<Task> request) {
+	public Response<Task> getTaskByID(int id) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			for (int i = 0, n = getTasksInternal().size(); i < n; i++) {
 				Task task = getTasksInternal().get(i);
 				if (task.getID() == id) {
-					request.respond(new Response<>(Response.State.SUCCESS, task));
-					return;
+					return new Response<Task>().complete(task);
 				}
 			}
-			request.respond(new Response<>(Response.State.FAIL, "No Task with id'" + id + "' found."));
+			return new Response<Task>().complete(null, Response.State.FAIL);
+		} else {
+			return new Response<Task>().complete(null, Response.State.FAIL);
 		}
 	}
 
@@ -316,19 +327,7 @@ public class TaskLogic {
 	 * Events: <p>
 	 * - TaskCreatedEvent: when the task was created
 	 */
-	public void createNewTask() {
-		createNewTask(null);
-	}
-
-
-
-
-	/**
-	 * Creates a new Task <p>
-	 * Events: <p>
-	 * - TaskCreatedEvent: when the task was created
-	 */
-	public void createNewTask(Request<Task> request) {
+	public Response<Task> createNewTask() {
 
 		Project project = Logic.project.getProject();
 		if (project != null) {
@@ -347,11 +346,10 @@ public class TaskLogic {
 			// add to project
 			project.tasks.add(task);
 			EventManager.fireEvent(new TaskCreatedEvent(task, this));
+			return new Response<Task>().complete(task);
 
-			if (request != null) {
-				request.respond(new Response<>(Response.State.SUCCESS, task));
-			}
-
+		} else {
+			return new Response<Task>().complete(null, Response.State.FAIL);
 		}
 	}
 

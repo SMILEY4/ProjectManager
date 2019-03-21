@@ -157,10 +157,12 @@ public class AttributeLogic {
 	/**
 	 * Request a list of all attributes
 	 */
-	public void getAttributes(Request<List<TaskAttribute>> request) {
+	public Response<List<TaskAttribute>> getAttributes() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, new ArrayList<>(project.attributes)));
+			return new Response<List<TaskAttribute>>().complete(new ArrayList<>(project.attributes));
+		} else {
+			return new Response<List<TaskAttribute>>().complete(new ArrayList<>(), Response.State.FAIL);
 		}
 	}
 
@@ -170,13 +172,10 @@ public class AttributeLogic {
 	/**
 	 * request the attribute with the given name
 	 */
-	public void getAttribute(String name, Request<TaskAttribute> request) {
+	public Response<TaskAttribute> getAttribute(String name) {
 		TaskAttribute attribute = findAttribute(name);
-		if (attribute != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, attribute));
-		} else {
-			request.respond(new Response<>(Response.State.FAIL, "Attribute '" + name + "' not found.", null));
-		}
+		return new Response<TaskAttribute>()
+				.complete(attribute, attribute == null ? Response.State.FAIL : Response.State.SUCCESS);
 	}
 
 
@@ -185,13 +184,10 @@ public class AttributeLogic {
 	/**
 	 * request all attributes of the given type
 	 */
-	public void getAttributes(TaskAttributeType type, Request<List<TaskAttribute>> request) {
+	public Response<List<TaskAttribute>> getAttributes(TaskAttributeType type, Request<List<TaskAttribute>> request) {
 		List<TaskAttribute> attributes = findAttributes(type);
-		if (attributes != null && !attributes.isEmpty()) {
-			request.respond(new Response<>(Response.State.SUCCESS, attributes));
-		} else {
-			request.respond(new Response<>(Response.State.FAIL, "No attributes with type '" + type + "' found.", null));
-		}
+		return new Response<List<TaskAttribute>>()
+				.complete(attributes, (attributes == null || attributes.isEmpty()) ? Response.State.FAIL : Response.State.SUCCESS);
 	}
 
 
@@ -200,12 +196,12 @@ public class AttributeLogic {
 	/**
 	 * request the first attribute of the given type
 	 */
-	public void getAttribute(TaskAttributeType type, Request<TaskAttribute> request) {
+	public Response<TaskAttribute> getAttribute(TaskAttributeType type) {
 		List<TaskAttribute> attributes = findAttributes(type);
 		if (attributes != null && !attributes.isEmpty()) {
-			request.respond(new Response<>(Response.State.SUCCESS, attributes.get(0)));
+			return new Response<TaskAttribute>().complete(attributes.get(0));
 		} else {
-			request.respond(new Response<>(Response.State.FAIL, "No attributes with type '" + type + "' found.", null));
+			return new Response<TaskAttribute>().complete(null, Response.State.FAIL);
 		}
 	}
 
@@ -215,10 +211,12 @@ public class AttributeLogic {
 	/**
 	 * Checks whether the attributes of the current project are locked
 	 */
-	public void getAttributeLock(Request<Boolean> request) {
+	public Response<Boolean> getAttributeLock() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, project.attributesLocked));
+			return new Response<Boolean>().complete(project.attributesLocked);
+		} else {
+			return new Response<Boolean>().complete(null, Response.State.FAIL);
 		}
 	}
 

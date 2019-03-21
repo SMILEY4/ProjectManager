@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.data.Task;
@@ -66,17 +65,12 @@ public class NumberItem extends SidebarItem {
 		spinner.setPrefSize(-1, 32);
 		spinner.setMaxSize(10000, 32);
 
-		Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>(true) {
-			@Override
-			public void onResponse(Response<TaskAttributeValue> response) {
-				if (response.getValue() instanceof NoValue) {
-					NumberAttributeData data = (NumberAttributeData) attribute.data;
-					spinner.getValueFactory().setValue(data.min);
-				} else {
-					spinner.getValueFactory().setValue(((NumberValue) response.getValue()).getDouble());
-				}
-			}
-		});
+		Response<TaskAttributeValue> response = Logic.tasks.getAttributeValue(task, attribute.name);
+		if (response.getValue() instanceof NoValue) {
+			spinner.getValueFactory().setValue(data.min);
+		} else {
+			spinner.getValueFactory().setValue(((NumberValue) response.getValue()).getDouble());
+		}
 
 		return spinner;
 	}

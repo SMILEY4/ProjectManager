@@ -1,8 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.architecture.Request;
-import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeCreatedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeLockEvent;
@@ -80,29 +78,24 @@ public class ProjectSettingsView extends AnchorPane implements TabContent {
 		labelName.addListener((observable, oldValue, newValue) -> {
 			Logic.project.renameProject(newValue);
 		});
-		Logic.project.getCurrentProject(new Request<Project>(true) {
-			@Override
-			public void onResponse(Response<Project> response) {
-				Project project = response.getValue();
-				labelName.setText(project.name);
-			}
-		});
+
+		Project project = Logic.project.getCurrentProject().getValue();
+		if (project != null) {
+			labelName.setText(project.name);
+		}
 
 
 		// lock task values
-		Logic.attribute.getAttributeLock(new Request<Boolean>(true) {
-			@Override
-			public void onResponse(Response<Boolean> response) {
-				attributesLocked = response.getValue();
-				if (attributesLocked) {
-					ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1f, "black");
-				} else {
-					ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_OPEN, 1f, "black");
-				}
-				btnLockAttributes.setOnAction(event -> Logic.attribute.setAttributeLock(!attributesLocked));
-				setAttributeLock(attributesLocked);
+		Boolean attributesLocked = Logic.attribute.getAttributeLock().getValue();
+		if (attributesLocked != null) {
+			if (attributesLocked) {
+				ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1f, "black");
+			} else {
+				ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_OPEN, 1f, "black");
 			}
-		});
+			btnLockAttributes.setOnAction(event -> Logic.attribute.setAttributeLock(!attributesLocked));
+			setAttributeLock(attributesLocked);
+		}
 
 
 		// task values
@@ -119,16 +112,11 @@ public class ProjectSettingsView extends AnchorPane implements TabContent {
 
 
 		// add initial attributes
-		Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
-			@Override
-			public void onResponse(Response<List<TaskAttribute>> response) {
-				List<TaskAttribute> attributes = response.getValue();
-				for (TaskAttribute attribute : attributes) {
-					AttributeNode attrNode = new AttributeNode(attribute);
-					boxTaskAttribs.getChildren().add(attrNode);
-				}
-			}
-		});
+		List<TaskAttribute> attributes = Logic.attribute.getAttributes().getValue();
+		for (TaskAttribute attribute : attributes) {
+			AttributeNode attrNode = new AttributeNode(attribute);
+			boxTaskAttribs.getChildren().add(attrNode);
+		}
 
 	}
 

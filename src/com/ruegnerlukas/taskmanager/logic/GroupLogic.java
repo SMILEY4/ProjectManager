@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
@@ -181,48 +180,56 @@ public class GroupLogic {
 
 
 
-	public void getSavedGroupOrders(Request<Map<String, AttributeGroupData>> request) {
+	public Response<Map<String, AttributeGroupData>> getSavedGroupOrders() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, project.savedGroupOrders));
+			return new Response<Map<String, AttributeGroupData>>().complete(project.savedGroupOrders);
+		} else {
+			return new Response<Map<String, AttributeGroupData>>().complete(new HashMap<>(), Response.State.FAIL);
 		}
 	}
 
 
 
 
-	public void getSavedGroupOrder(String name, Request<AttributeGroupData> request) {
+	public Response<AttributeGroupData> getSavedGroupOrder(String name) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			if (project.savedGroupOrders.containsKey(name)) {
-				request.respond(new Response<>(Response.State.SUCCESS, project.savedGroupOrders.get(name)));
+				return new Response<AttributeGroupData>().complete(project.savedGroupOrders.get(name));
 			} else {
-				request.respond(new Response<>(Response.State.FAIL, "No presets group order with name '" + name + "' found."));
+				return new Response<AttributeGroupData>().complete(null, Response.State.FAIL);
 			}
+		} else {
+			return new Response<AttributeGroupData>().complete(null, Response.State.FAIL);
 		}
 	}
 
 
 
 
-	public void getCustomHeaderString(Request<String> request) {
+	public Response<String> getCustomHeaderString() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			if (project.attribGroupData.useCustomHeader) {
-				request.respond(new Response<>(Response.State.SUCCESS, "", project.attribGroupData.customHeader));
+				return new Response<String>().complete(project.attribGroupData.customHeader);
 			} else {
-				request.respond(new Response<>(Response.State.FAIL, "TaskGroups do not currently use a custom headerString"));
+				return new Response<String>().complete("", Response.State.FAIL);
 			}
+		} else {
+			return new Response<String>().complete("", Response.State.FAIL);
 		}
 	}
 
 
 
 
-	public void getTaskGroupOrder(Request<List<TaskAttribute>> request) {
+	public Response<List<TaskAttribute>> getTaskGroupOrder() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, project.attribGroupData.attributes));
+			return new Response<List<TaskAttribute>>().complete(project.attribGroupData.attributes);
+		} else {
+			return new Response<List<TaskAttribute>>().complete(new ArrayList<>(), Response.State.FAIL);
 		}
 	}
 

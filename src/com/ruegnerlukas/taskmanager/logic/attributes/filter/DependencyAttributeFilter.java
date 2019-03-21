@@ -46,7 +46,7 @@ public class DependencyAttributeFilter extends AttributeFilter {
 		 * => e.g.: filter Task T-34 > T-34 depends on T-5 > match!
 		 * */
 		final Task[] tasks = ((TaskArrayValue) filterValue).getTasks();
-		List<Task> list = Logic.dependencies.getPrerequisitesOfInternal(task, attribute); // task depends on all in list
+		List<Task> list = Logic.dependencies.getPrerequisitesOf(task, attribute).getValue(); // task depends on all in list
 		for (Task t : tasks) {
 			if (list.contains(t)) {
 				return true;
@@ -66,7 +66,7 @@ public class DependencyAttributeFilter extends AttributeFilter {
 		 * */
 		final Task[] tasks = ((TaskArrayValue) filterValue).getTasks();
 		for (Task t : tasks) {
-			List<Task> list = Logic.dependencies.getPrerequisitesOfInternal(t, attribute); // t depends on all in list
+			List<Task> list = Logic.dependencies.getPrerequisitesOf(t, attribute).getValue(); // t depends on all in list
 			if (list.contains(task)) {
 				return true;
 			}
