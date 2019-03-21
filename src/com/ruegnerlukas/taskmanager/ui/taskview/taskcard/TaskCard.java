@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.taskcard;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
@@ -76,13 +75,10 @@ public class TaskCard extends AnchorPane {
 
 
 		// id
-		Logic.tasks.getAttributeValue(task, IDAttributeData.NAME, new Request<TaskAttributeValue>(true) {
-			@Override
-			public void onResponse(Response<TaskAttributeValue> response) {
-				NumberValue value = (NumberValue) response.getValue();
-				labelID.setText("T-" + value.getInt());
-			}
-		});
+		Response<TaskAttributeValue> responseID = Logic.tasks.getAttributeValue(task, IDAttributeData.NAME);
+		NumberValue value = (NumberValue) responseID.getValue();
+		labelID.setText("T-" + value.getInt());
+
 
 
 		// flag
@@ -126,27 +122,21 @@ public class TaskCard extends AnchorPane {
 
 
 	private void updateFlagColor() {
-		Logic.tasks.getAttributeValue(task, FlagAttributeData.NAME, new Request<TaskAttributeValue>(true) {
-			@Override
-			public void onResponse(Response<TaskAttributeValue> response) {
-				FlagValue value = (FlagValue) response.getValue();
-				Color flagColor = value.getFlag().color.color;
-				paneFlag.setStyle("-fx-background-color: rgba(" + flagColor.getRed() * 255 + "," + flagColor.getGreen() * 255 + "," + flagColor.getBlue() * 255 + ",1.0);");
-			}
-		});
+		FlagValue value = (FlagValue) Logic.tasks.getAttributeValue(task, FlagAttributeData.NAME).getValue();
+		if(value != null) {
+			Color flagColor = value.getFlag().color.color;
+			paneFlag.setStyle("-fx-background-color: rgba(" + flagColor.getRed() * 255 + "," + flagColor.getGreen() * 255 + "," + flagColor.getBlue() * 255 + ",1.0);");
+		}
 	}
 
 
 
 
 	private void updateDescription() {
-		Logic.tasks.getAttributeValue(task, DescriptionAttributeData.NAME, new Request<TaskAttributeValue>(true) {
-			@Override
-			public void onResponse(Response<TaskAttributeValue> response) {
-				TextValue value = (TextValue) response.getValue();
-				areaDescription.setText(value.getText());
-			}
-		});
+		TextValue value = (TextValue) Logic.tasks.getAttributeValue(task, DescriptionAttributeData.NAME).getValue();
+		if(value != null) {
+			areaDescription.setText(value.getText());
+		}
 	}
 
 

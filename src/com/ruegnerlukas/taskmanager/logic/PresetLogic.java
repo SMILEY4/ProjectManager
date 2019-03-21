@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
@@ -14,24 +13,29 @@ import java.util.List;
 public class PresetLogic {
 
 
-	public void getPresets(Request<List<Preset>> request) {
+	public Response<List<Preset>> getPresets() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
-			request.respond(new Response<>(Response.State.SUCCESS, new ArrayList<>(project.presets.values())));
+			return new Response<List<Preset>>().complete(new ArrayList<>(project.presets.values()), Response.State.FAIL);
+		} else {
+			return new Response<List<Preset>>().complete(new ArrayList<>(), Response.State.FAIL);
 		}
 	}
 
 
 
 
-	public void getPreset(String name, Request<Preset> request) {
+	public Response<Preset> getPreset(String name) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			if (project.presets.containsKey(name)) {
-				request.respond(new Response<>(Response.State.SUCCESS, project.presets.get(name)));
+				return new Response<Preset>().complete(project.presets.get(name));
 			} else {
-				request.respond(new Response<>(Response.State.FAIL, "No preset with name '" + name + "' found"));
+				return new Response<Preset>().complete(null, Response.State.FAIL);
 			}
+		} else {
+			return new Response<Preset>().complete(null, Response.State.FAIL);
+
 		}
 	}
 

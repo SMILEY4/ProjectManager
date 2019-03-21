@@ -1,14 +1,10 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sidebar;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
-import com.ruegnerlukas.taskmanager.architecture.Response;
-import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.TaskDeletedEvent;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.IDAttributeData;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -79,9 +75,7 @@ public class Breadcrumb extends AnchorPane {
 		content.getChildren().clear();
 
 		// refresh queue
-		SyncRequest<List<Task>> request = new SyncRequest<>();
-		Logic.tasks.getTasks(request);
- 		List<Task> tasksProject = request.getResponse().getValue();
+		List<Task> tasksProject = Logic.tasks.getTasks().getValue();
  		List<Task> invalidTasks = new ArrayList<>();
  		for(Task task : queue) {
  			if(!tasksProject.contains(task)) {
@@ -96,29 +90,13 @@ public class Breadcrumb extends AnchorPane {
 
 			// label
 			Label label = new Label();
-			Logic.tasks.getAttributeValue(task, IDAttributeData.NAME, new Request<TaskAttributeValue>() {
-				@Override
-				public void onResponse(Response<TaskAttributeValue> response) {
-					label.setText("T-" + ((NumberValue) response.getValue()).getInt());
-				}
-			});
+			label.setText("T-" + ((NumberValue) Logic.tasks.getAttributeValue(task, IDAttributeData.NAME).getValue()).getInt());
 			label.setMinHeight(32);
 			label.setMaxHeight(32);
 			if (i == queue.size() - 1) {
 				label.setId("breadcrumb_current");
-//				label.setStyle("-fx-font-weight: bold;");
 			} else {
 				label.setId("breadcrumb_task");
-//				label.styleProperty().bind(Bindings.when(label.hoverProperty())
-//						.then("-fx-text-fill: #3366BB; -fx-underline: true;")
-//						.otherwise("-fx-text-fill: #3366BB;"));
-//				label.setOnMouseEntered(event -> {
-//					getScene().setCursor(Cursor.HAND);
-//				});
-//				label.setOnMouseExited(event -> {
-//					getScene().setCursor(Cursor.DEFAULT);
-//				});
-
 				int index = i;
 				label.setOnMouseClicked(event -> {
 					if (onJumpBack(queue.get(index))) {
@@ -126,7 +104,6 @@ public class Breadcrumb extends AnchorPane {
 						refresh();
 					}
 				});
-
 			}
 			content.getChildren().add(label);
 

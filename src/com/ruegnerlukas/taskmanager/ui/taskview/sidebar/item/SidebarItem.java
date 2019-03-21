@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -153,20 +152,16 @@ public abstract class SidebarItem extends HBox {
 				emptyValue();
 			}
 
-			Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>() {
-				@Override
-				public void onResponse(Response<TaskAttributeValue> response) {
-					if (response.getValue() instanceof NoValue) {
-						noValue.setVisible(true);
-						valueNode.setVisible(false);
-						ButtonUtils.makeIconButton(btnAdd, SVGIcons.ADD, btnIconScale, "black");
-					} else {
-						noValue.setVisible(false);
-						valueNode.setVisible(true);
-						ButtonUtils.makeIconButton(btnAdd, SVGIcons.CROSS, btnIconScale, "black");
-					}
-				}
-			});
+			Response<TaskAttributeValue> response = Logic.tasks.getAttributeValue(task, attribute.name);
+			if (response.getValue() instanceof NoValue) {
+				noValue.setVisible(true);
+				valueNode.setVisible(false);
+				ButtonUtils.makeIconButton(btnAdd, SVGIcons.ADD, btnIconScale, "black");
+			} else {
+				noValue.setVisible(false);
+				valueNode.setVisible(true);
+				ButtonUtils.makeIconButton(btnAdd, SVGIcons.CROSS, btnIconScale, "black");
+			}
 
 		}
 

@@ -1,7 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.projectsettingsview.taskattributes;
 
-import com.ruegnerlukas.taskmanager.architecture.Response;
-import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeRenamedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeTypeChangedEvent;
@@ -246,10 +244,13 @@ public class AttributeNode extends AnchorPane {
 
 
 	private void onRemoveAttribute() {
-		SyncRequest<List<Task>> request = new SyncRequest<>();
-		Logic.tasks.getTaskWithValue(attribute, request);
-		Response<List<Task>> response = request.getResponse();
-		List<Task> effectedTasks = response.getValue();
+//		SyncRequest<List<Task>> request = new SyncRequest<>();
+//		Logic.tasks.getTaskWithValue(attribute, request);
+//		Response<List<Task>> response = request.getResponse();
+//		List<Task> effectedTasks = response.getValue();
+
+		List<Task> effectedTasks = Logic.tasks.getTaskWithValue(attribute).getValue();
+
 
 		if (effectedTasks.isEmpty()) {
 			Logic.attribute.deleteAttribute(attribute.name);
@@ -271,10 +272,11 @@ public class AttributeNode extends AnchorPane {
 
 	private void onTypeSelected(TaskAttributeType type) {
 
-		SyncRequest<List<Task>> request = new SyncRequest<>();
-		Logic.tasks.getTaskWithValue(attribute, request);
-		Response<List<Task>> response = request.getResponse();
-		List<Task> effectedTasks = response.getValue();
+//		SyncRequest<List<Task>> request = new SyncRequest<>();
+//		Logic.tasks.getTaskWithValue(attribute, request);
+//		Response<List<Task>> response = request.getResponse();
+//		List<Task> effectedTasks = response.getValue();
+		List<Task> effectedTasks = Logic.tasks.getTaskWithValue(attribute).getValue();
 
 		if (effectedTasks.isEmpty()) {
 			Logic.attribute.setAttributeType(attribute.name, type);

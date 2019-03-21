@@ -2,9 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.taskview;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.TaskManager;
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
-import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.Event;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventListener;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
@@ -122,23 +120,12 @@ public class TaskView extends AnchorPane implements TabContent {
 		);
 		Logic.attribute.updateTaskAttribute(FlagAttributeData.NAME, TaskAttributeData.Var.FLAG_ATT_FLAGS, flags);
 
-		Logic.tasks.getTasks(new Request<List<Task>>(true) {
-			@Override
-			public void onResponse(Response<List<Task>> response) {
-				List<Task> tasks = response.getValue();
-				for (Task task : tasks) {
-
-					Logic.attribute.getAttribute(TaskAttributeType.FLAG, new Request<TaskAttribute>(false) {
-						@Override
-						public void onResponse(Response<TaskAttribute> response) {
-							TaskAttribute flagAttribute = response.getValue();
-							FlagValue value = new FlagValue(((FlagAttributeData) flagAttribute.data).flags[new Random().nextInt(((FlagAttributeData) flagAttribute.data).flags.length)]);
-							Logic.tasks.setAttributeValue(task, flagAttribute, value);
-						}
-					});
-				}
-			}
-		});
+		List<Task> tasks = Logic.tasks.getTasks().getValue();
+		for (Task task : tasks) {
+			TaskAttribute flagAttribute = Logic.attribute.getAttribute(TaskAttributeType.FLAG).getValue();
+			FlagValue value = new FlagValue(((FlagAttributeData) flagAttribute.data).flags[new Random().nextInt(((FlagAttributeData) flagAttribute.data).flags.length)]);
+			Logic.tasks.setAttributeValue(task, flagAttribute, value);
+		}
 
 
 		Logic.attribute.createAttribute("Dependency", TaskAttributeType.DEPENDENCY);
@@ -170,18 +157,11 @@ public class TaskView extends AnchorPane implements TabContent {
 
 			getScene().addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
 				if (ke.getCode() == KeyCode.J) {
-
-					Logic.tasks.getTasks(new Request<List<Task>>(true) {
-						@Override
-						public void onResponse(Response<List<Task>> response) {
-							List<Task> tasks = response.getValue();
-							int index = new Random().nextInt(tasks.size());
-							Task task = tasks.get(index);
-							System.out.println("JUMP TO TASK: " + index);
-							onTaskSelected(task, true, true);
-						}
-					});
-
+					List<Task> taskList = Logic.tasks.getTasks().getValue();
+					int index = new Random().nextInt(taskList.size());
+					Task task = taskList.get(index);
+					System.out.println("JUMP TO TASK: " + index);
+					onTaskSelected(task, true, true);
 					ke.consume();
 				}
 			});
@@ -358,8 +338,8 @@ public class TaskView extends AnchorPane implements TabContent {
 		svg.setContent(SVGIcons.ARROW_RIGHT.data);
 		labelHideSidebar.setGraphic(svg);
 		labelHideSidebar.setText("");
-		svg.scaleXProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_RIGHT.width/0.8));
-		svg.scaleYProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_RIGHT.height/0.8));
+		svg.scaleXProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_RIGHT.width / 0.8));
+		svg.scaleYProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_RIGHT.height / 0.8));
 
 		sidebarHidden = false;
 	}
@@ -375,8 +355,8 @@ public class TaskView extends AnchorPane implements TabContent {
 		svg.setContent(SVGIcons.ARROW_LEFT.data);
 		labelHideSidebar.setGraphic(svg);
 		labelHideSidebar.setText("");
-		svg.scaleXProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_LEFT.width/0.8));
-		svg.scaleYProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_LEFT.height/0.8));
+		svg.scaleXProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_LEFT.width / 0.8));
+		svg.scaleYProperty().bind(labelHideSidebar.widthProperty().divide(SVGIcons.ARROW_LEFT.height / 0.8));
 
 		sidebarHidden = true;
 	}
@@ -401,77 +381,68 @@ public class TaskView extends AnchorPane implements TabContent {
 
 		clearTaskList();
 
-		Logic.tasks.getTaskGroups(new Request<TaskGroupData>(true) {
-			@Override
-			public void onResponse(Response<TaskGroupData> response) {
-				TaskGroupData taskGroupData = response.getValue();
-				lastTaskGroupData = taskGroupData;
+		TaskGroupData taskGroupData = Logic.tasks.getTaskGroups().getValue();
+		lastTaskGroupData = taskGroupData;
 
-				// display all tasks
-				if (taskGroupData.attributes.isEmpty()) {
-					if (!taskGroupData.groups.isEmpty()) {
-						createTaskList("All Tasks", taskGroupData.groups.get(0).tasks);
-					} else {
-					}
-
-
-				} else { // display grouped-tasks
-
-					SyncRequest<String> reqHeaderString = new SyncRequest<>();
-					Logic.group.getCustomHeaderString(reqHeaderString);
-					Response<String> resHeaderString = reqHeaderString.getResponse();
-					boolean useCustomHeaderString = resHeaderString.getState() == Response.State.SUCCESS;
-
-					// for each group
-					for (TaskGroup group : taskGroupData.groups) {
-
-						// build title
-						StringBuilder title = new StringBuilder();
-
-						if (useCustomHeaderString) {
-							String strCustomHeader = resHeaderString.getValue();
-
-							for (int i = 0; i < taskGroupData.attributes.size(); i++) {
-								TaskAttribute attribute = taskGroupData.attributes.get(i);
-								if (strCustomHeader.contains("{" + attribute.name + "}")) {
-									TaskAttributeValue value = group.values.get(attribute);
-									strCustomHeader = strCustomHeader.replaceAll("\\{" + attribute.name + "\\}", value.toString());
-								}
-							}
-
-							title.append(strCustomHeader);
-
-						} else {
-							for (int i = 0; i < taskGroupData.attributes.size(); i++) {
-								TaskAttribute attribute = taskGroupData.attributes.get(i);
-								TaskAttributeValue value = group.values.get(attribute);
-								title.append(value.toString());
-								if (i != taskGroupData.attributes.size() - 1) {
-									title.append(", ");
-								}
-							}
-						}
-
-						// createItem list
-						createTaskList(title.toString(), group.tasks);
-
-					}
-
-				}
-
-				updateNTaskLabel();
-
-				// select last selected task (if still exists)
-				SyncRequest<List<Task>> request = new SyncRequest<>();
-				Logic.tasks.getTasks(request);
-				List<Task> tasksProject = request.getResponse().getValue();
-				if(tasksProject.contains(sidebar.currentTask)) {
-					onTaskSelected(sidebar.currentTask, false, true);
-				} else {
-					onTaskSelected(null, false, false);
-				}
+		// display all tasks
+		if (taskGroupData.attributes.isEmpty()) {
+			if (!taskGroupData.groups.isEmpty()) {
+				createTaskList("All Tasks", taskGroupData.groups.get(0).tasks);
+			} else {
 			}
-		});
+
+
+		} else { // display grouped-tasks
+
+			Response<String> resHeaderString = Logic.group.getCustomHeaderString();
+			boolean useCustomHeaderString = resHeaderString.getState() == Response.State.SUCCESS;
+
+			// for each group
+			for (TaskGroup group : taskGroupData.groups) {
+
+				// build title
+				StringBuilder title = new StringBuilder();
+
+				if (useCustomHeaderString) {
+					String strCustomHeader = resHeaderString.getValue();
+
+					for (int i = 0; i < taskGroupData.attributes.size(); i++) {
+						TaskAttribute attribute = taskGroupData.attributes.get(i);
+						if (strCustomHeader.contains("{" + attribute.name + "}")) {
+							TaskAttributeValue value = group.values.get(attribute);
+							strCustomHeader = strCustomHeader.replaceAll("\\{" + attribute.name + "\\}", value.toString());
+						}
+					}
+
+					title.append(strCustomHeader);
+
+				} else {
+					for (int i = 0; i < taskGroupData.attributes.size(); i++) {
+						TaskAttribute attribute = taskGroupData.attributes.get(i);
+						TaskAttributeValue value = group.values.get(attribute);
+						title.append(value.toString());
+						if (i != taskGroupData.attributes.size() - 1) {
+							title.append(", ");
+						}
+					}
+				}
+
+				// createItem list
+				createTaskList(title.toString(), group.tasks);
+
+			}
+
+		}
+
+		updateNTaskLabel();
+
+		// select last selected task (if still exists)
+		List<Task> tasksProject = Logic.tasks.getTasks().getValue();
+		if (tasksProject.contains(sidebar.currentTask)) {
+			onTaskSelected(sidebar.currentTask, false, true);
+		} else {
+			onTaskSelected(null, false, false);
+		}
 
 	}
 
@@ -549,44 +520,36 @@ public class TaskView extends AnchorPane implements TabContent {
 
 
 	private void setBadgeText(Button button, Label badge) {
+		Project project = Logic.project.getCurrentProject().getValue();
+		int n = 0;
+		if (button == btnSort) {
+			n = project.sortElements.size();
+		}
+		if (button == btnFilter) {
+			n = project.filterCriteria.size();
+		}
+		if (button == btnGroup) {
+			n = project.attribGroupData.attributes.size(); // TODO
+		}
 
-		Logic.project.getCurrentProject(new Request<Project>(true) {
-			@Override
-			public void onResponse(Response<Project> response) {
-				Project project = response.getValue();
-				int n = 0;
-				if (button == btnSort) {
-					n = project.sortElements.size();
-				}
-				if (button == btnFilter) {
-					n = project.filterCriteria.size();
-				}
-				if (button == btnGroup) {
-					n = project.attribGroupData.attributes.size(); // TODO
-				}
-
-				if (0 < n && n < 10) {
-					badge.setText("" + n);
-					badge.setVisible(true);
-				} else if (n >= 10) {
-					badge.setText("!");
-					badge.setVisible(true);
-				} else {
-					badge.setText("");
-					badge.setVisible(false);
-				}
-			}
-		});
-
+		if (0 < n && n < 10) {
+			badge.setText("" + n);
+			badge.setVisible(true);
+		} else if (n >= 10) {
+			badge.setText("!");
+			badge.setVisible(true);
+		} else {
+			badge.setText("");
+			badge.setVisible(false);
+		}
 	}
 
 
 
 
 	private void updateNTaskLabel() {
-		SyncRequest<List<Task>> requestTotal = new SyncRequest<>();
-		Logic.tasks.getTasks(requestTotal);
-		int nTotal = requestTotal.getResponse().getValue().size();
+
+		int nTotal = Logic.tasks.getTasks().getValue().size();
 
 		int nDisplay = -1;
 		if (lastTaskGroupData != null) {
@@ -600,14 +563,10 @@ public class TaskView extends AnchorPane implements TabContent {
 
 
 	public void onCreateTask() {
-		Logic.tasks.createNewTask(new Request<Task>(true) {
-			@Override
-			public void onResponse(Response<Task> response) {
-				Platform.runLater( () -> {
-					sidebar.getBreadcrumb().clearTasks();
-					onTaskSelected(response.getValue(), true, true);
-				});
-			}
+		Platform.runLater(() -> {
+			sidebar.getBreadcrumb().clearTasks();
+			Response<Task> response = Logic.tasks.createNewTask();
+			onTaskSelected(response.getValue(), true, true);
 		});
 	}
 

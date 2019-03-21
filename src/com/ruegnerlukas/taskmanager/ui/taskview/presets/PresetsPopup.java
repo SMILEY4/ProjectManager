@@ -1,15 +1,10 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.presets;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.architecture.Request;
-import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.PresetDeletedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.PresetSavedEvent;
 import com.ruegnerlukas.taskmanager.data.Preset;
-import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
-import com.ruegnerlukas.taskmanager.data.groups.AttributeGroupData;
-import com.ruegnerlukas.taskmanager.data.sorting.SortElement;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.uidata.UIModule;
@@ -25,8 +20,6 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 
 public class PresetsPopup extends AnchorPane {
 
@@ -154,56 +147,38 @@ public class PresetsPopup extends AnchorPane {
 	private void loadSaved() {
 
 		// presets
-		Logic.presets.getPresets(new Request<List<Preset>>() {
-			@Override
-			public void onResponse(Response<List<Preset>> response) {
-				choiceSaved.getItems().clear();
-				for (Preset preset : response.getValue()) {
-					choiceSaved.getItems().add(preset.name);
-				}
-				btnDeleteSaved.setDisable(choiceSaved.getValue() == null);
-			}
-		});
+		choiceSaved.getItems().clear();
+		for (Preset preset : Logic.presets.getPresets().getValue()) {
+			choiceSaved.getItems().add(preset.name);
+		}
+		btnDeleteSaved.setDisable(choiceSaved.getValue() == null);
 
 
 		// filter
-		Logic.filter.getSavedFilterCriterias(new Request<Map<String, List<FilterCriteria>>>() {
-			@Override
-			public void onResponse(Response<Map<String, List<FilterCriteria>>> response) {
-				choiceFilter.getItems().clear();
-				for (String name : response.getValue().keySet()) {
-					choiceFilter.getItems().add(name);
-				}
-				choiceFilter.getItems().add("");
-				choiceFilter.getSelectionModel().select("");
-			}
-		});
+		choiceFilter.getItems().clear();
+		for (String name : Logic.filter.getSavedFilterCriterias().getValue().keySet()) {
+			choiceFilter.getItems().add(name);
+		}
+		choiceFilter.getItems().add("");
+		choiceFilter.getSelectionModel().select("");
+
 
 		// group
-		Logic.group.getSavedGroupOrders(new Request<Map<String, AttributeGroupData>>(true) {
-			@Override
-			public void onResponse(Response<Map<String, AttributeGroupData>> response) {
-				choiceTaskGroup.getItems().clear();
-				for (String name : response.getValue().keySet()) {
-					choiceTaskGroup.getItems().add(name);
-				}
-				choiceTaskGroup.getItems().add("");
-				choiceTaskGroup.getSelectionModel().select("");
-			}
-		});
+		choiceTaskGroup.getItems().clear();
+		for (String name : Logic.group.getSavedGroupOrders().getValue().keySet()) {
+			choiceTaskGroup.getItems().add(name);
+		}
+		choiceTaskGroup.getItems().add("");
+		choiceTaskGroup.getSelectionModel().select("");
 
 		// sort
-		Logic.sort.getSavedSortElements(new Request<Map<String, List<SortElement>>>() {
-			@Override
-			public void onResponse(Response<Map<String, List<SortElement>>> response) {
-				choiceSort.getItems().clear();
-				for (String name : response.getValue().keySet()) {
-					choiceSort.getItems().add(name);
-				}
-				choiceSort.getItems().add("");
-				choiceSort.getSelectionModel().select("");
-			}
-		});
+		choiceSort.getItems().clear();
+		for (String name : Logic.sort.getSavedSortElements().getValue().keySet()) {
+			choiceSort.getItems().add(name);
+		}
+		choiceSort.getItems().add("");
+		choiceSort.getSelectionModel().select("");
+
 	}
 
 

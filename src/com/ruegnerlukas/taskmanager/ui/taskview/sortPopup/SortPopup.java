@@ -1,7 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sortPopup;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.SortDeleteSavedEvent;
@@ -79,12 +78,7 @@ public class SortPopup extends AnchorPane {
 		// select presets
 		loadSaved();
 		choiceSaved.setOnAction(event -> {
-			Logic.sort.getSavedSortElements(choiceSaved.getValue(), new Request<List<SortElement>>(true) {
-				@Override
-				public void onResponse(Response<List<SortElement>> response) {
-					setSortElements(response.getValue());
-				}
-			});
+			setSortElements(Logic.sort.getSavedSortElements(choiceSaved.getValue()).getValue());
 		});
 
 		// delete presets
@@ -126,24 +120,17 @@ public class SortPopup extends AnchorPane {
 
 		// elements
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		Logic.sort.getSortElements(new Request<List<SortElement>>(true) {
-			@Override
-			public void onResponse(Response<List<SortElement>> response) {
-				setSortElements(response.getValue());
-			}
-		});
+		setSortElements(Logic.sort.getSortElements().getValue());
 
 
 		// add element
 		btnAdd.setOnAction(event -> {
-			Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
-				@Override
-				public void onResponse(Response<List<TaskAttribute>> response) {
-					SortElementNode node = new SortElementNode(response.getValue().get(0), SortPopup.this);
-					boxAttributes.getChildren().add(node);
-					onSortChanged(node);
-				}
-			});
+			List<TaskAttribute> list = Logic.attribute.getAttributes().getValue();
+			if(list != null && !list.isEmpty()) {
+				SortElementNode node = new SortElementNode(list.get(0), SortPopup.this);
+				boxAttributes.getChildren().add(node);
+				onSortChanged(node);
+			}
 		});
 
 
@@ -168,20 +155,16 @@ public class SortPopup extends AnchorPane {
 
 
 	private void loadSaved() {
-		Logic.sort.getSavedSortElements(new Request<Map<String, List<SortElement>>>() {
-			@Override
-			public void onResponse(Response<Map<String, List<SortElement>>> response) {
-				choiceSaved.getItems().clear();
-				if (response.getValue().isEmpty()) {
-					btnDeleteSaved.setDisable(true);
-				} else {
-					btnDeleteSaved.setDisable(false);
-					for (String name : response.getValue().keySet()) {
-						choiceSaved.getItems().add(name);
-					}
-				}
+		Response<Map<String, List<SortElement>>> response = Logic.sort.getSavedSortElements();
+		choiceSaved.getItems().clear();
+		if (response.getValue().isEmpty()) {
+			btnDeleteSaved.setDisable(true);
+		} else {
+			btnDeleteSaved.setDisable(false);
+			for (String name : response.getValue().keySet()) {
+				choiceSaved.getItems().add(name);
 			}
-		});
+		}
 	}
 
 

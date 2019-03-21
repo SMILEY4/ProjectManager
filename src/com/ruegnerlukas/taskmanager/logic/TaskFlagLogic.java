@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -23,7 +22,7 @@ public class TaskFlagLogic {
 
 
 
-	public void getFlag(String name, Request<TaskFlag> request) {
+	public Response<TaskFlag> getFlag(String name) {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			TaskAttribute flagAttribute = Logic.attribute.findAttribute(TaskAttributeType.FLAG);
@@ -37,46 +36,53 @@ public class TaskFlagLogic {
 					}
 				}
 				if (flag != null) {
-					request.respond(new Response<>(Response.State.SUCCESS, flag));
+					return new Response<TaskFlag>().complete(flag);
+
 				} else {
-					request.respond(new Response<>(Response.State.FAIL, "No Flag with the name '" + name + "' found."));
+					return new Response<TaskFlag>().complete(null, Response.State.FAIL);
 				}
 
 			} else {
-				request.respond(new Response<>(Response.State.FAIL, "No FlagAttribute found."));
+				return new Response<TaskFlag>().complete(null, Response.State.FAIL);
 			}
+		} else {
+			return new Response<TaskFlag>().complete(null, Response.State.FAIL);
 		}
 	}
 
 
 
 
-	public void getAllFlags(Request<TaskFlag[]> request) {
+	public Response<TaskFlag[]> getAllFlags() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			TaskAttribute flagAttribute = Logic.attribute.findAttribute(TaskAttributeType.FLAG);
 			if (flagAttribute != null) {
 				FlagAttributeData flagData = (FlagAttributeData) flagAttribute.data;
-				request.respond(new Response<>(Response.State.SUCCESS, flagData.flags));
+				return new Response<TaskFlag[]>().complete(flagData.flags);
 			} else {
-				request.respond(new Response<>(Response.State.FAIL, "No FlagAttribute found."));
+				return new Response<TaskFlag[]>().complete(new TaskFlag[]{}, Response.State.FAIL);
 			}
+		} else {
+			return new Response<TaskFlag[]>().complete(new TaskFlag[]{}, Response.State.FAIL);
 		}
 	}
 
 
 
 
-	public void getDefaultFlag(Request<TaskFlag> request) {
+	public Response<TaskFlag> getDefaultFlag() {
 		Project project = Logic.project.getProject();
 		if (project != null) {
 			TaskAttribute flagAttribute = Logic.attribute.findAttribute(TaskAttributeType.FLAG);
 			if (flagAttribute != null) {
 				FlagAttributeData flagData = (FlagAttributeData) flagAttribute.data;
-				request.respond(new Response<>(Response.State.SUCCESS, flagData.defaultFlag));
+				return new Response<TaskFlag>().complete(flagData.defaultFlag);
 			} else {
-				request.respond(new Response<>(Response.State.FAIL, "No FlagAttribute found."));
+				return new Response<TaskFlag>().complete(null, Response.State.FAIL);
 			}
+		} else {
+			return new Response<TaskFlag>().complete(null, Response.State.FAIL);
 		}
 	}
 

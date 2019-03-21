@@ -1,7 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup.values;
 
-import com.ruegnerlukas.taskmanager.architecture.Response;
-import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
@@ -88,9 +86,7 @@ public class DependencyFilterValue extends FilterValue {
 
 	private Set<String> getAllIDsAsChoices() {
 		Set<String> set = new HashSet<>();
-		SyncRequest<List<Task>> request = new SyncRequest<>();
-		Logic.tasks.getTasks(request);
-		for (Task task : request.getResponse().getValue()) {
+		for (Task task : Logic.tasks.getTasks().getValue()) {
 			set.add(Integer.toString(task.getID()));
 		}
 		return set;
@@ -102,11 +98,9 @@ public class DependencyFilterValue extends FilterValue {
 	private Set<Task> toTaskSet(String[] strings) {
 		Set<Task> set = new HashSet<>();
 		for (String str : strings) {
-			SyncRequest<Task> request = new SyncRequest<>();
-			Logic.tasks.getTaskByID(Integer.parseInt(str), request);
-			Response<Task> response = request.getResponse();
-			if (response.getState() == Response.State.SUCCESS) {
-				set.add(response.getValue());
+			Task task = Logic.tasks.getTaskByID(Integer.parseInt(str)).getValue();
+			if (task != null) {
+				set.add(task);
 			}
 		}
 		return set;

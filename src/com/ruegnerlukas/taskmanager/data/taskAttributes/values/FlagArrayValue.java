@@ -1,7 +1,6 @@
 package com.ruegnerlukas.taskmanager.data.taskAttributes.values;
 
 import com.ruegnerlukas.simplemath.MathUtils;
-import com.ruegnerlukas.taskmanager.architecture.SyncRequest;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 
@@ -84,9 +83,7 @@ public class FlagArrayValue implements TaskAttributeValue {
 		if (o instanceof FlagArrayValue) {
 			final TaskFlag[] oValue = ((FlagArrayValue) o).getFlags();
 
-			SyncRequest<TaskFlag[]> request = new SyncRequest<>();
-			Logic.taskFlags.getAllFlags(request);
-			TaskFlag[] flags = request.getResponse().getValue();
+			TaskFlag[] flags = Logic.taskFlags.getAllFlags().getValue();
 
 			for (int i = 0; i < Math.min(flags.length, oValue.length); i++) {
 				TaskFlag tf = flags[i];

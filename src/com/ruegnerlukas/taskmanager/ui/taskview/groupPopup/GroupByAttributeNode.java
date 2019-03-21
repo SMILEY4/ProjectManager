@@ -1,7 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.groupPopup;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
-import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
@@ -13,8 +11,6 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
-
-import java.util.List;
 
 public class GroupByAttributeNode extends HBox {
 
@@ -64,12 +60,7 @@ public class GroupByAttributeNode extends HBox {
 		choiceAttrib.setPrefSize(250, 32);
 		choiceAttrib.setMaxSize(500, 32);
 
-		Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
-			@Override
-			public void onResponse(Response<List<TaskAttribute>> response) {
-				choiceAttrib.getItems().addAll(response.getValue());
-			}
-		});
+		choiceAttrib.getItems().addAll(Logic.attribute.getAttributes().getValue());
 
 		choiceAttrib.getSelectionModel().select(attribute);
 		choiceAttrib.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {

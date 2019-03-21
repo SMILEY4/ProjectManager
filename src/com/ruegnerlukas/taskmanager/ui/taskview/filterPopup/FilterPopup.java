@@ -1,8 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.filterPopup;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.architecture.Request;
-import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.FilterCriteriaDeletedSavedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.FilterCriteriaSavedEvent;
@@ -79,12 +77,7 @@ public class FilterPopup extends AnchorPane {
 		// select presets
 		loadSaved();
 		choiceSaved.setOnAction(event -> {
-			Logic.filter.getSavedFilterCriteria(choiceSaved.getValue(), new Request<List<FilterCriteria>>(true) {
-				@Override
-				public void onResponse(Response<List<FilterCriteria>> response) {
-					setFilterCriterias(response.getValue());
-				}
-			});
+			setFilterCriterias(Logic.filter.getSavedFilterCriteria(choiceSaved.getValue()).getValue());
 		});
 
 		// delete presets
@@ -126,25 +119,15 @@ public class FilterPopup extends AnchorPane {
 
 		// values
 		VBoxDragAndDrop.enableDragAndDrop(boxAttributes);
-		Logic.filter.getFilterCriteria(new Request<List<FilterCriteria>>(true) {
-			@Override
-			public void onResponse(Response<List<FilterCriteria>> response) {
-				setFilterCriterias(response.getValue());
-			}
-		});
+		setFilterCriterias(Logic.filter.getFilterCriteria().getValue());
 
 
 		// add attribute
 		btnAdd.setOnAction(event -> {
-			Logic.attribute.getAttributes(new Request<List<TaskAttribute>>(true) {
-				@Override
-				public void onResponse(Response<List<TaskAttribute>> response) {
-					List<TaskAttribute> attributes = response.getValue();
-					FilterCriteriaNode node = new FilterCriteriaNode(attributes.get(0), FilterPopup.this);
-					boxAttributes.getChildren().add(node);
-					onFiltersChanged(node);
-				}
-			});
+			List<TaskAttribute> attributes = Logic.attribute.getAttributes().getValue();
+			FilterCriteriaNode node = new FilterCriteriaNode(attributes.get(0), FilterPopup.this);
+			boxAttributes.getChildren().add(node);
+			onFiltersChanged(node);
 		});
 
 
@@ -192,20 +175,18 @@ public class FilterPopup extends AnchorPane {
 
 	private void loadSaved() {
 
-		Logic.filter.getSavedFilterCriterias(new Request<Map<String, List<FilterCriteria>>>() {
-			@Override
-			public void onResponse(Response<Map<String, List<FilterCriteria>>> response) {
-				choiceSaved.getItems().clear();
-				if (response.getValue().isEmpty()) {
-					btnDeleteSaved.setDisable(true);
-				} else {
-					btnDeleteSaved.setDisable(false);
-					for (String name : response.getValue().keySet()) {
-						choiceSaved.getItems().add(name);
-					}
-				}
+		Map<String, List<FilterCriteria>> filters = Logic.filter.getSavedFilterCriterias().getValue();
+
+		choiceSaved.getItems().clear();
+		if (filters == null || filters.isEmpty()) {
+			btnDeleteSaved.setDisable(true);
+		} else {
+			btnDeleteSaved.setDisable(false);
+			for (String name : filters.keySet()) {
+				choiceSaved.getItems().add(name);
 			}
-		});
+		}
+
 	}
 
 

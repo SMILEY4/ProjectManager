@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.sidebar.item;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.data.Task;
@@ -56,16 +55,12 @@ public class ChoiceItem extends SidebarItem {
 		choiceBox.setPrefSize(200, 32);
 		choiceBox.setMaxSize(200, 32);
 
-		Logic.tasks.getAttributeValue(task, attribute.name, new Request<TaskAttributeValue>(true) {
-			@Override
-			public void onResponse(Response<TaskAttributeValue> response) {
-				if (response.getValue() instanceof NoValue) {
-					choiceBox.getSelectionModel().select(null);
-				} else {
-					choiceBox.getSelectionModel().select(((TextValue) response.getValue()).getText());
-				}
-			}
-		});
+		Response<TaskAttributeValue> response = Logic.tasks.getAttributeValue(task, attribute.name);
+		if (response.getValue() instanceof NoValue) {
+			choiceBox.getSelectionModel().select(null);
+		} else {
+			choiceBox.getSelectionModel().select(((TextValue) response.getValue()).getText());
+		}
 
 		choiceBox.setOnAction(event -> {
 			Logic.tasks.setAttributeValue(task, attribute, new TextValue(choiceBox.getSelectionModel().getSelectedItem()));

@@ -14,52 +14,70 @@ public class Response<T> {
 
 
 
-	private final State state;
-	private final String message;
-	private final T value;
+	public static final long WAIT_INTERVALL = 5;
+
+	private State state;
+	private T value;
+	private volatile boolean complete = false;
 
 
 
 
-	public Response(State state, String message) {
-		this(state, message, null);
+	public Response<T> complete(T value) {
+		return this.complete(value, State.SUCCESS);
 	}
 
 
 
 
-	public Response(State state, T value) {
-		this(state, "", value);
-	}
-
-
-
-
-	public Response(State state, String message, T value) {
-		this.state = state;
-		this.message = message;
-		this.value = value;
-	}
-
-
-
-
-	public T getValue() {
-		return value;
+	public Response<T> complete(T value, State state) {
+		if (!complete) {
+			this.value = value;
+			this.state = state;
+			complete = true;
+		}
+		return this;
 	}
 
 
 
 
 	public State getState() {
+		if (!complete) {
+			waitForComplete();
+		}
 		return state;
 	}
 
 
 
 
-	public String getMessage() {
-		return message;
+	public T getValue() {
+		if (!complete) {
+			waitForComplete();
+		}
+		return value;
 	}
+
+
+
+
+	private void waitForComplete() {
+		try {
+			do {
+				Thread.sleep(WAIT_INTERVALL);
+			} while (!complete);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
+
+	public boolean isComplete() {
+		return complete;
+	}
+
 
 }

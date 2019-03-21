@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.architecture.Request;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -63,7 +62,7 @@ public class AttributeWarningLogic {
 
 
 
-	private boolean requiresWarning(TaskAttribute attribute, Map<TaskAttributeData.Var, TaskAttributeValue> newValues) {
+	private boolean requiresWarningInternal(TaskAttribute attribute, Map<TaskAttributeData.Var, TaskAttributeValue> newValues) {
 		if (!requiresWarningAttribute(attribute, newValues)) {
 			return false;
 		} else {
@@ -74,8 +73,8 @@ public class AttributeWarningLogic {
 
 
 
-	public void requiresWarning(TaskAttribute attribute, Map<TaskAttributeData.Var, TaskAttributeValue> newValues, Request<Boolean> request) {
-		request.respond(new Response<>(Response.State.SUCCESS, requiresWarning(attribute, newValues)));
+	public Response<Boolean> requiresWarning(TaskAttribute attribute, Map<TaskAttributeData.Var, TaskAttributeValue> newValues) {
+		return new Response<Boolean>().complete(requiresWarningInternal(attribute, newValues));
 	}
 
 
