@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.taskview.taskcard;
 
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
@@ -17,14 +18,17 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValu
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
 import com.ruegnerlukas.taskmanager.ui.taskview.tasklist.TaskList;
+import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+
+import java.io.IOException;
 
 public class TaskCard extends AnchorPane {
 
@@ -35,9 +39,9 @@ public class TaskCard extends AnchorPane {
 	@FXML private Pane paneFlag;
 	@FXML private Pane paneBackground;
 	@FXML private Label labelID;
-	@FXML private AnchorPane paneDescription;
-
-	private TextArea areaDescription;
+	@FXML private HBox boxIcons;
+	@FXML private Label labelDesc;
+	@FXML private VBox boxAttribs;
 
 
 
@@ -46,15 +50,23 @@ public class TaskCard extends AnchorPane {
 		this.task = task;
 		this.parent = parent;
 
-		layout_taskcardBase layout = new layout_taskcardBase();
-		this.paneFlag = layout.paneFlag;
-		this.paneBackground = layout.paneBackground;
-		this.labelID = layout.labelID;
-		this.paneDescription = layout.paneDescription;
+//		layout_taskcardBase layout = new layout_taskcardBase();
+//		this.paneFlag = layout.paneFlag;
+//		this.paneBackground = layout.paneBackground;
+//		this.labelID = layout.labelID;
+//		this.paneDescription = layout.paneDescription;
+//
+//		Parent root = layout.root;
+//		AnchorUtils.setAnchors(root, 0, 0, 0, 0);
+//		this.getChildren().add(root);
 
-		Parent root = layout.root;
-		AnchorUtils.setAnchors(root, 0, 0, 0, 0);
-		this.getChildren().add(root);
+		try {
+			Parent root = UIDataHandler.loadFXML(UIModule.ELEMENT_TASKCARD, this);
+			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
+			this.getChildren().add(root);
+		} catch (IOException e) {
+			Logger.get().error("Error loading TaskCard-FXML: " + e);
+		}
 
 		this.setPrefSize(10000, 200);
 
@@ -96,21 +108,14 @@ public class TaskCard extends AnchorPane {
 
 
 		// description
-		areaDescription = new TextArea();
-		areaDescription.setEditable(false);
-		AnchorUtils.setAnchors(areaDescription, 0, 0, 0, 0);
-		paneDescription.getChildren().add(areaDescription);
-		paneDescription.setMouseTransparent(true);
-
 		updateDescription();
-
 		EventManager.registerListener(this, e -> {
 			TaskValueChangedEvent event = (TaskValueChangedEvent) e;
 			if (event.getTask() == task) {
 				TaskAttribute attribute = event.getAttribute();
 				if (attribute.data.getType() == TaskAttributeType.DESCRIPTION) {
 					TextValue newDescription = (TextValue) event.getNewValue();
-					areaDescription.setText(newDescription.getText());
+					labelDesc.setText(newDescription.getText());
 				}
 
 			}
@@ -135,7 +140,7 @@ public class TaskCard extends AnchorPane {
 	private void updateDescription() {
 		TextValue value = (TextValue) Logic.tasks.getAttributeValue(task, DescriptionAttributeData.NAME).getValue();
 		if(value != null) {
-			areaDescription.setText(value.getText());
+			labelDesc.setText(value.getText());
 		}
 	}
 
