@@ -120,9 +120,11 @@ public class Sidebar extends AnchorPane {
 		choiceFlag.setCellFactory(param -> ComboboxUtils.createListCellFlag());
 		choiceFlag.getItems().addAll(Logic.taskFlags.getAllFlags().getValue());
 		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			suppressFlagRefesh = true;
-			Logic.tasks.setAttributeValue(currentTask, FlagAttributeData.NAME, new FlagValue(choiceFlag.getValue()));
-			suppressFlagRefesh = false;
+			if(oldValue != newValue && oldValue != null && newValue != null) {
+				suppressFlagRefesh = true;
+				Logic.tasks.setAttributeValue(currentTask, FlagAttributeData.NAME, new FlagValue(choiceFlag.getValue()));
+				suppressFlagRefesh = false;
+			}
 		});
 
 
