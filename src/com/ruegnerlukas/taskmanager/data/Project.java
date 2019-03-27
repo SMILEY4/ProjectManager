@@ -17,6 +17,9 @@ public class Project {
 	public String name;
 	public boolean attributesLocked = false;
 	public List<TaskAttribute> attributes = new ArrayList<>();
+	public boolean appearanceLocked = false;
+	public List<TaskAttribute> cardAttributes = new ArrayList<>();
+	public Map<TaskAttribute, String> cardAttribDisplayType = new HashMap<>();
 
 	// 1. tasks
 	public List<Task> tasks = new ArrayList<>();

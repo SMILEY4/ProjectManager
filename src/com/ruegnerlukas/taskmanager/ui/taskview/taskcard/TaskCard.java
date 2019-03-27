@@ -4,6 +4,8 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.architecture.Response;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.AttributeUpdatedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.CardAttributeDisplayTypeChangedEvent;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.CardAttributesChangedEvent;
 import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.TaskValueChangedEvent;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -17,6 +19,7 @@ import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TextValue;
 import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.ui.taskview.taskcard.cardattributes.CardAttribute;
 import com.ruegnerlukas.taskmanager.ui.taskview.tasklist.TaskList;
 import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.uidata.UIModule;
@@ -29,6 +32,7 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 import java.io.IOException;
+import java.util.List;
 
 public class TaskCard extends AnchorPane {
 
@@ -92,7 +96,6 @@ public class TaskCard extends AnchorPane {
 		labelID.setText("T-" + value.getInt());
 
 
-
 		// flag
 		updateFlagColor();
 
@@ -121,6 +124,13 @@ public class TaskCard extends AnchorPane {
 			}
 		}, TaskValueChangedEvent.class);
 
+
+		// card attributes
+		updateCardAttributes();
+		EventManager.registerListener(this, e -> {
+			updateCardAttributes();
+		}, CardAttributesChangedEvent.class, AttributeUpdatedEvent.class, TaskValueChangedEvent.class, CardAttributeDisplayTypeChangedEvent.class);
+
 	}
 
 
@@ -128,7 +138,7 @@ public class TaskCard extends AnchorPane {
 
 	private void updateFlagColor() {
 		FlagValue value = (FlagValue) Logic.tasks.getAttributeValue(task, FlagAttributeData.NAME).getValue();
-		if(value != null) {
+		if (value != null) {
 			Color flagColor = value.getFlag().color.color;
 			paneFlag.setStyle("-fx-background-color: rgba(" + flagColor.getRed() * 255 + "," + flagColor.getGreen() * 255 + "," + flagColor.getBlue() * 255 + ",1.0);");
 		}
@@ -139,8 +149,27 @@ public class TaskCard extends AnchorPane {
 
 	private void updateDescription() {
 		TextValue value = (TextValue) Logic.tasks.getAttributeValue(task, DescriptionAttributeData.NAME).getValue();
-		if(value != null) {
+		if (value != null) {
 			labelDesc.setText(value.getText());
+		}
+	}
+
+
+
+
+	private void updateCardAttributes() {
+		boxAttribs.getChildren().clear();
+		boxIcons.getChildren().clear();
+		List<TaskAttribute> attributes = Logic.attribute.getCardAttributes().getValue();
+		for (TaskAttribute attribute : attributes) {
+			CardAttribute cardAttrib = CardAttribute.create(this.task, attribute);
+			boxAttribs.getChildren().add(cardAttrib);
+			Region iconNode = cardAttrib.getIconNode();
+			if(iconNode != null) {
+				iconNode.setMinHeight(20);
+				iconNode.setMaxHeight(20);
+				boxIcons.getChildren().add(iconNode);
+			}
 		}
 	}
 

@@ -1,6 +1,8 @@
 package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.taskmanager.architecture.Response;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
+import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.TaskValueChangedEvent;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
@@ -90,6 +92,7 @@ public class DependencyLogic {
 						new TaskArrayValue(prerequisite) :
 						new TaskArrayValue(((TaskArrayValue) value).getTasks(), prerequisite);
 				Logic.tasks.setValue(task, attribute, newValue);
+				EventManager.fireEvent(new TaskValueChangedEvent(task, attribute, value, newValue, this));
 			}
 		}
 	}

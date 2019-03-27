@@ -142,6 +142,8 @@ public class AttributeLogic {
 	}
 
 
+
+
 	protected AttributeUpdater getAttributeUpdater(TaskAttributeType type) {
 		return UPDATER_MAP.get(type);
 	}
@@ -221,10 +223,77 @@ public class AttributeLogic {
 	}
 
 
+
+
+	public Response<Boolean> getCardAttributeLock() {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			return new Response<Boolean>().complete(project.appearanceLocked);
+		} else {
+			return new Response<Boolean>().complete(null, Response.State.FAIL);
+		}
+	}
+
+
+
+
+	public Response<List<TaskAttribute>> getCardAttributes() {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			return new Response<List<TaskAttribute>>().complete(project.cardAttributes);
+		} else {
+			return new Response<List<TaskAttribute>>().complete(new ArrayList<>(), Response.State.FAIL);
+		}
+	}
+
+
 	//======================//
 	//        SETTER        //
 	//======================//
 
+
+
+
+	public void setCardAttributeLock(boolean lockAppearance) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			final boolean lockPrev = project.appearanceLocked;
+			if (lockPrev != lockAppearance) {
+				project.appearanceLocked = lockAppearance;
+				EventManager.fireEvent(new AppearanceLockEvent(lockPrev, lockAppearance, this));
+			}
+		}
+	}
+
+
+
+
+	public void setCardAttributes(List<TaskAttribute> cardAttributes) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if (cardAttributes != null && cardAttributes.size() <= 2) {
+				project.cardAttributes.clear();
+				project.cardAttributes.addAll(cardAttributes);
+				EventManager.fireEvent(new CardAttributesChangedEvent(cardAttributes, this));
+			}
+		}
+	}
+
+
+
+	public static final String CARD_ATTRIB_DISPLAY_TYPE_FULL = "Key-Value";
+	public static final String CARD_ATTRIB_DISPLAY_TYPE_ICON = "Icon";
+	public static final String CARD_ATTRIB_DISPLAY_TYPE_BOTH = "Key-Value + Icon";
+
+	public void setCardAttributeDisplayType(TaskAttribute attribute, String type) {
+		Project project = Logic.project.getProject();
+		if (project != null) {
+			if(project.cardAttributes.contains(attribute)) {
+				project.cardAttribDisplayType.put(attribute, type);
+				EventManager.fireEvent(new CardAttributeDisplayTypeChangedEvent(attribute, type, this));
+			}
+		}
+	}
 
 
 
@@ -307,6 +376,9 @@ public class AttributeLogic {
 
 			} else {
 				project.attributes.remove(attribute);
+				if(project.cardAttributes.remove(attribute)) {
+					EventManager.fireEvent(new CardAttributesChangedEvent(project.cardAttributes, this));
+				}
 				EventManager.fireEvent(new AttributeRemovedEvent(attribute, this));
 			}
 

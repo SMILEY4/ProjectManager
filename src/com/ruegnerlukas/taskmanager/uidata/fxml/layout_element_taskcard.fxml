@@ -14,15 +14,15 @@
       <Pane fx:id="paneBackground" layoutX="147.0" layoutY="89.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <VBox layoutX="147.0" layoutY="89.0" prefHeight="200.0" prefWidth="100.0" spacing="4.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <HBox>
+            <HBox maxHeight="20.0" minHeight="20.0" prefHeight="20.0">
                <children>
                   <Label fx:id="labelID" maxHeight="20.0" maxWidth="50.0" minHeight="20.0" minWidth="50.0" prefHeight="20.0" prefWidth="50.0" text="T-4200" />
                   <Region maxHeight="20.0" maxWidth="10000.0" minHeight="20.0" minWidth="0.0" prefHeight="20.0" prefWidth="10000.0" />
-                  <HBox fx:id="boxIcons" spacing="3.0" />
+                  <HBox fx:id="boxIcons" alignment="CENTER_RIGHT" minWidth="0.0" spacing="3.0" />
                </children>
             </HBox>
             <Label fx:id="labelDesc" alignment="TOP_LEFT" maxHeight="10000.0" maxWidth="10000.0" minHeight="10.0" minWidth="10.0" prefHeight="10000.0" prefWidth="10000.0" wrapText="true" />
-            <VBox fx:id="boxAttribs" prefHeight="200.0" prefWidth="100.0" spacing="5.0" />
+            <VBox fx:id="boxAttribs" prefHeight="200.0" prefWidth="100.0" />
          </children>
          <padding>
             <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />

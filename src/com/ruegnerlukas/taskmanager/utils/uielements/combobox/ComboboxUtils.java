@@ -113,12 +113,15 @@ public class ComboboxUtils {
 
 
 
+
+
+
 	public static ListCell<TaskAttribute> createListCellAttribute() {
 		return new ListCell<TaskAttribute>() {
 			@Override
 			protected void updateItem(TaskAttribute item, boolean empty) {
 				super.updateItem(item, empty);
-				if (item == null || empty) {
+				if(item == null || empty) {
 					setText("");
 				} else {
 					setText(item.name);

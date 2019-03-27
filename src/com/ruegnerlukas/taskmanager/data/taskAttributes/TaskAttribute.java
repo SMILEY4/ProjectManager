@@ -21,6 +21,9 @@ public class TaskAttribute {
 
 
 	public boolean createNewData(TaskAttributeType type) {
+		if(type == null) {
+			return false;
+		}
 		switch (type) {
 			case ID: {
 				data = new IDAttributeData();
