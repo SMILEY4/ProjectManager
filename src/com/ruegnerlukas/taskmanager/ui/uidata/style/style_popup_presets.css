@@ -1,0 +1,116 @@
+/*
+
+- PresetsPopup
+	- AnchorPane
+		- VBox #boxContent
+			- Label // "Presets"
+			- HBox #boxPresets
+				- ComboBox #choiceSaved
+				- Button #btnDeleteSaved
+				- HBox
+					- TextField #fieldSave
+					- Button #btnSave
+			- CheckBox #useIndPresets
+			- VBox #boxIndPresets
+				- HBox
+					- Label
+					- ComboBox #choiceFilter
+				- HBox
+					- Label
+					- ComboBox #choiceTaskGroup
+				- HBox
+					- Label
+					- ComboBox #choiceSort
+			- HBox
+				- Button #btnCancel
+				- Button #btnAccept
+
+
+ */
+
+* {
+	-primary-0:      #29323c;
+	-primary-1:      #2f3c48;
+	-primary-2:      #3e4d59;
+
+	-secondary:      #6f7f8c;
+	-info:           #5c8f94;
+	-danger:         #cc330d;
+	-success:        #3e4d59;
+	-warning:        #6e9fa5;
+	-light:          #eceeec;
+	-dark:           #1e2b37;
+
+	-gray-dark:      #767676;
+	-gray-mid-1:     #b9b9b9;
+	-gray-mid-0:     #cccccc;
+	-gray-light:     #ededed;
+
+	-text-light-0:   #b9b9b9;
+	-text-light-1:   white;
+
+	-text-link:      #3366bb;
+
+	-selected-light: #50aaff;
+	-selected-dark:  #0084ff;
+
+
+	-mouse-over:     #787878;
+	-mouse-down:     #a4a4a4;
+
+}
+
+
+#boxContent {
+	-fx-spacing: 10;
+}
+
+
+#boxContent > .label {
+	-fx-font-weight: bold;
+}
+
+
+#boxPresets {
+	-fx-spacing:           5;
+	-fx-padding:           3 3 3 10;
+	-fx-background-color:  white;
+	-fx-background-radius: 5;
+	-fx-border-radius:     5;
+	-fx-border-color:      -gray-mid-0;
+}
+
+
+#boxPresets > .combo-box {
+	-fx-background-color:  transparent;
+	-fx-background-insets: 0 0 5 0;
+	-fx-border-color:      -gray-mid-0;
+	-fx-border-radius:     0;
+	-fx-border-width:      0 0 1 0;
+	-fx-border-insets:     0 0 5 0;
+}
+
+
+#boxIndPresets {
+	-fx-padding: 0 0 0 30;
+}
+
+
+#boxIndPresets > * {
+	-fx-spacing:           5;
+	-fx-padding:           3 3 3 10;
+	-fx-background-color:  white;
+	-fx-background-radius: 5;
+	-fx-border-radius:     5;
+	-fx-border-color:      -gray-mid-0;
+}
+
+
+#boxIndPresets .combo-box {
+	-fx-background-color:  transparent;
+	-fx-background-insets: 0 0 5 0;
+	-fx-border-color:      -gray-mid-0;
+	-fx-border-radius:     0;
+	-fx-border-width:      0 0 1 0;
+	-fx-border-insets:     0 0 5 0;
+}
