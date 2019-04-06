@@ -63,9 +63,9 @@ public class TaskAttribute {
 
 
 
-	public SimpleStringProperty name = new SimpleStringProperty();
-	public AttributeTypeProperty type = new AttributeTypeProperty();
-	public ObservableMap<String, Object> values = FXCollections.observableHashMap();
+	public final SimpleStringProperty name = new SimpleStringProperty();
+	public final AttributeTypeProperty type = new AttributeTypeProperty();
+	public final ObservableMap<String, Object> values = FXCollections.observableHashMap();
 
 
 
@@ -101,15 +101,6 @@ public class TaskAttribute {
 				TextAttributeAccess.initAttribute(this);
 				break;
 			}
-		}
-	}
-
-
-
-
-	public void setValue(String key, Object value) {
-		if (values.containsKey(key)) {
-			values.put(key, value);
 		}
 	}
 

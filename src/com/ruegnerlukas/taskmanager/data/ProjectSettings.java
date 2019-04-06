@@ -4,7 +4,7 @@ import javafx.beans.property.SimpleStringProperty;
 
 public class ProjectSettings {
 
-	public SimpleStringProperty name = new SimpleStringProperty("New Project");
+	public final SimpleStringProperty name = new SimpleStringProperty("New Project");
 
 
 }
