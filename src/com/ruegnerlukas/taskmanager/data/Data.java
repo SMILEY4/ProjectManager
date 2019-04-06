@@ -1,10 +1,7 @@
 package com.ruegnerlukas.taskmanager.data;
 
 
-import javafx.beans.value.ChangeListener;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.ruegnerlukas.taskmanager.utils.observables.ProjectProperty;
 
 public class Data {
 
@@ -21,42 +18,30 @@ public class Data {
 
 
 
-	private Project project = null;
-	private List<ChangeListener<? super Project>> projectListeners = new ArrayList<>();
+	private ProjectProperty projectProperty = new ProjectProperty();
 
 
 
 
 	public void setProject(Project project) {
-		if (this.project == project) {
-			return;
+		if (this.projectProperty.get() != project) {
+			projectProperty.set(project);
 		}
-		final Project oldProject = this.project;
-		this.project = project;
-		for (ChangeListener<? super Project> listener : projectListeners) {
-			listener.changed(null, oldProject, this.project);
-		}
+
+	}
+
+
+
+
+	public ProjectProperty projectProperty() {
+		return this.projectProperty;
 	}
 
 
 
 
 	public Project getProject() {
-		return this.project;
-	}
-
-
-
-
-	public void addProjectListener(ChangeListener<? super Project> listener) {
-		projectListeners.add(listener);
-	}
-
-
-
-
-	public void removeProjectListener(ChangeListener<? super Project> listener) {
-		projectListeners.remove(listener);
+		return this.projectProperty.get();
 	}
 
 
