@@ -89,6 +89,10 @@ public class TaskAttribute {
 				DescriptionAttributeAccess.initAttribute(this);
 				break;
 			}
+			case FLAG: {
+				TaskFlagAttributeAccess.initAttribute(this);
+				break;
+			}
 			case BOOLEAN: {
 				BooleanAttributeAccess.initAttribute(this);
 				break;

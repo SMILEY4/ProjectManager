@@ -2,11 +2,13 @@ package com.ruegnerlukas.taskmanager.utils.uielements;
 
 
 import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.attributes.TaskFlag;
 import javafx.scene.control.ListCell;
 
 public class ComboboxUtils {
 
-//
+
+	//
 //	public static void initFlagColor(ComboBox<TaskFlag> combobox) {
 //		combobox.setButtonCell(new ListCell<TaskFlag>() {
 //			@Override
@@ -80,26 +82,27 @@ public class ComboboxUtils {
 			}
 		};
 	}
-//
-//
-//
-//
-//	public static ListCell<TaskFlag> createListCellFlag() {
-//		return new ListCell<TaskFlag>() {
-//			@Override
-//			protected void updateItem(TaskFlag item, boolean empty) {
-//				super.updateItem(item, empty);
-//				if (item == null || empty) {
-//					setText("");
-//				} else {
-//					setText(item.name);
-//				}
-//			}
-//		};
-//	}
-//
-//
-//
+
+
+
+
+	public static ListCell<TaskFlag> createListCellFlag() {
+		return new ListCell<TaskFlag>() {
+			@Override
+			protected void updateItem(TaskFlag item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText("");
+				} else {
+					setText(item.name.get());
+				}
+			}
+		};
+	}
+
+
+
+
 //
 //
 //

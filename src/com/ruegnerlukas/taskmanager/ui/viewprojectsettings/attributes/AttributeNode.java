@@ -2,10 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes;
 
 import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.Logic;
-import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes.BooleanContentNode;
-import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes.NumberContentNode;
-import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes.TextContentNode;
-import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes.UnchangeableContentNode;
+import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes.*;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
@@ -188,6 +185,10 @@ public class AttributeNode extends AnchorPane {
 			}
 			case DESCRIPTION: {
 				content = new UnchangeableContentNode(attribute);
+				break;
+			}
+			case FLAG: {
+				content = new FlagContentNode(attribute);
 				break;
 			}
 			case BOOLEAN: {
