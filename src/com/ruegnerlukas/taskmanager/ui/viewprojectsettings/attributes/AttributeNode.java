@@ -207,6 +207,10 @@ public class AttributeNode extends AnchorPane {
 				content = new ChoiceContentNode(attribute);
 				break;
 			}
+			case DEPENDENCY: {
+				content = new UnchangeableContentNode(attribute);
+				break;
+			}
 			default: {
 				content = new UnchangeableContentNode(attribute);
 				break;
@@ -299,8 +303,6 @@ public class AttributeNode extends AnchorPane {
 	public TaskAttribute getAttribute() {
 		return attribute;
 	}
-
-
 
 
 }

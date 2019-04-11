@@ -15,7 +15,8 @@ public class TaskAttribute {
 		TEXT("Text", false),
 		NUMBER("Number", false),
 		BOOLEAN("Boolean", false),
-		CHOICE("Choice", false);
+		CHOICE("Choice", false),
+		DEPENDENCY("Dependency", false);
 
 		public final String display;
 		public final boolean fixed;
@@ -108,6 +109,10 @@ public class TaskAttribute {
 			}
 			case CHOICE: {
 				ChoiceAttributeAccess.initAttribute(this);
+				break;
+			}
+			case DEPENDENCY: {
+				DependencyAttributeAccess.initAttribute(this);
 				break;
 			}
 		}
