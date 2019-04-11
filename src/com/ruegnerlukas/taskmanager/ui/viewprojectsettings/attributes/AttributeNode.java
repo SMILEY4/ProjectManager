@@ -207,6 +207,10 @@ public class AttributeNode extends AnchorPane {
 				content = new ChoiceContentNode(attribute);
 				break;
 			}
+			case DATE: {
+				content = new DateContentNode(attribute);
+				break;
+			}
 			case DEPENDENCY: {
 				content = new UnchangeableContentNode(attribute);
 				break;

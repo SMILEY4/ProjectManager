@@ -16,6 +16,7 @@ public class TaskAttribute {
 		NUMBER("Number", false),
 		BOOLEAN("Boolean", false),
 		CHOICE("Choice", false),
+		DATE("Date", false),
 		DEPENDENCY("Dependency", false);
 
 		public final String display;
@@ -109,6 +110,10 @@ public class TaskAttribute {
 			}
 			case CHOICE: {
 				ChoiceAttributeAccess.initAttribute(this);
+				break;
+			}
+			case DATE: {
+				DateAttributeAccess.initAttribute(this);
 				break;
 			}
 			case DEPENDENCY: {
