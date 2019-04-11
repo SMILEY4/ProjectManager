@@ -11,6 +11,8 @@ public class TaskAttribute {
 	public enum Type {
 		ID("ID", true),
 		DESCRIPTION("Description", true),
+		CREATED("Created", true),
+		LAST_UPDATED("Last Updated", true),
 		FLAG("Flag", true),
 		TEXT("Text", false),
 		NUMBER("Number", false),
@@ -90,6 +92,14 @@ public class TaskAttribute {
 			}
 			case DESCRIPTION: {
 				DescriptionAttributeAccess.initAttribute(this);
+				break;
+			}
+			case CREATED: {
+				CreatedAttributeAccess.initAttribute(this);
+				break;
+			}
+			case LAST_UPDATED: {
+				LastUpdatedAttributeAccess.initAttribute(this);
 				break;
 			}
 			case FLAG: {

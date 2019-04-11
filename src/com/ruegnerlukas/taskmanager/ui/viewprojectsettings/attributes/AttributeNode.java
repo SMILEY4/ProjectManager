@@ -187,6 +187,14 @@ public class AttributeNode extends AnchorPane {
 				content = new UnchangeableContentNode(attribute);
 				break;
 			}
+			case CREATED: {
+				content = new UnchangeableContentNode(attribute);
+				break;
+			}
+			case LAST_UPDATED: {
+				content = new UnchangeableContentNode(attribute);
+				break;
+			}
 			case FLAG: {
 				content = new FlagContentNode(attribute);
 				break;
