@@ -1,7 +1,10 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes;
 
-import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.data.AttributeType;
+import com.ruegnerlukas.taskmanager.data.Data;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.TaskAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes.*;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -26,7 +29,7 @@ public class AttributeNode extends AnchorPane {
 	private AnchorPane headerPane;
 	private HBox headerBox;
 	private Button btnRemove;
-	private ComboBox<TaskAttribute.Type> choiceType;
+	private ComboBox<AttributeType> choiceType;
 	private EditableLabel labelName;
 	private Button btnExpand;
 	private Label labelUnsafed;
@@ -116,7 +119,7 @@ public class AttributeNode extends AnchorPane {
 		if (attribute.type.getValue().fixed) {
 			choiceType.getItems().add(attribute.type.getValue());
 		} else {
-			choiceType.getItems().addAll(TaskAttribute.Type.getFreeTypes());
+			choiceType.getItems().addAll(AttributeType.getFreeTypes());
 		}
 		choiceType.getSelectionModel().select(this.attribute.type.getValue());
 		choiceType.setMinSize(150, 32);
@@ -243,15 +246,15 @@ public class AttributeNode extends AnchorPane {
 
 
 	protected void onRemoveAttribute() {
-		Logic.get().deleteTaskAttribute(getAttribute());
+		ProjectLogic.removeTaskAttributeFromProject(Data.projectProperty.get(), getAttribute());
 	}
 
 
 
 
-	protected void onTypeSelected(TaskAttribute.Type oldValue, TaskAttribute.Type newValue) {
+	protected void onTypeSelected(AttributeType oldValue, AttributeType newValue) {
 		if (oldValue != newValue) {
-			Logic.get().setTaskAttributeType(getAttribute(), newValue);
+			TaskAttributeLogic.setTaskAttributeType(getAttribute(), newValue);
 			setAttributeContent();
 		}
 	}
@@ -261,7 +264,7 @@ public class AttributeNode extends AnchorPane {
 
 	protected void onRename(String oldValue, String newValue) {
 		if (!oldValue.equals(newValue)) {
-			Logic.get().renameTaskAttribute(getAttribute(), newValue);
+			TaskAttributeLogic.renameTaskAttribute(Data.projectProperty.get(), getAttribute(), newValue);
 		}
 	}
 

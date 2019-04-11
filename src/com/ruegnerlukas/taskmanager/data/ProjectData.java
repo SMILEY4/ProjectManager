@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.data;
 
-import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;

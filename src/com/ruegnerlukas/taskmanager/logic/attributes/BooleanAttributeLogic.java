@@ -1,10 +1,30 @@
-package com.ruegnerlukas.taskmanager.data.attributes;
+package com.ruegnerlukas.taskmanager.logic.attributes;
 
-public class BooleanAttributeAccess {
+import com.ruegnerlukas.simpleutils.RandomUtils;
+import com.ruegnerlukas.taskmanager.data.AttributeType;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+
+public class BooleanAttributeLogic {
 
 
 	public static final String BOOLEAN_USE_DEFAULT = "bool_use_default";
 	public static final String BOOLEAN_DEFAULT_VALUE = "bool_default_value";
+
+
+
+
+	public static TaskAttribute createAttribute() {
+		return createAttribute("BooleanAttribute " + RandomUtils.generateRandomHexString(8));
+	}
+
+
+
+
+	public static TaskAttribute createAttribute(String name) {
+		TaskAttribute attribute = new TaskAttribute(name, AttributeType.BOOLEAN);
+		BooleanAttributeLogic.initAttribute(attribute);
+		return attribute;
+	}
 
 
 

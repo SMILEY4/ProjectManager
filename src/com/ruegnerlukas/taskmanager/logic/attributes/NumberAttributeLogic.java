@@ -1,6 +1,10 @@
-package com.ruegnerlukas.taskmanager.data.attributes;
+package com.ruegnerlukas.taskmanager.logic.attributes;
 
-public class NumberAttributeAccess {
+import com.ruegnerlukas.simpleutils.RandomUtils;
+import com.ruegnerlukas.taskmanager.data.AttributeType;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+
+public class NumberAttributeLogic {
 
 
 	public static final String NUMBER_DEC_PLACES = "number_dec_places";
@@ -8,6 +12,22 @@ public class NumberAttributeAccess {
 	public static final String NUMBER_MAX_VALUE = "number_max_value";
 	public static final String NUMBER_USE_DEFAULT = "number_use_default";
 	public static final String NUMBER_DEFAULT_VALUE = "number_default_value";
+
+
+
+
+	public static TaskAttribute createAttribute() {
+		return createAttribute("NumberAttribute " + RandomUtils.generateRandomHexString(8));
+	}
+
+
+
+
+	public static TaskAttribute createAttribute(String name) {
+		TaskAttribute attribute = new TaskAttribute(name, AttributeType.NUMBER);
+		NumberAttributeLogic.initAttribute(attribute);
+		return attribute;
+	}
 
 
 
@@ -39,7 +59,7 @@ public class NumberAttributeAccess {
 
 
 	public static void setMinValue(TaskAttribute attribute, int minValue) {
-		attribute.values.put(NUMBER_MIN_VALUE, (double)minValue);
+		attribute.values.put(NUMBER_MIN_VALUE, (double) minValue);
 	}
 
 
@@ -60,7 +80,7 @@ public class NumberAttributeAccess {
 
 
 	public static void setMaxValue(TaskAttribute attribute, int maxValue) {
-		attribute.values.put(NUMBER_MAX_VALUE, (double)maxValue);
+		attribute.values.put(NUMBER_MAX_VALUE, (double) maxValue);
 	}
 
 
@@ -95,7 +115,7 @@ public class NumberAttributeAccess {
 
 
 	public static void setDefaultValue(TaskAttribute attribute, int defaultValue) {
-		attribute.values.put(NUMBER_DEFAULT_VALUE, (double)defaultValue);
+		attribute.values.put(NUMBER_DEFAULT_VALUE, (double) defaultValue);
 	}
 
 

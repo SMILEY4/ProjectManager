@@ -1,12 +1,32 @@
-package com.ruegnerlukas.taskmanager.data.attributes;
+package com.ruegnerlukas.taskmanager.logic.attributes;
+
+import com.ruegnerlukas.simpleutils.RandomUtils;
+import com.ruegnerlukas.taskmanager.data.AttributeType;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
 import java.time.LocalDate;
 
-public class DateAttributeAccess {
+public class DateAttributeLogic {
 
 
 	public static final String DATE_USE_DEFAULT = "date_use_default";
 	public static final String DATE_DEFAULT_VALUE = "date_default_value";
+
+
+
+
+	public static TaskAttribute createAttribute() {
+		return createAttribute("DateAttribute " + RandomUtils.generateRandomHexString(8));
+	}
+
+
+
+
+	public static TaskAttribute createAttribute(String name) {
+		TaskAttribute attribute = new TaskAttribute(name, AttributeType.DATE);
+		DateAttributeLogic.initAttribute(attribute);
+		return attribute;
+	}
 
 
 

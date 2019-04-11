@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
-import com.ruegnerlukas.taskmanager.data.attributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.TaskFlag;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.observables.FlagColorProperty;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;

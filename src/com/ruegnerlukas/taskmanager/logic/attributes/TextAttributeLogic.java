@@ -1,12 +1,32 @@
-package com.ruegnerlukas.taskmanager.data.attributes;
+package com.ruegnerlukas.taskmanager.logic.attributes;
 
-public class TextAttributeAccess {
+import com.ruegnerlukas.simpleutils.RandomUtils;
+import com.ruegnerlukas.taskmanager.data.AttributeType;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+
+public class TextAttributeLogic {
 
 
 	public static final String TEXT_CHAR_LIMIT = "text_char_limit";
 	public static final String TEXT_MULTILINE = "text_multiline";
 	public static final String TEXT_USE_DEFAULT = "text_use_default";
 	public static final String TEXT_DEFAULT_VALUE = "text_default_value";
+
+
+
+
+	public static TaskAttribute createAttribute() {
+		return createAttribute("TextAttribute " + RandomUtils.generateRandomHexString(8));
+	}
+
+
+
+
+	public static TaskAttribute createAttribute(String name) {
+		TaskAttribute attribute = new TaskAttribute(name, AttributeType.TEXT);
+		TextAttributeLogic.initAttribute(attribute);
+		return attribute;
+	}
 
 
 

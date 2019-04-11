@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.utils.uielements;
 
 
-import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.attributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.AttributeType;
+import com.ruegnerlukas.taskmanager.data.TaskFlag;
 import javafx.scene.control.ListCell;
 
 public class ComboboxUtils {
@@ -175,10 +175,10 @@ public class ComboboxUtils {
 //
 //
 //
-	public static ListCell<TaskAttribute.Type> createListCellAttributeType() {
-		return new ListCell<TaskAttribute.Type>() {
+	public static ListCell<AttributeType> createListCellAttributeType() {
+		return new ListCell<AttributeType>() {
 			@Override
-			protected void updateItem(TaskAttribute.Type item, boolean empty) {
+			protected void updateItem(AttributeType item, boolean empty) {
 				super.updateItem(item, empty);
 				if (item == null || empty) {
 					setText("");

@@ -3,7 +3,7 @@ package com.ruegnerlukas.taskmanager.ui.viewmain;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.Project;
-import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.ProjectSettingsView;
@@ -90,7 +90,7 @@ public class MainView extends AnchorPane {
 			Logger.get().error("Error loading MainView-FXML: " + e);
 		}
 
-		Data.get().projectProperty().addListener((observable, oldValue, newValue) -> {
+		Data.projectProperty.addListener((observable, oldValue, newValue) -> {
 			System.out.println("Project changed: " + oldValue + "  " + newValue);
 		});
 
@@ -107,12 +107,12 @@ public class MainView extends AnchorPane {
 		functionNewProject = new MenuFunction("File", "New Project") {
 			@Override
 			public void onAction() {
-				if (Data.get().getProject() != null) {
+				if (Data.projectProperty.get() != null) {
 					if (handleOpenProject()) {
-						Logic.get().createNewProject();
+						ProjectLogic.setCurrentProject(ProjectLogic.createNewProject());
 					}
 				} else {
-					Logic.get().createNewProject();
+					ProjectLogic.setCurrentProject(ProjectLogic.createNewProject());
 				}
 			}
 		}.addToMenuBar(menuBar);
@@ -122,8 +122,8 @@ public class MainView extends AnchorPane {
 		functionSaveProject = new MenuFunction("File", "Save") {
 			@Override
 			public void onAction() {
-				if (Data.get().getProject() != null) {
-					Logic.get().saveProject(Data.get().getProject());
+				if (Data.projectProperty.get() != null) {
+					ProjectLogic.saveProject(Data.projectProperty.get());
 				}
 			}
 		}.addToMenuBar(menuBar);
@@ -133,7 +133,7 @@ public class MainView extends AnchorPane {
 		functionCloseProject = new MenuFunction("File", "Close Project") {
 			@Override
 			public void onAction() {
-				if (Data.get().getProject() != null) {
+				if (Data.projectProperty.get() != null) {
 					handleOpenProject();
 				}
 			}
@@ -143,7 +143,7 @@ public class MainView extends AnchorPane {
 		// Listeners
 		functionCloseProject.setDisable(true);
 		functionSaveProject.setDisable(true);
-		Data.get().projectProperty().addListener((observable, oldValue, newValue) -> {
+		Data.projectProperty.addListener((observable, oldValue, newValue) -> {
 			if (newValue == null) {
 				functionSaveProject.setDisable(true);
 				functionCloseProject.setDisable(true);
@@ -169,23 +169,23 @@ public class MainView extends AnchorPane {
 	private boolean handleOpenProject() {
 
 		// get project
-		if (Data.get().getProject() == null) {
+		if (Data.projectProperty.get() == null) {
 			return false;
 		}
-		Project project = Data.get().getProject();
+		Project project = Data.projectProperty.get();
 
 		// handle project
 		ButtonType alertSaveResult = Alerts.confirmation("Save current Project before closing?",
 				"Current project: " + project.settings.name);
 
 		if (alertSaveResult == ButtonType.YES) {
-			Logic.get().saveProject(Data.get().getProject());
-			Logic.get().closeCurrentProject();
+			ProjectLogic.saveProject(project);
+			ProjectLogic.closeCurrentProject();
 			return true;
 		}
 
 		if (alertSaveResult == ButtonType.NO) {
-			Logic.get().closeCurrentProject();
+			ProjectLogic.closeCurrentProject();
 			return true;
 		}
 

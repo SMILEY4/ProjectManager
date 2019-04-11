@@ -1,12 +1,33 @@
-package com.ruegnerlukas.taskmanager.data.attributes;
+package com.ruegnerlukas.taskmanager.logic.attributes;
+
+import com.ruegnerlukas.simpleutils.RandomUtils;
+import com.ruegnerlukas.taskmanager.data.AttributeType;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.TaskFlag;
 
 import java.util.Arrays;
 
-public class TaskFlagAttributeAccess {
+public class TaskFlagAttributeLogic {
 
 
 	public static final String FLAG_FLAG_LIST = "flag_flag_list";
 	public static final String FLAG_DEFAULT_VALUE = "flag_default_value";
+
+
+
+
+	public static TaskAttribute createAttribute() {
+		return createAttribute("FlagAttribute " + RandomUtils.generateRandomHexString(8));
+	}
+
+
+
+
+	public static TaskAttribute createAttribute(String name) {
+		TaskAttribute attribute = new TaskAttribute(name, AttributeType.FLAG);
+		TaskFlagAttributeLogic.initAttribute(attribute);
+		return attribute;
+	}
 
 
 
@@ -22,7 +43,7 @@ public class TaskFlagAttributeAccess {
 
 
 	public static void addFlagToList(TaskAttribute attribute, TaskFlag flag) {
-		if(!containsFlag(attribute, flag)) {
+		if (!containsFlag(attribute, flag)) {
 			TaskFlag[] list = getFlagList(attribute);
 			TaskFlag[] newList = Arrays.copyOf(list, list.length + 1);
 			newList[newList.length - 1] = flag;

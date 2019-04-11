@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
-import com.ruegnerlukas.taskmanager.data.attributes.ChoiceAttributeAccess;
-import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -34,9 +34,9 @@ public class ChoiceContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(ChoiceAttributeAccess.CHOICE_VALUE_LIST, ChoiceAttributeAccess.getValueList(attribute));
-		values.put(ChoiceAttributeAccess.CHOICE_USE_DEFAULT, ChoiceAttributeAccess.getUseDefault(attribute));
-		values.put(ChoiceAttributeAccess.CHOICE_DEFAULT_VALUE, ChoiceAttributeAccess.getDefaultValue(attribute));
+		values.put(ChoiceAttributeLogic.CHOICE_VALUE_LIST, ChoiceAttributeLogic.getValueList(attribute));
+		values.put(ChoiceAttributeLogic.CHOICE_USE_DEFAULT, ChoiceAttributeLogic.getUseDefault(attribute));
+		values.put(ChoiceAttributeLogic.CHOICE_DEFAULT_VALUE, ChoiceAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -130,7 +130,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void onValueList(String... valueList) {
-		values.put(ChoiceAttributeAccess.CHOICE_VALUE_LIST, valueList);
+		values.put(ChoiceAttributeLogic.CHOICE_VALUE_LIST, valueList);
 
 		choiceDefaultValue.getItems().clear();
 		choiceDefaultValue.getItems().addAll(valueList);
@@ -158,7 +158,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean useDefault) {
-		values.put(ChoiceAttributeAccess.CHOICE_USE_DEFAULT, useDefault);
+		values.put(ChoiceAttributeLogic.CHOICE_USE_DEFAULT, useDefault);
 		choiceDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -167,7 +167,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(String defaultValue) {
-		values.put(ChoiceAttributeAccess.CHOICE_DEFAULT_VALUE, defaultValue);
+		values.put(ChoiceAttributeLogic.CHOICE_DEFAULT_VALUE, defaultValue);
 		checkChanges();
 	}
 
@@ -213,21 +213,21 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private String[] getLocalValueList() {
-		return (String[]) values.get(ChoiceAttributeAccess.CHOICE_VALUE_LIST);
+		return (String[]) values.get(ChoiceAttributeLogic.CHOICE_VALUE_LIST);
 	}
 
 
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(ChoiceAttributeAccess.CHOICE_USE_DEFAULT);
+		return (boolean) values.get(ChoiceAttributeLogic.CHOICE_USE_DEFAULT);
 	}
 
 
 
 
 	private String getLocalDefaultValue() {
-		return (String) values.get(ChoiceAttributeAccess.CHOICE_DEFAULT_VALUE);
+		return (String) values.get(ChoiceAttributeLogic.CHOICE_DEFAULT_VALUE);
 	}
 
 

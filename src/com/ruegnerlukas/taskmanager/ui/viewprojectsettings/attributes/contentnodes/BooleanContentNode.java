@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
-import com.ruegnerlukas.taskmanager.data.attributes.BooleanAttributeAccess;
-import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.attributes.BooleanAttributeLogic;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -33,8 +33,8 @@ public class BooleanContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(BooleanAttributeAccess.BOOLEAN_USE_DEFAULT, BooleanAttributeAccess.getUseDefault(attribute));
-		values.put(BooleanAttributeAccess.BOOLEAN_DEFAULT_VALUE, BooleanAttributeAccess.getDefaultValue(attribute));
+		values.put(BooleanAttributeLogic.BOOLEAN_USE_DEFAULT, BooleanAttributeLogic.getUseDefault(attribute));
+		values.put(BooleanAttributeLogic.BOOLEAN_DEFAULT_VALUE, BooleanAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -99,7 +99,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean useDefault) {
-		values.put(BooleanAttributeAccess.BOOLEAN_USE_DEFAULT, useDefault);
+		values.put(BooleanAttributeLogic.BOOLEAN_USE_DEFAULT, useDefault);
 		choiceDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -108,7 +108,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(boolean defaultValue) {
-		values.put(BooleanAttributeAccess.BOOLEAN_DEFAULT_VALUE, defaultValue);
+		values.put(BooleanAttributeLogic.BOOLEAN_DEFAULT_VALUE, defaultValue);
 		checkChanges();
 	}
 
@@ -145,14 +145,14 @@ public class BooleanContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(BooleanAttributeAccess.BOOLEAN_USE_DEFAULT);
+		return (boolean) values.get(BooleanAttributeLogic.BOOLEAN_USE_DEFAULT);
 	}
 
 
 
 
 	private boolean getLocalDefaultValue() {
-		return (boolean) values.get(BooleanAttributeAccess.BOOLEAN_DEFAULT_VALUE);
+		return (boolean) values.get(BooleanAttributeLogic.BOOLEAN_DEFAULT_VALUE);
 	}
 
 

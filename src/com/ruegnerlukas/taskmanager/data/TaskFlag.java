@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.data.attributes;
+package com.ruegnerlukas.taskmanager.data;
 
 
 import com.ruegnerlukas.taskmanager.utils.observables.FlagColorProperty;

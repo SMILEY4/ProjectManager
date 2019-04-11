@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.utils.observables;
 
 
-import com.ruegnerlukas.taskmanager.data.attributes.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.TaskFlag;
 import com.sun.javafx.binding.ExpressionHelper;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;

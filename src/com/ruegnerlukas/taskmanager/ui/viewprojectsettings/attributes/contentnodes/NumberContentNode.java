@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
 import com.ruegnerlukas.simplemath.MathUtils;
-import com.ruegnerlukas.taskmanager.data.attributes.NumberAttributeAccess;
-import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -37,11 +37,11 @@ public class NumberContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(NumberAttributeAccess.NUMBER_DEC_PLACES, NumberAttributeAccess.getDecPlaces(attribute));
-		values.put(NumberAttributeAccess.NUMBER_MIN_VALUE, NumberAttributeAccess.getMinValue(attribute));
-		values.put(NumberAttributeAccess.NUMBER_MAX_VALUE, NumberAttributeAccess.getMaxValue(attribute));
-		values.put(NumberAttributeAccess.NUMBER_USE_DEFAULT, NumberAttributeAccess.getUseDefault(attribute));
-		values.put(NumberAttributeAccess.NUMBER_DEFAULT_VALUE, NumberAttributeAccess.getDefaultValue(attribute));
+		values.put(NumberAttributeLogic.NUMBER_DEC_PLACES, NumberAttributeLogic.getDecPlaces(attribute));
+		values.put(NumberAttributeLogic.NUMBER_MIN_VALUE, NumberAttributeLogic.getMinValue(attribute));
+		values.put(NumberAttributeLogic.NUMBER_MAX_VALUE, NumberAttributeLogic.getMaxValue(attribute));
+		values.put(NumberAttributeLogic.NUMBER_USE_DEFAULT, NumberAttributeLogic.getUseDefault(attribute));
+		values.put(NumberAttributeLogic.NUMBER_DEFAULT_VALUE, NumberAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -199,7 +199,7 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private void onMinValue(double newValue) {
-		values.put(NumberAttributeAccess.NUMBER_MIN_VALUE, newValue);
+		values.put(NumberAttributeLogic.NUMBER_MIN_VALUE, newValue);
 
 		SpinnerUtils.initSpinner(
 				spinnerMaxValue,
@@ -226,7 +226,7 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private void onMaxValue(double newValue) {
-		values.put(NumberAttributeAccess.NUMBER_MAX_VALUE, newValue);
+		values.put(NumberAttributeLogic.NUMBER_MAX_VALUE, newValue);
 
 		SpinnerUtils.initSpinner(
 				spinnerMinValue,
@@ -254,7 +254,7 @@ public class NumberContentNode extends AttributeContentNode {
 
 	private void onDecPlaces(int newValue) {
 
-		values.put(NumberAttributeAccess.NUMBER_DEC_PLACES, newValue);
+		values.put(NumberAttributeLogic.NUMBER_DEC_PLACES, newValue);
 
 		SpinnerUtils.initSpinner(
 				spinnerMinValue,
@@ -290,7 +290,7 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean newValue) {
-		values.put(NumberAttributeAccess.NUMBER_USE_DEFAULT, newValue);
+		values.put(NumberAttributeLogic.NUMBER_USE_DEFAULT, newValue);
 		spinnerDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -299,7 +299,7 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(Number newValue) {
-		values.put(NumberAttributeAccess.NUMBER_DEFAULT_VALUE, newValue);
+		values.put(NumberAttributeLogic.NUMBER_DEFAULT_VALUE, newValue);
 		checkChanges();
 	}
 
@@ -367,35 +367,35 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private int getLocalDecPlaces() {
-		return (int) values.get(NumberAttributeAccess.NUMBER_DEC_PLACES);
+		return (int) values.get(NumberAttributeLogic.NUMBER_DEC_PLACES);
 	}
 
 
 
 
 	private Number getLocalMinValue() {
-		return (Number) values.get(NumberAttributeAccess.NUMBER_MIN_VALUE);
+		return (Number) values.get(NumberAttributeLogic.NUMBER_MIN_VALUE);
 	}
 
 
 
 
 	private Number getLocalMaxValue() {
-		return (Number) values.get(NumberAttributeAccess.NUMBER_MAX_VALUE);
+		return (Number) values.get(NumberAttributeLogic.NUMBER_MAX_VALUE);
 	}
 
 
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(NumberAttributeAccess.NUMBER_USE_DEFAULT);
+		return (boolean) values.get(NumberAttributeLogic.NUMBER_USE_DEFAULT);
 	}
 
 
 
 
 	private Number getLocalDefaultValue() {
-		return (Number) values.get(NumberAttributeAccess.NUMBER_DEFAULT_VALUE);
+		return (Number) values.get(NumberAttributeLogic.NUMBER_DEFAULT_VALUE);
 	}
 
 

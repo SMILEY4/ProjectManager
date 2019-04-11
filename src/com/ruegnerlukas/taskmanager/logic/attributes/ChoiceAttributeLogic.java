@@ -1,9 +1,11 @@
-package com.ruegnerlukas.taskmanager.data.attributes;
+package com.ruegnerlukas.taskmanager.logic.attributes;
+
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class ChoiceAttributeAccess {
+public class ChoiceAttributeLogic {
 
 
 	public static final String CHOICE_VALUE_LIST = "choice_value_list";

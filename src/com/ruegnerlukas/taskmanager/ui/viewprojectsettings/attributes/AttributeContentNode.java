@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes;
 
-import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.attributes.TaskAttributeLogic;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.layout.AnchorPane;
 
@@ -32,7 +32,7 @@ public abstract class AttributeContentNode extends AnchorPane {
 		for (String key : attribute.values.keySet()) {
 			Object value = values.get(key);
 			if (value != null) {
-				Logic.get().setTaskAttributeValue(attribute, key, value);
+				TaskAttributeLogic.setTaskAttributeValue(attribute, key, value);
 			}
 		}
 	}

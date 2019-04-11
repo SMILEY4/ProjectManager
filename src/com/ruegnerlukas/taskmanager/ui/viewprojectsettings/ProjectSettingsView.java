@@ -1,9 +1,11 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.Logic;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.TaskAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeNode;
@@ -66,41 +68,39 @@ public class ProjectSettingsView extends AnchorPane {
 		labelName = new EditableLabel("");
 		AnchorUtils.setAnchors(labelName, 0, 0, 0, 0);
 		paneHeader.getChildren().add(labelName);
-		if (Data.get().getProject() != null) {
-			labelName.setText(Data.get().getProject().settings.name.getValue());
-		}
+		labelName.setText(Data.projectProperty.get().settings.name.getValue());
 		labelName.addListener((observable, oldValue, newValue) -> {
 			onRenameProject(newValue);
 		});
-		Data.get().getProject().settings.name.addListener((observable, oldValue, newValue) -> {
+		Data.projectProperty.get().settings.name.addListener((observable, oldValue, newValue) -> {
 			labelName.setText(newValue);
 		});
 
 		// lock attributes
-		if (Data.get().getProject().settings.attributesLocked.get()) {
+		if (Data.projectProperty.get().settings.attributesLocked.get()) {
 			ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1, "black");
 		} else {
 			ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_OPEN, 1, "black");
 		}
-		Data.get().getProject().settings.attributesLocked.addListener(((observable, oldValue, newValue) -> {
+		Data.projectProperty.get().settings.attributesLocked.addListener(((observable, oldValue, newValue) -> {
 			ButtonUtils.makeIconButton(btnLockAttributes, newValue ? SVGIcons.LOCK_CLOSED : SVGIcons.LOCK_OPEN, 0.7, "black");
 			boxTaskAttribs.setDisable(newValue);
 			btnAddAttribute.setDisable(newValue);
 		}));
 		btnLockAttributes.setOnAction(event -> {
-			Logic.get().lockSwitchTaskAttributes();
+			ProjectLogic.lockSwitchTaskAttributes(Data.projectProperty.get());
 		});
 
 
 		// add attributes
-		for (TaskAttribute attribute : Data.get().getProject().data.attributes) {
+		for (TaskAttribute attribute : Data.projectProperty.get().data.attributes) {
 			AttributeNode node = new AttributeNode(attribute);
 			attributeNodeList.add(node);
 			boxTaskAttribs.getChildren().add(node);
 		}
 
 		// attributes added/removed to/from project
-		Data.get().getProject().data.attributes.addListener((ListChangeListener<TaskAttribute>) c -> {
+		Data.projectProperty.get().data.attributes.addListener((ListChangeListener<TaskAttribute>) c -> {
 			while (c.next()) {
 				if (c.wasAdded()) {
 					for (TaskAttribute attribute : c.getAddedSubList()) {
@@ -136,14 +136,17 @@ public class ProjectSettingsView extends AnchorPane {
 
 
 	private void onRenameProject(String name) {
-		Logic.get().renameProject(Data.get().getProject(), name);
+		ProjectLogic.renameProject(Data.projectProperty.get(), name);
 	}
 
 
 
 
 	private void onAddAttribute() {
-		Logic.get().createTaskAttribute(TaskAttribute.Type.BOOLEAN);
+		ProjectLogic.addTaskAttributeToProject(
+				Data.projectProperty.get(),
+				TaskAttributeLogic.createTaskAttribute(AttributeType.getFreeTypes()[0])
+		);
 	}
 
 

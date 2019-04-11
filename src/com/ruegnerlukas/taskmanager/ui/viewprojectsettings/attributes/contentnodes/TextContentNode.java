@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
-import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.attributes.TextAttributeAccess;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.attributes.TextAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -36,10 +36,10 @@ public class TextContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(TextAttributeAccess.TEXT_CHAR_LIMIT, TextAttributeAccess.getCharLimit(attribute));
-		values.put(TextAttributeAccess.TEXT_MULTILINE, TextAttributeAccess.getMultiline(attribute));
-		values.put(TextAttributeAccess.TEXT_USE_DEFAULT, TextAttributeAccess.getUseDefault(attribute));
-		values.put(TextAttributeAccess.TEXT_DEFAULT_VALUE, TextAttributeAccess.getDefaultValue(attribute));
+		values.put(TextAttributeLogic.TEXT_CHAR_LIMIT, TextAttributeLogic.getCharLimit(attribute));
+		values.put(TextAttributeLogic.TEXT_MULTILINE, TextAttributeLogic.getMultiline(attribute));
+		values.put(TextAttributeLogic.TEXT_USE_DEFAULT, TextAttributeLogic.getUseDefault(attribute));
+		values.put(TextAttributeLogic.TEXT_DEFAULT_VALUE, TextAttributeLogic.getDefaultValue(attribute));
 
 		// root box
 		VBox vbox = new VBox();
@@ -160,7 +160,7 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private void onCharLimit(int newValue) {
-		values.put(TextAttributeAccess.TEXT_CHAR_LIMIT, newValue);
+		values.put(TextAttributeLogic.TEXT_CHAR_LIMIT, newValue);
 		if (fieldDefaultValue.getText().length() > getLocalCharLimit()) {
 			fieldDefaultValue.setText(fieldDefaultValue.getText().substring(0, getLocalCharLimit()));
 		}
@@ -171,7 +171,7 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private void onMultiline(boolean newValue) {
-		values.put(TextAttributeAccess.TEXT_MULTILINE, newValue);
+		values.put(TextAttributeLogic.TEXT_MULTILINE, newValue);
 		setDefaultValueHeight();
 		fieldDefaultValue.setMultiline(getLocalMultiline());
 		checkChanges();
@@ -181,7 +181,7 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean newValue) {
-		values.put(TextAttributeAccess.TEXT_USE_DEFAULT, newValue);
+		values.put(TextAttributeLogic.TEXT_USE_DEFAULT, newValue);
 		fieldDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -192,7 +192,7 @@ public class TextContentNode extends AttributeContentNode {
 	private void onDefaultValue(String newValue) {
 		String text = getLocalMultiline() ? newValue : newValue.replaceAll(System.lineSeparator(), "");
 		text = text.substring(0, Math.min(text.length(), getLocalCharLimit()));
-		values.put(TextAttributeAccess.TEXT_DEFAULT_VALUE, text);
+		values.put(TextAttributeLogic.TEXT_DEFAULT_VALUE, text);
 		fieldDefaultValue.setTextSilent(text);
 		checkChanges();
 	}
@@ -240,28 +240,28 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private int getLocalCharLimit() {
-		return (int) values.get(TextAttributeAccess.TEXT_CHAR_LIMIT);
+		return (int) values.get(TextAttributeLogic.TEXT_CHAR_LIMIT);
 	}
 
 
 
 
 	private boolean getLocalMultiline() {
-		return (boolean) values.get(TextAttributeAccess.TEXT_MULTILINE);
+		return (boolean) values.get(TextAttributeLogic.TEXT_MULTILINE);
 	}
 
 
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(TextAttributeAccess.TEXT_USE_DEFAULT);
+		return (boolean) values.get(TextAttributeLogic.TEXT_USE_DEFAULT);
 	}
 
 
 
 
 	private String getLocalDefaultValue() {
-		return (String) values.get(TextAttributeAccess.TEXT_DEFAULT_VALUE);
+		return (String) values.get(TextAttributeLogic.TEXT_DEFAULT_VALUE);
 	}
 
 

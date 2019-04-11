@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
-import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.attributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.data.attributes.TaskFlagAttributeAccess;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.TaskFlag;
+import com.ruegnerlukas.taskmanager.logic.attributes.TaskFlagAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -37,8 +37,8 @@ public class FlagContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set values
-		values.put(TaskFlagAttributeAccess.FLAG_DEFAULT_VALUE, TaskFlagAttributeAccess.getDefaultValue(attribute));
-		values.put(TaskFlagAttributeAccess.FLAG_FLAG_LIST, TaskFlagAttributeAccess.getFlagList(attribute));
+		values.put(TaskFlagAttributeLogic.FLAG_DEFAULT_VALUE, TaskFlagAttributeLogic.getDefaultValue(attribute));
+		values.put(TaskFlagAttributeLogic.FLAG_FLAG_LIST, TaskFlagAttributeLogic.getFlagList(attribute));
 
 
 		// root box
@@ -221,7 +221,7 @@ public class FlagContentNode extends AttributeContentNode {
 
 
 	private void onFlagList() {
-		values.put(TaskFlagAttributeAccess.FLAG_FLAG_LIST, collectLocalFlagList());
+		values.put(TaskFlagAttributeLogic.FLAG_FLAG_LIST, collectLocalFlagList());
 		TaskFlag defaultFlag = getLocalDefaultValue();
 		choiceDefaultValue.getItems().clear();
 		choiceDefaultValue.getItems().addAll(getLocalFlagList());
@@ -242,7 +242,7 @@ public class FlagContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(TaskFlag defaultValue) {
-		values.put(TaskFlagAttributeAccess.FLAG_DEFAULT_VALUE, defaultValue);
+		values.put(TaskFlagAttributeLogic.FLAG_DEFAULT_VALUE, defaultValue);
 		checkChanges();
 	}
 
@@ -262,12 +262,12 @@ public class FlagContentNode extends AttributeContentNode {
 	@Override
 	protected boolean compareValues(Map<String, Object> values) {
 
-		if (getLocalDefaultValue() != TaskFlagAttributeAccess.getDefaultValue(attribute)) {
+		if (getLocalDefaultValue() != TaskFlagAttributeLogic.getDefaultValue(attribute)) {
 			return false;
 		}
 
 		TaskFlag[] localFlags = collectTrueLocalFlagList();
-		TaskFlag[] attribFlags = TaskFlagAttributeAccess.getFlagList(attribute);
+		TaskFlag[] attribFlags = TaskFlagAttributeLogic.getFlagList(attribute);
 
 		if (localFlags.length != attribFlags.length) {
 			return false;
@@ -291,7 +291,7 @@ public class FlagContentNode extends AttributeContentNode {
 		for (Node node : boxFlagNodes.getChildren()) {
 			((FlagNode) node).commitValues();
 		}
-		values.put(TaskFlagAttributeAccess.FLAG_FLAG_LIST, getLocalFlagList());
+		values.put(TaskFlagAttributeLogic.FLAG_FLAG_LIST, getLocalFlagList());
 		saveValues(values);
 		checkChanges();
 	}
@@ -303,13 +303,13 @@ public class FlagContentNode extends AttributeContentNode {
 		discardValues(values);
 
 		boxFlagNodes.getChildren().clear();
-		for (TaskFlag flag : TaskFlagAttributeAccess.getFlagList(attribute)) {
+		for (TaskFlag flag : TaskFlagAttributeLogic.getFlagList(attribute)) {
 			boxFlagNodes.getChildren().add(buildFlagNode(flag));
 		}
 
 		TaskFlag defaultFlag = getLocalDefaultValue();
 		choiceDefaultValue.getItems().clear();
-		choiceDefaultValue.getItems().addAll(TaskFlagAttributeAccess.getFlagList(attribute));
+		choiceDefaultValue.getItems().addAll(TaskFlagAttributeLogic.getFlagList(attribute));
 		choiceDefaultValue.getSelectionModel().select(defaultFlag);
 
 		onFlagList();
@@ -347,14 +347,14 @@ public class FlagContentNode extends AttributeContentNode {
 
 
 	private TaskFlag[] getLocalFlagList() {
-		return (TaskFlag[]) values.get(TaskFlagAttributeAccess.FLAG_FLAG_LIST);
+		return (TaskFlag[]) values.get(TaskFlagAttributeLogic.FLAG_FLAG_LIST);
 	}
 
 
 
 
 	private TaskFlag getLocalDefaultValue() {
-		return (TaskFlag) values.get(TaskFlagAttributeAccess.FLAG_DEFAULT_VALUE);
+		return (TaskFlag) values.get(TaskFlagAttributeLogic.FLAG_DEFAULT_VALUE);
 	}
 
 

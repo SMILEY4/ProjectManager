@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
-import com.ruegnerlukas.taskmanager.data.attributes.DateAttributeAccess;
-import com.ruegnerlukas.taskmanager.data.attributes.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.attributes.DateAttributeLogic;
+import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -33,8 +33,8 @@ public class DateContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(DateAttributeAccess.DATE_USE_DEFAULT, DateAttributeAccess.getUseDefault(attribute));
-		values.put(DateAttributeAccess.DATE_DEFAULT_VALUE, DateAttributeAccess.getDefaultValue(attribute));
+		values.put(DateAttributeLogic.DATE_USE_DEFAULT, DateAttributeLogic.getUseDefault(attribute));
+		values.put(DateAttributeLogic.DATE_DEFAULT_VALUE, DateAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -95,7 +95,7 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean useDefault) {
-		values.put(DateAttributeAccess.DATE_USE_DEFAULT, useDefault);
+		values.put(DateAttributeLogic.DATE_USE_DEFAULT, useDefault);
 		pickerDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -104,7 +104,7 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(LocalDate defaultValue) {
-		values.put(DateAttributeAccess.DATE_DEFAULT_VALUE, defaultValue);
+		values.put(DateAttributeLogic.DATE_DEFAULT_VALUE, defaultValue);
 		checkChanges();
 	}
 
@@ -141,14 +141,14 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(DateAttributeAccess.DATE_USE_DEFAULT);
+		return (boolean) values.get(DateAttributeLogic.DATE_USE_DEFAULT);
 	}
 
 
 
 
 	private LocalDate getLocalDefaultValue() {
-		return (LocalDate) values.get(DateAttributeAccess.DATE_DEFAULT_VALUE);
+		return (LocalDate) values.get(DateAttributeLogic.DATE_DEFAULT_VALUE);
 	}
 
 
