@@ -22,10 +22,28 @@ public class TaskFlagAttributeAccess {
 
 
 	public static void addFlagToList(TaskAttribute attribute, TaskFlag flag) {
-		TaskFlag[] list = getFlagList(attribute);
-		TaskFlag[] newList = Arrays.copyOf(list, list.length + 1);
-		newList[newList.length - 1] = flag;
-		setFlagList(attribute, newList);
+		if(!containsFlag(attribute, flag)) {
+			TaskFlag[] list = getFlagList(attribute);
+			TaskFlag[] newList = Arrays.copyOf(list, list.length + 1);
+			newList[newList.length - 1] = flag;
+			setFlagList(attribute, newList);
+		}
+	}
+
+
+
+
+	public static void removeFlagFromList(TaskAttribute attribute, TaskFlag flag) {
+		if (containsFlag(attribute, flag)) {
+			TaskFlag[] list = getFlagList(attribute);
+			TaskFlag[] newList = new TaskFlag[list.length - 1];
+			for (int i = 0, j = 0; i < list.length; i++) {
+				if (list[i] != flag) {
+					newList[j++] = list[i];
+				}
+			}
+			setFlagList(attribute, newList);
+		}
 	}
 
 
@@ -40,6 +58,19 @@ public class TaskFlagAttributeAccess {
 
 	public static TaskFlag[] getFlagList(TaskAttribute attribute) {
 		return attribute.getValue(FLAG_FLAG_LIST, TaskFlag[].class);
+	}
+
+
+
+
+	public static boolean containsFlag(TaskAttribute attribute, TaskFlag flag) {
+		TaskFlag[] list = getFlagList(attribute);
+		for (int i = 0; i < list.length; i++) {
+			if (list[i] == flag) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 

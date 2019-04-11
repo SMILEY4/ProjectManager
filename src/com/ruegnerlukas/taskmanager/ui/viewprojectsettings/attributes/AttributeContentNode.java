@@ -54,8 +54,22 @@ public abstract class AttributeContentNode extends AnchorPane {
 		for (String key : attribute.values.keySet()) {
 			Object valueAttribute = attribute.getValue(key, Object.class);
 			Object valueMap = values.get(key);
-			if (valueAttribute == null || !valueAttribute.equals(valueMap)) {
-				return false;
+			if(valueAttribute instanceof Object[]) {
+				Object[] arrayAttribute = (Object[])valueAttribute;
+				Object[] arrayMap = (Object[])valueMap;
+				if(arrayAttribute.length != arrayMap.length) {
+					return false;
+				}
+				for(int i=0; i<arrayAttribute.length; i++) {
+					if(!arrayAttribute[i].equals(arrayMap[i])) {
+						return false;
+					}
+				}
+
+			} else {
+				if (valueAttribute == null || !valueAttribute.equals(valueMap)) {
+					return false;
+				}
 			}
 		}
 		return true;

@@ -203,6 +203,10 @@ public class AttributeNode extends AnchorPane {
 				content = new TextContentNode(attribute);
 				break;
 			}
+			case CHOICE: {
+				content = new ChoiceContentNode(attribute);
+				break;
+			}
 			default: {
 				content = new UnchangeableContentNode(attribute);
 				break;

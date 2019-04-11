@@ -14,7 +14,8 @@ public class TaskAttribute {
 		FLAG("Flag", true),
 		TEXT("Text", false),
 		NUMBER("Number", false),
-		BOOLEAN("Boolean", false);
+		BOOLEAN("Boolean", false),
+		CHOICE("Choice", false);
 
 		public final String display;
 		public final boolean fixed;
@@ -103,6 +104,10 @@ public class TaskAttribute {
 			}
 			case TEXT: {
 				TextAttributeAccess.initAttribute(this);
+				break;
+			}
+			case CHOICE: {
+				ChoiceAttributeAccess.initAttribute(this);
 				break;
 			}
 		}
