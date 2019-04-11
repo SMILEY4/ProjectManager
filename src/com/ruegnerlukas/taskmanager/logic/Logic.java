@@ -23,7 +23,7 @@ public class Logic {
 		Data.get().setProject(new Project());
 
 		// add fixed attributes
-		for(TaskAttribute.Type type : TaskAttribute.Type.getFixedTypes()) {
+		for (TaskAttribute.Type type : TaskAttribute.Type.getFixedTypes()) {
 			Data.get().getProject().data.attributes.add(new TaskAttribute(type.display + " Attribute", type));
 		}
 
@@ -55,10 +55,20 @@ public class Logic {
 
 
 
+	public void lockSwitchTaskAttributes() {
+		Project project = Data.get().getProject();
+		if (project != null) {
+			project.settings.attributesLocked.set(!project.settings.attributesLocked.get());
+		}
+	}
+
+
+
+
 	public TaskAttribute createTaskAttribute(TaskAttribute.Type type) {
 		Project project = Data.get().getProject();
 		if (project != null && type != null) {
-			return createTaskAttribute(type, "Attribute " + Integer.toHexString(("Attribute"+System.currentTimeMillis()).hashCode()));
+			return createTaskAttribute(type, "Attribute " + Integer.toHexString(("Attribute" + System.currentTimeMillis()).hashCode()));
 		} else {
 			return null;
 		}
@@ -146,6 +156,7 @@ public class Logic {
 			return false;
 		}
 	}
+
 
 
 
