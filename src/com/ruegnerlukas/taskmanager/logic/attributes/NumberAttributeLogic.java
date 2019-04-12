@@ -4,6 +4,10 @@ import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class NumberAttributeLogic {
 
 
@@ -12,6 +16,23 @@ public class NumberAttributeLogic {
 	public static final String NUMBER_MAX_VALUE = "number_max_value";
 	public static final String NUMBER_USE_DEFAULT = "number_use_default";
 	public static final String NUMBER_DEFAULT_VALUE = "number_default_value";
+
+
+	public static final Map<String, Class<?>> DATA_TYPES;
+
+
+
+
+	static {
+		Map<String, Class<?>> map = new HashMap<>();
+		map.put(NUMBER_DEC_PLACES, Integer.class);
+		map.put(NUMBER_MIN_VALUE, Double.class);
+		map.put(NUMBER_MAX_VALUE, Double.class);
+		map.put(NUMBER_USE_DEFAULT, Boolean.class);
+		map.put(NUMBER_DEFAULT_VALUE, Double.class);
+		map.put("task_value", Double.class);
+		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
 
 
 

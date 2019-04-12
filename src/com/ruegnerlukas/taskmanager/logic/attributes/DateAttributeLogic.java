@@ -5,6 +5,9 @@ import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
 import java.time.LocalDate;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class DateAttributeLogic {
 
@@ -12,6 +15,19 @@ public class DateAttributeLogic {
 	public static final String DATE_USE_DEFAULT = "date_use_default";
 	public static final String DATE_DEFAULT_VALUE = "date_default_value";
 
+
+	public static final Map<String, Class<?>> DATA_TYPES;
+
+
+
+
+	static {
+		Map<String, Class<?>> map = new HashMap<>();
+		map.put(DATE_USE_DEFAULT, Boolean.class);
+		map.put(DATE_DEFAULT_VALUE, LocalDate.class);
+		map.put("task_value", LocalDate.class);
+		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
 
 
 

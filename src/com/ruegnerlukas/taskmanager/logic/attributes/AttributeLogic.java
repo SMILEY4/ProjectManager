@@ -4,15 +4,18 @@ import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class TaskAttributeLogic {
+public class AttributeLogic {
 
 
-	private static final Map<AttributeType, Class<?>> LOGIC_CLASSED = new HashMap<>();
+	public static final Map<AttributeType, Class<?>> LOGIC_CLASSED = new HashMap<>();
 
 
 
@@ -92,8 +95,46 @@ public class TaskAttributeLogic {
 
 
 
-	public static void setTaskAttributeValue(TaskAttribute attribute, String key, Object newValue) {
+	public static boolean setTaskAttributeValue(TaskAttribute attribute, String key, Object newValue) {
+
+		// validate value
+		try {
+			Field field = LOGIC_CLASSED.get(attribute.type.get()).getField("DATA_TYPES");
+			Map<String, Class<?>> map = (Map<String, Class<?>>) field.get(null);
+			if (newValue.getClass() != map.get(key)) {
+				return false;
+			}
+		} catch (IllegalAccessException | NoSuchFieldException e) {
+			e.printStackTrace();
+		}
+
 		attribute.values.put(key, newValue);
+		return true;
+	}
+
+
+
+
+	public static TaskAttribute findAttribute(Project project, AttributeType type) {
+		for (TaskAttribute attribute : project.data.attributes) {
+			if (attribute.type.get() == type) {
+				return attribute;
+			}
+		}
+		return null;
+	}
+
+
+
+
+	public static List<TaskAttribute> findAttributes(Project project, AttributeType type) {
+		List<TaskAttribute> list = new ArrayList<>();
+		for (TaskAttribute attribute : project.data.attributes) {
+			if (attribute.type.get() == type) {
+				list.add(attribute);
+			}
+		}
+		return list;
 	}
 
 }

@@ -4,7 +4,27 @@ import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
+import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
 public class CreatedAttributeLogic {
+
+
+
+	public static final Map<String, Class<?>> DATA_TYPES;
+
+
+
+
+	static {
+		Map<String, Class<?>> map = new HashMap<>();
+		map.put("task_value", LocalDateTime.class);
+		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
+
+
 
 
 	public static TaskAttribute createAttribute() {

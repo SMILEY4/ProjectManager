@@ -4,8 +4,8 @@ import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.TaskAttributeLogic;
-import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes.*;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
+import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes.UnchangeableContentNode;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
@@ -19,6 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+
+import java.lang.reflect.InvocationTargetException;
 
 @SuppressWarnings ("FieldCanBeLocal") // TODO
 public class AttributeNode extends AnchorPane {
@@ -181,54 +183,16 @@ public class AttributeNode extends AnchorPane {
 
 
 	private void setAttributeContent() {
-		switch (attribute.type.get()) {
-			case ID: {
+
+		Class<? extends AttributeContentNode> nodeClass = AttributeContentNode.CONTENT_NODES.get(attribute.type.get());
+		if(nodeClass == null) {
+			content = new UnchangeableContentNode(attribute);
+		} else {
+			try {
+				content = nodeClass.getDeclaredConstructor(TaskAttribute.class).newInstance(attribute);
+			} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+				e.printStackTrace();
 				content = new UnchangeableContentNode(attribute);
-				break;
-			}
-			case DESCRIPTION: {
-				content = new UnchangeableContentNode(attribute);
-				break;
-			}
-			case CREATED: {
-				content = new UnchangeableContentNode(attribute);
-				break;
-			}
-			case LAST_UPDATED: {
-				content = new UnchangeableContentNode(attribute);
-				break;
-			}
-			case FLAG: {
-				content = new FlagContentNode(attribute);
-				break;
-			}
-			case BOOLEAN: {
-				content = new BooleanContentNode(attribute);
-				break;
-			}
-			case NUMBER: {
-				content = new NumberContentNode(attribute);
-				break;
-			}
-			case TEXT: {
-				content = new TextContentNode(attribute);
-				break;
-			}
-			case CHOICE: {
-				content = new ChoiceContentNode(attribute);
-				break;
-			}
-			case DATE: {
-				content = new DateContentNode(attribute);
-				break;
-			}
-			case DEPENDENCY: {
-				content = new UnchangeableContentNode(attribute);
-				break;
-			}
-			default: {
-				content = new UnchangeableContentNode(attribute);
-				break;
 			}
 		}
 
@@ -246,7 +210,7 @@ public class AttributeNode extends AnchorPane {
 
 
 	protected void onRemoveAttribute() {
-		ProjectLogic.removeTaskAttributeFromProject(Data.projectProperty.get(), getAttribute());
+		ProjectLogic.removeAttributeFromProject(Data.projectProperty.get(), getAttribute());
 	}
 
 
@@ -254,7 +218,7 @@ public class AttributeNode extends AnchorPane {
 
 	protected void onTypeSelected(AttributeType oldValue, AttributeType newValue) {
 		if (oldValue != newValue) {
-			TaskAttributeLogic.setTaskAttributeType(getAttribute(), newValue);
+			AttributeLogic.setTaskAttributeType(getAttribute(), newValue);
 			setAttributeContent();
 		}
 	}
@@ -264,7 +228,7 @@ public class AttributeNode extends AnchorPane {
 
 	protected void onRename(String oldValue, String newValue) {
 		if (!oldValue.equals(newValue)) {
-			TaskAttributeLogic.renameTaskAttribute(Data.projectProperty.get(), getAttribute(), newValue);
+			AttributeLogic.renameTaskAttribute(Data.projectProperty.get(), getAttribute(), newValue);
 		}
 	}
 

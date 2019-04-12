@@ -6,12 +6,29 @@ import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.TaskFlag;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TaskFlagAttributeLogic {
 
 
 	public static final String FLAG_FLAG_LIST = "flag_flag_list";
 	public static final String FLAG_DEFAULT_VALUE = "flag_default_value";
+
+
+	public static final Map<String, Class<?>> DATA_TYPES;
+
+
+
+
+	static {
+		Map<String, Class<?>> map = new HashMap<>();
+		map.put(FLAG_FLAG_LIST, TaskFlag[].class);
+		map.put(FLAG_DEFAULT_VALUE, TaskFlag.class);
+		map.put("task_value", TaskFlag.class);
+		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
 
 
 

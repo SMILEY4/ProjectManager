@@ -5,7 +5,7 @@ import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.TaskAttributeLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeNode;
@@ -143,9 +143,9 @@ public class ProjectSettingsView extends AnchorPane {
 
 
 	private void onAddAttribute() {
-		ProjectLogic.addTaskAttributeToProject(
+		ProjectLogic.addAttributeToProject(
 				Data.projectProperty.get(),
-				TaskAttributeLogic.createTaskAttribute(AttributeType.getFreeTypes()[0])
+				AttributeLogic.createTaskAttribute(AttributeType.getFreeTypes()[0])
 		);
 	}
 

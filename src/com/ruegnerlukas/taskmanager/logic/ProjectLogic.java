@@ -1,10 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.data.AttributeType;
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.Project;
-import com.ruegnerlukas.taskmanager.data.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.attributes.TaskAttributeLogic;
+import com.ruegnerlukas.taskmanager.data.*;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 public class ProjectLogic {
 
@@ -34,7 +31,7 @@ public class ProjectLogic {
 		Project project = new Project();
 		project.settings.name.set(name);
 		for (AttributeType type : AttributeType.getFixedTypes()) {
-			project.data.attributes.add(TaskAttributeLogic.createTaskAttribute(type, type.display + " Attribute"));
+			project.data.attributes.add(AttributeLogic.createTaskAttribute(type, type.display + " Attribute"));
 		}
 		return project;
 	}
@@ -63,7 +60,7 @@ public class ProjectLogic {
 
 
 
-	public static boolean addTaskAttributeToProject(Project project, TaskAttribute attribute) {
+	public static boolean addAttributeToProject(Project project, TaskAttribute attribute) {
 		// check name
 		for (TaskAttribute att : project.data.attributes) {
 			if (att.name.get().equals(attribute.name.get())) {
@@ -86,8 +83,26 @@ public class ProjectLogic {
 
 
 
-	public static boolean removeTaskAttributeFromProject(Project project, TaskAttribute attribute) {
+	public static boolean removeAttributeFromProject(Project project, TaskAttribute attribute) {
 		return project.data.attributes.remove(attribute);
+	}
+
+
+
+
+	public static boolean addTaskToProject(Project project, Task task) {
+		final int id = project.settings.idCounter.get();
+		project.settings.idCounter.set(id + 1);
+		TaskLogic.setValue(task, AttributeLogic.findAttribute(project, AttributeType.ID), id);
+		project.data.tasks.add(task);
+		return true;
+	}
+
+
+
+
+	public static boolean removeTaskFromProject(Project project, Task task) {
+		return project.data.tasks.remove(task);
 	}
 
 

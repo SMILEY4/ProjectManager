@@ -2,8 +2,7 @@ package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class ChoiceAttributeLogic {
 
@@ -11,6 +10,21 @@ public class ChoiceAttributeLogic {
 	public static final String CHOICE_VALUE_LIST = "choice_value_list";
 	public static final String CHOICE_USE_DEFAULT = "choice_use_default";
 	public static final String CHOICE_DEFAULT_VALUE = "choice_default_value";
+
+
+	public static final Map<String, Class<?>> DATA_TYPES;
+
+
+
+
+	static {
+		Map<String, Class<?>> map = new HashMap<>();
+		map.put(CHOICE_VALUE_LIST, String[].class);
+		map.put(CHOICE_USE_DEFAULT, Boolean.class);
+		map.put(CHOICE_DEFAULT_VALUE, String.class);
+		map.put("task_value", String.class);
+		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
 
 
 
