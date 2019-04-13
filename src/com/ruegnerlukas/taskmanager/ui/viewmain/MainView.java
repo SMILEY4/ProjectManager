@@ -7,6 +7,7 @@ import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.ProjectSettingsView;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.TaskView;
 import com.ruegnerlukas.taskmanager.utils.uielements.Alerts;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.MenuFunction;
@@ -200,11 +201,20 @@ public class MainView extends AnchorPane {
 
 
 	private void openTabs() {
+
+		// project settings
 		ProjectSettingsView viewProjectSettings = new ProjectSettingsView();
 		AnchorUtils.setAnchors(viewProjectSettings, 0, 0, 0, 0);
 		Tab tabProjectSettings = new Tab(ProjectSettingsView.TITLE);
 		tabProjectSettings.setContent(viewProjectSettings);
 		tabPane.getTabs().add(tabProjectSettings);
+
+		// tasks
+		TaskView viewTasks = new TaskView();
+		AnchorUtils.setAnchors(viewTasks, 0, 0, 0, 0);
+		Tab tabTaskView = new Tab(TaskView.TITLE);
+		tabTaskView.setContent(viewTasks);
+		tabPane.getTabs().add(tabTaskView);
 	}
 
 

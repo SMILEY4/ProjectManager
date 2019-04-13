@@ -26,6 +26,9 @@ public class UIDataHandler {
 		stylesheetPaths.put(UIModule.VIEW_MAIN, "style/style_view_main.css");
 		stylesheetPaths.put(UIModule.VIEW_PROJECTSETTINGS, "style/style_view_projectsettings.css");
 		stylesheetPaths.put(UIModule.VIEW_TASKS, "style/style_view_tasks.css");
+		stylesheetPaths.put(UIModule.VIEW_TASKS_HEADER, "style/style_view_tasks_header.css");
+		stylesheetPaths.put(UIModule.VIEW_TASKS_CONTENT, "style/style_view_tasks_content.css");
+		stylesheetPaths.put(UIModule.VIEW_TASKS_SIDEBAR, "style/style_view_tasks_sidebar.css");
 		stylesheetPaths.put(UIModule.ELEMENT_SIDEBAR, "style/style_element_sidebar.css");
 		stylesheetPaths.put(UIModule.ELEMENT_TASKCARD, "style/style_element_taskcard.css");
 		stylesheetPaths.put(UIModule.ELEMENT_TASKLIST, "style/style_element_tasklist.css");
@@ -40,6 +43,9 @@ public class UIDataHandler {
 		fxmlPaths.put(UIModule.VIEW_MAIN, "fxml/layout_view_main.fxml");
 		fxmlPaths.put(UIModule.VIEW_PROJECTSETTINGS, "fxml/layout_view_projectsettings.fxml");
 		fxmlPaths.put(UIModule.VIEW_TASKS, "fxml/layout_view_tasks.fxml");
+		fxmlPaths.put(UIModule.VIEW_TASKS_HEADER, "fxml/layout_view_tasks_header.fxml");
+		fxmlPaths.put(UIModule.VIEW_TASKS_CONTENT, "fxml/layout_view_tasks_content.fxml");
+		fxmlPaths.put(UIModule.VIEW_TASKS_SIDEBAR, "fxml/layout_view_tasks_sidebar.fxml");
 		fxmlPaths.put(UIModule.ELEMENT_SIDEBAR, "fxml/layout_element_sidebar.fxml");
 		fxmlPaths.put(UIModule.ELEMENT_TASKCARD, "fxml/layout_element_taskcard.fxml");
 		fxmlPaths.put(UIModule.ELEMENT_TASKLIST, "fxml/layout_element_tasklist.fxml");
