@@ -14,7 +14,6 @@ public class TaskFlagAttributeLogic {
 
 
 	public static final String FLAG_FLAG_LIST = "flag_flag_list";
-	public static final String FLAG_DEFAULT_VALUE = "flag_default_value";
 
 
 	public static final Map<String, Class<?>> DATA_TYPES;
@@ -25,8 +24,9 @@ public class TaskFlagAttributeLogic {
 	static {
 		Map<String, Class<?>> map = new HashMap<>();
 		map.put(FLAG_FLAG_LIST, TaskFlag[].class);
-		map.put(FLAG_DEFAULT_VALUE, TaskFlag.class);
-		map.put("task_value", TaskFlag.class);
+		map.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, TaskFlag.class);
+		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, TaskFlag.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 	}
 
@@ -53,6 +53,7 @@ public class TaskFlagAttributeLogic {
 		attribute.values.clear();
 		TaskFlag defaultFlag = new TaskFlag("Default", TaskFlag.FlagColor.GRAY);
 		setFlagList(attribute, new TaskFlag[]{defaultFlag});
+		setUseDefault(attribute, true);
 		setDefaultValue(attribute, defaultFlag);
 	}
 
@@ -114,15 +115,29 @@ public class TaskFlagAttributeLogic {
 
 
 
-	public static void setDefaultValue(TaskAttribute attribute, TaskFlag defaultValue) {
-		attribute.values.put(FLAG_DEFAULT_VALUE, defaultValue);
+	private static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
+		attribute.values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
+	}
+
+
+
+
+	public static boolean getUseDefault(TaskAttribute attribute) {
+		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+	}
+
+
+
+
+	private static void setDefaultValue(TaskAttribute attribute, TaskFlag defaultValue) {
+		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
 	}
 
 
 
 
 	public static TaskFlag getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(FLAG_DEFAULT_VALUE, TaskFlag.class);
+		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, TaskFlag.class);
 	}
 
 

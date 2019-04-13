@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.Task;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -45,5 +46,33 @@ public class DependencyAttributeLogic {
 	public static void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 	}
+
+
+
+	private static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
+		attribute.values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
+	}
+
+
+
+
+	public static boolean getUseDefault(TaskAttribute attribute) {
+		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+	}
+
+
+
+
+	private static void setDefaultValue(TaskAttribute attribute, LocalDateTime defaultValue) {
+		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
+	}
+
+
+
+
+	public static LocalDateTime getDefaultValue(TaskAttribute attribute) {
+		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, LocalDateTime.class);
+	}
+
 
 }

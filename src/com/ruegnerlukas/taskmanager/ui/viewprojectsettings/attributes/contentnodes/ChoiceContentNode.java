@@ -1,7 +1,8 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
-import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -35,8 +36,8 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 		// set value
 		values.put(ChoiceAttributeLogic.CHOICE_VALUE_LIST, ChoiceAttributeLogic.getValueList(attribute));
-		values.put(ChoiceAttributeLogic.CHOICE_USE_DEFAULT, ChoiceAttributeLogic.getUseDefault(attribute));
-		values.put(ChoiceAttributeLogic.CHOICE_DEFAULT_VALUE, ChoiceAttributeLogic.getDefaultValue(attribute));
+		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, ChoiceAttributeLogic.getUseDefault(attribute));
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, ChoiceAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -158,7 +159,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean useDefault) {
-		values.put(ChoiceAttributeLogic.CHOICE_USE_DEFAULT, useDefault);
+		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
 		choiceDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -167,7 +168,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(String defaultValue) {
-		values.put(ChoiceAttributeLogic.CHOICE_DEFAULT_VALUE, defaultValue);
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
 		checkChanges();
 	}
 
@@ -220,14 +221,14 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(ChoiceAttributeLogic.CHOICE_USE_DEFAULT);
+		return (boolean) values.get(AttributeLogic.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	private String getLocalDefaultValue() {
-		return (String) values.get(ChoiceAttributeLogic.CHOICE_DEFAULT_VALUE);
+		return (String) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE);
 	}
 
 

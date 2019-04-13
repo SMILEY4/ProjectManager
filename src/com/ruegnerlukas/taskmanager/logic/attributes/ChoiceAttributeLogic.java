@@ -8,8 +8,6 @@ public class ChoiceAttributeLogic {
 
 
 	public static final String CHOICE_VALUE_LIST = "choice_value_list";
-	public static final String CHOICE_USE_DEFAULT = "choice_use_default";
-	public static final String CHOICE_DEFAULT_VALUE = "choice_default_value";
 
 
 	public static final Map<String, Class<?>> DATA_TYPES;
@@ -20,9 +18,9 @@ public class ChoiceAttributeLogic {
 	static {
 		Map<String, Class<?>> map = new HashMap<>();
 		map.put(CHOICE_VALUE_LIST, String[].class);
-		map.put(CHOICE_USE_DEFAULT, Boolean.class);
-		map.put(CHOICE_DEFAULT_VALUE, String.class);
-		map.put("task_value", String.class);
+		map.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
+		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, String.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 	}
 
@@ -106,28 +104,28 @@ public class ChoiceAttributeLogic {
 
 
 	public static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(CHOICE_USE_DEFAULT, useDefault);
+		attribute.values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
 	}
 
 
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(CHOICE_USE_DEFAULT, Boolean.class);
+		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
 	}
 
 
 
 
 	public static void setDefaultValue(TaskAttribute attribute, String defaultValue) {
-		attribute.values.put(CHOICE_DEFAULT_VALUE, defaultValue);
+		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
 	}
 
 
 
 
 	public static String getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(CHOICE_DEFAULT_VALUE, String.class);
+		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
 	}
 
 

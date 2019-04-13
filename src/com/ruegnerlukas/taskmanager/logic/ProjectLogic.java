@@ -91,9 +91,12 @@ public class ProjectLogic {
 
 
 	public static boolean addTaskToProject(Project project, Task task) {
-		final int id = project.settings.idCounter.get();
-		project.settings.idCounter.set(id + 1);
-		TaskLogic.setValue(task, AttributeLogic.findAttribute(project, AttributeType.ID), id);
+		TaskAttribute attribute = AttributeLogic.findAttribute(project, AttributeType.ID);
+		if (TaskLogic.getTrueValue(task, attribute, Integer.class) == null) {
+			final int id = project.settings.idCounter.get();
+			project.settings.idCounter.set(id + 1);
+			TaskLogic.setValue(task, attribute, id);
+		}
 		project.data.tasks.add(task);
 		return true;
 	}

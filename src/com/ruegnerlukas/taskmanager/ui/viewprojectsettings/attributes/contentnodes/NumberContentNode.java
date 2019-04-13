@@ -1,8 +1,9 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
 import com.ruegnerlukas.simplemath.MathUtils;
-import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -40,8 +41,8 @@ public class NumberContentNode extends AttributeContentNode {
 		values.put(NumberAttributeLogic.NUMBER_DEC_PLACES, NumberAttributeLogic.getDecPlaces(attribute));
 		values.put(NumberAttributeLogic.NUMBER_MIN_VALUE, NumberAttributeLogic.getMinValue(attribute));
 		values.put(NumberAttributeLogic.NUMBER_MAX_VALUE, NumberAttributeLogic.getMaxValue(attribute));
-		values.put(NumberAttributeLogic.NUMBER_USE_DEFAULT, NumberAttributeLogic.getUseDefault(attribute));
-		values.put(NumberAttributeLogic.NUMBER_DEFAULT_VALUE, NumberAttributeLogic.getDefaultValue(attribute));
+		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, NumberAttributeLogic.getUseDefault(attribute));
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, NumberAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -290,7 +291,7 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean newValue) {
-		values.put(NumberAttributeLogic.NUMBER_USE_DEFAULT, newValue);
+		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, newValue);
 		spinnerDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -299,7 +300,7 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(Number newValue) {
-		values.put(NumberAttributeLogic.NUMBER_DEFAULT_VALUE, newValue);
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, newValue);
 		checkChanges();
 	}
 
@@ -388,14 +389,14 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(NumberAttributeLogic.NUMBER_USE_DEFAULT);
+		return (boolean) values.get(AttributeLogic.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	private Number getLocalDefaultValue() {
-		return (Number) values.get(NumberAttributeLogic.NUMBER_DEFAULT_VALUE);
+		return (Number) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE);
 	}
 
 

@@ -18,7 +18,7 @@ public class IDAttributeLogic {
 
 	static {
 		Map<String, Class<?>> map = new HashMap<>();
-		map.put("task_value", Integer.class);
+		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, Integer.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 	}
 

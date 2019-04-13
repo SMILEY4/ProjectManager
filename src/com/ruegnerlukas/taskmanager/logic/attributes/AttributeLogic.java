@@ -15,6 +15,11 @@ import java.util.Map;
 public class AttributeLogic {
 
 
+	public static final String ATTRIB_TASK_VALUE_TYPE = "attrib_task_value_type";
+	public static final String ATTRIB_USE_DEFAULT = "attrib_use_default";
+	public static final String ATTRIB_DEFAULT_VALUE = "attrib_default_value";
+
+
 	public static final Map<AttributeType, Class<?>> LOGIC_CLASSED = new HashMap<>();
 
 
@@ -136,5 +141,32 @@ public class AttributeLogic {
 		}
 		return list;
 	}
+
+
+
+
+	public static boolean getUsesDefault(TaskAttribute attribute) {
+		Boolean value = attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		if (value != null) {
+			return value;
+		} else {
+			return false;
+		}
+	}
+
+
+
+
+	public static boolean hasDefaultValueDefined(TaskAttribute attribute) {
+		return attribute.values.containsKey(AttributeLogic.ATTRIB_DEFAULT_VALUE);
+	}
+
+
+
+
+	public static Object getDefaultValue(TaskAttribute attribute) {
+		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, Object.class);
+	}
+
 
 }

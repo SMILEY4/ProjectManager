@@ -12,8 +12,6 @@ import java.util.Map;
 public class DateAttributeLogic {
 
 
-	public static final String DATE_USE_DEFAULT = "date_use_default";
-	public static final String DATE_DEFAULT_VALUE = "date_default_value";
 
 
 	public static final Map<String, Class<?>> DATA_TYPES;
@@ -23,9 +21,9 @@ public class DateAttributeLogic {
 
 	static {
 		Map<String, Class<?>> map = new HashMap<>();
-		map.put(DATE_USE_DEFAULT, Boolean.class);
-		map.put(DATE_DEFAULT_VALUE, LocalDate.class);
-		map.put("task_value", LocalDate.class);
+		map.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, LocalDate.class);
+		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, LocalDate.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 	}
 
@@ -57,28 +55,28 @@ public class DateAttributeLogic {
 
 
 	public static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(DATE_USE_DEFAULT, useDefault);
+		attribute.values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
 	}
 
 
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(DATE_USE_DEFAULT, Boolean.class);
+		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
 	}
 
 
 
 
 	public static void setDefaultValue(TaskAttribute attribute, LocalDate defaultValue) {
-		attribute.values.put(DATE_DEFAULT_VALUE, defaultValue);
+		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
 	}
 
 
 
 
 	public static LocalDate getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(DATE_DEFAULT_VALUE, LocalDate.class);
+		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, LocalDate.class);
 	}
 
 

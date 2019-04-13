@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.DateAttributeLogic;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
@@ -33,8 +34,8 @@ public class DateContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(DateAttributeLogic.DATE_USE_DEFAULT, DateAttributeLogic.getUseDefault(attribute));
-		values.put(DateAttributeLogic.DATE_DEFAULT_VALUE, DateAttributeLogic.getDefaultValue(attribute));
+		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, DateAttributeLogic.getUseDefault(attribute));
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, DateAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -95,7 +96,7 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean useDefault) {
-		values.put(DateAttributeLogic.DATE_USE_DEFAULT, useDefault);
+		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
 		pickerDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -104,7 +105,7 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(LocalDate defaultValue) {
-		values.put(DateAttributeLogic.DATE_DEFAULT_VALUE, defaultValue);
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
 		checkChanges();
 	}
 
@@ -141,14 +142,14 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(DateAttributeLogic.DATE_USE_DEFAULT);
+		return (boolean) values.get(AttributeLogic.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	private LocalDate getLocalDefaultValue() {
-		return (LocalDate) values.get(DateAttributeLogic.DATE_DEFAULT_VALUE);
+		return (LocalDate) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE);
 	}
 
 

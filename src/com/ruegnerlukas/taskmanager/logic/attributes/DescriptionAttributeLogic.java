@@ -18,7 +18,9 @@ public class DescriptionAttributeLogic {
 
 	static {
 		Map<String, Class<?>> map = new HashMap<>();
-		map.put("task_value", String.class);
+		map.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
+		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, String.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 	}
 
@@ -43,6 +45,37 @@ public class DescriptionAttributeLogic {
 
 	public static void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
+		setUseDefault(attribute, true);
+		setDefaultValue(attribute, "");
 	}
+
+
+
+
+	private static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
+		attribute.values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
+	}
+
+
+
+
+	public static boolean getUseDefault(TaskAttribute attribute) {
+		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+	}
+
+
+
+
+	private static void setDefaultValue(TaskAttribute attribute, String defaultValue) {
+		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
+	}
+
+
+
+
+	public static String getDefaultValue(TaskAttribute attribute) {
+		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
+	}
+
 
 }

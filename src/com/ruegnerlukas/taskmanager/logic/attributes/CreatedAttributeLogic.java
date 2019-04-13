@@ -12,7 +12,6 @@ import java.util.Map;
 public class CreatedAttributeLogic {
 
 
-
 	public static final Map<String, Class<?>> DATA_TYPES;
 
 
@@ -20,7 +19,7 @@ public class CreatedAttributeLogic {
 
 	static {
 		Map<String, Class<?>> map = new HashMap<>();
-		map.put("task_value", LocalDateTime.class);
+		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, LocalDateTime.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 	}
 
@@ -46,5 +45,6 @@ public class CreatedAttributeLogic {
 	public static void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 	}
+
 
 }

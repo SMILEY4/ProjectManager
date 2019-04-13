@@ -14,8 +14,6 @@ public class NumberAttributeLogic {
 	public static final String NUMBER_DEC_PLACES = "number_dec_places";
 	public static final String NUMBER_MIN_VALUE = "number_min_value";
 	public static final String NUMBER_MAX_VALUE = "number_max_value";
-	public static final String NUMBER_USE_DEFAULT = "number_use_default";
-	public static final String NUMBER_DEFAULT_VALUE = "number_default_value";
 
 
 	public static final Map<String, Class<?>> DATA_TYPES;
@@ -28,9 +26,9 @@ public class NumberAttributeLogic {
 		map.put(NUMBER_DEC_PLACES, Integer.class);
 		map.put(NUMBER_MIN_VALUE, Double.class);
 		map.put(NUMBER_MAX_VALUE, Double.class);
-		map.put(NUMBER_USE_DEFAULT, Boolean.class);
-		map.put(NUMBER_DEFAULT_VALUE, Double.class);
-		map.put("task_value", Double.class);
+		map.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, Double.class);
+		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, Double.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 	}
 
@@ -122,35 +120,35 @@ public class NumberAttributeLogic {
 
 
 	public static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(NUMBER_USE_DEFAULT, useDefault);
+		attribute.values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
 	}
 
 
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(NUMBER_USE_DEFAULT, Boolean.class);
+		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
 	}
 
 
 
 
 	public static void setDefaultValue(TaskAttribute attribute, int defaultValue) {
-		attribute.values.put(NUMBER_DEFAULT_VALUE, (double) defaultValue);
+		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, (double) defaultValue);
 	}
 
 
 
 
 	public static void setDefaultValue(TaskAttribute attribute, double defaultValue) {
-		attribute.values.put(NUMBER_DEFAULT_VALUE, defaultValue);
+		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
 	}
 
 
 
 
 	public static Number getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(NUMBER_DEFAULT_VALUE, Number.class);
+		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, Number.class);
 	}
 
 

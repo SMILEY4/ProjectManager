@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.TextAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
@@ -38,8 +39,8 @@ public class TextContentNode extends AttributeContentNode {
 		// set value
 		values.put(TextAttributeLogic.TEXT_CHAR_LIMIT, TextAttributeLogic.getCharLimit(attribute));
 		values.put(TextAttributeLogic.TEXT_MULTILINE, TextAttributeLogic.getMultiline(attribute));
-		values.put(TextAttributeLogic.TEXT_USE_DEFAULT, TextAttributeLogic.getUseDefault(attribute));
-		values.put(TextAttributeLogic.TEXT_DEFAULT_VALUE, TextAttributeLogic.getDefaultValue(attribute));
+		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, TextAttributeLogic.getUseDefault(attribute));
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, TextAttributeLogic.getDefaultValue(attribute));
 
 		// root box
 		VBox vbox = new VBox();
@@ -181,7 +182,7 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean newValue) {
-		values.put(TextAttributeLogic.TEXT_USE_DEFAULT, newValue);
+		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, newValue);
 		fieldDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -192,7 +193,7 @@ public class TextContentNode extends AttributeContentNode {
 	private void onDefaultValue(String newValue) {
 		String text = getLocalMultiline() ? newValue : newValue.replaceAll(System.lineSeparator(), "");
 		text = text.substring(0, Math.min(text.length(), getLocalCharLimit()));
-		values.put(TextAttributeLogic.TEXT_DEFAULT_VALUE, text);
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, text);
 		fieldDefaultValue.setTextSilent(text);
 		checkChanges();
 	}
@@ -254,14 +255,14 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(TextAttributeLogic.TEXT_USE_DEFAULT);
+		return (boolean) values.get(AttributeLogic.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	private String getLocalDefaultValue() {
-		return (String) values.get(TextAttributeLogic.TEXT_DEFAULT_VALUE);
+		return (String) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE);
 	}
 
 
