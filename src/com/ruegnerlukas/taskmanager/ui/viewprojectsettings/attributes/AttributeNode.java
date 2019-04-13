@@ -163,6 +163,12 @@ public class AttributeNode extends AnchorPane {
 			}
 		});
 
+		if(attribute.type.get().fixed && AttributeContentNode.CONTENT_NODES.get(attribute.type.get()) == UnchangeableContentNode.class) {
+			btnExpand.setDisable(true);
+			btnExpand.setVisible(false);
+		}
+
+
 
 		// content pane
 		contentPane = new AnchorPane();
