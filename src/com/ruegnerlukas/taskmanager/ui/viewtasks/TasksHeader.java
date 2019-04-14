@@ -6,7 +6,7 @@ import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
-import com.ruegnerlukas.taskmanager.utils.uielements.MenuFunction;
+import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MenuFunction;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Parent;

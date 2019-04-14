@@ -141,6 +141,11 @@ ChoiceValueItem #item_choice
 }
 
 
+.tag-default {
+	-fx-background-color: -info;
+}
+
+
 #btnLockAttributes {
 	-fx-background-color: transparent;
 	-fx-border-color:     transparent;
@@ -197,13 +202,13 @@ ChoiceValueItem #item_choice
 
 
 #unsafed_changes_header {
-	-fx-border-color: transparent;
-	-fx-background-color: -warning;
-	-fx-border-radius: 9;
+	-fx-border-color:      transparent;
+	-fx-background-color:  -warning;
+	-fx-border-radius:     9;
 	-fx-background-radius: 9;
-	-fx-text-fill: white;
-	-fx-font-weight: bold;
-	-fx-font-size: 80%;
+	-fx-text-fill:         white;
+	-fx-font-weight:       bold;
+	-fx-font-size:         80%;
 }
 
 

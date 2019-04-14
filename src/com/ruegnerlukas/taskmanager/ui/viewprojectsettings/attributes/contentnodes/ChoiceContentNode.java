@@ -6,11 +6,11 @@ import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.customelements.TagBar;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -20,7 +20,7 @@ import java.util.Map;
 public class ChoiceContentNode extends AttributeContentNode {
 
 
-	private TextField fieldValues;
+	private TagBar fieldValues;
 	private CheckBox cbUseDefault;
 	private ComboBox<String> choiceDefaultValue;
 	private Button btnDiscard;
@@ -62,16 +62,16 @@ public class ChoiceContentNode extends AttributeContentNode {
 	private void buildValuesListField(VBox root) {
 		HBox boxAlign = ContentNodeUtils.buildEntryWithAlignment(root, "Values (CSV):");
 
-		fieldValues = new TextField();
-		fieldValues.setPromptText("Comma (,) Separated Values");
+		fieldValues = new TagBar();
 		fieldValues.setMinSize(60, 32);
 		fieldValues.setPrefSize(10000, 32);
 		fieldValues.setMaxSize(10000, 32);
+		fieldValues.allowDuplicates.set(false);
 		boxAlign.getChildren().add(fieldValues);
 
-		fieldValues.textProperty().addListener(((observable, oldValue, newValue) -> {
-			onValueList(newValue);
-		}));
+		fieldValues.setOnTagAdded(((observable, oldValue, newValue) -> onValueList(fieldValues.getTagArray())));
+		fieldValues.setOnTagRemoved(((observable, oldValue, newValue) -> onValueList(fieldValues.getTagArray())));
+		fieldValues.setOnTagChanged(((observable, oldValue, newValue) -> onValueList(fieldValues.getTagArray())));
 
 	}
 
@@ -103,6 +103,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 		choiceDefaultValue.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			onDefaultValue(newValue);
 		});
+
 	}
 
 
@@ -114,17 +115,6 @@ public class ChoiceContentNode extends AttributeContentNode {
 		btnDiscard.setOnAction(event -> onDiscard());
 		btnSave = buttons[1];
 		btnSave.setOnAction(event -> onSave());
-	}
-
-
-
-
-	private void onValueList(String strValues) {
-		String[] values = strValues.split(",");
-		for (int i = 0; i < values.length; i++) {
-			values[i] = values[i].trim();
-		}
-		onValueList(values);
 	}
 
 
@@ -161,6 +151,10 @@ public class ChoiceContentNode extends AttributeContentNode {
 	private void onUseDefault(boolean useDefault) {
 		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
 		choiceDefaultValue.setDisable(!getLocalUseDefault());
+		fieldValues.removeCssStyleClass(null, "tag-default");
+		if(getLocalUseDefault()) {
+			fieldValues.addCssStyleClass(getLocalDefaultValue(), "tag-default");
+		}
 		checkChanges();
 	}
 
@@ -169,6 +163,10 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 	private void onDefaultValue(String defaultValue) {
 		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
+		fieldValues.removeCssStyleClass(null, "tag-default");
+		if(getLocalUseDefault()) {
+			fieldValues.addCssStyleClass(getLocalDefaultValue(), "tag-default");
+		}
 		checkChanges();
 	}
 
@@ -199,13 +197,19 @@ public class ChoiceContentNode extends AttributeContentNode {
 		String[] valueList = getLocalValueList();
 		String defaultValue = getLocalDefaultValue();
 
-		fieldValues.setText(String.join(", ", valueList));
+		fieldValues.removeAll();
+		fieldValues.addTags(valueList);
 
 		choiceDefaultValue.getItems().setAll(valueList);
 		choiceDefaultValue.getSelectionModel().select(defaultValue);
 		choiceDefaultValue.setDisable(!getLocalUseDefault());
 
 		cbUseDefault.setSelected(getLocalUseDefault());
+
+		fieldValues.removeCssStyleClass(null, "tag-default");
+		if(getLocalUseDefault()) {
+			fieldValues.addCssStyleClass(defaultValue, "tag-default");
+		}
 
 		checkChanges();
 	}

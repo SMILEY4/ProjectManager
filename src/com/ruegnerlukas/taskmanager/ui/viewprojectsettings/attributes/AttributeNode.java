@@ -10,7 +10,7 @@ import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ComboboxUtils;
-import com.ruegnerlukas.taskmanager.utils.uielements.EditableLabel;
+import com.ruegnerlukas.taskmanager.utils.uielements.customelements.EditableLabel;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;

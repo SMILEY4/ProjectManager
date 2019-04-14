@@ -12,7 +12,7 @@ import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeN
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
-import com.ruegnerlukas.taskmanager.utils.uielements.EditableLabel;
+import com.ruegnerlukas.taskmanager.utils.uielements.customelements.EditableLabel;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;

@@ -4,7 +4,7 @@ import com.ruegnerlukas.taskmanager.data.TaskFlag;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.observables.FlagColorProperty;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
-import com.ruegnerlukas.taskmanager.utils.uielements.EditableLabel;
+import com.ruegnerlukas.taskmanager.utils.uielements.customelements.EditableLabel;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

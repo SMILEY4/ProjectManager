@@ -6,7 +6,7 @@ import com.ruegnerlukas.taskmanager.logic.attributes.TextAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
-import com.ruegnerlukas.taskmanager.utils.uielements.MultiTextField;
+import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MultiTextField;
 import com.ruegnerlukas.taskmanager.utils.uielements.SpinnerUtils;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;

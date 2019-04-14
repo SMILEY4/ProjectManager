@@ -10,7 +10,7 @@ import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.TaskView;
 import com.ruegnerlukas.taskmanager.utils.uielements.Alerts;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
-import com.ruegnerlukas.taskmanager.utils.uielements.MenuFunction;
+import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MenuFunction;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
