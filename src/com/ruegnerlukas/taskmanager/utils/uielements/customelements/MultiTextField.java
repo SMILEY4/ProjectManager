@@ -1,6 +1,7 @@
-package com.ruegnerlukas.taskmanager.utils.uielements;
+package com.ruegnerlukas.taskmanager.utils.uielements.customelements;
 
 import com.ruegnerlukas.taskmanager.utils.FXEvents;
+import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;

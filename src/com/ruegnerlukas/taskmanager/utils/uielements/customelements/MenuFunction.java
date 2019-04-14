@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.utils.uielements;
+package com.ruegnerlukas.taskmanager.utils.uielements.customelements;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import javafx.event.ActionEvent;

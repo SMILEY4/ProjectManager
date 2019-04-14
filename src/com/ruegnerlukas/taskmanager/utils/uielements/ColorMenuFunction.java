@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.utils.uielements;
 
+import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MenuFunction;
 import javafx.geometry.Pos;
 import javafx.scene.control.CustomMenuItem;
 import javafx.scene.control.Label;
