@@ -88,11 +88,13 @@ public class TaskLogic {
 
 	public static boolean setValue(Task task, TaskAttribute attribute, Object value) {
 
+
+
 		// validate value-type
 		try {
 			Field field = AttributeLogic.LOGIC_CLASSED.get(attribute.type.get()).getField("DATA_TYPES");
 			Map<String, Class<?>> map = (Map<String, Class<?>>) field.get(null);
-			if (value.getClass() != map.get("task_value")) {
+			if (value.getClass() != map.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE)) {
 				return false;
 			}
 		} catch (IllegalAccessException | NoSuchFieldException e) {

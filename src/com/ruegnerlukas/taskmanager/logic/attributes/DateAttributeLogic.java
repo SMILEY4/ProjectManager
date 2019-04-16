@@ -6,12 +6,11 @@ import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
 import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DateAttributeLogic {
-
-
 
 
 	public static final Map<String, Class<?>> DATA_TYPES;
@@ -26,6 +25,19 @@ public class DateAttributeLogic {
 		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, LocalDate.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 	}
+
+
+
+
+	public static Comparator<LocalDate> DATE_COMPARATOR = LocalDate::compareTo;
+
+
+
+
+	public static Comparator getComparator() {
+		return DATE_COMPARATOR;
+	}
+
 
 
 

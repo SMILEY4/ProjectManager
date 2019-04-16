@@ -5,10 +5,7 @@ import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.TaskFlag;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class TaskFlagAttributeLogic {
 
@@ -28,6 +25,18 @@ public class TaskFlagAttributeLogic {
 		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, TaskFlag.class);
 		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, TaskFlag.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
+
+
+
+
+	public static Comparator<TaskFlag> FLAG_COMPARATOR = Comparator.comparing(x -> x.name.get());
+
+
+
+
+	public static Comparator getComparator() {
+		return FLAG_COMPARATOR;
 	}
 
 

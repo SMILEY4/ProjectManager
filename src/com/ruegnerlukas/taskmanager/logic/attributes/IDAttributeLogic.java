@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -20,6 +21,18 @@ public class IDAttributeLogic {
 		Map<String, Class<?>> map = new HashMap<>();
 		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, Integer.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
+
+
+
+
+	public static Comparator<Integer> ID_COMPARATOR = Integer::compareTo;
+
+
+
+
+	public static Comparator getComparator() {
+		return ID_COMPARATOR;
 	}
 
 

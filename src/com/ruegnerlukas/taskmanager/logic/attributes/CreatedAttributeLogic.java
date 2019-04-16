@@ -6,6 +6,7 @@ import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,6 +22,18 @@ public class CreatedAttributeLogic {
 		Map<String, Class<?>> map = new HashMap<>();
 		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, LocalDateTime.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
+
+
+
+
+	public static Comparator<LocalDateTime> CREATED_COMPARATOR = LocalDateTime::compareTo;
+
+
+
+
+	public static Comparator getComparator() {
+		return CREATED_COMPARATOR;
 	}
 
 

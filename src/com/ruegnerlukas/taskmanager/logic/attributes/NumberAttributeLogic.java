@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,18 @@ public class NumberAttributeLogic {
 		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, Double.class);
 		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, Double.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
+
+
+
+
+	public static Comparator<Double> NUMBER_COMPARATOR = Double::compareTo;
+
+
+
+
+	public static Comparator getComparator() {
+		return NUMBER_COMPARATOR;
 	}
 
 

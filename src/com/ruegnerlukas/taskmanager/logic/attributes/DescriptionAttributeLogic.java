@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,18 @@ public class DescriptionAttributeLogic {
 		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
 		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, String.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
+
+
+
+
+	public static Comparator<String> DESCRIPTION_COMPARATOR = String::compareTo;
+
+
+
+
+	public static Comparator getComparator() {
+		return DESCRIPTION_COMPARATOR;
 	}
 
 

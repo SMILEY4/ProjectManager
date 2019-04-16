@@ -119,6 +119,15 @@ public class AttributeLogic {
 
 
 
+	public static TaskAttribute findAttribute(Project project, String name) {
+		for (TaskAttribute attribute : project.data.attributes) {
+			if (attribute.name.get().equals(name)) {
+				return attribute;
+			}
+		}
+		return null;
+	}
+
 
 	public static TaskAttribute findAttribute(Project project, AttributeType type) {
 		for (TaskAttribute attribute : project.data.attributes) {

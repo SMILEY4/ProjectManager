@@ -27,6 +27,18 @@ public class ChoiceAttributeLogic {
 
 
 
+	public static Comparator<String> CHOICE_COMPARATOR = String::compareTo;
+
+
+
+
+	public static Comparator getComparator() {
+		return CHOICE_COMPARATOR;
+	}
+
+
+
+
 	public static void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 		setValueList(attribute, new String[]{});

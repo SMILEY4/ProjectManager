@@ -60,7 +60,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void buildValuesListField(VBox root) {
-		HBox boxAlign = ContentNodeUtils.buildEntryWithAlignment(root, "Values (CSV):");
+		HBox boxAlign = ContentNodeUtils.buildEntryWithAlignment(root, "Values:");
 
 		fieldValues = new TagBar();
 		fieldValues.setMinSize(60, 32);

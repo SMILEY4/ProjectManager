@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,18 @@ public class BooleanAttributeLogic {
 		map.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
 		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, Boolean.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
+
+
+
+
+	public static Comparator<Boolean> BOOL_COMPARATOR = Boolean::compare;
+
+
+
+
+	public static Comparator getComparator() {
+		return BOOL_COMPARATOR;
 	}
 
 

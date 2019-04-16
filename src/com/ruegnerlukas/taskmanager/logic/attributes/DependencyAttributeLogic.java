@@ -7,6 +7,7 @@ import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -22,6 +23,19 @@ public class DependencyAttributeLogic {
 		Map<String, Class<?>> map = new HashMap<>();
 		map.put("task_value", Task[].class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
+	}
+
+
+
+
+
+	public static Comparator<Task[]> DEPENDENCY_COMPARATOR = Comparator.comparingInt(x -> x.length);
+
+
+
+
+	public static Comparator getComparator() {
+		return DEPENDENCY_COMPARATOR;
 	}
 
 
