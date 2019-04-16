@@ -1,9 +1,10 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.simpleutils.RandomUtils;
-import com.ruegnerlukas.taskmanager.data.AttributeType;
-import com.ruegnerlukas.taskmanager.data.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.projectdata.*;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;
 
@@ -143,5 +144,67 @@ public class TaskFlagAttributeLogic {
 		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, TaskFlag.class);
 	}
 
+
+
+
+	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
+		FilterOperation operation = criteria.operation;
+		List<Object> values = criteria.values;
+
+		// invalid filter operation
+		if (!(operation == FilterOperation.HAS_VALUE || operation == FilterOperation.EQUALS || operation == FilterOperation.NOT_EQUALS)) {
+			return false;
+		}
+
+		// invalid filter/values
+		if (operation == FilterOperation.HAS_VALUE) {
+			if (values.size() != 1 || !(values.get(0) instanceof Boolean)) {
+				return false;
+			}
+		}
+		if (operation == FilterOperation.EQUALS) {
+			if (values.size() != 1 || !(values.get(0) instanceof TaskFlag)) {
+				return false;
+			}
+		}
+		if (operation == FilterOperation.NOT_EQUALS) {
+			if (values.size() != 1 || !(values.get(0) instanceof TaskFlag)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+
+
+
+	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+		TaskAttribute attribute = criteria.attribute.get();
+		FilterOperation operation = criteria.operation;
+		List<Object> values = criteria.values;
+		Object taskValue = TaskLogic.getValue(task, attribute);
+
+		if (operation == FilterOperation.HAS_VALUE) {
+			boolean filterValue = (Boolean) values.get(0);
+			if (filterValue) {
+				return taskValue != null && !(taskValue instanceof NoValue);
+			} else {
+				return taskValue == null || (taskValue instanceof NoValue);
+			}
+		}
+
+		if (operation == FilterOperation.EQUALS) {
+			TaskFlag filterValue = (TaskFlag) values.get(0);
+			return filterValue.equals(taskValue);
+		}
+
+		if (operation == FilterOperation.NOT_EQUALS) {
+			TaskFlag filterValue = (TaskFlag) values.get(0);
+			return !filterValue.equals(taskValue);
+		}
+
+		return false;
+	}
 
 }

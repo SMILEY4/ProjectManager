@@ -1,5 +1,8 @@
 package com.ruegnerlukas.taskmanager.data;
 
+import com.ruegnerlukas.taskmanager.data.projectdata.SortElement;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

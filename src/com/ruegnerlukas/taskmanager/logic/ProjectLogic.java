@@ -1,6 +1,9 @@
 package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.taskmanager.data.*;
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 public class ProjectLogic {

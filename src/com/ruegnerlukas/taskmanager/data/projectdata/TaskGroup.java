@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.data;
+package com.ruegnerlukas.taskmanager.data.projectdata;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

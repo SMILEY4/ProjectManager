@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.utils.observables;
 
 
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.sun.javafx.binding.ExpressionHelper;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
@@ -13,7 +13,7 @@ import javafx.beans.value.WritableObjectValue;
 
 import java.lang.ref.WeakReference;
 
-public class AttributeTypeProperty implements Property<AttributeType>, WritableObjectValue<AttributeType> {
+public class TaskAttributeProperty implements Property<TaskAttribute>, WritableObjectValue<TaskAttribute> {
 
 
 	private static final Object DEFAULT_BEAN = null;
@@ -22,38 +22,38 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 	private final Object bean;
 	private final String name;
 
-	private AttributeType value;
+	private TaskAttribute value;
 
-	private ObservableValue<? extends AttributeType> observable = null;
+	private ObservableValue<? extends TaskAttribute> observable = null;
 	private InvalidationListener listener = null;
 	private boolean valid = true;
-	private ExpressionHelper<AttributeType> helper = null;
+	private ExpressionHelper<TaskAttribute> helper = null;
 
 
 
 
-	public AttributeTypeProperty() {
+	public TaskAttributeProperty() {
 		this(DEFAULT_BEAN, DEFAULT_NAME, null);
 	}
 
 
 
 
-	public AttributeTypeProperty(AttributeType initialValue) {
+	public TaskAttributeProperty(TaskAttribute initialValue) {
 		this(DEFAULT_BEAN, DEFAULT_NAME, initialValue);
 	}
 
 
 
 
-	public AttributeTypeProperty(Object bean, String name) {
+	public TaskAttributeProperty(Object bean, String name) {
 		this(bean, name, null);
 	}
 
 
 
 
-	public AttributeTypeProperty(Object bean, String name, AttributeType initialValue) {
+	public TaskAttributeProperty(Object bean, String name, TaskAttribute initialValue) {
 		this.bean = bean;
 		this.name = name;
 		this.value = initialValue;
@@ -62,7 +62,7 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 
 
 	@Override
-	public AttributeType get() {
+	public TaskAttribute get() {
 		valid = true;
 		return observable == null ? value : observable.getValue();
 	}
@@ -71,9 +71,9 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 
 
 	@Override
-	public void set(AttributeType newValue) {
+	public void set(TaskAttribute newValue) {
 		if (isBound()) {
-			throw new java.lang.RuntimeException((getBean() != null && getName() != null ? getBean().getClass().getSimpleName() + "." + getName() + " : " : "") + "A bound value cannot be set.");
+			throw new RuntimeException((getBean() != null && getName() != null ? getBean().getClass().getSimpleName() + "." + getName() + " : " : "") + "A bound value cannot be set.");
 		}
 		if ((value == null) ? newValue != null : !value.equals(newValue)) {
 			value = newValue;
@@ -84,7 +84,7 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 
 
 	@Override
-	public AttributeType getValue() {
+	public TaskAttribute getValue() {
 		return get();
 	}
 
@@ -92,7 +92,7 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 
 
 	@Override
-	public void setValue(AttributeType newValue) {
+	public void setValue(TaskAttribute newValue) {
 		set(newValue);
 	}
 
@@ -116,7 +116,7 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 
 
 	@Override
-	public void addListener(ChangeListener<? super AttributeType> listener) {
+	public void addListener(ChangeListener<? super TaskAttribute> listener) {
 		helper = ExpressionHelper.addListener(helper, this, listener);
 	}
 
@@ -124,7 +124,7 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 
 
 	@Override
-	public void removeListener(ChangeListener<? super AttributeType> listener) {
+	public void removeListener(ChangeListener<? super TaskAttribute> listener) {
 		helper = ExpressionHelper.removeListener(helper, listener);
 	}
 
@@ -156,7 +156,7 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 
 
 	@Override
-	public void bindBidirectional(Property<AttributeType> other) {
+	public void bindBidirectional(Property<TaskAttribute> other) {
 		Bindings.bindBidirectional(this, other);
 	}
 
@@ -164,7 +164,7 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 
 
 	@Override
-	public void unbindBidirectional(Property<AttributeType> other) {
+	public void unbindBidirectional(Property<TaskAttribute> other) {
 		Bindings.unbindBidirectional(this, other);
 	}
 
@@ -172,7 +172,7 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 
 
 	@Override
-	public void bind(ObservableValue<? extends AttributeType> newObservable) {
+	public void bind(ObservableValue<? extends TaskAttribute> newObservable) {
 		if (newObservable == null) {
 			throw new NullPointerException("Cannot bind to null");
 		}
@@ -232,12 +232,12 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 	private static class Listener implements InvalidationListener {
 
 
-		private final WeakReference<AttributeTypeProperty> wref;
+		private final WeakReference<TaskAttributeProperty> wref;
 
 
 
 
-		public Listener(AttributeTypeProperty ref) {
+		public Listener(TaskAttributeProperty ref) {
 			this.wref = new WeakReference<>(ref);
 		}
 
@@ -246,7 +246,7 @@ public class AttributeTypeProperty implements Property<AttributeType>, WritableO
 
 		@Override
 		public void invalidated(Observable observable) {
-			AttributeTypeProperty ref = wref.get();
+			TaskAttributeProperty ref = wref.get();
 			if (ref == null) {
 				observable.removeListener(this);
 			} else {

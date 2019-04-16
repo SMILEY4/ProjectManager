@@ -1,7 +1,9 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.taskmanager.data.AttributeType;
-import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -112,7 +114,7 @@ public class AttributeLogicManager {
 				errors.add("ERROR - Logic class of type " + type + " is missing the method \"createAttribute():TaskAttribute\"");
 			}
 
-			// all classes have method "createAttribute(name:String):TaskAttribute"
+			// all classes have method "createAttribute(String):TaskAttribute"
 			boolean hasMethod_createNamedAttribute = false;
 			for (Method method : methods) {
 				if ("createAttribute".equals(method.getName()) && method.getParameterCount() == 1
@@ -122,10 +124,10 @@ public class AttributeLogicManager {
 				}
 			}
 			if (!hasMethod_createNamedAttribute) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the method \"createAttribute(name:String):TaskAttribute\"");
+				errors.add("ERROR - Logic class of type " + type + " is missing the method \"createAttribute(String):TaskAttribute\"");
 			}
 
-			// all classes have method "initAttribute(attrib:TaskAttribute):void"
+			// all classes have method "initAttribute(TaskAttribute):void"
 			boolean hasMethod_initAttribute = false;
 			for (Method method : methods) {
 				if ("initAttribute".equals(method.getName()) && method.getParameterCount() == 1
@@ -135,8 +137,40 @@ public class AttributeLogicManager {
 				}
 			}
 			if (!hasMethod_initAttribute) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the method \"initAttribute(attrib:TaskAttribute):void\"");
+				errors.add("ERROR - Logic class of type " + type + " is missing the method \"initAttribute(TaskAttribute):void\"");
 			}
+
+			// all classes have method "matchesFilter(Task,TerminalFilterCriteria):boolean"
+			boolean hasMethod_matchesFilter = false;
+			for (Method method : methods) {
+				if ("matchesFilter".equals(method.getName()) && method.getParameterCount() == 2
+						&& method.getParameterTypes()[0] == Task.class
+						&& method.getParameterTypes()[1] == TerminalFilterCriteria.class
+						&& method.getReturnType() == boolean.class) {
+					hasMethod_matchesFilter = true;
+					break;
+				}
+			}
+			if (!hasMethod_matchesFilter) {
+				errors.add("ERROR - Logic class of type " + type + " is missing the method \"matchesFilter(Task,TerminalFilterCriteria):boolean\"");
+			}
+
+
+			// all classes have method "isValidFilterOperation(Task,TerminalFilterCriteria):boolean"
+			boolean hasMethod_isValidFilterOperation = false;
+			for (Method method : methods) {
+				if ("isValidFilterOperation".equals(method.getName()) && method.getParameterCount() == 2
+						&& method.getParameterTypes()[0] == Task.class
+						&& method.getParameterTypes()[1] == TerminalFilterCriteria.class
+						&& method.getReturnType() == boolean.class) {
+					hasMethod_isValidFilterOperation = true;
+					break;
+				}
+			}
+			if (!hasMethod_isValidFilterOperation) {
+				errors.add("ERROR - Logic class of type " + type + " is missing the method \"isValidFilterOperation(Task,TerminalFilterCriteria):boolean\"");
+			}
+
 
 		}
 
@@ -204,11 +238,35 @@ public class AttributeLogicManager {
 
 
 
-	public static void initeTaskAttribute(TaskAttribute attribute) {
-		Method method = getMethod(getLogicClass(attribute.type.get()), "initAttribute", new Class<?>[]{TaskAttribute.class});
+	public static void initTaskAttribute(TaskAttribute attribute) {
+		Method method = getMethod(getLogicClass(attribute.type.get()), "initAttribute", TaskAttribute.class);
 		try {
 			method.invoke(null, attribute);
 		} catch (IllegalAccessException | InvocationTargetException e) {
+		}
+	}
+
+
+
+
+	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
+		Method method = getMethod(getLogicClass(criteria.attribute.get().type.get()), "isValidFilterOperation", Task.class, TerminalFilterCriteria.class);
+		try {
+			return (Boolean) method.invoke(null, task, criteria);
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			return false;
+		}
+	}
+
+
+
+
+	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+		Method method = getMethod(getLogicClass(criteria.attribute.get().type.get()), "matchesFilter", Task.class, TerminalFilterCriteria.class);
+		try {
+			return (Boolean) method.invoke(null, task, criteria);
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			return false;
 		}
 	}
 

@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.data;
+package com.ruegnerlukas.taskmanager.data.projectdata;
 
 import com.ruegnerlukas.taskmanager.utils.observables.AttributeTypeProperty;
 import javafx.beans.property.SimpleStringProperty;

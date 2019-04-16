@@ -209,7 +209,7 @@ public class MainView extends AnchorPane {
 		tabProjectSettings.setContent(viewProjectSettings);
 		tabPane.getTabs().add(tabProjectSettings);
 
-		// tasks
+		// projectdata
 		TaskView viewTasks = new TaskView();
 		AnchorUtils.setAnchors(viewTasks, 0, 0, 0, 0);
 		Tab tabTaskView = new Tab(TaskView.TITLE);

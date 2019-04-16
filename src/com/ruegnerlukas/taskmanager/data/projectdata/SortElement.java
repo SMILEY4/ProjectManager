@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.data;
+package com.ruegnerlukas.taskmanager.data.projectdata;
 
 public class SortElement {
 

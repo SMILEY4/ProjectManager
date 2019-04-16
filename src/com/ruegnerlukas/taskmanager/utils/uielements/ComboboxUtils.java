@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.utils.uielements;
 
 
-import com.ruegnerlukas.taskmanager.data.AttributeType;
-import com.ruegnerlukas.taskmanager.data.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
 import javafx.scene.control.ListCell;
 
 public class ComboboxUtils {
@@ -124,10 +124,10 @@ public class ComboboxUtils {
 //
 //
 //
-//	public static ListCell<FilterCriteria.ComparisonOp> createListCellComparisonOp() {
-//		return new ListCell<FilterCriteria.ComparisonOp>() {
+//	public static ListCell<TerminalFilterCriteria.ComparisonOp> createListCellComparisonOp() {
+//		return new ListCell<TerminalFilterCriteria.ComparisonOp>() {
 //			@Override
-//			protected void updateItem(FilterCriteria.ComparisonOp item, boolean empty) {
+//			protected void updateItem(TerminalFilterCriteria.ComparisonOp item, boolean empty) {
 //				super.updateItem(item, empty);
 //				if (item == null || empty) {
 //					setText("");

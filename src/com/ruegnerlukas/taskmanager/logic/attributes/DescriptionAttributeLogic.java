@@ -1,13 +1,15 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.simpleutils.RandomUtils;
-import com.ruegnerlukas.taskmanager.data.AttributeType;
-import com.ruegnerlukas.taskmanager.data.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DescriptionAttributeLogic {
 
@@ -84,5 +86,104 @@ public class DescriptionAttributeLogic {
 		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
 	}
 
+
+
+
+	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
+		FilterOperation operation = criteria.operation;
+		List<Object> values = criteria.values;
+
+		// invalid filter operation
+		if (!(operation == FilterOperation.HAS_VALUE
+				|| operation == FilterOperation.EQUALS
+				|| operation == FilterOperation.EQUALS_IGNORE_CASE
+				|| operation == FilterOperation.NOT_EQUALS
+				|| operation == FilterOperation.CONTAINS
+				|| operation == FilterOperation.CONTAINS_NOT
+		)) {
+			return false;
+		}
+
+		// invalid filter/values
+		if (operation == FilterOperation.HAS_VALUE) {
+			if (values.size() != 1 || !(values.get(0) instanceof Boolean)) {
+				return false;
+			}
+		}
+		if (operation == FilterOperation.EQUALS) {
+			if (values.size() != 1 || !(values.get(0) instanceof String)) {
+				return false;
+			}
+		}
+		if (operation == FilterOperation.EQUALS_IGNORE_CASE) {
+			if (values.size() != 1 || !(values.get(0) instanceof String)) {
+				return false;
+			}
+		}
+		if (operation == FilterOperation.NOT_EQUALS) {
+			if (values.size() != 1 || !(values.get(0) instanceof String)) {
+				return false;
+			}
+		}
+		if (operation == FilterOperation.CONTAINS) {
+			if (values.size() != 1 || !(values.get(0) instanceof String)) {
+				return false;
+			}
+		}
+		if (operation == FilterOperation.CONTAINS_NOT) {
+			if (values.size() != 1 || !(values.get(0) instanceof String)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+
+
+
+	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+		TaskAttribute attribute = criteria.attribute.get();
+		FilterOperation operation = criteria.operation;
+		List<Object> values = criteria.values;
+		Object taskValue = TaskLogic.getValue(task, attribute);
+
+		if (operation == FilterOperation.HAS_VALUE) {
+			boolean filterValue = (Boolean) values.get(0);
+			if (filterValue) {
+				return taskValue != null && !(taskValue instanceof NoValue);
+			} else {
+				return taskValue == null || (taskValue instanceof NoValue);
+			}
+		}
+
+		if (operation == FilterOperation.EQUALS) {
+			String filterValue = (String) values.get(0);
+			return filterValue.equals((String) taskValue);
+		}
+
+		if (operation == FilterOperation.EQUALS_IGNORE_CASE) {
+			String filterValue = (String) values.get(0);
+			return filterValue.equalsIgnoreCase((String) taskValue);
+		}
+
+		if (operation == FilterOperation.NOT_EQUALS) {
+			String filterValue = (String) values.get(0);
+			return !filterValue.equals((String) taskValue);
+		}
+
+		if (operation == FilterOperation.CONTAINS) {
+			String filterValue = (String) values.get(0);
+			return ((String) taskValue).contains(filterValue);
+		}
+
+		if (operation == FilterOperation.CONTAINS_NOT) {
+			String filterValue = (String) values.get(0);
+			return !((String) taskValue).contains(filterValue);
+		}
+
+
+		return false;
+	}
 
 }
