@@ -28,14 +28,8 @@ public class DescriptionAttributeLogic {
 
 
 
-	public static Comparator<String> DESCRIPTION_COMPARATOR = String::compareTo;
-
-
-
-
-	public static Comparator getComparator() {
-		return DESCRIPTION_COMPARATOR;
-	}
+	public static final Comparator<String> COMPARATOR_ASC = String::compareTo;
+	public static final Comparator<String> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 

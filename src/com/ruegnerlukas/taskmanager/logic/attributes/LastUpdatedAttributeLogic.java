@@ -27,14 +27,8 @@ public class LastUpdatedAttributeLogic {
 
 
 
-	public static Comparator<LocalDateTime> LAST_UPDATED_COMPARATOR = LocalDateTime::compareTo;
-
-
-
-
-	public static Comparator getComparator() {
-		return LAST_UPDATED_COMPARATOR;
-	}
+	public static final Comparator<LocalDateTime> COMPARATOR_ASC = LocalDateTime::compareTo;
+	public static final Comparator<LocalDateTime> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 

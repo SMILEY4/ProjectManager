@@ -34,14 +34,8 @@ public class TextAttributeLogic {
 
 
 
-	public static Comparator<String> TEXT_COMPARATOR = String::compareTo;
-
-
-
-
-	public static Comparator getComparator() {
-		return TEXT_COMPARATOR;
-	}
+	public static final Comparator<String> COMPARATOR_ASC = String::compareTo;
+	public static final Comparator<String> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 

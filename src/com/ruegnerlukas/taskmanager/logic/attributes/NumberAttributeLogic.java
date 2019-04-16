@@ -36,14 +36,8 @@ public class NumberAttributeLogic {
 
 
 
-	public static Comparator<Double> NUMBER_COMPARATOR = Double::compareTo;
-
-
-
-
-	public static Comparator getComparator() {
-		return NUMBER_COMPARATOR;
-	}
+	public static final Comparator<Double> COMPARATOR_ASC = Double::compareTo;
+	public static final Comparator<Double> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 

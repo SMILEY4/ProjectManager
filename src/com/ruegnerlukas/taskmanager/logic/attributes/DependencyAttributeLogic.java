@@ -21,22 +21,15 @@ public class DependencyAttributeLogic {
 
 	static {
 		Map<String, Class<?>> map = new HashMap<>();
-		map.put("task_value", Task[].class);
+		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, Task[].class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 	}
 
 
 
 
-
-	public static Comparator<Task[]> DEPENDENCY_COMPARATOR = Comparator.comparingInt(x -> x.length);
-
-
-
-
-	public static Comparator getComparator() {
-		return DEPENDENCY_COMPARATOR;
-	}
+	public static final Comparator<Task[]> COMPARATOR_ASC = Comparator.comparingInt(x -> x.length);
+	public static final Comparator<Task[]> COMPARATOR_DESC = (x, y) -> Integer.compare(x.length, y.length) * -1;
 
 
 
@@ -60,6 +53,7 @@ public class DependencyAttributeLogic {
 	public static void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 	}
+
 
 
 

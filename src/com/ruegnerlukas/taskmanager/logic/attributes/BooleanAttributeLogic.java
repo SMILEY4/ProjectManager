@@ -28,14 +28,10 @@ public class BooleanAttributeLogic {
 
 
 
-	public static Comparator<Boolean> BOOL_COMPARATOR = Boolean::compare;
+	public static final Comparator<Boolean> COMPARATOR_ASC = Boolean::compare;
+	public static final Comparator<Boolean> COMPARATOR_DESC = (x,y) -> Boolean.compare(x, y)*-1;
 
 
-
-
-	public static Comparator getComparator() {
-		return BOOL_COMPARATOR;
-	}
 
 
 

@@ -2,8 +2,8 @@ package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.taskmanager.data.*;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 
-import java.lang.reflect.Field;
 import java.time.LocalDate;
 import java.util.Map;
 
@@ -88,17 +88,10 @@ public class TaskLogic {
 
 	public static boolean setValue(Task task, TaskAttribute attribute, Object value) {
 
-
-
-		// validate value-type
-		try {
-			Field field = AttributeLogic.LOGIC_CLASSED.get(attribute.type.get()).getField("DATA_TYPES");
-			Map<String, Class<?>> map = (Map<String, Class<?>>) field.get(null);
-			if (value.getClass() != map.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE)) {
-				return false;
-			}
-		} catch (IllegalAccessException | NoSuchFieldException e) {
-			e.printStackTrace();
+		// validate type
+		Map<String, Class<?>> map = AttributeLogicManager.getDataTypeMap(attribute.type.get());
+		if (value.getClass() != map.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE)) {
+			return false;
 		}
 
 		// TODO: validate value

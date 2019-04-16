@@ -1,5 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
+import com.ruegnerlukas.simpleutils.RandomUtils;
+import com.ruegnerlukas.taskmanager.data.AttributeType;
 import com.ruegnerlukas.taskmanager.data.TaskAttribute;
 
 import java.util.*;
@@ -27,13 +29,23 @@ public class ChoiceAttributeLogic {
 
 
 
-	public static Comparator<String> CHOICE_COMPARATOR = String::compareTo;
+	public static final Comparator<String> COMPARATOR_ASC = String::compareTo;
+	public static final Comparator<String> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 
 
-	public static Comparator getComparator() {
-		return CHOICE_COMPARATOR;
+	public static TaskAttribute createAttribute() {
+		return createAttribute("ChoiceAttribute " + RandomUtils.generateRandomHexString(8));
+	}
+
+
+
+
+	public static TaskAttribute createAttribute(String name) {
+		TaskAttribute attribute = new TaskAttribute(name, AttributeType.CHOICE);
+		ChoiceAttributeLogic.initAttribute(attribute);
+		return attribute;
 	}
 
 

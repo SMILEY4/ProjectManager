@@ -27,14 +27,8 @@ public class CreatedAttributeLogic {
 
 
 
-	public static Comparator<LocalDateTime> CREATED_COMPARATOR = LocalDateTime::compareTo;
-
-
-
-
-	public static Comparator getComparator() {
-		return CREATED_COMPARATOR;
-	}
+	public static final Comparator<LocalDateTime> COMPARATOR_ASC = LocalDateTime::compareTo;
+	public static final Comparator<LocalDateTime> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 

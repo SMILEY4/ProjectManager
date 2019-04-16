@@ -29,14 +29,8 @@ public class DateAttributeLogic {
 
 
 
-	public static Comparator<LocalDate> DATE_COMPARATOR = LocalDate::compareTo;
-
-
-
-
-	public static Comparator getComparator() {
-		return DATE_COMPARATOR;
-	}
+	public static final Comparator<LocalDate> COMPARATOR_ASC = LocalDate::compareTo;
+	public static final Comparator<LocalDate> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 

@@ -26,14 +26,8 @@ public class IDAttributeLogic {
 
 
 
-	public static Comparator<Integer> ID_COMPARATOR = Integer::compareTo;
-
-
-
-
-	public static Comparator getComparator() {
-		return ID_COMPARATOR;
-	}
+	public static final Comparator<Integer> COMPARATOR_ASC = Integer::compareTo;
+	public static final Comparator<Integer> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 

@@ -30,14 +30,8 @@ public class TaskFlagAttributeLogic {
 
 
 
-	public static Comparator<TaskFlag> FLAG_COMPARATOR = Comparator.comparing(x -> x.name.get());
-
-
-
-
-	public static Comparator getComparator() {
-		return FLAG_COMPARATOR;
-	}
+	public static final Comparator<TaskFlag> COMPARATOR_ASC = Comparator.comparing(x -> x.name.get());
+	public static final Comparator<TaskFlag> COMPARATOR_DESC = (x, y) -> x.name.get().compareTo(y.name.get()) * -1;
 
 
 

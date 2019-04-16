@@ -1,10 +1,8 @@
 package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.taskmanager.data.*;
-import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.*;
 
 public class TaskDisplayLogic {
@@ -211,7 +209,10 @@ public class TaskDisplayLogic {
 		for(int i=dataSort.size()-1; i>=0; i--) {
 			SortElement sortElement = dataSort.get(i);
 
-			final Comparator comparatorType = getComparator(sortElement.attribute.type.get());
+			final Comparator comparatorType = sortElement.dir == SortElement.SortDir.ASC ?
+					AttributeLogicManager.getComparatorAsc(sortElement.attribute.type.get())
+					: AttributeLogicManager.getComparatorDesc(sortElement.attribute.type.get());
+
 			if(comparatorType != null) {
 				Comparator<Task> comparatorTask = (tx, ty) -> {
 					final Object vx = TaskLogic.getValue(tx, sortElement.attribute);
@@ -234,16 +235,6 @@ public class TaskDisplayLogic {
 
 
 
-
-	private static Comparator getComparator(AttributeType type) {
-		try {
-			Method method = AttributeLogic.LOGIC_CLASSED.get(type).getMethod("getComparator");
-			return (Comparator) method.invoke(null);
-		} catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 
 }
