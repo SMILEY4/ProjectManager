@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.data.projectdata;
 
 
-import com.ruegnerlukas.taskmanager.utils.observables.FlagColorProperty;
+import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.paint.Color;
 
@@ -44,7 +44,7 @@ public class TaskFlag {
 
 
 
-	public final FlagColorProperty color = new FlagColorProperty();
+	public final CustomProperty<FlagColor> color = new CustomProperty<>();
 	public final SimpleStringProperty name = new SimpleStringProperty();
 
 

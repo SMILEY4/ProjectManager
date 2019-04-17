@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
+import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
-import com.ruegnerlukas.taskmanager.utils.observables.FlagColorProperty;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.EditableLabel;
 import javafx.beans.property.SimpleStringProperty;
@@ -35,7 +35,7 @@ public class FlagNode extends HBox {
 
 	private final TaskFlag flag;
 	private SimpleStringProperty nameProperty = new SimpleStringProperty();
-	private FlagColorProperty colorProperty = new FlagColorProperty();
+	private CustomProperty<TaskFlag.FlagColor> colorProperty = new CustomProperty<>();
 
 
 
@@ -219,7 +219,7 @@ public class FlagNode extends HBox {
 
 
 
-	public FlagColorProperty colorProperty() {
+	public CustomProperty<TaskFlag.FlagColor> colorProperty() {
 		return this.colorProperty;
 	}
 

@@ -1,12 +1,12 @@
 package com.ruegnerlukas.taskmanager.data;
 
 
-import com.ruegnerlukas.taskmanager.utils.observables.ProjectProperty;
+import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 
 public class Data {
 
 
-	public static ProjectProperty projectProperty = new ProjectProperty();
+	public static CustomProperty<Project> projectProperty = new CustomProperty<>();
 
 
 }

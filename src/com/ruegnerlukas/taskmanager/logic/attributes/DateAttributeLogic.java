@@ -102,7 +102,7 @@ public class DateAttributeLogic {
 
 	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
 		TaskAttribute attribute = criteria.attribute.get();
-		FilterOperation operation = criteria.operation;
+		FilterOperation operation = criteria.operation.get();
 		List<Object> values = criteria.values;
 		Object taskValue = TaskLogic.getValue(task, attribute);
 

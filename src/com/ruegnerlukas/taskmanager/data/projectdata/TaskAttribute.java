@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.data.projectdata;
 
-import com.ruegnerlukas.taskmanager.utils.observables.AttributeTypeProperty;
+import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -9,7 +9,7 @@ public class TaskAttribute {
 
 
 	public final SimpleStringProperty name = new SimpleStringProperty();
-	public final AttributeTypeProperty type = new AttributeTypeProperty();
+	public final CustomProperty<AttributeType> type = new CustomProperty<>();
 	public final ObservableMap<String, Object> values = FXCollections.observableHashMap();
 
 

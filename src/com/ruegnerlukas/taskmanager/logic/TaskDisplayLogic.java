@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.*;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.TaskFilterData;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 
 import java.util.*;
@@ -9,12 +9,12 @@ import java.util.*;
 public class TaskDisplayLogic {
 
 
-	public static List<TaskGroup> createTaskGroups(List<Task> tasks, TaskFilterData dataFilter, List<TaskAttribute> dataGroup, List<SortElement> dataSort) {
+	public static List<TaskGroup> createTaskGroups(List<Task> tasks, FilterCriteria dataFilter, List<TaskAttribute> dataGroup, List<SortElement> dataSort) {
 
 
 		// 1. filter
 		List<Task> filteredTasks = new ArrayList<>();
-		FilterNode rootFilter = new FilterNode(dataFilter.criteria);
+		FilterNode rootFilter = new FilterNode(dataFilter);
 		rootFilter.expand();
 
 		for (int i = 0, n = tasks.size(); i < n; i++) {
