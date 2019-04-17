@@ -13,8 +13,11 @@ public class TaskFlagAttributeLogic {
 
 	public static final String FLAG_FLAG_LIST = "flag_flag_list";
 
-
 	public static final Map<String, Class<?>> DATA_TYPES;
+	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+
+	public static final Comparator<TaskFlag> COMPARATOR_ASC = Comparator.comparing(x -> x.name.get());
+	public static final Comparator<TaskFlag> COMPARATOR_DESC = (x, y) -> x.name.get().compareTo(y.name.get()) * -1;
 
 
 
@@ -26,13 +29,13 @@ public class TaskFlagAttributeLogic {
 		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, TaskFlag.class);
 		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, TaskFlag.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
+
+		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
+		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
+		mapData.put(FilterOperation.EQUALS, new Class<?>[]{TaskFlag.class});
+		mapData.put(FilterOperation.NOT_EQUALS, new Class<?>[]{TaskFlag.class});
+		FILTER_DATA = Collections.unmodifiableMap(mapData);
 	}
-
-
-
-
-	public static final Comparator<TaskFlag> COMPARATOR_ASC = Comparator.comparing(x -> x.name.get());
-	public static final Comparator<TaskFlag> COMPARATOR_DESC = (x, y) -> x.name.get().compareTo(y.name.get()) * -1;
 
 
 
@@ -142,38 +145,6 @@ public class TaskFlagAttributeLogic {
 
 	public static TaskFlag getDefaultValue(TaskAttribute attribute) {
 		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, TaskFlag.class);
-	}
-
-
-
-
-	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
-		FilterOperation operation = criteria.operation;
-		List<Object> values = criteria.values;
-
-		// invalid filter operation
-		if (!(operation == FilterOperation.HAS_VALUE || operation == FilterOperation.EQUALS || operation == FilterOperation.NOT_EQUALS)) {
-			return false;
-		}
-
-		// invalid filter/values
-		if (operation == FilterOperation.HAS_VALUE) {
-			if (values.size() != 1 || !(values.get(0) instanceof Boolean)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof TaskFlag)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.NOT_EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof TaskFlag)) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 

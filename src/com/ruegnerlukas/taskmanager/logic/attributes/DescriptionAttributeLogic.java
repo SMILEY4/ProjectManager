@@ -15,23 +15,30 @@ public class DescriptionAttributeLogic {
 
 
 	public static final Map<String, Class<?>> DATA_TYPES;
+	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+
+	public static final Comparator<String> COMPARATOR_ASC = String::compareTo;
+	public static final Comparator<String> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 
 
 	static {
-		Map<String, Class<?>> map = new HashMap<>();
-		map.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
-		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
-		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, String.class);
-		DATA_TYPES = Collections.unmodifiableMap(map);
+		Map<String, Class<?>> mapTypes = new HashMap<>();
+		mapTypes.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		mapTypes.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
+		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, String.class);
+		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
+
+		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
+		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
+		mapData.put(FilterOperation.EQUALS, new Class<?>[]{String.class});
+		mapData.put(FilterOperation.EQUALS_IGNORE_CASE, new Class<?>[]{String.class});
+		mapData.put(FilterOperation.NOT_EQUALS, new Class<?>[]{String.class});
+		mapData.put(FilterOperation.CONTAINS, new Class<?>[]{String.class});
+		mapData.put(FilterOperation.CONTAINS_NOT, new Class<?>[]{String.class});
+		FILTER_DATA = Collections.unmodifiableMap(mapData);
 	}
-
-
-
-
-	public static final Comparator<String> COMPARATOR_ASC = String::compareTo;
-	public static final Comparator<String> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 
@@ -84,59 +91,6 @@ public class DescriptionAttributeLogic {
 
 	public static String getDefaultValue(TaskAttribute attribute) {
 		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
-	}
-
-
-
-
-	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
-		FilterOperation operation = criteria.operation;
-		List<Object> values = criteria.values;
-
-		// invalid filter operation
-		if (!(operation == FilterOperation.HAS_VALUE
-				|| operation == FilterOperation.EQUALS
-				|| operation == FilterOperation.EQUALS_IGNORE_CASE
-				|| operation == FilterOperation.NOT_EQUALS
-				|| operation == FilterOperation.CONTAINS
-				|| operation == FilterOperation.CONTAINS_NOT
-		)) {
-			return false;
-		}
-
-		// invalid filter/values
-		if (operation == FilterOperation.HAS_VALUE) {
-			if (values.size() != 1 || !(values.get(0) instanceof Boolean)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof String)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.EQUALS_IGNORE_CASE) {
-			if (values.size() != 1 || !(values.get(0) instanceof String)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.NOT_EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof String)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.CONTAINS) {
-			if (values.size() != 1 || !(values.get(0) instanceof String)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.CONTAINS_NOT) {
-			if (values.size() != 1 || !(values.get(0) instanceof String)) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 

@@ -16,21 +16,26 @@ public class DependencyAttributeLogic {
 
 
 	public static final Map<String, Class<?>> DATA_TYPES;
+	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+
+	public static final Comparator<Task[]> COMPARATOR_ASC = Comparator.comparingInt(x -> x.length);
+	public static final Comparator<Task[]> COMPARATOR_DESC = (x, y) -> Integer.compare(x.length, y.length) * -1;
 
 
 
 
 	static {
-		Map<String, Class<?>> map = new HashMap<>();
-		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, Task[].class);
-		DATA_TYPES = Collections.unmodifiableMap(map);
+		Map<String, Class<?>> mapTypes = new HashMap<>();
+		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, Task[].class);
+		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
+
+		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
+		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
+		mapData.put(FilterOperation.DEPENDENT_ON, new Class<?>[]{Task.class});
+		mapData.put(FilterOperation.PREREQUISITE_OF, new Class<?>[]{Task.class});
+		mapData.put(FilterOperation.INDEPENDENT, new Class<?>[]{Boolean.class});
+		FILTER_DATA = Collections.unmodifiableMap(mapData);
 	}
-
-
-
-
-	public static final Comparator<Task[]> COMPARATOR_ASC = Comparator.comparingInt(x -> x.length);
-	public static final Comparator<Task[]> COMPARATOR_DESC = (x, y) -> Integer.compare(x.length, y.length) * -1;
 
 
 
@@ -81,48 +86,6 @@ public class DependencyAttributeLogic {
 
 	public static LocalDateTime getDefaultValue(TaskAttribute attribute) {
 		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, LocalDateTime.class);
-	}
-
-
-
-
-	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
-		FilterOperation operation = criteria.operation;
-		List<Object> values = criteria.values;
-
-		// invalid filter operation
-		if (!(operation == FilterOperation.HAS_VALUE
-				|| operation == FilterOperation.DEPENDENT_ON
-				|| operation == FilterOperation.PREREQUISITE_OF
-				|| operation == FilterOperation.INDEPENDENT
-		)) {
-			return false;
-		}
-
-		// invalid filter/values
-		if (operation == FilterOperation.HAS_VALUE) {
-			if (values.size() != 1 || !(values.get(0) instanceof Boolean)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.DEPENDENT_ON) {
-			if (values.size() != 1 || !(values.get(0) instanceof Task)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.PREREQUISITE_OF) {
-			if (values.size() != 1 || !(values.get(0) instanceof Task)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.INDEPENDENT) {
-			if (values.size() != 1 || !(values.get(0) instanceof Boolean)) {
-				return false;
-			}
-		}
-
-
-		return true;
 	}
 
 

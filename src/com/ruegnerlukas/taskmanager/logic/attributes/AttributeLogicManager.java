@@ -3,6 +3,7 @@ package com.ruegnerlukas.taskmanager.logic.attributes;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
 
 import java.lang.reflect.Field;
@@ -102,6 +103,19 @@ public class AttributeLogicManager {
 				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final COMPARATOR_DESC:Comparator\"");
 			}
 
+			// all classes have final field "FILTER_DATA"
+			boolean hasField_filterData = false;
+			for (Field field : fields) {
+				if ("FILTER_DATA".equals(field.getName()) && Map.class == field.getType() && Modifier.isFinal(field.getModifiers())) {
+					hasField_filterData = true;
+					break;
+				}
+			}
+			if (!hasField_filterData) {
+				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final FILTER_DATA:Map<FilterOperation,Class[]>\"");
+			}
+
+
 			// all classes have method "createAttribute():TaskAttribute"
 			boolean hasMethod_createAttribute = false;
 			for (Method method : methods) {
@@ -154,23 +168,6 @@ public class AttributeLogicManager {
 			if (!hasMethod_matchesFilter) {
 				errors.add("ERROR - Logic class of type " + type + " is missing the method \"matchesFilter(Task,TerminalFilterCriteria):boolean\"");
 			}
-
-
-			// all classes have method "isValidFilterOperation(Task,TerminalFilterCriteria):boolean"
-			boolean hasMethod_isValidFilterOperation = false;
-			for (Method method : methods) {
-				if ("isValidFilterOperation".equals(method.getName()) && method.getParameterCount() == 2
-						&& method.getParameterTypes()[0] == Task.class
-						&& method.getParameterTypes()[1] == TerminalFilterCriteria.class
-						&& method.getReturnType() == boolean.class) {
-					hasMethod_isValidFilterOperation = true;
-					break;
-				}
-			}
-			if (!hasMethod_isValidFilterOperation) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the method \"isValidFilterOperation(Task,TerminalFilterCriteria):boolean\"");
-			}
-
 
 		}
 
@@ -250,12 +247,30 @@ public class AttributeLogicManager {
 
 
 	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
-		Method method = getMethod(getLogicClass(criteria.attribute.get().type.get()), "isValidFilterOperation", Task.class, TerminalFilterCriteria.class);
+		Field field = getField(getLogicClass(criteria.attribute.get().type.get()), "FILTER_DATA");
 		try {
-			return (Boolean) method.invoke(null, task, criteria);
-		} catch (IllegalAccessException | InvocationTargetException e) {
-			return false;
+			Map<FilterOperation, Class<?>[]> FILTER_DATA = (Map<FilterOperation, Class<?>[]>) field.get(null);
+			// is invalid operation
+			if (!FILTER_DATA.containsKey(criteria.operation)) {
+				return false;
+			}
+			// has invalid amount of values
+			Class<?>[] dataTypes = FILTER_DATA.get(criteria.operation);
+			if (dataTypes.length != criteria.values.size()) {
+				return false;
+			}
+			// in invalid datatype
+			for (int i = 0; i < dataTypes.length; i++) {
+				Class<?> expected = dataTypes[i];
+				Class<?> actual = criteria.values.get(i).getClass();
+				if (actual != expected) {
+					return false;
+				}
+			}
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
 		}
+		return false;
 	}
 
 

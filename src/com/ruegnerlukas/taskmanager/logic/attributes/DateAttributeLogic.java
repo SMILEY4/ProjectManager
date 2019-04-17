@@ -16,23 +16,33 @@ public class DateAttributeLogic {
 
 
 	public static final Map<String, Class<?>> DATA_TYPES;
+	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+
+	public static final Comparator<LocalDate> COMPARATOR_ASC = LocalDate::compareTo;
+	public static final Comparator<LocalDate> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 
 
 	static {
-		Map<String, Class<?>> map = new HashMap<>();
-		map.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
-		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, LocalDate.class);
-		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, LocalDate.class);
-		DATA_TYPES = Collections.unmodifiableMap(map);
+		Map<String, Class<?>> mapTypes = new HashMap<>();
+		mapTypes.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		mapTypes.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, LocalDate.class);
+		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, LocalDate.class);
+		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
+
+		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
+		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
+		mapData.put(FilterOperation.EQUALS, new Class<?>[]{LocalDate.class});
+		mapData.put(FilterOperation.NOT_EQUALS, new Class<?>[]{LocalDate.class});
+		mapData.put(FilterOperation.GREATER_THAN, new Class<?>[]{LocalDate.class});
+		mapData.put(FilterOperation.GREATER_EQUALS, new Class<?>[]{LocalDate.class});
+		mapData.put(FilterOperation.LESS_THAN, new Class<?>[]{LocalDate.class});
+		mapData.put(FilterOperation.LESS_EQUALS, new Class<?>[]{LocalDate.class});
+		mapData.put(FilterOperation.IN_RANGE, new Class<?>[]{LocalDate.class, LocalDate.class});
+		mapData.put(FilterOperation.NOT_IN_RANGE, new Class<?>[]{LocalDate.class, LocalDate.class});
+		FILTER_DATA = Collections.unmodifiableMap(mapData);
 	}
-
-
-
-
-	public static final Comparator<LocalDate> COMPARATOR_ASC = LocalDate::compareTo;
-	public static final Comparator<LocalDate> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 
@@ -85,77 +95,6 @@ public class DateAttributeLogic {
 
 	public static LocalDate getDefaultValue(TaskAttribute attribute) {
 		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, LocalDate.class);
-	}
-
-
-
-
-	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
-		FilterOperation operation = criteria.operation;
-		List<Object> values = criteria.values;
-
-		// invalid filter operation
-		if (!(operation == FilterOperation.HAS_VALUE
-				|| operation == FilterOperation.EQUALS
-				|| operation == FilterOperation.NOT_EQUALS
-				|| operation == FilterOperation.GREATER_THAN
-				|| operation == FilterOperation.GREATER_EQUALS
-				|| operation == FilterOperation.LESS_THAN
-				|| operation == FilterOperation.LESS_EQUALS
-				|| operation == FilterOperation.IN_RANGE
-				|| operation == FilterOperation.NOT_IN_RANGE
-		)) {
-			return false;
-		}
-
-		// invalid filter/values
-		if (operation == FilterOperation.HAS_VALUE) {
-			if (values.size() != 1 || !(values.get(0) instanceof Boolean)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDate)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.NOT_EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDate)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.GREATER_THAN) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDate)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.GREATER_EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDate)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.LESS_THAN) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDate)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.LESS_EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDate)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.IN_RANGE) {
-			if (values.size() != 2 || !(values.get(0) instanceof LocalDate) || !(values.get(1) instanceof LocalDate)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.NOT_IN_RANGE) {
-			if (values.size() != 2 || !(values.get(0) instanceof LocalDate) || !(values.get(1) instanceof LocalDate)) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 

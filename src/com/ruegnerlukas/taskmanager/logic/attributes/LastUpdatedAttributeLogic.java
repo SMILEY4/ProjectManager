@@ -16,6 +16,10 @@ public class LastUpdatedAttributeLogic {
 
 
 	public static final Map<String, Class<?>> DATA_TYPES;
+	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+
+	public static final Comparator<LocalDateTime> COMPARATOR_ASC = LocalDateTime::compareTo;
+	public static final Comparator<LocalDateTime> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 
@@ -24,13 +28,19 @@ public class LastUpdatedAttributeLogic {
 		Map<String, Class<?>> map = new HashMap<>();
 		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, LocalDateTime.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
+
+		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
+		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
+		mapData.put(FilterOperation.EQUALS, new Class<?>[]{LocalDateTime.class});
+		mapData.put(FilterOperation.NOT_EQUALS, new Class<?>[]{LocalDateTime.class});
+		mapData.put(FilterOperation.GREATER_THAN, new Class<?>[]{LocalDateTime.class});
+		mapData.put(FilterOperation.GREATER_EQUALS, new Class<?>[]{LocalDateTime.class});
+		mapData.put(FilterOperation.LESS_THAN, new Class<?>[]{LocalDateTime.class});
+		mapData.put(FilterOperation.LESS_EQUALS, new Class<?>[]{LocalDateTime.class});
+		mapData.put(FilterOperation.IN_RANGE, new Class<?>[]{LocalDateTime.class, LocalDateTime.class});
+		mapData.put(FilterOperation.NOT_IN_RANGE, new Class<?>[]{LocalDateTime.class, LocalDateTime.class});
+		FILTER_DATA = Collections.unmodifiableMap(mapData);
 	}
-
-
-
-
-	public static final Comparator<LocalDateTime> COMPARATOR_ASC = LocalDateTime::compareTo;
-	public static final Comparator<LocalDateTime> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 
@@ -53,77 +63,6 @@ public class LastUpdatedAttributeLogic {
 
 	public static void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
-	}
-
-
-
-
-	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
-		FilterOperation operation = criteria.operation;
-		List<Object> values = criteria.values;
-
-		// invalid filter operation
-		if (!(operation == FilterOperation.HAS_VALUE
-				|| operation == FilterOperation.EQUALS
-				|| operation == FilterOperation.NOT_EQUALS
-				|| operation == FilterOperation.GREATER_THAN
-				|| operation == FilterOperation.GREATER_EQUALS
-				|| operation == FilterOperation.LESS_THAN
-				|| operation == FilterOperation.LESS_EQUALS
-				|| operation == FilterOperation.IN_RANGE
-				|| operation == FilterOperation.NOT_IN_RANGE
-		)) {
-			return false;
-		}
-
-		// invalid filter/values
-		if (operation == FilterOperation.HAS_VALUE) {
-			if (values.size() != 1 || !(values.get(0) instanceof Boolean)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDateTime)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.NOT_EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDateTime)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.GREATER_THAN) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDateTime)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.GREATER_EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDateTime)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.LESS_THAN) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDateTime)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.LESS_EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof LocalDateTime)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.IN_RANGE) {
-			if (values.size() != 2 || !(values.get(0) instanceof LocalDateTime) || !(values.get(1) instanceof LocalDateTime)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.NOT_IN_RANGE) {
-			if (values.size() != 2 || !(values.get(0) instanceof LocalDateTime) || !(values.get(1) instanceof LocalDateTime)) {
-				return false;
-			}
-		}
-
-		return true;
 	}
 
 

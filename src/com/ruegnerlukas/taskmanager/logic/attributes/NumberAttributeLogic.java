@@ -19,28 +19,37 @@ public class NumberAttributeLogic {
 	public static final String NUMBER_MIN_VALUE = "number_min_value";
 	public static final String NUMBER_MAX_VALUE = "number_max_value";
 
-
 	public static final Map<String, Class<?>> DATA_TYPES;
+	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+
+	public static final Comparator<Double> COMPARATOR_ASC = Double::compareTo;
+	public static final Comparator<Double> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 
 
 	static {
-		Map<String, Class<?>> map = new HashMap<>();
-		map.put(NUMBER_DEC_PLACES, Integer.class);
-		map.put(NUMBER_MIN_VALUE, Double.class);
-		map.put(NUMBER_MAX_VALUE, Double.class);
-		map.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
-		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, Double.class);
-		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, Double.class);
-		DATA_TYPES = Collections.unmodifiableMap(map);
+		Map<String, Class<?>> mapTypes = new HashMap<>();
+		mapTypes.put(NUMBER_DEC_PLACES, Integer.class);
+		mapTypes.put(NUMBER_MIN_VALUE, Double.class);
+		mapTypes.put(NUMBER_MAX_VALUE, Double.class);
+		mapTypes.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		mapTypes.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, Double.class);
+		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, Double.class);
+		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
+
+		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
+		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
+		mapData.put(FilterOperation.EQUALS, new Class<?>[]{Double.class});
+		mapData.put(FilterOperation.NOT_EQUALS, new Class<?>[]{Double.class});
+		mapData.put(FilterOperation.GREATER_THAN, new Class<?>[]{Double.class});
+		mapData.put(FilterOperation.GREATER_EQUALS, new Class<?>[]{Double.class});
+		mapData.put(FilterOperation.LESS_THAN, new Class<?>[]{Double.class});
+		mapData.put(FilterOperation.LESS_EQUALS, new Class<?>[]{Double.class});
+		mapData.put(FilterOperation.IN_RANGE, new Class<?>[]{Double.class, Double.class});
+		mapData.put(FilterOperation.NOT_IN_RANGE, new Class<?>[]{Double.class, Double.class});
+		FILTER_DATA = Collections.unmodifiableMap(mapData);
 	}
-
-
-
-
-	public static final Comparator<Double> COMPARATOR_ASC = Double::compareTo;
-	public static final Comparator<Double> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
 
@@ -164,77 +173,6 @@ public class NumberAttributeLogic {
 
 
 
-	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
-		FilterOperation operation = criteria.operation;
-		List<Object> values = criteria.values;
-
-		// invalid filter operation
-		if (!(operation == FilterOperation.HAS_VALUE
-				|| operation == FilterOperation.EQUALS
-				|| operation == FilterOperation.NOT_EQUALS
-				|| operation == FilterOperation.GREATER_THAN
-				|| operation == FilterOperation.GREATER_EQUALS
-				|| operation == FilterOperation.LESS_THAN
-				|| operation == FilterOperation.LESS_EQUALS
-				|| operation == FilterOperation.IN_RANGE
-				|| operation == FilterOperation.NOT_IN_RANGE
-		)) {
-			return false;
-		}
-
-		// invalid filter/values
-		if (operation == FilterOperation.HAS_VALUE) {
-			if (values.size() != 1 || !(values.get(0) instanceof Boolean)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof Double)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.NOT_EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof Double)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.GREATER_THAN) {
-			if (values.size() != 1 || !(values.get(0) instanceof Double)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.GREATER_EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof Double)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.LESS_THAN) {
-			if (values.size() != 1 || !(values.get(0) instanceof Double)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.LESS_EQUALS) {
-			if (values.size() != 1 || !(values.get(0) instanceof Double)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.IN_RANGE) {
-			if (values.size() != 2 || !(values.get(0) instanceof Double) || !(values.get(1) instanceof Double)) {
-				return false;
-			}
-		}
-		if (operation == FilterOperation.NOT_IN_RANGE) {
-			if (values.size() != 2 || !(values.get(0) instanceof Double) || !(values.get(1) instanceof Double)) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-
-
-
 	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
 		TaskAttribute attribute = criteria.attribute.get();
 		FilterOperation operation = criteria.operation;
@@ -252,44 +190,44 @@ public class NumberAttributeLogic {
 
 		if (operation == FilterOperation.EQUALS) {
 			double filterValue = (double) values.get(0);
-			return MathUtils.isNearlyEqual(filterValue, (double)taskValue, getDecPlaces(attribute));
+			return MathUtils.isNearlyEqual(filterValue, (double) taskValue, getDecPlaces(attribute));
 		}
 
 		if (operation == FilterOperation.NOT_EQUALS) {
 			double filterValue = (double) values.get(0);
-			return !MathUtils.isNearlyEqual(filterValue, (double)taskValue, getDecPlaces(attribute));
+			return !MathUtils.isNearlyEqual(filterValue, (double) taskValue, getDecPlaces(attribute));
 		}
 
 		if (operation == FilterOperation.GREATER_THAN) {
 			double filterValue = (double) values.get(0);
-			return filterValue < (double)taskValue;
+			return filterValue < (double) taskValue;
 		}
 
 		if (operation == FilterOperation.GREATER_EQUALS) {
 			double filterValue = (double) values.get(0);
-			return filterValue <= (double)taskValue;
+			return filterValue <= (double) taskValue;
 		}
 
 		if (operation == FilterOperation.LESS_THAN) {
 			double filterValue = (double) values.get(0);
-			return filterValue > (double)taskValue;
+			return filterValue > (double) taskValue;
 		}
 
 		if (operation == FilterOperation.LESS_EQUALS) {
 			double filterValue = (double) values.get(0);
-			return filterValue >= (double)taskValue;
+			return filterValue >= (double) taskValue;
 		}
 
 		if (operation == FilterOperation.IN_RANGE) {
 			double filterValueMin = (double) values.get(0);
 			double filterValueMax = (double) values.get(1);
-			return filterValueMin <= (double)taskValue && (double)taskValue <= filterValueMax;
+			return filterValueMin <= (double) taskValue && (double) taskValue <= filterValueMax;
 		}
 
 		if (operation == FilterOperation.NOT_IN_RANGE) {
 			double filterValueMin = (double) values.get(0);
 			double filterValueMax = (double) values.get(1);
-			return !(filterValueMin <= (double)taskValue && (double)taskValue <= filterValueMax);
+			return !(filterValueMin <= (double) taskValue && (double) taskValue <= filterValueMax);
 		}
 
 		return false;
