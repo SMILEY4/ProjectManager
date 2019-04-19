@@ -215,7 +215,7 @@
 }
 
 
-/* Badges for filter/group/sort */
+/* Badges for popupfilter/group/sort */
 #paneHeaderBadges > Label {
 	-fx-background-color: -warning;
 	-fx-background-radius: 7;

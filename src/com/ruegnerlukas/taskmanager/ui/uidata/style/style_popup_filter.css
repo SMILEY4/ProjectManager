@@ -14,14 +14,7 @@
 					- TextField #fieldSave
 					- Button #btnSave
 			- ScrollPane
-				- ... VBox
-					- VBox #boxAttributes
-						- FilterCriteriaNode
-							- Button // "X"/remove
-							- ComboBox // select attribute
-							- ComboBox // select comp-op
-							- * // value-field / can be anything
-					- Button #btnAdd
+				- ???
 			- HBox
 				- Button #btnCancel
 				- Button #btnAccept
@@ -60,8 +53,10 @@
 }
 
 
-#boxContent {
-	-fx-spacing: 15;
+
+
+#paneRoot {
+	-fx-background-color: white;
 }
 
 
@@ -95,7 +90,12 @@
 }
 
 
-#boxContent > .scroll-pane {
+.scroll-pane {
+	-fx-border-radius: 5 0 0 5;
+}
+
+
+#paneCriteria {
 	-fx-background-radius: 5;
 	-fx-border-radius:     5;
 	-fx-border-color:      -gray-mid-0;
@@ -103,36 +103,115 @@
 
 
 
-#boxAttributes > * {
+#and-criteria {
+	-fx-background-radius: 5;
 	-fx-background-color:  white;
+	-fx-border-radius:     5;
+	-fx-border-color:      -gray-mid-0;
+}
+
+
+#and-criteria > VBox {
+	-fx-padding:           5 5 5 5;
+	-fx-background-color:  #f3f3f3;
 	-fx-background-radius: 5;
 	-fx-border-radius:     5;
 	-fx-border-color:      -gray-mid-0;
 }
 
 
-#boxAttributes > *:hover {
+#and-criteria:hover {
 	-fx-border-color: -gray-dark;
 }
 
 
-#boxAttributes > * > .button {
-	-fx-background-color: transparent;
+#and-criteria > .button {
 	-fx-border-color:     transparent;
+	-fx-background-color: transparent;
 }
 
 
-#boxAttributes > * > .button:hover > SVGPath {
+#and-criteria > .button:hover > SVGPath {
 	-fx-fill: -mouse-over;
 }
 
 
-#boxAttributes > * > .button:pressed > SVGPath {
+#and-criteria > .button:pressed > SVGPath {
 	-fx-fill: -mouse-down;
 }
 
 
-#boxAttributes > * > .combo-box {
+
+#or-criteria {
+	-fx-background-radius: 5;
+	-fx-background-color:  white;
+	-fx-border-radius:     5;
+	-fx-border-color:      -gray-mid-0;
+}
+
+
+#or-criteria > VBox {
+	-fx-padding:           5 5 5 5;
+	-fx-background-color:  #f3f3f3;
+	-fx-background-radius: 5;
+	-fx-border-radius:     5;
+	-fx-border-color:      -gray-mid-0;
+}
+
+
+#or-criteria:hover {
+	-fx-border-color: -gray-dark;
+}
+
+
+#or-criteria > .button {
+	-fx-border-color:     transparent;
+	-fx-background-color: transparent;
+}
+
+
+#or-criteria > .button:hover > SVGPath {
+	-fx-fill: -mouse-over;
+}
+
+
+#or-criteria > .button:pressed > SVGPath {
+	-fx-fill: -mouse-down;
+}
+
+
+
+#terminal-criteria {
+	-fx-background-radius: 5;
+	-fx-background-color:  white;
+	-fx-border-radius:     5;
+	-fx-border-color:      -gray-mid-0;
+}
+
+
+
+#terminal-criteria:hover {
+	-fx-border-color: -gray-dark;
+}
+
+
+#terminal-criteria > HBox > .button {
+	-fx-border-color:     transparent;
+	-fx-background-color: transparent;
+}
+
+
+#terminal-criteria > HBox > .button:hover > SVGPath {
+	-fx-fill: -mouse-over;
+}
+
+
+#terminal-criteria > HBox > .button:pressed > SVGPath {
+	-fx-fill: -mouse-down;
+}
+
+
+#terminal-criteria > HBox > .combo-box {
 	-fx-background-color:  transparent;
 	-fx-background-insets: 0 0 5 0;
 	-fx-border-color:      -gray-mid-0;
@@ -140,3 +219,5 @@
 	-fx-border-width:      0 0 1 0;
 	-fx-border-insets:     0 0 5 0;
 }
+
+

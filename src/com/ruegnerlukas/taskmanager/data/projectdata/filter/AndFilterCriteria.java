@@ -6,7 +6,7 @@ import javafx.collections.ObservableList;
 public class AndFilterCriteria extends FilterCriteria {
 
 
-	public final ObservableList<FilterCriteria> criteria = FXCollections.observableArrayList();
+	public final ObservableList<FilterCriteria> subCriteria = FXCollections.observableArrayList();
 
 
 

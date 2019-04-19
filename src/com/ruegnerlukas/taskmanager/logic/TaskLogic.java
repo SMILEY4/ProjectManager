@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 
@@ -103,6 +104,13 @@ public class TaskLogic {
 		task.attributes.put(attribute, value);
 		return true;
 	}
+
+
+
+	public static void setFilter(Project project, FilterCriteria criteria) {
+		project.data.filterCriteria.set(criteria);
+	}
+
 
 
 }

@@ -7,6 +7,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 public class ProjectData {
 
@@ -17,5 +18,7 @@ public class ProjectData {
 	public final CustomProperty<FilterCriteria> filterCriteria = new CustomProperty<>();
 	public final ObservableList<TaskAttribute> groupBy = FXCollections.observableArrayList();
 	public final ObservableList<SortElement> sortElements = FXCollections.observableArrayList();
+
+	public final ObservableMap<String, FilterCriteria> filterPresets = FXCollections.observableHashMap();
 
 }

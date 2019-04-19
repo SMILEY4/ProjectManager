@@ -195,6 +195,14 @@ public class AttributeLogicManager {
 
 
 
+	public static  Map<FilterOperation, Class<?>[]> getFilterData(AttributeType type) {
+		Field field = getField(getLogicClass(type), "FILTER_DATA");
+		return ( Map<FilterOperation, Class<?>[]>) getFieldValue(field, null);
+	}
+
+
+
+
 	public static Comparator getComparatorAsc(AttributeType type) {
 		Field field = getField(getLogicClass(type), "COMPARATOR_ASC");
 		return (Comparator) getFieldValue(field, null);

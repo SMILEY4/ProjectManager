@@ -12,7 +12,7 @@ public class TaskDisplayLogic {
 	public static List<TaskGroup> createTaskGroups(List<Task> tasks, FilterCriteria dataFilter, List<TaskAttribute> dataGroup, List<SortElement> dataSort) {
 
 
-		// 1. filter
+		// 1. popupfilter
 		List<Task> filteredTasks = new ArrayList<>();
 		FilterNode rootFilter = new FilterNode(dataFilter);
 		rootFilter.expand();

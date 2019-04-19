@@ -46,14 +46,14 @@ public class FilterNode {
 
 	public void expand() {
 		if (this.criteria.type == FilterCriteria.CriteriaType.OR) {
-			for (FilterCriteria crit : ((OrFilterCriteria) this.criteria).criteria) {
+			for (FilterCriteria crit : ((OrFilterCriteria) this.criteria).subCriteria) {
 				FilterNode node = new FilterNode(crit);
 				node.expand();
 				this.children.add(node);
 			}
 		}
 		if (this.criteria.type == FilterCriteria.CriteriaType.AND) {
-			for (FilterCriteria crit : ((AndFilterCriteria) this.criteria).criteria) {
+			for (FilterCriteria crit : ((AndFilterCriteria) this.criteria).subCriteria) {
 				FilterNode node = new FilterNode(crit);
 				node.expand();
 				this.children.add(node);

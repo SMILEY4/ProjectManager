@@ -2,7 +2,10 @@ package com.ruegnerlukas.taskmanager.utils.uielements;
 
 
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import javafx.scene.control.ListCell;
 
 public class ComboboxUtils {
@@ -103,78 +106,23 @@ public class ComboboxUtils {
 
 
 
-//
-//
-//
-//
-//	public static ListCell<TaskAttribute> createListCellAttribute() {
-//		return new ListCell<TaskAttribute>() {
-//			@Override
-//			protected void updateItem(TaskAttribute item, boolean empty) {
-//				super.updateItem(item, empty);
-//				if(item == null || empty) {
-//					setText("");
-//				} else {
-//					setText(item.name);
-//				}
-//			}
-//		};
-//	}
-//
-//
-//
-//
-//	public static ListCell<TerminalFilterCriteria.ComparisonOp> createListCellComparisonOp() {
-//		return new ListCell<TerminalFilterCriteria.ComparisonOp>() {
-//			@Override
-//			protected void updateItem(TerminalFilterCriteria.ComparisonOp item, boolean empty) {
-//				super.updateItem(item, empty);
-//				if (item == null || empty) {
-//					setText("");
-//				} else {
-//					setText(item.display);
-//				}
-//			}
-//		};
-//	}
-//
-//
-//
-//
-//	public static ListCell<Task> createListCellTask() {
-//		return new ListCell<Task>() {
-//			@Override
-//			protected void updateItem(Task item, boolean empty) {
-//				super.updateItem(item, empty);
-//				if (item == null || empty) {
-//					setText("");
-//				} else {
-//					setText("T-" + item.getID());
-//				}
-//			}
-//		};
-//	}
-//
-//
-//
-//
-//	public static ListCell<SortElement.Sort> createListCellSortDir() {
-//		return new ListCell<SortElement.Sort>() {
-//			@Override
-//			protected void updateItem(SortElement.Sort item, boolean empty) {
-//				super.updateItem(item, empty);
-//				if (item == null || empty) {
-//					setText("");
-//				} else {
-//					setText(item.display);
-//				}
-//			}
-//		};
-//	}
-//
-//
-//
-//
+	public static ListCell<TaskAttribute> createListCellAttribute() {
+		return new ListCell<TaskAttribute>() {
+			@Override
+			protected void updateItem(TaskAttribute item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText("");
+				} else {
+					setText(item.name.get());
+				}
+			}
+		};
+	}
+
+
+
+
 	public static ListCell<AttributeType> createListCellAttributeType() {
 		return new ListCell<AttributeType>() {
 			@Override
@@ -188,6 +136,46 @@ public class ComboboxUtils {
 			}
 		};
 	}
+
+
+
+	public static ListCell<FilterOperation> createListCellFilterOperation() {
+		return new ListCell<FilterOperation>() {
+			@Override
+			protected void updateItem(FilterOperation item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText("");
+				} else {
+					setText(item.toString());
+				}
+			}
+		};
+	}
+
+
+
+	public static ListCell<Task> createListCellTask() {
+		return new ListCell<Task>() {
+			@Override
+			protected void updateItem(Task item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText("");
+				} else {
+					setText("T-?");
+					for(TaskAttribute attribute : item.attributes.keySet()) {
+						if(attribute.type.get() == AttributeType.ID) {
+							final int id = item.getValue(attribute, Integer.class);
+							setText("T-"+id);
+							break;
+						}
+					}
+				}
+			}
+		};
+	}
+
 
 }
 
