@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
 
 public class PresetLogic {
@@ -50,6 +51,32 @@ public class PresetLogic {
 	public static boolean saveTaskGroupPreset(Project project, String name, TaskGroupData groupData) {
 		if (!project.data.groupPresets.containsKey(name.trim())) {
 			project.data.groupPresets.put(name.trim(), groupData);
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+
+
+	public static SortData getSortPreset(Project project, String name) {
+		return project.data.sortPresets.get(name.trim());
+	}
+
+
+
+
+	public static boolean deleteSortPreset(Project project, String name) {
+		return project.data.sortPresets.remove(name.trim()) != null;
+	}
+
+
+
+
+	public static boolean saveSortPreset(Project project, String name, SortData sortData) {
+		if (!project.data.sortPresets.containsKey(name.trim())) {
+			project.data.sortPresets.put(name.trim(), sortData);
 			return true;
 		} else {
 			return false;

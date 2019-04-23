@@ -8,7 +8,7 @@
 				- Button #btnLockAttributes
 			- VBox
 				- VBox #box_attributes
-					- AttributeNode #attribute
+					- SortElementNode #attribute
 						- AnchorPane #pane_header
 							- HBox
 								- Button // remove

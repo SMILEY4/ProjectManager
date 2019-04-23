@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 
 import java.util.*;
@@ -94,14 +95,14 @@ public class TaskDisplayLogic {
 		for (int i = dataSort.size() - 1; i >= 0; i--) {
 			SortElement sortElement = dataSort.get(i);
 
-			final Comparator comparatorType = sortElement.dir == SortElement.SortDir.ASC ?
-					AttributeLogicManager.getComparatorAsc(sortElement.attribute.type.get())
-					: AttributeLogicManager.getComparatorDesc(sortElement.attribute.type.get());
+			final Comparator comparatorType = sortElement.dir.get() == SortElement.SortDir.ASC ?
+					AttributeLogicManager.getComparatorAsc(sortElement.attribute.get().type.get())
+					: AttributeLogicManager.getComparatorDesc(sortElement.attribute.get().type.get());
 
 			if (comparatorType != null) {
 				Comparator<Task> comparatorTask = (tx, ty) -> {
-					final Object vx = TaskLogic.getValue(tx, sortElement.attribute);
-					final Object vy = TaskLogic.getValue(ty, sortElement.attribute);
+					final Object vx = TaskLogic.getValue(tx, sortElement.attribute.get());
+					final Object vy = TaskLogic.getValue(ty, sortElement.attribute.get());
 
 					if (vx instanceof NoValue || vx == null) {
 						return (vy instanceof NoValue || vy == null) ? 0 : -1;

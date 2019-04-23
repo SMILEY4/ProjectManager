@@ -6,6 +6,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
 import javafx.scene.control.ListCell;
 
 public class ComboboxUtils {
@@ -139,6 +140,7 @@ public class ComboboxUtils {
 
 
 
+
 	public static ListCell<FilterOperation> createListCellFilterOperation() {
 		return new ListCell<FilterOperation>() {
 			@Override
@@ -155,6 +157,24 @@ public class ComboboxUtils {
 
 
 
+
+	public static ListCell<SortElement.SortDir> createListCellSortDir() {
+		return new ListCell<SortElement.SortDir>() {
+			@Override
+			protected void updateItem(SortElement.SortDir item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText("");
+				} else {
+					setText(item.toString());
+				}
+			}
+		};
+	}
+
+
+
+
 	public static ListCell<Task> createListCellTask() {
 		return new ListCell<Task>() {
 			@Override
@@ -164,10 +184,10 @@ public class ComboboxUtils {
 					setText("");
 				} else {
 					setText("T-?");
-					for(TaskAttribute attribute : item.attributes.keySet()) {
-						if(attribute.type.get() == AttributeType.ID) {
+					for (TaskAttribute attribute : item.attributes.keySet()) {
+						if (attribute.type.get() == AttributeType.ID) {
 							final int id = item.getValue(attribute, Integer.class);
-							setText("T-"+id);
+							setText("T-" + id);
 							break;
 						}
 					}

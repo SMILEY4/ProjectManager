@@ -1,9 +1,9 @@
 package com.ruegnerlukas.taskmanager.data;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.SortElement;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import javafx.collections.FXCollections;
@@ -18,9 +18,10 @@ public class ProjectData {
 
 	public final CustomProperty<FilterCriteria> filterCriteria = new CustomProperty<>();
 	public final CustomProperty<TaskGroupData> groupData = new CustomProperty<>();
-	public final ObservableList<SortElement> sortElements = FXCollections.observableArrayList();
+	public final CustomProperty<SortData> sortData = new CustomProperty<>();
 
 	public final ObservableMap<String, FilterCriteria> filterPresets = FXCollections.observableHashMap();
 	public final ObservableMap<String, TaskGroupData> groupPresets = FXCollections.observableHashMap();
+	public final ObservableMap<String, SortData> sortPresets = FXCollections.observableHashMap();
 
 }
