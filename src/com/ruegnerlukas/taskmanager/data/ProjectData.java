@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.data;
 
+import com.ruegnerlukas.taskmanager.data.projectdata.MasterPreset;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
@@ -23,5 +24,6 @@ public class ProjectData {
 	public final ObservableMap<String, FilterCriteria> filterPresets = FXCollections.observableHashMap();
 	public final ObservableMap<String, TaskGroupData> groupPresets = FXCollections.observableHashMap();
 	public final ObservableMap<String, SortData> sortPresets = FXCollections.observableHashMap();
+	public final ObservableMap<String, MasterPreset> masterPresets = FXCollections.observableHashMap();
 
 }
