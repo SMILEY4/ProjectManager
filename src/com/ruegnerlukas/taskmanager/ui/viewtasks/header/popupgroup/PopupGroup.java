@@ -134,14 +134,21 @@ public class PopupGroup extends TasksPopup {
 		});
 
 		// load initial data
-		TaskGroupData initialData = Data.projectProperty.get().data.groupData.get();
-		groupData.set(initialData);
-		if (initialData == null) {
-			onClearGroupData();
+		String initialPreset = Data.projectProperty.get().data.selectedGroupPreset.get();
+		if(initialPreset != null) {
+			choicePreset.getSelectionModel().select(initialPreset);
+			groupData.set(Data.projectProperty.get().data.groupPresets.get(initialPreset));
+			onPresetSelected();
 		} else {
-			onSetGroupData(initialData);
+			TaskGroupData initialData = Data.projectProperty.get().data.groupData.get();
+			groupData.set(initialData);
+			if (initialData == null) {
+				onClearGroupData();
+			} else {
+				onSetGroupData(initialData);
+			}
+			onPresetDeselected();
 		}
-		onPresetDeselected();
 	}
 
 
@@ -307,6 +314,7 @@ public class PopupGroup extends TasksPopup {
 
 
 	private void onSetHeaderString(String headerString) {
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 		onModified();
 	}
 
@@ -341,7 +349,7 @@ public class PopupGroup extends TasksPopup {
 
 
 	private void onAccept() {
-		TaskLogic.setGroupData(Data.projectProperty.get(), buildGroupData());
+		TaskLogic.setGroupData(Data.projectProperty.get(), buildGroupData(), choicePreset.getValue());
 		this.getStage().close();
 	}
 

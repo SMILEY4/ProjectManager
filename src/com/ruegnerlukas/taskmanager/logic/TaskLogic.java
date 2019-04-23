@@ -110,22 +110,26 @@ public class TaskLogic {
 
 
 
-	public static void setFilter(Project project, FilterCriteria criteria) {
-		project.data.filterCriteria.set(criteria);
+	public static void setFilter(Project project, FilterCriteria criteria, String preset) {
+		project.data.filterData.set(criteria);
+		project.data.selectedFilterPreset.set(preset);
 	}
 
 
 
 
-	public static void setGroupData(Project project, TaskGroupData groupData) {
+	public static void setGroupData(Project project, TaskGroupData groupData, String preset) {
 		project.data.groupData.set(groupData);
+		project.data.selectedGroupPreset.set(preset);
 	}
 
 
 
 
-	public static void setSortData(Project project, SortData sortData) {
+	public static void setSortData(Project project, SortData sortData, String preset) {
 		project.data.sortData.set(sortData);
+		project.data.selectedSortPreset.set(preset);
+
 	}
 
 

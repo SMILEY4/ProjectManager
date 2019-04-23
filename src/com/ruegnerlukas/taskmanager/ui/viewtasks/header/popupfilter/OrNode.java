@@ -121,7 +121,7 @@ public class OrNode extends CriteriaNode {
 
 	@Override
 	public FilterCriteria buildCriteriaTree() {
-		OrFilterCriteria criteria = (OrFilterCriteria) getCriteria();
+		OrFilterCriteria criteria = new OrFilterCriteria();
 		criteria.subCriteria.clear();
 		for (CriteriaNode childNode : children) {
 			criteria.subCriteria.add(childNode.buildCriteriaTree());

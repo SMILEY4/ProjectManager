@@ -121,7 +121,7 @@ public class AndNode extends CriteriaNode {
 
 	@Override
 	public FilterCriteria buildCriteriaTree() {
-		AndFilterCriteria criteria = (AndFilterCriteria) getCriteria();
+		AndFilterCriteria criteria = new AndFilterCriteria();
 		criteria.subCriteria.clear();
 		for (CriteriaNode childNode : children) {
 			criteria.subCriteria.add(childNode.buildCriteriaTree());

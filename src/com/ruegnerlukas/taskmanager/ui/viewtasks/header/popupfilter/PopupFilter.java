@@ -118,14 +118,21 @@ public class PopupFilter extends TasksPopup {
 
 
 		// load initial data
-		FilterCriteria initialCriteria = Data.projectProperty.get().data.filterCriteria.get();
-		filterCriteria.set(initialCriteria);
-		if (initialCriteria == null) {
-			onClearRootCriteria();
+		String initialPreset = Data.projectProperty.get().data.selectedFilterPreset.get();
+		if (initialPreset != null) {
+			choicePreset.getSelectionModel().select(initialPreset);
+			filterCriteria.set(Data.projectProperty.get().data.filterPresets.get(initialPreset));
+			onPresetSelected();
 		} else {
-			onSetRootCriteria(initialCriteria);
+			FilterCriteria initialCriteria = Data.projectProperty.get().data.filterData.get();
+			filterCriteria.set(initialCriteria);
+			if (initialCriteria == null) {
+				onClearRootCriteria();
+			} else {
+				onSetRootCriteria(initialCriteria);
+			}
+			onPresetDeselected();
 		}
-		onPresetDeselected();
 	}
 
 
@@ -216,7 +223,7 @@ public class PopupFilter extends TasksPopup {
 		node.setOnRemove(event -> onClearRootCriteria());
 		node.expandTree();
 		AnchorUtils.setAnchors(node, 0, 0, 0, 0);
-		paneCriteria.getChildren().add(node);
+		paneCriteria.getChildren().setAll(choiceAdd, node);
 		criteriaNode.set(node);
 		choiceAdd.setDisable(true);
 		choiceAdd.setVisible(false);
@@ -226,7 +233,7 @@ public class PopupFilter extends TasksPopup {
 
 
 	private void onClearRootCriteria() {
-		paneCriteria.getChildren().remove(criteriaNode.get());
+		paneCriteria.getChildren().setAll(choiceAdd);
 		criteriaNode.set(null);
 		choiceAdd.setDisable(false);
 		choiceAdd.setVisible(true);
@@ -252,7 +259,7 @@ public class PopupFilter extends TasksPopup {
 
 
 	private void onAccept() {
-		TaskLogic.setFilter(Data.projectProperty.get(), criteriaNode.get() == null ? null : criteriaNode.get().buildCriteriaTree());
+		TaskLogic.setFilter(Data.projectProperty.get(), criteriaNode.get() == null ? null : criteriaNode.get().buildCriteriaTree(), choicePreset.getValue());
 		this.getStage().close();
 	}
 

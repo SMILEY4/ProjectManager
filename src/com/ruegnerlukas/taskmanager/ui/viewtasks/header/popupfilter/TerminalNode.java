@@ -345,11 +345,7 @@ public class TerminalNode extends CriteriaNode {
 
 	@Override
 	public FilterCriteria buildCriteriaTree() {
-		TerminalFilterCriteria criteria = (TerminalFilterCriteria) this.getCriteria();
-		criteria.attribute.set(getAttribute());
-		criteria.operation.set(getFilterOperation());
-		criteria.values.setAll(getValues());
-		return criteria;
+		return new TerminalFilterCriteria(getAttribute(), getFilterOperation(), getValues());
 	}
 
 

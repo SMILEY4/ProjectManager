@@ -118,15 +118,24 @@ public class PopupSort extends TasksPopup {
 			onAccept();
 		});
 
+
 		// load initial data
-		SortData initialData = Data.projectProperty.get().data.sortData.get();
-		sortData.set(initialData);
-		if (initialData == null) {
-			onClearSortData();
+		String initialPreset = Data.projectProperty.get().data.selectedSortPreset.get();
+		if (initialPreset != null) {
+			choicePreset.getSelectionModel().select(initialPreset);
+			sortData.set(Data.projectProperty.get().data.sortPresets.get(initialPreset));
+			onPresetSelected();
 		} else {
-			onSetSortData(initialData);
+			SortData initialData = Data.projectProperty.get().data.sortData.get();
+			sortData.set(initialData);
+			if (initialData == null) {
+				onClearSortData();
+			} else {
+				onSetSortData(initialData);
+			}
+			onPresetDeselected();
 		}
-		onPresetDeselected();
+
 	}
 
 
@@ -302,7 +311,7 @@ public class PopupSort extends TasksPopup {
 
 
 	private void onAccept() {
-		TaskLogic.setSortData(Data.projectProperty.get(), buildSortData());
+		TaskLogic.setSortData(Data.projectProperty.get(), buildSortData(), choicePreset.getValue());
 		this.getStage().close();
 	}
 

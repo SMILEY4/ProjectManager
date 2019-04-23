@@ -11,6 +11,7 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.TasksPopup;
+import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -55,6 +56,9 @@ public class PopupMasterPreset extends TasksPopup {
 	// bottom
 	@FXML private Button btnCancel;
 	@FXML private Button btnAccept;
+
+
+	private final CustomProperty<MasterPreset> masterData = new CustomProperty<>();
 
 
 
@@ -114,11 +118,14 @@ public class PopupMasterPreset extends TasksPopup {
 			if (newValue != null) {
 				onLoadFilterPreset(newValue);
 			}
+			btnClearFilter.setDisable(selectFilter.getValue() == null);
 		}));
 
 		// clear filter preset
+		btnClearFilter.setDisable(true);
 		btnClearFilter.setOnAction(event -> {
 			onClearFilterData();
+			onModified();
 		});
 
 
@@ -130,11 +137,15 @@ public class PopupMasterPreset extends TasksPopup {
 			if (newValue != null) {
 				onLoadGroupPreset(newValue);
 			}
+			btnClearTaskGroup.setDisable(selectTaskGroup.getValue() == null);
+
 		}));
 
-		// clear filter preset
+		// clear group preset
+		btnClearTaskGroup.setDisable(true);
 		btnClearTaskGroup.setOnAction(event -> {
 			onClearGroupData();
+			onModified();
 		});
 
 
@@ -146,11 +157,14 @@ public class PopupMasterPreset extends TasksPopup {
 			if (newValue != null) {
 				onLoadSortPreset(newValue);
 			}
+			btnClearSort.setDisable(selectSort.getValue() == null);
 		}));
 
-		// clear filter preset
+		// clear sort preset
+		btnClearSort.setDisable(true);
 		btnClearSort.setOnAction(event -> {
 			onClearSortData();
+			onModified();
 		});
 
 
@@ -165,6 +179,28 @@ public class PopupMasterPreset extends TasksPopup {
 			onAccept();
 		});
 
+
+		// load initial data
+		String initialPreset = Data.projectProperty.get().data.selectedMasterPreset.get();
+		if (initialPreset != null) {
+			choicePreset.getSelectionModel().select(initialPreset);
+			masterData.set(Data.projectProperty.get().data.masterPresets.get(initialPreset));
+			onMasterPresetSelected();
+
+		} else {
+			String initialFilterPreset = Data.projectProperty.get().data.selectedFilterPreset.get();
+			if (initialFilterPreset != null) {
+				selectFilter.getSelectionModel().select(initialFilterPreset);
+			}
+			String initialGroupPreset = Data.projectProperty.get().data.selectedGroupPreset.get();
+			if (initialGroupPreset != null) {
+				selectTaskGroup.getSelectionModel().select(initialGroupPreset);
+			}
+			String initialSortPreset = Data.projectProperty.get().data.selectedSortPreset.get();
+			if (initialSortPreset != null) {
+				selectSort.getSelectionModel().select(initialSortPreset);
+			}
+		}
 	}
 
 
@@ -246,6 +282,7 @@ public class PopupMasterPreset extends TasksPopup {
 		} else {
 			onSetFilterData(name);
 		}
+		onModified();
 	}
 
 
@@ -258,6 +295,7 @@ public class PopupMasterPreset extends TasksPopup {
 		} else {
 			onSetGroupData(name);
 		}
+		onModified();
 	}
 
 
@@ -270,6 +308,7 @@ public class PopupMasterPreset extends TasksPopup {
 		} else {
 			onSetSortData(name);
 		}
+		onModified();
 	}
 
 
@@ -286,7 +325,6 @@ public class PopupMasterPreset extends TasksPopup {
 
 	private void onClearFilterData() {
 		selectFilter.getSelectionModel().clearSelection();
-		onModified();
 	}
 
 
@@ -294,7 +332,6 @@ public class PopupMasterPreset extends TasksPopup {
 
 	private void onClearGroupData() {
 		selectTaskGroup.getSelectionModel().clearSelection();
-		onModified();
 	}
 
 
@@ -302,7 +339,6 @@ public class PopupMasterPreset extends TasksPopup {
 
 	private void onClearSortData() {
 		selectSort.getSelectionModel().clearSelection();
-		onModified();
 	}
 
 
@@ -331,7 +367,6 @@ public class PopupMasterPreset extends TasksPopup {
 
 	private void onSetFilterData(String filterData) {
 		selectFilter.getSelectionModel().select(filterData);
-		onModified();
 	}
 
 
@@ -339,7 +374,6 @@ public class PopupMasterPreset extends TasksPopup {
 
 	private void onSetGroupData(String groupData) {
 		selectTaskGroup.getSelectionModel().select(groupData);
-		onModified();
 	}
 
 
@@ -347,7 +381,6 @@ public class PopupMasterPreset extends TasksPopup {
 
 	private void onSetSortData(String sortData) {
 		selectSort.getSelectionModel().select(sortData);
-		onModified();
 	}
 
 
@@ -413,9 +446,10 @@ public class PopupMasterPreset extends TasksPopup {
 
 
 	private void onAccept() {
-		TaskLogic.setFilter(Data.projectProperty.get(), getFilterData());
-		TaskLogic.setGroupData(Data.projectProperty.get(), getTaskGroupData());
-		TaskLogic.setSortData(Data.projectProperty.get(), getSortData());
+		Data.projectProperty.get().data.selectedMasterPreset.set(choicePreset.getValue());
+		TaskLogic.setFilter(Data.projectProperty.get(), getFilterData(), selectFilter.getValue());
+		TaskLogic.setGroupData(Data.projectProperty.get(), getTaskGroupData(), selectTaskGroup.getValue());
+		TaskLogic.setSortData(Data.projectProperty.get(), getSortData(), selectSort.getValue());
 		this.getStage().close();
 	}
 
