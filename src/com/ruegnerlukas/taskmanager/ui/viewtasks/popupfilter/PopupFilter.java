@@ -49,7 +49,7 @@ public class PopupFilter extends TasksPopup {
 
 
 	public PopupFilter() {
-		super(1000, 400);
+		super(800, 600);
 	}
 
 

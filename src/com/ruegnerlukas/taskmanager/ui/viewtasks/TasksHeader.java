@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.TaskManager;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.popupfilter.PopupFilter;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.popupgroup.PopupGroup;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MenuFunction;

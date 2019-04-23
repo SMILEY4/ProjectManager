@@ -6,6 +6,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 
@@ -107,10 +108,17 @@ public class TaskLogic {
 
 
 
+
 	public static void setFilter(Project project, FilterCriteria criteria) {
 		project.data.filterCriteria.set(criteria);
 	}
 
+
+
+
+	public static void setGroupData(Project project, TaskGroupData groupData) {
+		project.data.groupData.set(groupData);
+	}
 
 
 }

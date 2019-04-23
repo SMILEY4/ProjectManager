@@ -42,7 +42,7 @@ public class TerminalNode extends CriteriaNode {
 	public TerminalNode(FilterCriteria criteria, EventHandler<ActionEvent> handlerModified) {
 		super(criteria, handlerModified);
 		this.setId("terminal-criteria");
-		this.setPrefSize(100000, 35);
+		this.setPrefSize(100000, 36);
 		this.setPadding(new Insets(0, 5, 0, 5));
 
 
