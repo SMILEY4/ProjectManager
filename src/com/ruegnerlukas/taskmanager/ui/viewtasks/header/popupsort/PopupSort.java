@@ -1,16 +1,17 @@
-package com.ruegnerlukas.taskmanager.ui.viewtasks.popupgroup;
+package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupsort;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.logic.PresetLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
-import com.ruegnerlukas.taskmanager.ui.viewtasks.TasksPopup;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.header.TasksPopup;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.VBoxOrder;
@@ -19,14 +20,14 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class PopupGroup extends TasksPopup {
+@SuppressWarnings ("Duplicates")
+public class PopupSort extends TasksPopup {
 
 
 	// header
@@ -40,24 +41,20 @@ public class PopupGroup extends TasksPopup {
 	@FXML private Button btnSavePreset;
 
 	// body
-	@FXML private VBox boxAttributes;
+	@FXML private VBox boxElements;
 	@FXML private Button btnAdd;
-
-	// header string
-	@FXML private CheckBox cbUseHeaderString;
-	@FXML private TextField fieldHeaderText;
 
 	// bottom
 	@FXML private Button btnCancel;
 	@FXML private Button btnAccept;
 
 
-	private final CustomProperty<TaskGroupData> groupData = new CustomProperty<>();
+	private final CustomProperty<SortData> sortData = new CustomProperty<>();
 
 
 
 
-	public PopupGroup() {
+	public PopupSort() {
 		super(800, 600);
 	}
 
@@ -67,11 +64,11 @@ public class PopupGroup extends TasksPopup {
 	@Override
 	public void create() {
 		try {
-			Parent root = UIDataHandler.loadFXML(UIModule.POPUP_GROUPBY, this);
+			Parent root = UIDataHandler.loadFXML(UIModule.POPUP_SORT, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {
-			Logger.get().error("Error loading GroupPopup-FXML: " + e);
+			Logger.get().error("Error loading SortPopup-FXML: " + e);
 		}
 
 
@@ -106,20 +103,8 @@ public class PopupGroup extends TasksPopup {
 
 		// add attribute
 		btnAdd.setOnAction(event -> {
-			onAddAttribute();
+			onAddSortElement();
 		});
-
-
-		// use header string
-		cbUseHeaderString.selectedProperty().addListener((observable, oldValue, newValue) -> {
-			onUseHeaderString(cbUseHeaderString.isSelected());
-		});
-
-
-		// text header string
-		fieldHeaderText.textProperty().addListener(((observable, oldValue, newValue) -> {
-			onSetHeaderString(fieldHeaderText.getText());
-		}));
 
 
 		// button cancel
@@ -134,12 +119,12 @@ public class PopupGroup extends TasksPopup {
 		});
 
 		// load initial data
-		TaskGroupData initialData = Data.projectProperty.get().data.groupData.get();
-		groupData.set(initialData);
+		SortData initialData = Data.projectProperty.get().data.sortData.get();
+		sortData.set(initialData);
 		if (initialData == null) {
-			onClearGroupData();
+			onClearSortData();
 		} else {
-			onSetGroupData(initialData);
+			onSetSortData(initialData);
 		}
 		onPresetDeselected();
 	}
@@ -148,10 +133,10 @@ public class PopupGroup extends TasksPopup {
 
 
 	private void onReset() {
-		if (groupData.get() == null) {
-			onClearGroupData();
+		if (sortData.get() == null) {
+			onClearSortData();
 		} else {
-			onSetGroupData(groupData.get());
+			onSetSortData(sortData.get());
 		}
 		choicePreset.getSelectionModel().clearSelection();
 		onPresetDeselected();
@@ -161,11 +146,11 @@ public class PopupGroup extends TasksPopup {
 
 
 	private void onLoadPreset(String name) {
-		TaskGroupData preset = PresetLogic.getTaskGroupPreset(Data.projectProperty.get(), name.trim());
+		SortData preset = PresetLogic.getSortPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
-			onClearGroupData();
+			onClearSortData();
 		} else {
-			onSetGroupData(preset);
+			onSetSortData(preset);
 		}
 		onPresetSelected();
 	}
@@ -174,10 +159,10 @@ public class PopupGroup extends TasksPopup {
 
 
 	private void onDeletePreset(String name) {
-		boolean deleted = PresetLogic.deleteTaskGroupPreset(Data.projectProperty.get(), name);
+		boolean deleted = PresetLogic.deleteSortPreset(Data.projectProperty.get(), name);
 		if (deleted) {
 			choicePreset.getItems().clear();
-			choicePreset.getItems().addAll(Data.projectProperty.get().data.groupPresets.keySet());
+			choicePreset.getItems().addAll(Data.projectProperty.get().data.sortPresets.keySet());
 			choicePreset.getSelectionModel().clearSelection();
 			onPresetDeselected();
 		}
@@ -188,11 +173,11 @@ public class PopupGroup extends TasksPopup {
 
 	private void onSavePreset(String name) {
 		String strName = name.trim();
-		boolean saved = PresetLogic.saveTaskGroupPreset(Data.projectProperty.get(), strName, buildGroupData());
+		boolean saved = PresetLogic.saveSortPreset(Data.projectProperty.get(), strName, buildSortData());
 		if (saved) {
 			fieldPresetName.setText("");
 			choicePreset.getItems().clear();
-			choicePreset.getItems().addAll(Data.projectProperty.get().data.groupPresets.keySet());
+			choicePreset.getItems().addAll(Data.projectProperty.get().data.sortPresets.keySet());
 			choicePreset.getSelectionModel().select(strName);
 			onPresetSelected();
 		}
@@ -220,58 +205,50 @@ public class PopupGroup extends TasksPopup {
 
 
 
-	private void onSetGroupData(TaskGroupData data) {
-		boxAttributes.getChildren().clear();
-		for (TaskAttribute attribute : data.attributes) {
-			onAddAttribute(attribute);
-		}
-		if (data.customHeaderString.get() == null) {
-			cbUseHeaderString.setSelected(false);
-			fieldHeaderText.setText("");
-		} else {
-			cbUseHeaderString.setSelected(true);
-			fieldHeaderText.setText(data.customHeaderString.get());
+	private void onSetSortData(SortData data) {
+		boxElements.getChildren().clear();
+		for (SortElement element : data.sortElements) {
+			onAddSortElement(element);
 		}
 	}
 
 
 
 
-	private void onClearGroupData() {
-		boxAttributes.getChildren().clear();
-		cbUseHeaderString.setSelected(false);
-		fieldHeaderText.setText("");
+	private void onClearSortData() {
+		boxElements.getChildren().clear();
 		onModified();
 	}
 
 
 
 
-	private void onAddAttribute() {
+	private void onAddSortElement() {
 		TaskAttribute attribute = AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID);
-		onAddAttribute(attribute);
+		SortElement element = new SortElement(attribute, SortElement.SortDir.ASC);
+		onAddSortElement(element);
 		onModified();
 	}
 
 
 
 
-	private void onAddAttribute(TaskAttribute attribute) {
-		AttributeNode node = new AttributeNode(attribute);
+	private void onAddSortElement(SortElement element) {
+		SortElementNode node = new SortElementNode(element);
 		node.setOnModified(event -> onModified());
-		node.setOnRemove(event -> onRemoveAttribute(node));
-		node.setOnMoveUp(event -> onMoveUpAttributeNode(node));
-		node.setOnMoveDown(event -> onMoveDownAttributeNode(node));
-		boxAttributes.getChildren().add(node);
+		node.setOnRemove(event -> onRemoveSortElement(node));
+		node.setOnMoveUp(event -> onMoveUpSortNode(node));
+		node.setOnMoveDown(event -> onMoveDownSortNode(node));
+		boxElements.getChildren().add(node);
 	}
 
 
 
 
-	private void onMoveUpAttributeNode(AttributeNode attribNode) {
-		int index = boxAttributes.getChildren().indexOf(attribNode);
+	private void onMoveUpSortNode(SortElementNode sortNode) {
+		int index = boxElements.getChildren().indexOf(sortNode);
 		if (index > 0) {
-			VBoxOrder.moveItem(boxAttributes, attribNode, -1);
+			VBoxOrder.moveItem(boxElements, sortNode, -1);
 			onModified();
 		}
 	}
@@ -279,10 +256,10 @@ public class PopupGroup extends TasksPopup {
 
 
 
-	private void onMoveDownAttributeNode(AttributeNode attribNode) {
-		final int index = boxAttributes.getChildren().indexOf(attribNode);
-		if (index < boxAttributes.getChildren().size() - 1) {
-			VBoxOrder.moveItem(boxAttributes, attribNode, +1);
+	private void onMoveDownSortNode(SortElementNode sortNode) {
+		final int index = boxElements.getChildren().indexOf(sortNode);
+		if (index < boxElements.getChildren().size() - 1) {
+			VBoxOrder.moveItem(boxElements, sortNode, +1);
 			onModified();
 		}
 	}
@@ -290,34 +267,18 @@ public class PopupGroup extends TasksPopup {
 
 
 
-	private void onRemoveAttribute(AttributeNode node) {
-		boxAttributes.getChildren().remove(node);
+	private void onRemoveSortElement(SortElementNode node) {
+		boxElements.getChildren().remove(node);
 		onModified();
 	}
 
 
 
 
-	private void onUseHeaderString(boolean useHeaderString) {
-		fieldHeaderText.setDisable(!useHeaderString);
-		onModified();
-	}
-
-
-
-
-	private void onSetHeaderString(String headerString) {
-		onModified();
-	}
-
-
-
-
-	private TaskGroupData buildGroupData() {
-		TaskGroupData data = new TaskGroupData();
-		data.customHeaderString.set((cbUseHeaderString.isSelected()) ? fieldHeaderText.getText() : null);
-		for (Node node : boxAttributes.getChildren()) {
-			data.attributes.add(((AttributeNode) node).getAttribute());
+	private SortData buildSortData() {
+		SortData data = new SortData();
+		for (Node node : boxElements.getChildren()) {
+			data.sortElements.add(((SortElementNode) node).buildSortElement());
 		}
 		return data;
 	}
@@ -341,7 +302,7 @@ public class PopupGroup extends TasksPopup {
 
 
 	private void onAccept() {
-		TaskLogic.setGroupData(Data.projectProperty.get(), buildGroupData());
+		TaskLogic.setSortData(Data.projectProperty.get(), buildSortData());
 		this.getStage().close();
 	}
 

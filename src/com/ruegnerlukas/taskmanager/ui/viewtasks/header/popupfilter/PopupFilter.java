@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.ui.viewtasks.popupfilter;
+package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupfilter;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.Data;
@@ -7,7 +7,7 @@ import com.ruegnerlukas.taskmanager.logic.PresetLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
-import com.ruegnerlukas.taskmanager.ui.viewtasks.TasksPopup;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.header.TasksPopup;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.fxml.FXML;

@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.ui.viewtasks.popupfilter;
+package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupfilter;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.AndFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;

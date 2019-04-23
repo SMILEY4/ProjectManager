@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.ui.viewtasks;
+package com.ruegnerlukas.taskmanager.ui.viewtasks.header;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
