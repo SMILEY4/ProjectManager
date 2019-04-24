@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.header;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.TaskManager;
+import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupfilter.PopupFilter;
@@ -63,12 +64,47 @@ public class TasksHeader {
 
 	private void create() {
 
-		// TODO: update badges
+		// create badges
 		paneHeaderBadges.setMouseTransparent(true);
 		badgeFilter = createBadge(paneHeaderBadges, btnFilter);
 		badgeGroup = createBadge(paneHeaderBadges, btnGroup);
 		badgeSort = createBadge(paneHeaderBadges, btnSort);
 		badgePresets = createBadge(paneHeaderBadges, btnPresets);
+
+		// badge filter
+		showBadge(badgeFilter, false);
+		Data.projectProperty.get().data.filterData.addListener(((observable, oldValue, newValue) -> {
+			showBadge(badgeFilter, newValue != null || Data.projectProperty.get().data.selectedFilterPreset.get() != null);
+		}));
+		Data.projectProperty.get().data.selectedFilterPreset.addListener(((observable, oldValue, newValue) -> {
+			showBadge(badgeFilter, newValue != null);
+		}));
+
+		// badge group
+		showBadge(badgeGroup, false);
+		Data.projectProperty.get().data.groupData.addListener(((observable, oldValue, newValue) -> {
+			showBadge(badgeGroup, newValue != null || Data.projectProperty.get().data.selectedGroupPreset.get() != null);
+		}));
+		Data.projectProperty.get().data.selectedGroupPreset.addListener(((observable, oldValue, newValue) -> {
+			showBadge(badgeGroup, newValue != null);
+		}));
+
+		// badge sort
+		showBadge(badgeSort, false);
+		Data.projectProperty.get().data.sortData.addListener(((observable, oldValue, newValue) -> {
+			showBadge(badgeSort, newValue != null || Data.projectProperty.get().data.selectedSortPreset.get() != null);
+		}));
+		Data.projectProperty.get().data.selectedSortPreset.addListener(((observable, oldValue, newValue) -> {
+			showBadge(badgeSort, newValue != null);
+		}));
+
+		// badge presets
+		showBadge(badgePresets, false);
+		Data.projectProperty.get().data.selectedMasterPreset.addListener(((observable, oldValue, newValue) -> {
+			showBadge(badgePresets, newValue != null);
+		}));
+
+
 
 		// header buttons
 		btnFilter.setOnAction(event -> openPopup(new PopupFilter()));
@@ -92,6 +128,13 @@ public class TasksHeader {
 			popup.show(btnActions, Side.BOTTOM, 0, 0);
 		});
 
+	}
+
+
+
+
+	private void showBadge(Label badge, boolean show) {
+		badge.setVisible(show);
 	}
 
 

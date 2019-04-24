@@ -101,6 +101,7 @@ public class PopupFilter extends TasksPopup {
 		choiceAdd.setOnAction(event -> {
 			if (choiceAdd.getValue() != null) {
 				onSetRootCriteria(choiceAdd.getValue());
+				onNodeTreeModified();
 			}
 		});
 
@@ -179,7 +180,7 @@ public class PopupFilter extends TasksPopup {
 
 	private void onSavePreset(String name) {
 		String strName = name.trim();
-		boolean saved = PresetLogic.saveFilterPreset(Data.projectProperty.get(), strName, criteriaNode.get().buildCriteriaTree());
+		boolean saved = PresetLogic.saveFilterPreset(Data.projectProperty.get(), strName,  criteriaNode.get() == null ? null : criteriaNode.get().buildCriteriaTree());
 		if (saved) {
 			fieldPresetName.setText("");
 			choicePreset.getItems().clear();

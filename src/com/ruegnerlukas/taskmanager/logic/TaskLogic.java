@@ -119,16 +119,27 @@ public class TaskLogic {
 
 
 	public static void setGroupData(Project project, TaskGroupData groupData, String preset) {
-		project.data.groupData.set(groupData);
-		project.data.selectedGroupPreset.set(preset);
+		if (preset == null && groupData != null && groupData.attributes.isEmpty() && groupData.customHeaderString.get() == null) {
+			project.data.groupData.set(null);
+			project.data.selectedGroupPreset.set(null);
+		} else {
+			project.data.groupData.set(groupData);
+			project.data.selectedGroupPreset.set(preset);
+		}
+
 	}
 
 
 
 
 	public static void setSortData(Project project, SortData sortData, String preset) {
-		project.data.sortData.set(sortData);
-		project.data.selectedSortPreset.set(preset);
+		if (preset == null && sortData != null && sortData.sortElements.isEmpty()) {
+			project.data.sortData.set(null);
+			project.data.selectedSortPreset.set(null);
+		} else {
+			project.data.sortData.set(sortData);
+			project.data.selectedSortPreset.set(preset);
+		}
 
 	}
 

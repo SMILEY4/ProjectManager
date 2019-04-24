@@ -26,13 +26,6 @@ public abstract class TasksPopup extends AnchorPane {
 
 
 
-	public void closePopup() {
-		stage.close();
-	}
-
-
-
-
 	public int getPopupWidth() {
 		return this.width;
 	}

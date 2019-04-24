@@ -135,7 +135,7 @@ public class PopupGroup extends TasksPopup {
 
 		// load initial data
 		String initialPreset = Data.projectProperty.get().data.selectedGroupPreset.get();
-		if(initialPreset != null) {
+		if (initialPreset != null) {
 			choicePreset.getSelectionModel().select(initialPreset);
 			groupData.set(Data.projectProperty.get().data.groupPresets.get(initialPreset));
 			onPresetSelected();
