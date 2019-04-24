@@ -7,5 +7,4 @@ public class Project {
 	public final ProjectData data = new ProjectData();
 	public final ProjectDataTemporary temporaryData = new ProjectDataTemporary();
 
-
 }

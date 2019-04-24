@@ -3,6 +3,9 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.header;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.TaskManager;
 import com.ruegnerlukas.taskmanager.data.Data;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
+import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
+import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupfilter.PopupFilter;
@@ -122,6 +125,8 @@ public class TasksHeader {
 			MenuFunction funcCreateTask = new MenuFunction("Create Task") {
 				@Override
 				public void onAction() {
+					Task task = TaskLogic.createTask(Data.projectProperty.get());
+					ProjectLogic.addTaskToProject(Data.projectProperty.get(), task);
 				}
 			};
 			funcCreateTask.addToContextMenu(popup);

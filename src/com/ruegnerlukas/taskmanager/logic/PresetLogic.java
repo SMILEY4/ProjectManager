@@ -9,6 +9,12 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
 public class PresetLogic {
 
 
+	public static void init() {
+	}
+
+
+
+
 	public static FilterCriteria getFilterPreset(Project project, String name) {
 		return project.data.filterPresets.get(name.trim());
 	}

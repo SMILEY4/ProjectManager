@@ -195,9 +195,9 @@ public class AttributeLogicManager {
 
 
 
-	public static  Map<FilterOperation, Class<?>[]> getFilterData(AttributeType type) {
+	public static Map<FilterOperation, Class<?>[]> getFilterData(AttributeType type) {
 		Field field = getField(getLogicClass(type), "FILTER_DATA");
-		return ( Map<FilterOperation, Class<?>[]>) getFieldValue(field, null);
+		return (Map<FilterOperation, Class<?>[]>) getFieldValue(field, null);
 	}
 
 
@@ -333,18 +333,5 @@ public class AttributeLogicManager {
 		}
 	}
 
-
-
-
-	public static void main(String[] args) {
-		String[] status = validateLogicClasses();
-		for (String str : status) {
-			if (str.startsWith("ERROR")) {
-				System.err.println(str);
-			} else {
-				System.out.println(str);
-			}
-		}
-	}
 
 }

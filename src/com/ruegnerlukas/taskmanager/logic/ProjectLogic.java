@@ -10,6 +10,12 @@ import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 public class ProjectLogic {
 
 
+	public static void init() {
+	}
+
+
+
+
 	public static void closeCurrentProject() {
 		setCurrentProject(null);
 	}

@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.data.*;
+import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
@@ -11,22 +11,33 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Random;
 
 public class TaskLogic {
+
+
+	public static void init() {
+	}
+
+
 
 
 	public static Task createTask(Project project) {
 		Task task = new Task();
 
-		LocalDate time = LocalDate.now();
+		LocalDateTime time = LocalDateTime.now();
 
 		// set id
 		TaskAttribute idAttribute = AttributeLogic.findAttribute(project, AttributeType.ID);
 		final int id = project.settings.idCounter.get();
 		project.settings.idCounter.set(id + 1);
 		setValue(task, idAttribute, id);
+
+		// set random description
+		TaskAttribute descriptionAttribute = AttributeLogic.findAttribute(project, AttributeType.DESCRIPTION);
+		setValue(task, descriptionAttribute, "Some Text " + new Random().nextInt(3));
 
 		// set date created
 		TaskAttribute createdAttribute = AttributeLogic.findAttribute(project, AttributeType.CREATED);

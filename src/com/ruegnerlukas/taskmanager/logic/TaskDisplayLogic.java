@@ -1,27 +1,180 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.*;
+import com.ruegnerlukas.taskmanager.data.Data;
+import com.ruegnerlukas.taskmanager.data.Project;
+import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskGroup;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
+import javafx.collections.ListChangeListener;
 
 import java.util.*;
 
 public class TaskDisplayLogic {
 
 
-	public static List<TaskGroup> createTaskGroups(List<Task> tasks, FilterCriteria dataFilter, List<TaskAttribute> dataGroup, List<SortElement> dataSort) {
+	public static void init() {
 
+		Data.projectProperty.addListener(((observable, oldValue, newProject) -> {
+
+			if (newProject != null) {
+
+				// add listener to tasks
+				newProject.data.tasks.addListener((ListChangeListener<Task>) c -> {
+					while (c.next()) {
+						if (c.wasAdded()) {
+							for (Task task : c.getAddedSubList()) {
+								onTaskAdded(Data.projectProperty.get(), task);
+							}
+						}
+						if (c.wasRemoved()) {
+							for (Task task : c.getRemoved()) {
+								onTaskRemoved(Data.projectProperty.get(), task);
+							}
+						}
+					}
+				});
+
+				// add listeners to filter/group/sort-data
+				newProject.data.filterData.addListener(((observable1, oldValue1, newValue1) -> {
+					Data.projectProperty.get().temporaryData.lastGroupsValid.set(false);
+				}));
+				newProject.data.groupData.addListener(((observable1, oldValue1, newValue1) -> {
+					Data.projectProperty.get().temporaryData.lastGroupsValid.set(false);
+				}));
+				newProject.data.sortData.addListener(((observable1, oldValue1, newValue1) -> {
+					Data.projectProperty.get().temporaryData.lastGroupsValid.set(false);
+				}));
+			}
+		}));
+	}
+
+
+
+
+	private static void onTaskAdded(Project project, Task task) {
+		if (project.temporaryData.lastGroupsValid.get()) {
+			// check if task passes filter
+			if (project.data.filterData.get() != null) {
+				FilterNode rootFilter = new FilterNode(project.data.filterData.get());
+				rootFilter.expand();
+				if (!rootFilter.matches(task)) {
+					return;
+				}
+			}
+
+			// find taskgroup
+			TaskGroup taskGroup = null;
+			if(project.data.groupData.get() == null && project.temporaryData.lastTaskGroups.size() == 1) {
+				taskGroup = project.temporaryData.lastTaskGroups.get(0);
+
+			} else {
+				outer: for (TaskGroup group : project.temporaryData.lastTaskGroups) {
+					Task taskRef = group.tasks.get(0);
+
+					for (TaskAttribute attribute : group.attributes) {
+						Object valueRef = TaskLogic.getValue(taskRef, attribute);
+						Object valueTask = TaskLogic.getValue(task, attribute);
+						if (!valueRef.equals(valueTask)) {
+							continue outer;
+						}
+					}
+
+					taskGroup = group;
+					break;
+				}
+			}
+
+			if (taskGroup == null) {
+				taskGroup = new TaskGroup();
+				taskGroup.tasks.add(task);
+				taskGroup.attributes.setAll(project.data.groupData.get() == null ? new ArrayList<>() : project.data.groupData.get().attributes);
+				project.temporaryData.lastTaskGroups.add(taskGroup);
+
+			} else {
+				taskGroup.tasks.add(task);
+				if (project.data.sortData.get() != null) {
+					sortTasks(taskGroup.tasks, project.data.sortData.get().sortElements);
+				}
+			}
+
+
+
+		}
+
+	}
+
+
+
+
+	private static void onTaskRemoved(Project project, Task task) {
+		if (project.temporaryData.lastGroupsValid.get()) {
+			TaskGroup taskGroup = null;
+			for (TaskGroup group : project.temporaryData.lastTaskGroups) {
+				if (group.tasks.contains(task)) {
+					taskGroup = group;
+					break;
+				}
+			}
+			if (taskGroup != null) {
+				taskGroup.tasks.remove(task);
+				if (taskGroup.tasks.isEmpty()) {
+					project.temporaryData.lastTaskGroups.remove(taskGroup);
+				}
+			}
+		}
+	}
+
+
+
+
+	public static List<TaskGroup> createTaskGroups(Project project) {
+		return createTaskGroups(project, false);
+	}
+
+
+
+
+	public static List<TaskGroup> createTaskGroups(Project project, boolean force) {
+		if (project.temporaryData.lastGroupsValid.get() && !force) {
+			return project.temporaryData.lastTaskGroups;
+		} else {
+			final List<Task> tasks = project.data.tasks;
+			final FilterCriteria dataFilter = project.data.filterData.get();
+			final TaskGroupData dataGroup = project.data.groupData.get();
+			final SortData dataSort = project.data.sortData.get();
+			List<TaskGroup> taskGroups = createTaskGroups(tasks, dataFilter, dataGroup, dataSort);
+			project.temporaryData.lastTaskGroups.setAll(taskGroups);
+			project.temporaryData.lastGroupsValid.set(true);
+			return taskGroups;
+		}
+	}
+
+
+
+
+	private static List<TaskGroup> createTaskGroups(List<Task> tasks, FilterCriteria dataFilter, TaskGroupData dataGroup, SortData dataSort) {
 
 		// 1. popupfilter
 		List<Task> filteredTasks = new ArrayList<>();
-		FilterNode rootFilter = new FilterNode(dataFilter);
-		rootFilter.expand();
 
-		for (int i = 0, n = tasks.size(); i < n; i++) {
-			Task task = tasks.get(i);
-			if (rootFilter.matches(task)) {
-				filteredTasks.add(task);
+		if (dataFilter == null) {
+			filteredTasks.addAll(tasks);
+
+		} else {
+			FilterNode rootFilter = new FilterNode(dataFilter);
+			rootFilter.expand();
+
+			for (int i = 0, n = tasks.size(); i < n; i++) {
+				Task task = tasks.get(i);
+				if (rootFilter.matches(task)) {
+					filteredTasks.add(task);
+				}
 			}
 		}
 
@@ -33,7 +186,7 @@ public class TaskDisplayLogic {
 		root.tasks.addAll(filteredTasks);
 		groups.add(root);
 
-		for (TaskAttribute attribute : dataGroup) {
+		for (TaskAttribute attribute : (dataGroup == null ? new ArrayList<TaskAttribute>() : dataGroup.attributes)) {
 			List<TaskGroup> newGroups = new ArrayList<>();
 			for (TaskGroup group : groups) {
 				newGroups.addAll(splitTaskGroup(group, attribute));
@@ -44,8 +197,10 @@ public class TaskDisplayLogic {
 
 
 		// 3. sort
-		for (TaskGroup group : groups) {
-			sortTasks(group.tasks, dataSort);
+		if (dataSort != null) {
+			for (TaskGroup group : groups) {
+				sortTasks(group.tasks, dataSort.sortElements);
+			}
 		}
 
 		return groups;

@@ -59,7 +59,7 @@ public class UIDataHandler {
 
 
 	public static Parent loadFXML(UIModule module, Object controller) throws IOException {
-		System.out.println("load module fxml: " + module + "   " + controller);
+//		System.out.println("load module fxml: " + module + "   " + controller);
 		javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getFXMLAsURL(module));
 		loader.setController(controller);
 		Parent root = loader.load();
@@ -72,7 +72,7 @@ public class UIDataHandler {
 
 
 	public static void setStyle(Parent root, UIModule module) {
-		System.out.println("set style: " + module);
+//		System.out.println("set style: " + module);
 		root.getStylesheets().clear();
 //		root.getStylesheets().add(getStylesheetAsURL(UIModule.STYLE_BASE).toExternalForm());
 //		root.getStylesheets().add(getStylesheetAsURL(module).toExternalForm());
