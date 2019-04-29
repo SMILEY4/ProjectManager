@@ -179,7 +179,7 @@ public class AttributeLogicManager {
 			return errorArray;
 
 		} else {
-			return new String[]{"OK"};
+			return new String[]{"AttributeLogic - OK"};
 		}
 
 	}

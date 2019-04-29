@@ -21,7 +21,6 @@ public class TaskDisplayLogic {
 	public static void init() {
 
 		Data.projectProperty.addListener(((observable, oldValue, newProject) -> {
-
 			if (newProject != null) {
 
 				// add listener to tasks
@@ -50,6 +49,7 @@ public class TaskDisplayLogic {
 				newProject.data.sortData.addListener(((observable1, oldValue1, newValue1) -> {
 					Data.projectProperty.get().temporaryData.lastGroupsValid.set(false);
 				}));
+
 			}
 		}));
 	}
@@ -70,11 +70,12 @@ public class TaskDisplayLogic {
 
 			// find taskgroup
 			TaskGroup taskGroup = null;
-			if(project.data.groupData.get() == null && project.temporaryData.lastTaskGroups.size() == 1) {
+			if (project.data.groupData.get() == null && project.temporaryData.lastTaskGroups.size() == 1) {
 				taskGroup = project.temporaryData.lastTaskGroups.get(0);
 
 			} else {
-				outer: for (TaskGroup group : project.temporaryData.lastTaskGroups) {
+				outer:
+				for (TaskGroup group : project.temporaryData.lastTaskGroups) {
 					Task taskRef = group.tasks.get(0);
 
 					for (TaskAttribute attribute : group.attributes) {
@@ -104,7 +105,6 @@ public class TaskDisplayLogic {
 			}
 
 
-
 		}
 
 	}
@@ -128,6 +128,14 @@ public class TaskDisplayLogic {
 				}
 			}
 		}
+	}
+
+
+
+
+	public static void onTaskModified(Project project, Task task, TaskAttribute attribute) {
+		onTaskRemoved(project, task);
+		onTaskAdded(project, task);
 	}
 
 
@@ -222,7 +230,6 @@ public class TaskDisplayLogic {
 			}
 			buckets.get(value).add(task);
 		}
-
 
 		// convert buckets to groups
 		List<TaskGroup> groups = new ArrayList<>();

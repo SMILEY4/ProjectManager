@@ -59,9 +59,16 @@ public class TaskFlag {
 
 
 	public boolean compare(TaskFlag flag) {
-			return flag != null && flag.name.get().equals(this.name.get()) && flag.color.get() == this.color.get();
+		return flag != null && flag.name.get().equals(this.name.get()) && flag.color.get() == this.color.get();
 	}
 
+
+
+
+	@Override
+	public int hashCode() {
+		return name.get().hashCode();
+	}
 
 
 }

@@ -5,6 +5,10 @@ import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 public class ProjectLogic {
@@ -43,6 +47,7 @@ public class ProjectLogic {
 		for (AttributeType type : AttributeType.getFixedTypes()) {
 			project.data.attributes.add(AttributeLogic.createTaskAttribute(type, type.display + " Attribute"));
 		}
+		project.data.attributes.add(AttributeLogic.createTaskAttribute(AttributeType.NUMBER));
 		return project;
 	}
 
@@ -94,7 +99,41 @@ public class ProjectLogic {
 
 
 	public static boolean removeAttributeFromProject(Project project, TaskAttribute attribute) {
-		return project.data.attributes.remove(attribute);
+
+		if(!project.data.attributes.remove(attribute)) {
+			return false;
+		}
+
+		// check filter data
+		if (project.data.filterData.get() != null) {
+			FilterCriteria filterData = project.data.filterData.get();
+			if (TaskLogic.getUsedFilterAttributes(filterData).contains(attribute)) {
+				project.temporaryData.lastGroupsValid.set(false);
+				return true;
+			}
+		}
+
+		// check group data
+		if (project.data.groupData.get() != null) {
+			TaskGroupData groupData = project.data.groupData.get();
+			if (groupData.attributes.contains(attribute)) {
+				project.temporaryData.lastGroupsValid.set(false);
+				return true;
+			}
+		}
+
+		// check sort data
+		if (project.data.sortData.get() != null) {
+			SortData sortData = project.data.sortData.get();
+			for (SortElement element : sortData.sortElements) {
+				if (element.attribute.get() == attribute) {
+					project.temporaryData.lastGroupsValid.set(false);
+					return true;
+				}
+			}
+		}
+
+		return true;
 	}
 
 
@@ -105,7 +144,7 @@ public class ProjectLogic {
 		if (TaskLogic.getTrueValue(task, attribute, Integer.class) == null) {
 			final int id = project.settings.idCounter.get();
 			project.settings.idCounter.set(id + 1);
-			TaskLogic.setValue(task, attribute, id);
+			TaskLogic.setValue(project, task, attribute, id);
 		}
 		project.data.tasks.add(task);
 		return true;
