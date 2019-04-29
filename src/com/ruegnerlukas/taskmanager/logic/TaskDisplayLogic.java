@@ -134,8 +134,10 @@ public class TaskDisplayLogic {
 
 
 	public static void onTaskModified(Project project, Task task, TaskAttribute attribute) {
-		onTaskRemoved(project, task);
-		onTaskAdded(project, task);
+		if(project.data.tasks.contains(task)) {
+			onTaskRemoved(project, task);
+			onTaskAdded(project, task);
+		}
 	}
 
 
