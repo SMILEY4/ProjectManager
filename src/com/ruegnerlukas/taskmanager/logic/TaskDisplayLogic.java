@@ -12,6 +12,8 @@ import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 import javafx.collections.ListChangeListener;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 
 import java.util.*;
 
@@ -104,7 +106,7 @@ public class TaskDisplayLogic {
 				}
 			}
 
-
+			callListenersDisplayChanged(project);
 		}
 
 	}
@@ -126,6 +128,7 @@ public class TaskDisplayLogic {
 				if (taskGroup.tasks.isEmpty()) {
 					project.temporaryData.lastTaskGroups.remove(taskGroup);
 				}
+				callListenersDisplayChanged(project);
 			}
 		}
 	}
@@ -134,7 +137,7 @@ public class TaskDisplayLogic {
 
 
 	public static void onTaskModified(Project project, Task task, TaskAttribute attribute) {
-		if(project.data.tasks.contains(task)) {
+		if (project.data.tasks.contains(task)) {
 			onTaskRemoved(project, task);
 			onTaskAdded(project, task);
 		}
@@ -161,6 +164,7 @@ public class TaskDisplayLogic {
 			List<TaskGroup> taskGroups = createTaskGroups(tasks, dataFilter, dataGroup, dataSort);
 			project.temporaryData.lastTaskGroups.setAll(taskGroups);
 			project.temporaryData.lastGroupsValid.set(true);
+			callListenersDisplayChanged(project);
 			return taskGroups;
 		}
 	}
@@ -284,112 +288,26 @@ public class TaskDisplayLogic {
 	}
 
 
-//	static Project project;
-//
-//
-//
-//
-//	public static void main(String[] args) {
-
-//		project = ProjectLogic.createNewProject();
-//
-//		ProjectLogic.addAttributeToProject(project, AttributeLogic.createTaskAttribute(AttributeType.BOOLEAN, "BoolAttribute"));
-//		ProjectLogic.addAttributeToProject(project, AttributeLogic.createTaskAttribute(AttributeType.NUMBER, "NumberAttribute"));
-//
-//		for (int i = 0; i < 20; i++) {
-//			ProjectLogic.addTaskToProject(project, TaskLogic.createTask(project));
-//		}
-//
-//		Random random = new Random();
-//		for (Task task : project.data.projectdata) {
-//			TaskLogic.setValue(task, AttributeLogic.findAttribute(project, AttributeType.DESCRIPTION), "d" + random.nextInt(4));
-//			TaskLogic.setValue(task, AttributeLogic.findAttribute(project, "BoolAttribute"), random.nextBoolean());
-//			TaskLogic.setValue(task, AttributeLogic.findAttribute(project, "NumberAttribute"), (double)random.nextInt(20));
-//		}
-
-//		List<SortElement> dataSort = new ArrayList<>();
-//		dataSort.add(new SortElement(AttributeLogic.findAttribute(project, "NumberAttribute"), SortElement.SortDir.ASC));
-//		dataSort.add(new SortElement(AttributeLogic.findAttribute(project, AttributeType.DESCRIPTION), SortElement.SortDir.ASC));
-//		dataSort.add(new SortElement(AttributeLogic.findAttribute(project, "BoolAttribute"), SortElement.SortDir.ASC));
-//
-//
-//		System.out.println("=== ALL ===");
-//
-//		for (Task task : project.data.projectdata) {
-//			String strTask = "   - ";
-//			strTask += TaskLogic.getValue(task, AttributeLogic.findAttribute(project, AttributeType.ID)) + ":  ";
-//			for (SortElement e : dataSort) {
-//				strTask += TaskLogic.getValue(task, e.attribute) + ",  ";
-//			}
-//			System.out.println(strTask);
-//		}
-//
-//		System.out.println();
-//		System.out.println();
-//
-//		sortTasks(project.data.projectdata, dataSort);
-//
-//		System.out.println("=== SORTED ===");
-//
-//		for (Task task : project.data.projectdata) {
-//			String strTask = "   - ";
-//			strTask += TaskLogic.getValue(task, AttributeLogic.findAttribute(project, AttributeType.ID)) + ":  ";
-//			for (SortElement e : dataSort) {
-//				strTask += TaskLogic.getValue(task, e.attribute) + ",  ";
-//			}
-//			System.out.println(strTask);
-//		}
-//
-//		System.out.println();
-//		System.out.println();
 
 
-//		List<TaskAttribute> dataGroup = new ArrayList<>();
-//		dataGroup.add(AttributeLogic.findAttribute(project, AttributeType.DESCRIPTION));
-//		dataGroup.add(AttributeLogic.findAttribute(project, "BoolAttribute"));
-//
-//		List<TaskGroup> groups = createTaskGroups(project.data.projectdata, new ArrayList<>(), dataGroup, new ArrayList<>());
-//
-//
-//		System.out.println("=== ALL ===");
-//
-//		for (Task task : project.data.projectdata) {
-//			String strTask = "   - ";
-//			strTask += TaskLogic.getValue(task, AttributeLogic.findAttribute(project, AttributeType.ID)) + ":  ";
-//			for (TaskAttribute attribute : dataGroup) {
-//				strTask += TaskLogic.getValue(task, attribute) + ",  ";
-//			}
-//			System.out.println(strTask);
-//		}
-//
-//		System.out.println();
-//		System.out.println();
-//
-//
-//		for (TaskGroup group : groups) {
-//
-//			System.out.println();
-//			System.out.println();
-//			System.out.println("=== GROUP ===");
-//
-//			for (TaskAttribute attribute : group.attributes) {
-//				System.out.println("* " + attribute.name.get());
-//			}
-//
-//			for (Task task : group.projectdata) {
-//				String strTask = "   - ";
-//				strTask += TaskLogic.getValue(task, AttributeLogic.findAttribute(project, AttributeType.ID)) + ":  ";
-//				for (TaskAttribute attribute : group.attributes) {
-//					strTask += TaskLogic.getValue(task, attribute) + ",  ";
-//				}
-//				System.out.println(strTask);
-//			}
-//
-//
-//		}
+	public static int countDisplayedTasks(Project project) {
+		List<TaskGroup> groups = project.temporaryData.lastTaskGroups;
+		int count = 0;
+		for (TaskGroup group : groups) {
+			count += group.tasks.size();
+		}
+		return count;
+	}
 
-//
-//	}
+
+
+
+	private static void callListenersDisplayChanged(Project project) {
+		List<EventHandler<ActionEvent>> listeners = project.temporaryData.listenersTaskGroupsChanged;
+		for (EventHandler<ActionEvent> listener : listeners) {
+			listener.handle(new ActionEvent());
+		}
+	}
 
 
 }

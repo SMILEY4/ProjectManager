@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.TaskManager;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
+import com.ruegnerlukas.taskmanager.logic.TaskDisplayLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
@@ -15,6 +16,7 @@ import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupsort.PopupSort;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MenuFunction;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
@@ -115,8 +117,17 @@ public class TasksHeader {
 		btnSort.setOnAction(event -> openPopup(new PopupSort()));
 		btnPresets.setOnAction(event -> openPopup(new PopupMasterPreset()));
 
-		// TODO label taskcount
-		labelNTasks.setText("32/42");
+		// label n tasks
+		Data.projectProperty.get().data.tasks.addListener((ListChangeListener<Task>) c -> {
+			final int nTotal = Data.projectProperty.get().data.tasks.size();
+			final int nDisplayed = TaskDisplayLogic.countDisplayedTasks(Data.projectProperty.get());
+			labelNTasks.setText(nDisplayed + "/" + nTotal);
+		});
+		Data.projectProperty.get().temporaryData.listenersTaskGroupsChanged.add(event -> {
+			final int nTotal = Data.projectProperty.get().data.tasks.size();
+			final int nDisplayed = TaskDisplayLogic.countDisplayedTasks(Data.projectProperty.get());
+			labelNTasks.setText(nDisplayed + "/" + nTotal);
+		});
 
 		// TODO actions
 		ButtonUtils.makeIconButton(btnActions, SVGIcons.HAMBURGER, 0.7f, "white");
