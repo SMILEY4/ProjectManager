@@ -1,10 +1,15 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.data.Data;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
+import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
+import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.content.TasksContent;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.TasksHeader;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -57,6 +62,12 @@ public class TaskView extends AnchorPane {
 		TasksSidebar sidebar = new TasksSidebar();
 		AnchorUtils.setAnchors(sidebar.getAnchorPane(), 0, 0, 0, 0);
 		paneSidebar.getChildren().add(sidebar.getAnchorPane());
+
+		// TODO TMP
+		Task task = TaskLogic.createTask(Data.projectProperty.get());
+		ProjectLogic.addTaskToProject(Data.projectProperty.get(), task);
+		sidebar.setTask(task);
+
 
 	}
 

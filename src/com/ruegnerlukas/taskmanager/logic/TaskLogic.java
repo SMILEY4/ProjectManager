@@ -210,7 +210,7 @@ public class TaskLogic {
 
 		// validate type
 		Map<String, Class<?>> map = AttributeLogicManager.getDataTypeMap(attribute.type.get());
-		if (value.getClass() != map.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE)) {
+		if ( !(value.getClass() == map.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE) || value instanceof NoValue) ) {
 			return false;
 		}
 
