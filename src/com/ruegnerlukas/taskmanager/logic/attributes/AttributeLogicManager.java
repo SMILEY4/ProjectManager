@@ -259,11 +259,11 @@ public class AttributeLogicManager {
 		try {
 			Map<FilterOperation, Class<?>[]> FILTER_DATA = (Map<FilterOperation, Class<?>[]>) field.get(null);
 			// is invalid operation
-			if (!FILTER_DATA.containsKey(criteria.operation)) {
+			if (!FILTER_DATA.containsKey(criteria.operation.get())) {
 				return false;
 			}
 			// has invalid amount of values
-			Class<?>[] dataTypes = FILTER_DATA.get(criteria.operation);
+			Class<?>[] dataTypes = FILTER_DATA.get(criteria.operation.get());
 			if (dataTypes.length != criteria.values.size()) {
 				return false;
 			}
@@ -278,7 +278,7 @@ public class AttributeLogicManager {
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		}
-		return false;
+		return true;
 	}
 
 

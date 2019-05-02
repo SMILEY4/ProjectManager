@@ -81,14 +81,6 @@ public class OrNode extends CriteriaNode {
 			Platform.runLater(() -> boxAdd.getSelectionModel().clearSelection());
 		});
 
-
-		// debug style
-//		this.setStyle("-fx-border-color: blue;");
-//		label.setStyle("-fx-border-color: cyan;");
-//		content.setStyle("-fx-border-color: cyan;");
-//		btnRemove.setStyle("-fx-border-color: cyan;");
-//		btnAdd.setStyle("-fx-border-color: cyan;");
-
 	}
 
 

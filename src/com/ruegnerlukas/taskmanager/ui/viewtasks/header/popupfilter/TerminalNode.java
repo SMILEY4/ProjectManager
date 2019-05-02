@@ -90,7 +90,7 @@ public class TerminalNode extends CriteriaNode {
 
 		Class<?>[] dataTypes = AttributeLogicManager.getFilterData(
 				terminalCriteria.attribute.get().type.get()).get(terminalCriteria.operation.get());
-		createValueInputFields(dataTypes, null);
+		createValueInputFields(dataTypes, terminalCriteria.values.toArray());
 
 
 		// spacing

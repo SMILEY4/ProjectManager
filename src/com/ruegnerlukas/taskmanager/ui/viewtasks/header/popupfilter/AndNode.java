@@ -81,14 +81,6 @@ public class AndNode extends CriteriaNode {
 			Platform.runLater(() -> boxAdd.getSelectionModel().clearSelection());
 		});
 
-
-		// debug style
-//		this.setStyle("-fx-border-color: red;");
-//		label.setStyle("-fx-border-color: orange;");
-//		content.setStyle("-fx-border-color: orange;");
-//		btnRemove.setStyle("-fx-border-color: orange;");
-//		btnAdd.setStyle("-fx-border-color: orange;");
-
 	}
 
 
