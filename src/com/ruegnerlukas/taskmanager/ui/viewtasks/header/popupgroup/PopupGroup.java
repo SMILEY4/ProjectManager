@@ -314,7 +314,6 @@ public class PopupGroup extends TasksPopup {
 
 
 	private void onSetHeaderString(String headerString) {
-		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 		onModified();
 	}
 

@@ -18,10 +18,7 @@ import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 import javafx.collections.ListChangeListener;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 public class TaskLogic {
 
@@ -43,16 +40,16 @@ public class TaskLogic {
 										setFilter(newProject, null, null);
 									} else {
 										int nRemoved = removeAttributeFromFilterCriteria(criteria, attribute);
-										if(nRemoved > 0) {
+										if (nRemoved > 0) {
 											newProject.temporaryData.lastGroupsValid.set(false);
 										}
 									}
 
 								}
 								if (newProject.data.groupData.get() != null && newProject.data.groupData.get().attributes.contains(attribute)) {
-									if(newProject.data.groupData.get().attributes.remove(attribute)) {
+									if (newProject.data.groupData.get().attributes.remove(attribute)) {
 										newProject.temporaryData.lastGroupsValid.set(false);
-										if(newProject.data.groupData.get().attributes.isEmpty()) {
+										if (newProject.data.groupData.get().attributes.isEmpty()) {
 											setGroupData(newProject, null, null);
 										}
 									}
@@ -63,7 +60,7 @@ public class TaskLogic {
 										if (element.attribute.get() == attribute) {
 											newProject.data.sortData.get().sortElements.remove(element);
 											newProject.temporaryData.lastGroupsValid.set(false);
-											if(newProject.data.sortData.get().sortElements.isEmpty()) {
+											if (newProject.data.sortData.get().sortElements.isEmpty()) {
 												setSortData(newProject, null, null);
 											}
 											break;
@@ -303,6 +300,21 @@ public class TaskLogic {
 			project.data.groupData.set(null);
 			project.data.selectedGroupPreset.set(null);
 		} else {
+
+			// remove duplicates
+			if (groupData != null) {
+				Set<TaskAttribute> attributes = new HashSet<>();
+				Iterator<TaskAttribute> iter = groupData.attributes.iterator();
+				while (iter.hasNext()) {
+					TaskAttribute a = iter.next();
+					if (attributes.contains(a)) {
+						iter.remove();
+					} else {
+						attributes.add(a);
+					}
+				}
+			}
+
 			project.data.groupData.set(groupData);
 			project.data.selectedGroupPreset.set(preset);
 		}
@@ -317,6 +329,21 @@ public class TaskLogic {
 			project.data.sortData.set(null);
 			project.data.selectedSortPreset.set(null);
 		} else {
+
+			// remove duplicates
+			if (sortData != null) {
+				List<SortElement> toRemove = new ArrayList<>();
+				Set<TaskAttribute> attributes = new HashSet<>();
+				for (SortElement e : sortData.sortElements) {
+					if (attributes.contains(e.attribute.get())) {
+						toRemove.add(e);
+					} else {
+						attributes.add(e.attribute.get());
+					}
+				}
+				sortData.sortElements.removeAll(toRemove);
+			}
+
 			project.data.sortData.set(sortData);
 			project.data.selectedSortPreset.set(preset);
 		}
