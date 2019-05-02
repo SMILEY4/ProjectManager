@@ -10,7 +10,8 @@ import java.util.Map;
 
 public abstract class MenuFunction {
 
-	protected String path[];
+
+	protected String[] path;
 	protected String text;
 	
 	protected MenuItem item;

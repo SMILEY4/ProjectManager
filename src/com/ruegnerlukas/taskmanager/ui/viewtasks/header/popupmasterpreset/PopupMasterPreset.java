@@ -24,7 +24,6 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-@SuppressWarnings ("Duplicates")
 public class PopupMasterPreset extends TasksPopup {
 
 

@@ -19,7 +19,7 @@ import javafx.scene.layout.VBox;
 public class AndNode extends CriteriaNode {
 
 
-	private ObservableList<CriteriaNode> children = FXCollections.observableArrayList();
+	private final ObservableList<CriteriaNode> children = FXCollections.observableArrayList();
 
 
 
