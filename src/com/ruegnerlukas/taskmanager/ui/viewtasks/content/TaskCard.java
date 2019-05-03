@@ -51,6 +51,16 @@ public class TaskCard extends AnchorPane {
 	private void create() {
 		this.setPrefSize(320, 200);
 
+		task.addOnChange(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG), event -> {
+			final TaskFlag newFlag = (TaskFlag) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG));
+			paneFlag.setStyle("-fx-background-color: " + newFlag.color.get().asHex());
+		});
+
+		task.addOnChange(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION), event -> {
+			final String newDescr = (String) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION));
+			labelDesc.setText(newDescr);
+		});
+
 		final int id 			= (Integer) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID));
 		final TaskFlag flag 	= (TaskFlag) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG));
 		final String descr 		= (String) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION));
@@ -58,6 +68,7 @@ public class TaskCard extends AnchorPane {
 		labelID.setText("T-" + id);
 		labelDesc.setText(descr);
 		paneFlag.setStyle("-fx-background-color: " + flag.color.get().asHex());
+
 	}
 
 
