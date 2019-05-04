@@ -27,6 +27,14 @@ public class ItemCreated extends SimpleSidebarItem {
 
 
 	@Override
+	public void dispose() {
+
+	}
+
+
+
+
+	@Override
 	protected void onSetEmpty(boolean empty) {
 		this.setEmpty(false);
 	}

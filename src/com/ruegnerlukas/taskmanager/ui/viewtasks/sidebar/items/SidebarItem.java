@@ -1,10 +1,15 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
 
-public class SidebarItem extends AnchorPane {
+public abstract class SidebarItem extends AnchorPane {
 
 
 	public static SidebarItem createItem(TaskAttribute attribute, Task task) {
@@ -42,12 +47,51 @@ public class SidebarItem extends AnchorPane {
 	private final TaskAttribute attribute;
 	private final Task task;
 
+	private EventHandler<ActionEvent> handlerAttribNameChanged;
+	private EventHandler<ActionEvent> handlerAttribTypeChanged;
+
+	private FXChangeListener<String> listenerName;
+	private FXChangeListener<AttributeType> listenerType;
+
 
 
 
 	public SidebarItem(TaskAttribute attribute, Task task) {
 		this.attribute = attribute;
 		this.task = task;
+
+		listenerName = new FXChangeListener<String>(attribute.name) {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (handlerAttribNameChanged != null) {
+					handlerAttribNameChanged.handle(new ActionEvent());
+				}
+			}
+		};
+
+		listenerType = new FXChangeListener<AttributeType>(attribute.type) {
+			@Override
+			public void changed(ObservableValue<? extends AttributeType> observable, AttributeType oldValue, AttributeType newValue) {
+				if (handlerAttribTypeChanged != null) {
+					handlerAttribTypeChanged.handle(new ActionEvent());
+				}
+			}
+		};
+
+	}
+
+
+
+
+	public void setOnAttribNameChanged(EventHandler<ActionEvent> handler) {
+		handlerAttribNameChanged = handler;
+	}
+
+
+
+
+	public void setOnAttribTypeChanged(EventHandler<ActionEvent> handler) {
+		handlerAttribTypeChanged = handler;
 	}
 
 
@@ -62,6 +106,16 @@ public class SidebarItem extends AnchorPane {
 
 	public Task getTask() {
 		return task;
+	}
+
+
+
+
+	public void dispose() {
+		listenerName.removeFromAll();
+		listenerType.removeFromAll();
+		handlerAttribNameChanged = null;
+		handlerAttribTypeChanged = null;
 	}
 
 }

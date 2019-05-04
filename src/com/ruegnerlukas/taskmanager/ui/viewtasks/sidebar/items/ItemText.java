@@ -50,6 +50,14 @@ public class ItemText extends SidebarItem {
 
 
 
+	@Override
+	public void dispose() {
+
+	}
+
+
+
+
 	private void setValueHeight() {
 		final double height = TextAttributeLogic.getMultiline(getAttribute()) ? MultiTextField.calculateOptimalHeight(5) : 32;
 		area.setMinSize(60, height);

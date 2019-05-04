@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.Project;
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 
 import java.util.ArrayList;
@@ -56,8 +56,8 @@ public class AttributeLogic {
 
 
 	public static void setTaskAttributeType(TaskAttribute attribute, AttributeType newType) {
+		AttributeLogicManager.initTaskAttribute(attribute, newType);
 		attribute.type.set(newType);
-		initTaskAttribute(attribute);
 	}
 
 

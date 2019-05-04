@@ -29,6 +29,7 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 	public SimpleSidebarItem(TaskAttribute attribute, Task task) {
 		super(attribute, task);
 
+
 		// root box
 		HBox root = new HBox();
 		root.setMinSize(0, 34);
@@ -39,6 +40,7 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 		AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 		this.getChildren().add(root);
 
+
 		// left - label
 		label = new Label("Attribute");
 		label.setAlignment(Pos.CENTER_RIGHT);
@@ -46,11 +48,13 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 		label.setPrefSize(100000, 34);
 		root.getChildren().add(label);
 
+
 		// right - pane
 		AnchorPane paneRight = new AnchorPane();
 		paneRight.setMinWidth(0);
 		paneRight.setPrefSize(100000, 34);
 		root.getChildren().add(paneRight);
+
 
 		// button - add / clear
 		button = new Button();
@@ -69,6 +73,7 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 		AnchorUtils.setAnchors(labelEmpty, 0, 34, 0, 0);
 		paneRight.getChildren().add(labelEmpty);
 
+
 		// box value
 		boxValue = new HBox();
 		boxValue.setMinWidth(0);
@@ -77,8 +82,12 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 		AnchorUtils.setAnchors(boxValue, 0, 34, 0, 0);
 		paneRight.getChildren().add(boxValue);
 
-		this.setText(attribute.name.get() + ":");
+
 		this.setEmpty(true);
+		this.setText(attribute.name.get() + ":");
+		this.setOnAttribNameChanged(event -> {
+			this.setText(attribute.name.get() + ":");
+		});
 	}
 
 

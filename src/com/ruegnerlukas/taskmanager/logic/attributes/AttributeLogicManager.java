@@ -244,7 +244,14 @@ public class AttributeLogicManager {
 
 
 	public static void initTaskAttribute(TaskAttribute attribute) {
-		Method method = getMethod(getLogicClass(attribute.type.get()), "initAttribute", TaskAttribute.class);
+		initTaskAttribute(attribute, attribute.type.get());
+	}
+
+
+
+
+	public static void initTaskAttribute(TaskAttribute attribute, AttributeType type) {
+		Method method = getMethod(getLogicClass(type), "initAttribute", TaskAttribute.class);
 		try {
 			method.invoke(null, attribute);
 		} catch (IllegalAccessException | InvocationTargetException e) {

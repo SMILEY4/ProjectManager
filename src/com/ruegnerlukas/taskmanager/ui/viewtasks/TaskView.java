@@ -78,7 +78,6 @@ public class TaskView extends AnchorPane implements MainViewModule {
 		ProjectLogic.addTaskToProject(Data.projectProperty.get(), task);
 		sidebar.setTask(task);
 
-
 	}
 
 
