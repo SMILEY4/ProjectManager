@@ -40,13 +40,6 @@ public class FlagNode extends HBox {
 
 
 
-	public FlagNode() {
-		this(null);
-	}
-
-
-
-
 	public FlagNode(TaskFlag taskFlag) {
 
 		if (taskFlag == null) {
@@ -57,6 +50,7 @@ public class FlagNode extends HBox {
 		nameProperty.set(this.flag.name.get());
 		colorProperty.set(this.flag.color.get());
 
+
 		// root box
 		this.setSpacing(5);
 		this.setAlignment(Pos.CENTER_LEFT);
@@ -64,6 +58,7 @@ public class FlagNode extends HBox {
 		this.setPrefSize(10000, 38);
 		this.setMaxSize(10000, 38);
 		this.setStyle("-fx-border-color: #aaaaaa; -fx-border-radius: 5;");
+
 
 		// button remove
 		btnRemove = new Button();
@@ -123,7 +118,6 @@ public class FlagNode extends HBox {
 			onMoveDown();
 		});
 		this.getChildren().add(btnDown);
-
 
 	}
 

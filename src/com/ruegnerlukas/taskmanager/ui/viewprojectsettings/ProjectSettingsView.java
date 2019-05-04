@@ -1,18 +1,22 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.Data;
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
+import com.ruegnerlukas.taskmanager.ui.viewmain.MainViewModule;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeNode;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXListChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.EditableLabel;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -23,10 +27,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-public class ProjectSettingsView extends AnchorPane {
+public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 
 	public static final String TITLE = "Project Settings";
@@ -44,6 +46,10 @@ public class ProjectSettingsView extends AnchorPane {
 	@FXML private Button btnAddAttribute;
 
 	private ObservableList<AttributeNode> attributeNodeList = FXCollections.observableArrayList();
+
+	private FXChangeListener<String> listenerProjectName;
+	private FXChangeListener<Boolean> listenerAttributeLock;
+	private FXListChangeListener<TaskAttribute> listenerAttributes;
 
 
 
@@ -65,30 +71,25 @@ public class ProjectSettingsView extends AnchorPane {
 	private void create() {
 
 		// Project name
-		labelName = new EditableLabel("");
+		labelName = new EditableLabel(Data.projectProperty.get().settings.name.getValue());
 		AnchorUtils.setAnchors(labelName, 0, 0, 0, 0);
 		paneHeader.getChildren().add(labelName);
-		labelName.setText(Data.projectProperty.get().settings.name.getValue());
 		labelName.addListener((observable, oldValue, newValue) -> {
 			onRenameProject(newValue);
 		});
-		Data.projectProperty.get().settings.name.addListener((observable, oldValue, newValue) -> {
-			labelName.setText(newValue);
-		});
+
 
 		// lock attributes
-		if (Data.projectProperty.get().settings.attributesLocked.get()) {
-			ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_CLOSED, 1, "black");
-		} else {
-			ButtonUtils.makeIconButton(btnLockAttributes, SVGIcons.LOCK_OPEN, 1, "black");
-		}
-		Data.projectProperty.get().settings.attributesLocked.addListener(((observable, oldValue, newValue) -> {
-			ButtonUtils.makeIconButton(btnLockAttributes, newValue ? SVGIcons.LOCK_CLOSED : SVGIcons.LOCK_OPEN, 0.7, "black");
-			boxTaskAttribs.setDisable(newValue);
-			btnAddAttribute.setDisable(newValue);
-		}));
+		final boolean isLocked = Data.projectProperty.get().settings.attributesLocked.get();
+		ButtonUtils.makeIconButton(btnLockAttributes, isLocked ? SVGIcons.LOCK_CLOSED : SVGIcons.LOCK_OPEN, 1, "black");
 		btnLockAttributes.setOnAction(event -> {
-			ProjectLogic.lockSwitchTaskAttributes(Data.projectProperty.get());
+			onLockAttributes();
+		});
+
+
+		// button add attribute
+		btnAddAttribute.setOnAction(event -> {
+			onAddAttribute();
 		});
 
 
@@ -99,37 +100,45 @@ public class ProjectSettingsView extends AnchorPane {
 			boxTaskAttribs.getChildren().add(node);
 		}
 
-		// attributes added/removed to/from project
-		Data.projectProperty.get().data.attributes.addListener((ListChangeListener<TaskAttribute>) c -> {
-			while (c.next()) {
-				if (c.wasAdded()) {
-					for (TaskAttribute attribute : c.getAddedSubList()) {
-						AttributeNode node = new AttributeNode(attribute);
-						attributeNodeList.add(node);
-						boxTaskAttribs.getChildren().add(node);
-					}
+
+		// listener: project name
+		listenerProjectName = new FXChangeListener<String>(Data.projectProperty.get().settings.name) {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				onProjectNameChanged(newValue);
+			}
+		};
+
+
+		// listener: attribute-lock
+		listenerAttributeLock = new FXChangeListener<Boolean>(Data.projectProperty.get().settings.attributesLocked) {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				onAttributeLockChanged(newValue);
+			}
+		};
+
+
+		// listener: attribute list
+		listenerAttributes = new FXListChangeListener<TaskAttribute>(Data.projectProperty.get().data.attributes) {
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends TaskAttribute> c) {
+				for (TaskAttribute attribute : getAllAdded(c)) {
+					onAttributeAdded(attribute);
 				}
-				if (c.wasRemoved()) {
-					List<AttributeNode> removed = new ArrayList<>();
-					for (TaskAttribute attribute : c.getRemoved()) {
-						for (AttributeNode node : attributeNodeList) {
-							if (node.getAttribute() == attribute) {
-								removed.add(node);
-							}
-						}
-					}
-					attributeNodeList.removeAll(removed);
-					boxTaskAttribs.getChildren().removeAll(removed);
+				for (TaskAttribute attribute : getAllRemoved(c)) {
+					onAttributeRemoved(attribute);
 				}
 			}
-		});
+		};
+
+	}
 
 
-		// button add attribute
-		btnAddAttribute.setOnAction(event -> {
-			onAddAttribute();
-		});
 
+
+	private void onProjectNameChanged(String newName) {
+		labelName.setText(newName);
 	}
 
 
@@ -142,6 +151,50 @@ public class ProjectSettingsView extends AnchorPane {
 
 
 
+	private void onAttributeLockChanged(boolean newLock) {
+		ButtonUtils.makeIconButton(btnLockAttributes, newLock ? SVGIcons.LOCK_CLOSED : SVGIcons.LOCK_OPEN, 0.7, "black");
+		boxTaskAttribs.setDisable(newLock);
+		btnAddAttribute.setDisable(newLock);
+	}
+
+
+
+
+	private void onLockAttributes() {
+		ProjectLogic.lockSwitchTaskAttributes(Data.projectProperty.get());
+	}
+
+
+
+
+	private void onAttributeAdded(TaskAttribute attribute) {
+		AttributeNode node = new AttributeNode(attribute);
+		attributeNodeList.add(node);
+		boxTaskAttribs.getChildren().add(node);
+	}
+
+
+
+
+	private void onAttributeRemoved(TaskAttribute attribute) {
+		AttributeNode removed = null;
+		for (AttributeNode node : attributeNodeList) {
+			if (node.getAttribute() == attribute) {
+				removed = node;
+				break;
+			}
+		}
+		if (removed != null) {
+			attributeNodeList.remove(removed);
+			boxTaskAttribs.getChildren().remove(removed);
+			removed.dispose();
+		}
+
+	}
+
+
+
+
 	private void onAddAttribute() {
 		ProjectLogic.addAttributeToProject(
 				Data.projectProperty.get(),
@@ -149,5 +202,38 @@ public class ProjectSettingsView extends AnchorPane {
 		);
 	}
 
+
+
+
+	@Override
+	public void onModuleClose() {
+		for (AttributeNode node : attributeNodeList) {
+			node.dispose();
+		}
+		listenerProjectName.removeFromAll();
+		listenerAttributeLock.removeFromAll();
+		listenerAttributes.removeFromAll();
+	}
+
+
+
+
+	@Override
+	public void onModuleOpen() {
+	}
+
+
+
+
+	@Override
+	public void onModuleSelected() {
+	}
+
+
+
+
+	@Override
+	public void onModuleDeselected() {
+	}
 
 }

@@ -43,19 +43,6 @@ public class AttributeNode extends AnchorPane {
 	private AttributeContentNode content;
 
 
-	/*
-	THIS: AnchorPane
-	  - HEADER_PANE: AnchorPane
-	  .   - HEADER_BOX: HBox
-	  .   .   - BTN_REMOVE: Button
-	  .   .   - CHOICE_TYPE: ChoiceBox
-	  .   .   - ATTRIB_NAME: EditableLabel
-	  .   .   - BTN_EXPAND: Button
-	  - CONTENT_PANE: AnchorPane
-	  .   .   - CONTENT: AttributeContentNode
-	 */
-
-
 
 
 	public AttributeNode(TaskAttribute attribute) {
@@ -163,11 +150,10 @@ public class AttributeNode extends AnchorPane {
 			}
 		});
 
-		if(attribute.type.get().fixed && AttributeContentNode.CONTENT_NODES.get(attribute.type.get()) == UnchangeableContentNode.class) {
+		if (attribute.type.get().fixed && AttributeContentNode.CONTENT_NODES.get(attribute.type.get()) == UnchangeableContentNode.class) {
 			btnExpand.setDisable(true);
 			btnExpand.setVisible(false);
 		}
-
 
 
 		// content pane
@@ -191,7 +177,7 @@ public class AttributeNode extends AnchorPane {
 	private void setAttributeContent() {
 
 		Class<? extends AttributeContentNode> nodeClass = AttributeContentNode.CONTENT_NODES.get(attribute.type.get());
-		if(nodeClass == null) {
+		if (nodeClass == null) {
 			content = new UnchangeableContentNode(attribute);
 		} else {
 			try {
@@ -289,5 +275,13 @@ public class AttributeNode extends AnchorPane {
 		return attribute;
 	}
 
+
+
+
+	public void dispose() {
+		if (content != null) {
+			content.dispose();
+		}
+	}
 
 }

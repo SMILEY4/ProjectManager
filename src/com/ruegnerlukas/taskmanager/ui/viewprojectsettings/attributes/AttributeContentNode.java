@@ -104,4 +104,10 @@ public abstract class AttributeContentNode extends AnchorPane {
 	}
 
 
+
+
+	public void dispose() {
+		// unused
+	}
+
 }
