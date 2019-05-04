@@ -8,9 +8,11 @@ import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.TaskView;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.Alerts;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MenuFunction;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
@@ -79,6 +81,9 @@ public class MainView extends AnchorPane {
 	private MenuFunction functionSaveProject;
 	private MenuFunction functionCloseProject;
 
+	private MainViewModule moduleProjectSettings;
+	private MainViewModule moduleTabs;
+
 
 
 
@@ -102,7 +107,6 @@ public class MainView extends AnchorPane {
 
 
 	private void create() {
-
 
 		// Create new empty Project
 		functionNewProject = new MenuFunction("File", "New Project") {
@@ -141,21 +145,30 @@ public class MainView extends AnchorPane {
 		}.addToMenuBar(menuBar);
 
 
-		// Listeners
 		functionCloseProject.setDisable(true);
 		functionSaveProject.setDisable(true);
-		Data.projectProperty.addListener((observable, oldValue, newValue) -> {
-			if (newValue == null) {
-				functionSaveProject.setDisable(true);
-				functionCloseProject.setDisable(true);
-				closeTabs();
-			} else {
-				functionSaveProject.setDisable(false);
-				functionCloseProject.setDisable(false);
-				openTabs();
+		new FXChangeListener<Project>(Data.projectProperty) {
+			@Override
+			public void changed(ObservableValue<? extends Project> observable, Project oldValue, Project newValue) {
+				if (newValue == null) {
+					functionSaveProject.setDisable(true);
+					functionCloseProject.setDisable(true);
+					closeTabs();
+				} else {
+					functionSaveProject.setDisable(false);
+					functionCloseProject.setDisable(false);
+					openTabs();
+				}
 			}
-		});
+		};
 
+
+		new FXChangeListener<Tab>(tabPane.getSelectionModel().selectedItemProperty()) {
+			@Override
+			public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+				onTabSelected(oldValue, newValue);
+			}
+		};
 
 	}
 
@@ -200,6 +213,20 @@ public class MainView extends AnchorPane {
 
 
 
+	private void onTabSelected(Tab prevTab, Tab currTab) {
+		if (prevTab != null && prevTab.getContent() instanceof MainViewModule) {
+			MainViewModule prevModule = (MainViewModule) prevTab.getContent();
+			prevModule.onModuleDeselected();
+		}
+		if (currTab != null && currTab.getContent() instanceof MainViewModule) {
+			MainViewModule currModule = (MainViewModule) currTab.getContent();
+			currModule.onModuleSelected();
+		}
+	}
+
+
+
+
 	private void openTabs() {
 
 		// project settings
@@ -209,18 +236,31 @@ public class MainView extends AnchorPane {
 		tabProjectSettings.setContent(viewProjectSettings);
 		tabPane.getTabs().add(tabProjectSettings);
 
+		this.moduleProjectSettings = viewProjectSettings;
+		this.moduleProjectSettings.onModuleOpen();
+
 		// projectdata
 		TaskView viewTasks = new TaskView();
 		AnchorUtils.setAnchors(viewTasks, 0, 0, 0, 0);
 		Tab tabTaskView = new Tab(TaskView.TITLE);
 		tabTaskView.setContent(viewTasks);
 		tabPane.getTabs().add(tabTaskView);
+
+		this.moduleTabs = viewTasks;
+		this.moduleTabs.onModuleOpen();
+
 	}
 
 
 
 
 	private void closeTabs() {
+		if (moduleProjectSettings != null) {
+			moduleProjectSettings.onModuleClose();
+		}
+		if (moduleTabs != null) {
+			moduleTabs.onModuleClose();
+		}
 		tabPane.getTabs().clear();
 	}
 
