@@ -68,6 +68,11 @@ public class TaskView extends AnchorPane implements MainViewModule {
 		AnchorUtils.setAnchors(sidebar.getAnchorPane(), 0, 0, 0, 0);
 		paneSidebar.getChildren().add(sidebar.getAnchorPane());
 
+		// (de-)select task
+		content.selectedTask.addListener((observable, oldValue, newValue) -> {
+			sidebar.setTask(newValue);
+		});
+
 		// TODO TMP
 		Task task = TaskLogic.createTask(Data.projectProperty.get());
 		ProjectLogic.addTaskToProject(Data.projectProperty.get(), task);

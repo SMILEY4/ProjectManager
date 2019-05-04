@@ -25,6 +25,7 @@ public class TaskCard extends AnchorPane {
 
 
 	private Task task;
+	protected TaskList parent;
 
 	@FXML private Pane paneFlag;
 	@FXML private Label labelID;
@@ -38,8 +39,9 @@ public class TaskCard extends AnchorPane {
 
 
 
-	public TaskCard(Task task) {
+	public TaskCard(Task task, TaskList list) {
 		this.task = task;
+		this.parent = list;
 		try {
 			AnchorPane root = (AnchorPane) UIDataHandler.loadFXML(UIModule.ELEMENT_TASKCARD, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
@@ -56,6 +58,10 @@ public class TaskCard extends AnchorPane {
 	private void create() {
 		this.setPrefSize(320, 200);
 
+		this.setOnMouseClicked(event -> {
+			parent.parent.selectTask(this.task);
+		});
+
 		handlerChangedFlag = e -> onFlagChanged();
 		handlerChangedDescription = e -> onDescriptionChanged();
 		task.addOnChange(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG), handlerChangedFlag);
@@ -69,6 +75,20 @@ public class TaskCard extends AnchorPane {
 		labelDesc.setText(descr);
 		paneFlag.setStyle("-fx-background-color: " + flag.color.get().asHex());
 
+	}
+
+
+
+
+	public void select() {
+		this.setStyle("-fx-border-color: #5a92ff; -fx-border-width: 3;");
+	}
+
+
+
+
+	public void deselect() {
+		this.setStyle("-fx-border-color: transparent; -fx-border-width: 0;");
 	}
 
 

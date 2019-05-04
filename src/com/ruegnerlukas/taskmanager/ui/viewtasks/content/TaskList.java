@@ -26,11 +26,14 @@ public class TaskList extends AnchorPane {
 	@FXML private Label labelTitle;
 	@FXML private VBox boxCards;
 
+	protected TaskContent parent;
 
 
 
-	public TaskList(TaskGroup taskGroup) {
+
+	public TaskList(TaskGroup taskGroup, TaskContent parent) {
 		this.taskGroup = taskGroup;
+		this.parent = parent;
 		try {
 			AnchorPane root = (AnchorPane) UIDataHandler.loadFXML(UIModule.ELEMENT_TASKLIST, this);
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
@@ -83,7 +86,7 @@ public class TaskList extends AnchorPane {
 
 
 	private void addTaskCard(Task task) {
-		TaskCard card = new TaskCard(task);
+		TaskCard card = new TaskCard(task, this);
 		boxCards.getChildren().add(taskGroup.tasks.indexOf(task), card);
 	}
 
@@ -91,7 +94,7 @@ public class TaskList extends AnchorPane {
 
 
 	private void removeTaskCard(Task task) {
-		TaskCard card = findTaskCard(task);
+		TaskCard card = findCard(task);
 		if (card != null) {
 			card.dispose();
 			boxCards.getChildren().remove(card);
@@ -101,7 +104,7 @@ public class TaskList extends AnchorPane {
 
 
 
-	public TaskCard findTaskCard(Task task) {
+	public TaskCard findCard(Task task) {
 		for (Node node : boxCards.getChildren()) {
 			if (!(node instanceof TaskCard)) {
 				continue;

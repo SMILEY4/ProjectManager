@@ -8,6 +8,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskGroup;
 import com.ruegnerlukas.taskmanager.logic.TaskDisplayLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
+import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXListChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -31,6 +32,8 @@ public class TaskContent {
 
 	private FXListChangeListener<TaskGroup> listenerLastTaskGroups;
 	private FXChangeListener<Boolean> listenerValid;
+
+	public final CustomProperty<Task> selectedTask = new CustomProperty<>();
 
 
 
@@ -90,6 +93,23 @@ public class TaskContent {
 
 
 
+	public void selectTask(Task task) {
+		if (selectedTask.get() != null) {
+			TaskCard lastCard = findCard(selectedTask.get());
+			if (lastCard != null) {
+				lastCard.deselect();
+			}
+		}
+		TaskCard card = findCard(task);
+		if (card != null) {
+			card.select();
+		}
+		selectedTask.set(task);
+	}
+
+
+
+
 	private void rebuildTaskLists() {
 		removeAllLists();
 		List<TaskGroup> taskGroups = TaskDisplayLogic.createTaskGroups(Data.projectProperty.get());
@@ -103,7 +123,7 @@ public class TaskContent {
 
 
 	private void addTaskList(TaskGroup group) {
-		TaskList list = new TaskList(group);
+		TaskList list = new TaskList(group, this);
 		boxTasks.getChildren().add(list);
 	}
 
@@ -163,11 +183,23 @@ public class TaskContent {
 				continue;
 			}
 			TaskList list = (TaskList) node;
-			if (list.findTaskCard(task) != null) {
+			if (list.findCard(task) != null) {
 				return list;
 			}
 		}
 		return null;
+	}
+
+
+
+
+	private TaskCard findCard(Task task) {
+		TaskList list = findList(task);
+		if (list != null) {
+			return list.findCard(task);
+		} else {
+			return null;
+		}
 	}
 
 
