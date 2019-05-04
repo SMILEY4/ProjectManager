@@ -10,6 +10,8 @@ import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -29,6 +31,9 @@ public class TaskCard extends AnchorPane {
 	@FXML private HBox boxIcons;
 	@FXML private Label labelDesc;
 	@FXML private VBox boxAttribs;
+
+	private EventHandler<ActionEvent> handlerChangedFlag;
+	private EventHandler<ActionEvent> handlerChangedDescription;
 
 
 
@@ -51,24 +56,35 @@ public class TaskCard extends AnchorPane {
 	private void create() {
 		this.setPrefSize(320, 200);
 
-		task.addOnChange(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG), event -> {
-			final TaskFlag newFlag = (TaskFlag) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG));
-			paneFlag.setStyle("-fx-background-color: " + newFlag.color.get().asHex());
-		});
+		handlerChangedFlag = e -> onFlagChanged();
+		handlerChangedDescription = e -> onDescriptionChanged();
+		task.addOnChange(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG), handlerChangedFlag);
+		task.addOnChange(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION), handlerChangedDescription);
 
-		task.addOnChange(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION), event -> {
-			final String newDescr = (String) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION));
-			labelDesc.setText(newDescr);
-		});
-
-		final int id 			= (Integer) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID));
-		final TaskFlag flag 	= (TaskFlag) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG));
-		final String descr 		= (String) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION));
+		final int id = (Integer) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID));
+		final TaskFlag flag = (TaskFlag) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG));
+		final String descr = (String) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION));
 
 		labelID.setText("T-" + id);
 		labelDesc.setText(descr);
 		paneFlag.setStyle("-fx-background-color: " + flag.color.get().asHex());
 
+	}
+
+
+
+
+	private void onFlagChanged() {
+		final TaskFlag newFlag = (TaskFlag) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG));
+		paneFlag.setStyle("-fx-background-color: " + newFlag.color.get().asHex());
+	}
+
+
+
+
+	private void onDescriptionChanged() {
+		final String newDescr = (String) TaskLogic.getValue(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION));
+		labelDesc.setText(newDescr);
 	}
 
 
@@ -82,6 +98,8 @@ public class TaskCard extends AnchorPane {
 
 
 	public void dispose() {
+		task.removeHandler(handlerChangedFlag);
+		task.removeHandler(handlerChangedDescription);
 	}
 
 

@@ -24,27 +24,37 @@ public abstract class FXListChangeListener<E> {
 
 
 
-	public void addTo(ObservableList<? extends E> list) {
+	public FXListChangeListener<E> addTo(ObservableList<? extends E> list) {
 		list.addListener(listener);
 		lists.add(list);
+		return this;
 	}
 
 
 
 
-	public void removeFrom(ObservableList<? extends E> list) {
+	public FXListChangeListener<E> removeFrom(ObservableList<? extends E> list) {
 		list.removeListener(listener);
 		lists.remove(list);
+		return this;
 	}
 
 
 
 
-	public void removeFromAll() {
+	public FXListChangeListener<E> removeFromAll() {
 		for (ObservableList<? extends E> list : lists) {
 			list.removeListener(listener);
 		}
 		lists.clear();
+		return this;
+	}
+
+
+
+
+	public ListChangeListener<E> getListener() {
+		return this.listener;
 	}
 
 
@@ -58,6 +68,7 @@ public abstract class FXListChangeListener<E> {
 	private ListChangeListener.Change<? extends E> lastProcessedChange = null;
 	private final List<E> listAdded = new ArrayList<>();
 	private final List<E> listRemoved = new ArrayList<>();
+	private final List<ListChangeListener.Change<? extends E>> listPermutations = new ArrayList<>();
 
 
 
@@ -66,8 +77,12 @@ public abstract class FXListChangeListener<E> {
 
 		listAdded.clear();
 		listRemoved.clear();
+		listPermutations.clear();
 
 		while (c.next()) {
+			if (c.wasPermutated()) {
+				listPermutations.add(c);
+			}
 			if (c.wasAdded()) {
 				listAdded.addAll(c.getAddedSubList());
 			}
@@ -95,6 +110,16 @@ public abstract class FXListChangeListener<E> {
 			processChange(c);
 		}
 		return listRemoved;
+	}
+
+
+
+
+	public List<ListChangeListener.Change<? extends E>> getAllPermutations(ListChangeListener.Change<? extends E> c) {
+		if (lastProcessedChange != c) {
+			processChange(c);
+		}
+		return listPermutations;
 	}
 
 }

@@ -24,27 +24,30 @@ public abstract class FXChangeListener<T> {
 
 
 
-	public void addTo(ObservableValue<T> observable) {
+	public FXChangeListener addTo(ObservableValue<T> observable) {
 		observable.addListener(listener);
 		observables.add(observable);
+		return this;
 	}
 
 
 
 
-	public void removeFrom(ObservableValue<T> observable) {
+	public FXChangeListener removeFrom(ObservableValue<T> observable) {
 		observable.removeListener(listener);
 		observables.remove(observable);
+		return this;
 	}
 
 
 
 
-	public void removeFromAll() {
+	public FXChangeListener removeFromAll() {
 		for (ObservableValue<T> observable : observables) {
 			observable.removeListener(listener);
 		}
 		observables.clear();
+		return this;
 	}
 
 

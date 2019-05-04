@@ -47,11 +47,11 @@ public class TasksSidebar {
 
 		boxAttributes.getChildren().clear();
 
-		if(task != null) {
+		if (task != null) {
 			List<TaskAttribute> attributes = Data.projectProperty.get().data.attributes;
 			for (TaskAttribute attribute : attributes) {
 				SidebarItem item = SidebarItem.createItem(attribute, task);
-				if(item != null) {
+				if (item != null) {
 					boxAttributes.getChildren().add(item);
 				}
 			}
@@ -64,6 +64,12 @@ public class TasksSidebar {
 
 	public AnchorPane getAnchorPane() {
 		return this.root;
+	}
+
+
+
+
+	public void dispose() {
 	}
 
 

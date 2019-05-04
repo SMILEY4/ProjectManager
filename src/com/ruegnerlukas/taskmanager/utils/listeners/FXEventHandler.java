@@ -16,31 +16,34 @@ public abstract class FXEventHandler<T extends Event> {
 
 
 
-	public void addTo(ObjectProperty<EventHandler<T>> property) {
+	public FXEventHandler addTo(ObjectProperty<EventHandler<T>> property) {
 		property.set(handler);
 		properties.add(property);
+		return this;
 	}
 
 
 
 
-	public void removeFrom(ObjectProperty<EventHandler<T>> property) {
+	public FXEventHandler removeFrom(ObjectProperty<EventHandler<T>> property) {
 		if (property.get() == handler) {
 			property.set(null);
 		}
 		properties.remove(property);
+		return this;
 	}
 
 
 
 
-	public void removeFromAll() {
+	public FXEventHandler removeFromAll() {
 		for (ObjectProperty<EventHandler<T>> property : properties) {
 			if (property.get() == handler) {
 				property.set(null);
 			}
 		}
 		properties.clear();
+		return this;
 	}
 
 

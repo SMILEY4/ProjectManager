@@ -8,6 +8,9 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskGroup;
 import com.ruegnerlukas.taskmanager.logic.TaskDisplayLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXListChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -18,7 +21,7 @@ import javafx.scene.layout.HBox;
 import java.io.IOException;
 import java.util.List;
 
-public class TasksContent {
+public class TaskContent {
 
 
 	private AnchorPane root;
@@ -26,14 +29,17 @@ public class TasksContent {
 	@FXML private HBox boxTasks;
 	@FXML private Label labelHideSidebar;
 
+	private FXListChangeListener<TaskGroup> listenerLastTaskGroups;
+	private FXChangeListener<Boolean> listenerValid;
 
 
 
-	public TasksContent() {
+
+	public TaskContent() {
 		try {
 			root = (AnchorPane) UIDataHandler.loadFXML(UIModule.VIEW_TASKS_CONTENT, this);
 		} catch (IOException e) {
-			Logger.get().error("Error loading TasksContent-FXML: " + e);
+			Logger.get().error("Error loading TaskContent-FXML: " + e);
 		}
 		create();
 	}
@@ -43,35 +49,41 @@ public class TasksContent {
 
 	private void create() {
 
-		Data.projectProperty.get().temporaryData.lastTaskGroups.addListener((ListChangeListener<TaskGroup>) c -> {
-			if(Data.projectProperty.get().temporaryData.lastGroupsValid.get()) {
-				while (c.next()) {
-					if(c.wasPermutated()) {
-						int[] p = new int[c.getTo()-c.getFrom()];
-						for(int i=0; i<p.length; i++) {
-							p[i] = c.getPermutation(i+c.getFrom());
-						}
-						ArrayUtils.applyPermutation(boxTasks.getChildren(), p, c.getFrom());
+		// listener: task-groups changed
+		listenerLastTaskGroups = new FXListChangeListener<TaskGroup>(Data.projectProperty.get().temporaryData.lastTaskGroups) {
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends TaskGroup> c) {
+				if (Data.projectProperty.get().temporaryData.lastGroupsValid.get()) {
+
+					for (TaskGroup group : getAllAdded(c)) {
+						addTaskList(group);
 					}
-					if (c.wasAdded()) {
-						for (TaskGroup group : c.getAddedSubList()) {
-							addTaskList(group);
-						}
+					for (TaskGroup group : getAllRemoved(c)) {
+						removeTaskList(group);
 					}
-					if (c.wasRemoved()) {
-						for (TaskGroup group : c.getRemoved()) {
-							removeTaskList(group);
+					for (ListChangeListener.Change<? extends TaskGroup> permutation : getAllPermutations(c)) {
+						int[] p = new int[permutation.getTo() - permutation.getFrom()];
+						for (int i = 0; i < p.length; i++) {
+							p[i] = permutation.getPermutation(i + permutation.getFrom());
 						}
+						ArrayUtils.applyPermutation(boxTasks.getChildren(), p, permutation.getFrom());
 					}
 				}
 			}
-		});
+		};
 
-		Data.projectProperty.get().temporaryData.lastGroupsValid.addListener(((observable, oldValue, newValue) -> {
-			if (!newValue) {
-				rebuildTaskLists();
+
+		// listener: task-groups valid
+		listenerValid = new FXChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if (!newValue) {
+					rebuildTaskLists();
+				}
 			}
-		}));
+		};
+
+
 		rebuildTaskLists();
 	}
 
@@ -165,5 +177,18 @@ public class TasksContent {
 		return this.root;
 	}
 
+
+
+
+	public void dispose() {
+		for (Node node : boxTasks.getChildren()) {
+			if (node instanceof TaskList) {
+				TaskList list = (TaskList) node;
+				list.dispose();
+			}
+		}
+		listenerLastTaskGroups.removeFromAll();
+		listenerValid.removeFromAll();
+	}
 
 }

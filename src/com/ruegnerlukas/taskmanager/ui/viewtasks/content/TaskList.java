@@ -6,6 +6,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskGroup;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXListChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -20,6 +21,7 @@ public class TaskList extends AnchorPane {
 
 
 	private TaskGroup taskGroup;
+	private FXListChangeListener<Task> listenerTasks;
 
 	@FXML private Label labelTitle;
 	@FXML private VBox boxCards;
@@ -47,29 +49,29 @@ public class TaskList extends AnchorPane {
 		this.setPrefWidth(330);
 		this.setMaxSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
-		taskGroup.tasks.addListener((ListChangeListener<Task>) c -> {
-			while (c.next()) {
-				if(c.wasPermutated()) {
-					int[] p = new int[c.getTo()-c.getFrom()];
-					for(int i=0; i<p.length; i++) {
-						p[i] = c.getPermutation(i+c.getFrom());
-					}
-					ArrayUtils.applyPermutation(boxCards.getChildren(), p, c.getFrom());
+
+		listenerTasks = new FXListChangeListener<Task>(taskGroup.tasks) {
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends Task> c) {
+				for (Task task : getAllAdded(c)) {
+					addTaskCard(task);
 				}
-				if (c.wasAdded()) {
-					for (Task task : c.getAddedSubList()) {
-						addTaskCard(task);
-					}
+				for (Task task : getAllRemoved(c)) {
+					removeTaskCard(task);
 				}
-				if (c.wasRemoved()) {
-					for (Task task : c.getRemoved()) {
-						removeTaskCard(task);
+				for (ListChangeListener.Change<? extends Task> permuation : getAllPermutations(c)) {
+					int[] p = new int[permuation.getTo() - permuation.getFrom()];
+					for (int i = 0; i < p.length; i++) {
+						p[i] = permuation.getPermutation(i + permuation.getFrom());
 					}
+					ArrayUtils.applyPermutation(boxCards.getChildren(), p, permuation.getFrom());
 				}
 			}
-		});
+		};
+
 
 		labelTitle.setText("List n=" + taskGroup.tasks.size());
+
 
 		for (int i = 0; i < taskGroup.tasks.size(); i++) {
 			addTaskCard(taskGroup.tasks.get(i));
@@ -130,6 +132,7 @@ public class TaskList extends AnchorPane {
 			TaskCard card = (TaskCard) node;
 			card.dispose();
 		}
+		listenerTasks.removeFromAll();
 	}
 
 }

@@ -51,7 +51,7 @@ public class Task {
 
 
 
-	public void removeHanlder(EventHandler<ActionEvent> listener) {
+	public void removeHandler(EventHandler<ActionEvent> listener) {
 		for (TaskAttribute attribute : listeners.keySet()) {
 			listeners.get(attribute).remove(listener);
 		}

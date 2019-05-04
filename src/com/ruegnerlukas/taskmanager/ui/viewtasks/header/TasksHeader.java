@@ -14,9 +14,12 @@ import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupgroup.PopupGroup;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupmasterpreset.PopupMasterPreset;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupsort.PopupSort;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXEventAdapter;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXGenericChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MenuFunction;
-import javafx.collections.ListChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Side;
 import javafx.scene.Parent;
@@ -49,8 +52,13 @@ public class TasksHeader {
 	private Label badgeSort;
 	private Label badgePresets;
 
-
 	@FXML private Label labelNTasks;
+
+	private FXGenericChangeListener listenerBadgeFilter;
+	private FXGenericChangeListener listenerBadgeGroup;
+	private FXGenericChangeListener listenerBadgeSort;
+	private FXGenericChangeListener listenerBadgePresets;
+	private FXEventAdapter listenerNTasks;
 
 
 
@@ -76,39 +84,45 @@ public class TasksHeader {
 		badgeSort = createBadge(paneHeaderBadges, btnSort);
 		badgePresets = createBadge(paneHeaderBadges, btnPresets);
 
+
 		// badge filter
 		showBadge(badgeFilter, false);
-		Data.projectProperty.get().data.filterData.addListener(((observable, oldValue, newValue) -> {
-			showBadge(badgeFilter, newValue != null || Data.projectProperty.get().data.selectedFilterPreset.get() != null);
-		}));
-		Data.projectProperty.get().data.selectedFilterPreset.addListener(((observable, oldValue, newValue) -> {
-			showBadge(badgeFilter, newValue != null);
-		}));
+		listenerBadgeFilter = new FXGenericChangeListener(Data.projectProperty.get().data.filterData, Data.projectProperty.get().data.selectedFilterPreset) {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				showBadge(badgeFilter, newValue != null || Data.projectProperty.get().data.selectedFilterPreset.get() != null);
+			}
+		};
+
 
 		// badge group
 		showBadge(badgeGroup, false);
-		Data.projectProperty.get().data.groupData.addListener(((observable, oldValue, newValue) -> {
-			showBadge(badgeGroup, newValue != null || Data.projectProperty.get().data.selectedGroupPreset.get() != null);
-		}));
-		Data.projectProperty.get().data.selectedGroupPreset.addListener(((observable, oldValue, newValue) -> {
-			showBadge(badgeGroup, newValue != null);
-		}));
+		listenerBadgeGroup = new FXGenericChangeListener(Data.projectProperty.get().data.groupData, Data.projectProperty.get().data.selectedGroupPreset) {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				showBadge(badgeGroup, newValue != null || Data.projectProperty.get().data.selectedGroupPreset.get() != null);
+			}
+		};
+
 
 		// badge sort
 		showBadge(badgeSort, false);
-		Data.projectProperty.get().data.sortData.addListener(((observable, oldValue, newValue) -> {
-			showBadge(badgeSort, newValue != null || Data.projectProperty.get().data.selectedSortPreset.get() != null);
-		}));
-		Data.projectProperty.get().data.selectedSortPreset.addListener(((observable, oldValue, newValue) -> {
-			showBadge(badgeSort, newValue != null);
-		}));
+		listenerBadgeSort = new FXGenericChangeListener(Data.projectProperty.get().data.sortData, Data.projectProperty.get().data.selectedSortPreset) {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				showBadge(badgeSort, newValue != null || Data.projectProperty.get().data.selectedSortPreset.get() != null);
+			}
+		};
+
 
 		// badge presets
 		showBadge(badgePresets, false);
-		Data.projectProperty.get().data.selectedMasterPreset.addListener(((observable, oldValue, newValue) -> {
-			showBadge(badgePresets, newValue != null);
-		}));
-
+		listenerBadgePresets = new FXGenericChangeListener(Data.projectProperty.get().data.selectedMasterPreset) {
+			@Override
+			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+				showBadge(badgePresets, newValue != null);
+			}
+		};
 
 
 		// header buttons
@@ -117,19 +131,18 @@ public class TasksHeader {
 		btnSort.setOnAction(event -> openPopup(new PopupSort()));
 		btnPresets.setOnAction(event -> openPopup(new PopupMasterPreset()));
 
-		// label n tasks
-		Data.projectProperty.get().data.tasks.addListener((ListChangeListener<Task>) c -> {
-			final int nTotal = Data.projectProperty.get().data.tasks.size();
-			final int nDisplayed = TaskDisplayLogic.countDisplayedTasks(Data.projectProperty.get());
-			labelNTasks.setText(nDisplayed + "/" + nTotal);
-		});
-		Data.projectProperty.get().temporaryData.listenersTaskGroupsChanged.add(event -> {
-			final int nTotal = Data.projectProperty.get().data.tasks.size();
-			final int nDisplayed = TaskDisplayLogic.countDisplayedTasks(Data.projectProperty.get());
-			labelNTasks.setText(nDisplayed + "/" + nTotal);
-		});
 
-		// TODO actions
+		// label n tasks
+		listenerNTasks = new FXEventAdapter() {
+			@Override
+			public void handle(ActionEvent event) {
+				onNumDisplayedTasksChanged();
+			}
+		}.addTo(Data.projectProperty.get().data.tasks);
+		Data.projectProperty.get().temporaryData.listenersTaskGroupsChanged.add(listenerNTasks.getEventHandler());
+
+
+		// TODO actions hamburger
 		ButtonUtils.makeIconButton(btnActions, SVGIcons.HAMBURGER, 0.7f, "white");
 		btnActions.setOnAction(event -> {
 			ContextMenu popup = new ContextMenu();
@@ -198,9 +211,29 @@ public class TasksHeader {
 
 
 
+	public void onNumDisplayedTasksChanged() {
+		final int nTotal = Data.projectProperty.get().data.tasks.size();
+		final int nDisplayed = TaskDisplayLogic.countDisplayedTasks(Data.projectProperty.get());
+		labelNTasks.setText(nDisplayed + "/" + nTotal);
+	}
+
+
+
+
 	public AnchorPane getAnchorPane() {
 		return this.rootHeader;
 	}
 
+
+
+
+	public void dispose() {
+		listenerBadgeFilter.removeFromAll();
+		listenerBadgeGroup.removeFromAll();
+		listenerBadgeSort.removeFromAll();
+		listenerBadgePresets.removeFromAll();
+		listenerNTasks.removeFromAll();
+		Data.projectProperty.get().temporaryData.listenersTaskGroupsChanged.remove(listenerNTasks.getEventHandler());
+	}
 
 }

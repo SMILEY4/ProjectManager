@@ -7,7 +7,8 @@ import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
-import com.ruegnerlukas.taskmanager.ui.viewtasks.content.TasksContent;
+import com.ruegnerlukas.taskmanager.ui.viewmain.MainViewModule;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.content.TaskContent;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.TasksHeader;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -18,7 +19,7 @@ import javafx.scene.layout.AnchorPane;
 
 import java.io.IOException;
 
-public class TaskView extends AnchorPane {
+public class TaskView extends AnchorPane implements MainViewModule {
 
 
 	public static final String TITLE = "Tasks";
@@ -28,6 +29,10 @@ public class TaskView extends AnchorPane {
 	@FXML private SplitPane splitContent;
 	@FXML private AnchorPane paneContent;
 	@FXML private AnchorPane paneSidebar;
+
+	private TasksHeader header;
+	private TaskContent content;
+	private TasksSidebar sidebar;
 
 
 
@@ -49,17 +54,17 @@ public class TaskView extends AnchorPane {
 	private void create() {
 
 		// header
-		TasksHeader header = new TasksHeader();
+		header = new TasksHeader();
 		AnchorUtils.setAnchors(header.getAnchorPane(), 0, 0, 0, 0);
 		paneHeader.getChildren().add(header.getAnchorPane());
 
 		// content
-		TasksContent content = new TasksContent();
+		content = new TaskContent();
 		AnchorUtils.setAnchors(content.getAnchorPane(), 0, 0, 0, 0);
 		paneContent.getChildren().add(content.getAnchorPane());
 
 		// sidebar
-		TasksSidebar sidebar = new TasksSidebar();
+		sidebar = new TasksSidebar();
 		AnchorUtils.setAnchors(sidebar.getAnchorPane(), 0, 0, 0, 0);
 		paneSidebar.getChildren().add(sidebar.getAnchorPane());
 
@@ -68,6 +73,40 @@ public class TaskView extends AnchorPane {
 		ProjectLogic.addTaskToProject(Data.projectProperty.get(), task);
 		sidebar.setTask(task);
 
+
+	}
+
+
+
+
+	@Override
+	public void onModuleClose() {
+		header.dispose();
+		content.dispose();
+		sidebar.dispose();
+	}
+
+
+
+
+	@Override
+	public void onModuleOpen() {
+
+	}
+
+
+
+
+	@Override
+	public void onModuleSelected() {
+
+	}
+
+
+
+
+	@Override
+	public void onModuleDeselected() {
 
 	}
 
