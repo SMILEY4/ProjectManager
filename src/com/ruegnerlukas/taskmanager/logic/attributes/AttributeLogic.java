@@ -2,7 +2,9 @@ package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,7 +65,7 @@ public class AttributeLogic {
 
 
 
-	public static boolean setTaskAttributeValue(TaskAttribute attribute, String key, Object newValue) {
+	public static boolean setTaskAttributeValue(Project project, TaskAttribute attribute, String key, Object newValue, boolean preferNoValueTask) {
 
 		// validate value
 		Map<String, Class<?>> map = AttributeLogicManager.getDataTypeMap(attribute.type.get());
@@ -71,7 +73,20 @@ public class AttributeLogic {
 			return false;
 		}
 
+		// set value
 		attribute.values.put(key, newValue);
+
+		// check tasks for changes
+		List<Task> tasks = project.data.tasks;
+		for (int i = 0, n = tasks.size(); i < n; i++) {
+			Task task = tasks.get(i);
+			Object value = TaskLogic.getValue(task, attribute);
+			if (!AttributeLogicManager.isValidTaskValue(attribute, value)) {
+				Object validValue = AttributeLogicManager.generateValidTaskValue(value, attribute, preferNoValueTask);
+				TaskLogic.setValue(project, task, attribute, validValue);
+			}
+		}
+
 		return true;
 	}
 

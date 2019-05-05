@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes;
 
+import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
@@ -60,7 +61,7 @@ public abstract class AttributeContentNode extends AnchorPane {
 		for (String key : attribute.values.keySet()) {
 			Object value = values.get(key);
 			if (value != null) {
-				AttributeLogic.setTaskAttributeValue(attribute, key, value);
+				AttributeLogic.setTaskAttributeValue(Data.projectProperty.get(), attribute, key, value, true);
 			}
 		}
 	}

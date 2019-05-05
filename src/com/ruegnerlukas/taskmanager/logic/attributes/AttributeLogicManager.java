@@ -49,6 +49,7 @@ public class AttributeLogicManager {
 			}
 		}
 
+
 		// all classes are valid
 		for (AttributeType type : AttributeType.values()) {
 			Class<?> logicClass = LOGIC_CLASSES.get(type);
@@ -57,6 +58,7 @@ public class AttributeLogicManager {
 			}
 			List<Field> fields = new ArrayList<>(Arrays.asList(logicClass.getFields()));
 			List<Method> methods = new ArrayList<>(Arrays.asList(logicClass.getMethods()));
+
 
 			// all classes have final field "DATA_TYPES"
 			boolean hasField_dataTypes = false;
@@ -91,6 +93,7 @@ public class AttributeLogicManager {
 				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final COMPARATOR_ASC:Comparator\"");
 			}
 
+
 			// all classes have final field "COMPARATOR_DESC"
 			boolean hasField_comparatorDesc = false;
 			for (Field field : fields) {
@@ -102,6 +105,7 @@ public class AttributeLogicManager {
 			if (!hasField_comparatorDesc) {
 				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final COMPARATOR_DESC:Comparator\"");
 			}
+
 
 			// all classes have final field "FILTER_DATA"
 			boolean hasField_filterData = false;
@@ -128,6 +132,7 @@ public class AttributeLogicManager {
 				errors.add("ERROR - Logic class of type " + type + " is missing the method \"createAttribute():TaskAttribute\"");
 			}
 
+
 			// all classes have method "createAttribute(String):TaskAttribute"
 			boolean hasMethod_createNamedAttribute = false;
 			for (Method method : methods) {
@@ -141,6 +146,7 @@ public class AttributeLogicManager {
 				errors.add("ERROR - Logic class of type " + type + " is missing the method \"createAttribute(String):TaskAttribute\"");
 			}
 
+
 			// all classes have method "initAttribute(TaskAttribute):void"
 			boolean hasMethod_initAttribute = false;
 			for (Method method : methods) {
@@ -153,6 +159,7 @@ public class AttributeLogicManager {
 			if (!hasMethod_initAttribute) {
 				errors.add("ERROR - Logic class of type " + type + " is missing the method \"initAttribute(TaskAttribute):void\"");
 			}
+
 
 			// all classes have method "matchesFilter(Task,TerminalFilterCriteria):boolean"
 			boolean hasMethod_matchesFilter = false;
@@ -169,18 +176,52 @@ public class AttributeLogicManager {
 				errors.add("ERROR - Logic class of type " + type + " is missing the method \"matchesFilter(Task,TerminalFilterCriteria):boolean\"");
 			}
 
+
+			// all classes have method "isValidTaskValue(TaskAttribute,Object):boolean"
+			boolean hasMethod_isValidTaskValue = false;
+			for (Method method : methods) {
+				if ("isValidTaskValue".equals(method.getName()) && method.getParameterCount() == 2
+						&& method.getParameterTypes()[0] == TaskAttribute.class
+						&& method.getReturnType() == boolean.class) {
+					hasMethod_isValidTaskValue = true;
+					break;
+				}
+			}
+			if (!hasMethod_isValidTaskValue) {
+				errors.add("ERROR - Logic class of type " + type + " is missing the method \"isValidTaskValue(TaskAttribute,Object):boolean\"");
+			}
+
+
+			// all classes have method "generateValidTaskValue(Object,TaskAttribute,boolean):Object"
+			boolean hasMethod_generateValidValue = false;
+			for (Method method : methods) {
+				if ("generateValidTaskValue".equals(method.getName()) && method.getParameterCount() == 3
+						&& method.getParameterTypes()[0] == Object.class
+						&& method.getParameterTypes()[1] == TaskAttribute.class
+						&& method.getParameterTypes()[2] == boolean.class
+						&& method.getReturnType() != Void.class) {
+					hasMethod_generateValidValue = true;
+					break;
+				}
+			}
+			if (!hasMethod_generateValidValue) {
+				errors.add("ERROR - Logic class of type " + type + " is missing the method \"generateValidTaskValue(Object,TaskAttribute,boolean):Object\"");
+			}
+
 		}
 
+
+		// print errors / status
 		if (!errors.isEmpty()) {
 			String[] errorArray = new String[errors.size()];
 			for (int i = 0; i < errors.size(); i++) {
 				errorArray[i] = errors.get(i);
 			}
 			return errorArray;
-
 		} else {
 			return new String[]{"AttributeLogic - OK"};
 		}
+
 
 	}
 
@@ -295,6 +336,30 @@ public class AttributeLogicManager {
 		Method method = getMethod(getLogicClass(criteria.attribute.get().type.get()), "matchesFilter", Task.class, TerminalFilterCriteria.class);
 		try {
 			return (Boolean) method.invoke(null, task, criteria);
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			return false;
+		}
+	}
+
+
+
+
+	public static boolean isValidTaskValue(TaskAttribute attribute, Object value) {
+		Method method = getMethod(getLogicClass(attribute.type.get()), "isValidTaskValue", TaskAttribute.class, Object.class);
+		try {
+			return (Boolean) method.invoke(null, attribute, value);
+		} catch (IllegalAccessException | InvocationTargetException e) {
+			return false;
+		}
+	}
+
+
+
+
+	public static Object generateValidTaskValue(Object oldValue, TaskAttribute attribute, boolean preferNoValue) {
+		Method method = getMethod(getLogicClass(attribute.type.get()), "generateValidTaskValue", Object.class, TaskAttribute.class, boolean.class);
+		try {
+			return method.invoke(null, oldValue, attribute, preferNoValue);
 		} catch (IllegalAccessException | InvocationTargetException e) {
 			return false;
 		}

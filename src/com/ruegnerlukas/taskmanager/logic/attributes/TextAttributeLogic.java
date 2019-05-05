@@ -175,4 +175,30 @@ public class TextAttributeLogic {
 		return false;
 	}
 
+
+
+
+	public static boolean isValidTaskValue(TaskAttribute attribute, Object value) {
+		if (value.getClass() == DATA_TYPES.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE)) {
+			String str = (String) value;
+			return str.length() <= getCharLimit(attribute);
+		} else if (value.getClass() == NoValue.class) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+
+
+	public static Object generateValidTaskValue(Object oldValue, TaskAttribute attribute, boolean preferNoValue) {
+		if (preferNoValue) {
+			return new NoValue();
+		} else {
+			final String value = (oldValue instanceof NoValue) ? "" : (String) oldValue;
+			return value.substring(0, Math.min(value.length(), getCharLimit(attribute)));
+		}
+	}
+
 }

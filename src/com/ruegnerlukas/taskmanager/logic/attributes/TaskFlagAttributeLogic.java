@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.simpleutils.RandomUtils;
+import com.ruegnerlukas.simpleutils.arrays.ArrayUtils;
 import com.ruegnerlukas.taskmanager.data.projectdata.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
@@ -176,6 +177,32 @@ public class TaskFlagAttributeLogic {
 		}
 
 		return false;
+	}
+
+
+
+
+	public static boolean isValidTaskValue(TaskAttribute attribute, Object value) {
+		if (value.getClass() == DATA_TYPES.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE)) {
+			TaskFlag flag = (TaskFlag) value;
+			return ArrayUtils.contains(getFlagList(attribute), flag);
+		} else if (value.getClass() == NoValue.class) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
+
+
+	public static Object generateValidTaskValue(Object oldValue, TaskAttribute attribute, boolean preferNoValue) {
+		TaskFlag[] flags = getFlagList(attribute);
+		if (flags.length == 0) {
+			return getDefaultValue(attribute);
+		} else {
+			return flags[0];
+		}
 	}
 
 }

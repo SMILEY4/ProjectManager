@@ -138,4 +138,18 @@ public class CreatedAttributeLogic {
 	}
 
 
+
+
+	public static boolean isValidTaskValue(TaskAttribute attribute, Object value) {
+		return value.getClass() == DATA_TYPES.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE);
+	}
+
+
+
+
+	public static Object generateValidTaskValue(Object oldValue, TaskAttribute attribute, boolean preferNoValue) {
+		return null;
+	}
+
+
 }

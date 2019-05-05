@@ -207,14 +207,14 @@ public class TaskLogic {
 
 
 	public static boolean setValue(Project project, Task task, TaskAttribute attribute, Object value) {
-
-		// validate type
-		Map<String, Class<?>> map = AttributeLogicManager.getDataTypeMap(attribute.type.get());
-		if ( !(value.getClass() == map.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE) || value instanceof NoValue) ) {
-			return false;
+		if(value == null) {
+			value = new NoValue();
 		}
 
-		// TODO: validate value
+		// validate value
+		if (!AttributeLogicManager.isValidTaskValue(attribute, value)) {
+			return false;
+		}
 
 		// set value
 		task.attributes.put(attribute, value);
