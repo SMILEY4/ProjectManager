@@ -8,4 +8,12 @@ public class NoValue {
 		return 0;
 	}
 
+
+
+
+	@Override
+	public boolean equals(Object o) {
+		return o instanceof NoValue;
+	}
+
 }

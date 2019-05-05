@@ -61,6 +61,7 @@ public class TaskDisplayLogic {
 
 	private static void onTaskAdded(Project project, Task task) {
 		if (project.temporaryData.lastGroupsValid.get()) {
+
 			// check if task passes filter
 			if (project.data.filterData.get() != null) {
 				FilterNode rootFilter = new FilterNode(project.data.filterData.get());
