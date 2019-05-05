@@ -9,7 +9,9 @@ import java.util.List;
 public abstract class FXListChangeListener<E> {
 
 
-	private final ListChangeListener<E> listener = this::onChanged;
+	private final ListChangeListener<E> listener = this::onListChanged;
+
+
 	private final List<ObservableList<? extends E>> lists = new ArrayList<>();
 
 
@@ -60,15 +62,23 @@ public abstract class FXListChangeListener<E> {
 
 
 
-	public abstract void onChanged(ListChangeListener.Change<? extends E> c);
-
-
-
-
-	private ListChangeListener.Change<? extends E> lastProcessedChange = null;
+	private boolean valid = false;
 	private final List<E> listAdded = new ArrayList<>();
 	private final List<E> listRemoved = new ArrayList<>();
 	private final List<ListChangeListener.Change<? extends E>> listPermutations = new ArrayList<>();
+
+
+
+
+	private void onListChanged(ListChangeListener.Change<? extends E> c) {
+		valid = false;
+		onChanged(c);
+	}
+
+
+
+
+	public abstract void onChanged(ListChangeListener.Change<? extends E> c);
 
 
 
@@ -90,13 +100,15 @@ public abstract class FXListChangeListener<E> {
 				listRemoved.addAll(c.getRemoved());
 			}
 		}
+
+		valid = true;
 	}
 
 
 
 
 	public List<E> getAllAdded(ListChangeListener.Change<? extends E> c) {
-		if (lastProcessedChange != c) {
+		if (!valid) {
 			processChange(c);
 		}
 		return listAdded;
@@ -106,7 +118,7 @@ public abstract class FXListChangeListener<E> {
 
 
 	public List<E> getAllRemoved(ListChangeListener.Change<? extends E> c) {
-		if (lastProcessedChange != c) {
+		if (!valid) {
 			processChange(c);
 		}
 		return listRemoved;
@@ -116,7 +128,7 @@ public abstract class FXListChangeListener<E> {
 
 
 	public List<ListChangeListener.Change<? extends E>> getAllPermutations(ListChangeListener.Change<? extends E> c) {
-		if (lastProcessedChange != c) {
+		if (!valid) {
 			processChange(c);
 		}
 		return listPermutations;
