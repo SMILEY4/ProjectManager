@@ -80,7 +80,6 @@ public class TaskContent {
 		listenerValid = new FXChangeListener<Boolean>(Data.projectProperty.get().temporaryData.lastGroupsValid) {
 			@Override
 			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
-				System.out.println("valid " + oldValue + " -> " + newValue);
 				if (!newValue) {
 					rebuildTaskLists();
 				}

@@ -21,24 +21,43 @@ public class ItemDate extends SimpleSidebarItem {
 
 	public ItemDate(TaskAttribute attribute, Task task) {
 		super(attribute, task);
+	}
 
+
+
+
+	@Override
+	protected void setupControls() {
 		picker = new DatePicker();
 		picker.setValue(LocalDate.now());
-		picker.setOnAction(event -> {
-			TaskLogic.setValue(Data.projectProperty.get(), task, attribute, picker.getValue());
-		});
 
 		this.setValueNode(picker);
-		this.setText(attribute.name.getName() + ":");
-		this.setShowButton(!DateAttributeLogic.getUseDefault(attribute));
+		this.setText(getAttribute().name.getName() + ":");
+		this.setShowButton(!DateAttributeLogic.getUseDefault(getAttribute()));
+	}
 
-		final Object objValue = TaskLogic.getValue(task, attribute);
+
+
+
+	@Override
+	protected void setupInitialValue() {
+		final Object objValue = TaskLogic.getValue(getTask(), getAttribute());
 		if (objValue != null && !(objValue instanceof NoValue)) {
 			picker.setValue((LocalDate) objValue);
 			this.setEmpty(false);
 		} else {
 			setEmpty(true);
 		}
+	}
+
+
+
+
+	@Override
+	protected void setupLogic() {
+		picker.setOnAction(event -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), picker.getValue());
+		});
 	}
 
 
@@ -63,9 +82,6 @@ public class ItemDate extends SimpleSidebarItem {
 			picker.setValue(value);
 		}
 	}
-
-
-
 
 
 }

@@ -21,7 +21,15 @@ public class ItemDescription extends SidebarItem {
 
 	public ItemDescription(TaskAttribute attribute, Task task) {
 		super(attribute, task);
+		setupControls();
+		setupInitialValue();
+		setupLogic();
+	}
 
+
+
+
+	private void setupControls() {
 		VBox box = new VBox();
 		AnchorUtils.setAnchors(box, 0, 0, 0, 0);
 		this.getChildren().add(box);
@@ -32,18 +40,29 @@ public class ItemDescription extends SidebarItem {
 		area = new TextArea();
 		area.setMinSize(0, 40);
 		area.setPrefSize(10000, 200);
-		area.textProperty().addListener(((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), task, attribute, area.getText());
-		}));
 		box.getChildren().add(area);
 
-		final Object objValue = TaskLogic.getValue(task, attribute);
+	}
+
+
+
+
+	private void setupInitialValue() {
+		final Object objValue = TaskLogic.getValue(getTask(), getAttribute());
 		if (objValue != null && !(objValue instanceof NoValue)) {
 			area.setText((String) objValue);
 		} else {
 			area.setText("");
 		}
+	}
 
+
+
+
+	private void setupLogic() {
+		area.textProperty().addListener(((observable, oldValue, newValue) -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), area.getText());
+		}));
 	}
 
 

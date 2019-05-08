@@ -12,15 +12,42 @@ import java.time.format.DateTimeFormatter;
 public class ItemLastUpdated extends SimpleSidebarItem {
 
 
+	private Label label;
+
+
+
+
 	public ItemLastUpdated(TaskAttribute attribute, Task task) {
 		super(attribute, task);
+	}
 
-		final LocalDateTime lastUpdated = (LocalDateTime) TaskLogic.getValue(task, attribute);
-		Label label = new Label(lastUpdated.format(DateTimeFormatter.ISO_DATE_TIME));
+
+
+
+	@Override
+	protected void setupControls() {
+		label = new Label();
 		this.setValueNode(label);
 
 		this.setEmpty(false);
 		this.setShowButton(false);
+	}
+
+
+
+
+	@Override
+	protected void setupInitialValue() {
+		final LocalDateTime lastUpdated = (LocalDateTime) TaskLogic.getValue(getTask(), getAttribute());
+		label.setText(lastUpdated.format(DateTimeFormatter.ISO_DATE_TIME));
+	}
+
+
+
+
+	@Override
+	protected void setupLogic() {
+
 	}
 
 

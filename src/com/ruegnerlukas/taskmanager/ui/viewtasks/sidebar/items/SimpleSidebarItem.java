@@ -88,7 +88,21 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 		this.setOnAttribNameChanged(event -> {
 			this.setText(attribute.name.get() + ":");
 		});
+
+
+		setupControls();
+		setupInitialValue();
+		setupLogic();
 	}
+
+
+
+
+	protected abstract void setupControls();
+
+	protected abstract void setupInitialValue();
+
+	protected abstract void setupLogic();
 
 
 

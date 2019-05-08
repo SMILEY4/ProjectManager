@@ -96,10 +96,6 @@ public class MainView extends AnchorPane {
 			Logger.get().error("Error loading MainView-FXML: " + e);
 		}
 
-		Data.projectProperty.addListener((observable, oldValue, newValue) -> {
-			System.out.println("Project changed: " + oldValue + "  " + newValue);
-		});
-
 		create();
 	}
 

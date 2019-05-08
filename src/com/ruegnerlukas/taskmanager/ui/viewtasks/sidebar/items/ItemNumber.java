@@ -21,34 +21,50 @@ public class ItemNumber extends SimpleSidebarItem {
 
 	public ItemNumber(TaskAttribute attribute, Task task) {
 		super(attribute, task);
+	}
 
+
+
+
+	@Override
+	protected void setupControls() {
 		spinner = new Spinner<>();
 		spinner.setEditable(true);
 		SpinnerUtils.initSpinner(
 				spinner,
-				MathUtils.setDecPlaces(0, NumberAttributeLogic.getDecPlaces(attribute)),
-				NumberAttributeLogic.getMinValue(attribute).doubleValue(),
-				NumberAttributeLogic.getMaxValue(attribute).doubleValue(),
-				1.0 / Math.pow(10, NumberAttributeLogic.getDecPlaces(attribute)),
-				NumberAttributeLogic.getDecPlaces(attribute),
+				MathUtils.setDecPlaces(0, NumberAttributeLogic.getDecPlaces(getAttribute())),
+				NumberAttributeLogic.getMinValue(getAttribute()).doubleValue(),
+				NumberAttributeLogic.getMaxValue(getAttribute()).doubleValue(),
+				1.0 / Math.pow(10, NumberAttributeLogic.getDecPlaces(getAttribute())),
+				NumberAttributeLogic.getDecPlaces(getAttribute()),
 				true, null);
 
-		spinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), task, attribute, newValue);
-		}));
-
 		this.setValueNode(spinner);
-		this.setShowButton(!NumberAttributeLogic.getUseDefault(attribute));
+		this.setShowButton(!NumberAttributeLogic.getUseDefault(getAttribute()));
+	}
 
-		final Object objValue = TaskLogic.getValue(task, attribute);
+
+
+
+	@Override
+	protected void setupInitialValue() {
+		final Object objValue = TaskLogic.getValue(getTask(), getAttribute());
 		if (objValue != null && !(objValue instanceof NoValue)) {
 			spinner.getValueFactory().setValue((Double) objValue);
 			this.setEmpty(false);
 		} else {
 			setEmpty(true);
 		}
+	}
 
 
+
+
+	@Override
+	protected void setupLogic() {
+		spinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), newValue);
+		}));
 	}
 
 

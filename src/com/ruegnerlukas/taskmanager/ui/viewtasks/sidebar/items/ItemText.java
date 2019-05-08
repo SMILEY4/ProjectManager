@@ -22,29 +22,47 @@ public class ItemText extends SidebarItem {
 
 	public ItemText(TaskAttribute attribute, Task task) {
 		super(attribute, task);
+		setupControls();
+		setupInitialValue();
+		setupLogic();
+	}
 
+
+
+
+	private void setupControls() {
 		VBox box = new VBox();
 		AnchorUtils.setAnchors(box, 0, 0, 0, 0);
 		this.getChildren().add(box);
 
-		Label label = new Label(attribute.name.get() + ":");
+		Label label = new Label(getAttribute().name.get() + ":");
 		box.getChildren().add(label);
 
 		area = new MultiTextField();
-		area.setMultiline(TextAttributeLogic.getMultiline(attribute));
+		area.setMultiline(TextAttributeLogic.getMultiline(getAttribute()));
 		setValueHeight();
-		area.textProperty().addListener(((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), task, attribute, area.getText());
-		}));
 		box.getChildren().add(area);
+	}
 
-		final Object objValue = TaskLogic.getValue(task, attribute);
+
+
+
+	private void setupInitialValue() {
+		final Object objValue = TaskLogic.getValue(getTask(), getAttribute());
 		if (objValue != null && !(objValue instanceof NoValue)) {
 			area.setText((String) objValue);
 		} else {
 			area.setText("");
 		}
+	}
 
+
+
+
+	private void setupLogic() {
+		area.textProperty().addListener(((observable, oldValue, newValue) -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), area.getText());
+		}));
 	}
 
 

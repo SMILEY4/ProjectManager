@@ -9,15 +9,42 @@ import javafx.scene.control.Label;
 public class ItemID extends SimpleSidebarItem {
 
 
+	private Label label;
+
+
+
+
 	public ItemID(TaskAttribute attribute, Task task) {
 		super(attribute, task);
+	}
 
-		final int id = (Integer) TaskLogic.getValue(task, attribute);
-		Label label = new Label(Integer.toString(id));
+
+
+
+	@Override
+	protected void setupControls() {
+		label = new Label();
 		this.setValueNode(label);
 
 		this.setEmpty(false);
 		this.setShowButton(false);
+	}
+
+
+
+
+	@Override
+	protected void setupInitialValue() {
+		final int id = (Integer) TaskLogic.getValue(getTask(), getAttribute());
+		label.setText(Integer.toString(id));
+	}
+
+
+
+
+	@Override
+	protected void setupLogic() {
+
 	}
 
 

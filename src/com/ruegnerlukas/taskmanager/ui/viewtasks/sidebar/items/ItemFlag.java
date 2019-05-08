@@ -13,23 +13,47 @@ import javafx.scene.control.ComboBox;
 public class ItemFlag extends SimpleSidebarItem {
 
 
+	private ComboBox<TaskFlag> choiceFlag;
+
+
+
+
 	public ItemFlag(TaskAttribute attribute, Task task) {
 		super(attribute, task);
+	}
 
-		final TaskFlag flag = (TaskFlag) TaskLogic.getValue(task, attribute);
 
-		ComboBox<TaskFlag> choiceFlag = new ComboBox<>();
+
+
+	@Override
+	protected void setupControls() {
+		choiceFlag = new ComboBox<>();
 		choiceFlag.setButtonCell(ComboboxUtils.createListCellFlag());
 		choiceFlag.setCellFactory(param -> ComboboxUtils.createListCellFlag());
-		choiceFlag.getItems().addAll(TaskFlagAttributeLogic.getFlagList(attribute));
-		choiceFlag.getSelectionModel().select(flag);
-		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), task, attribute, newValue);
-		});
+		choiceFlag.getItems().addAll(TaskFlagAttributeLogic.getFlagList(getAttribute()));
 		this.setValueNode(choiceFlag);
 
 		this.setEmpty(false);
 		this.setShowButton(false);
+	}
+
+
+
+
+	@Override
+	protected void setupInitialValue() {
+		final TaskFlag flag = (TaskFlag) TaskLogic.getValue(getTask(), getAttribute());
+		choiceFlag.getSelectionModel().select(flag);
+	}
+
+
+
+
+	@Override
+	protected void setupLogic() {
+		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), newValue);
+		});
 	}
 
 

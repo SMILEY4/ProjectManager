@@ -20,24 +20,42 @@ public class ItemChoice extends SimpleSidebarItem {
 
 	public ItemChoice(TaskAttribute attribute, Task task) {
 		super(attribute, task);
+	}
 
+
+
+
+	@Override
+	protected void setupControls() {
 		choice = new ComboBox<>();
-		choice.getItems().addAll(ChoiceAttributeLogic.getValueList(attribute));
-		choice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), task, attribute, newValue);
-		});
+		choice.getItems().addAll(ChoiceAttributeLogic.getValueList(getAttribute()));
 
 		this.setValueNode(choice);
-		this.setShowButton(!NumberAttributeLogic.getUseDefault(attribute));
+		this.setShowButton(!NumberAttributeLogic.getUseDefault(getAttribute()));
+	}
 
-		final Object objValue = TaskLogic.getValue(task, attribute);
+
+
+
+	@Override
+	protected void setupInitialValue() {
+		final Object objValue = TaskLogic.getValue(getTask(), getAttribute());
 		if (objValue != null && !(objValue instanceof NoValue)) {
 			choice.getSelectionModel().select((String) objValue);
 			this.setEmpty(false);
 		} else {
 			setEmpty(true);
 		}
+	}
 
+
+
+
+	@Override
+	protected void setupLogic() {
+		choice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), newValue);
+		});
 	}
 
 

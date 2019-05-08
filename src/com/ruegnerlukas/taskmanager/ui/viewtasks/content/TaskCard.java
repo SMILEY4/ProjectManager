@@ -14,10 +14,8 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 
 import java.io.IOException;
 
@@ -81,14 +79,14 @@ public class TaskCard extends AnchorPane {
 
 
 	public void select() {
-		this.setStyle("-fx-border-color: #5a92ff; -fx-border-width: 3;");
+		this.borderProperty().set( new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
 	}
 
 
 
 
 	public void deselect() {
-		this.setStyle("-fx-border-color: transparent; -fx-border-width: 0;");
+		this.borderProperty().set( new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0))));
 	}
 
 

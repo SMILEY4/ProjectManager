@@ -14,13 +14,35 @@ public class ItemCreated extends SimpleSidebarItem {
 
 	public ItemCreated(TaskAttribute attribute, Task task) {
 		super(attribute, task);
+	}
 
-		final LocalDateTime created = (LocalDateTime) TaskLogic.getValue(task, attribute);
+
+
+
+	@Override
+	protected void setupControls() {
+		final LocalDateTime created = (LocalDateTime) TaskLogic.getValue(getTask(), getAttribute());
 		Label label = new Label(created.format(DateTimeFormatter.ISO_DATE_TIME));
 		this.setValueNode(label);
 
 		this.setEmpty(false);
 		this.setShowButton(false);
+	}
+
+
+
+
+	@Override
+	protected void setupInitialValue() {
+
+	}
+
+
+
+
+	@Override
+	protected void setupLogic() {
+
 	}
 
 
