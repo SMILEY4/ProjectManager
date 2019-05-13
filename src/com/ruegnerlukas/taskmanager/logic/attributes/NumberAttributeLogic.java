@@ -1,13 +1,14 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NumberValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;
@@ -34,8 +35,8 @@ public class NumberAttributeLogic {
 		mapTypes.put(NUMBER_MIN_VALUE, Double.class);
 		mapTypes.put(NUMBER_MAX_VALUE, Double.class);
 		mapTypes.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
-		mapTypes.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, Double.class);
-		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, Double.class);
+		mapTypes.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, NumberValue.class);
+		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, NumberValue.class);
 		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
 
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
@@ -76,7 +77,7 @@ public class NumberAttributeLogic {
 		setMinValue(attribute, -10);
 		setMaxValue(attribute, +10);
 		setUseDefault(attribute, false);
-		setDefaultValue(attribute, 0);
+		setDefaultValue(attribute, new NumberValue(0));
 	}
 
 
@@ -90,7 +91,7 @@ public class NumberAttributeLogic {
 
 
 	public static int getDecPlaces(TaskAttribute attribute) {
-		return attribute.getValue(NUMBER_DEC_PLACES, Integer.class);
+		return attribute.getValue(NUMBER_DEC_PLACES);
 	}
 
 
@@ -111,7 +112,7 @@ public class NumberAttributeLogic {
 
 
 	public static Number getMinValue(TaskAttribute attribute) {
-		return attribute.getValue(NUMBER_MIN_VALUE, Number.class);
+		return attribute.getValue(NUMBER_MIN_VALUE);
 	}
 
 
@@ -132,7 +133,7 @@ public class NumberAttributeLogic {
 
 
 	public static Number getMaxValue(TaskAttribute attribute) {
-		return attribute.getValue(NUMBER_MAX_VALUE, Number.class);
+		return attribute.getValue(NUMBER_MAX_VALUE);
 	}
 
 
@@ -146,124 +147,182 @@ public class NumberAttributeLogic {
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
-	public static void setDefaultValue(TaskAttribute attribute, int defaultValue) {
-		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, (double) defaultValue);
-	}
-
-
-
-
-	public static void setDefaultValue(TaskAttribute attribute, double defaultValue) {
+	public static void setDefaultValue(TaskAttribute attribute, NumberValue defaultValue) {
 		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
 	}
 
 
 
 
-	public static Number getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, Number.class);
+	public static NumberValue getDefaultValue(TaskAttribute attribute) {
+		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE);
 	}
 
 
 
 
 	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
-		TaskAttribute attribute = criteria.attribute.get();
-		FilterOperation operation = criteria.operation.get();
-		List<Object> values = criteria.values;
-		Object taskValue = TaskLogic.getValue(task, attribute);
 
-		if (operation == FilterOperation.HAS_VALUE) {
-			boolean filterValue = (Boolean) values.get(0);
-			if (filterValue) {
-				return taskValue != null && !(taskValue instanceof NoValue);
-			} else {
-				return taskValue == null || (taskValue instanceof NoValue);
+		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
+		List<Object> filterValues = criteria.values;
+
+		switch (criteria.operation.get()) {
+
+			case HAS_VALUE: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof Boolean) {
+					boolean valueFilter = (Boolean) filterValues.get(0);
+					return valueFilter == (valueTask.getAttType() == null);
+				} else {
+					return false;
+				}
+			}
+
+			case EQUALS: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof Double) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((NumberValue) valueTask).getValue().compareTo((Double) filterValues.get(0)) == 0;
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case NOT_EQUALS: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof Double) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((NumberValue) valueTask).getValue().compareTo((Double) filterValues.get(0)) != 0;
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case GREATER_THAN: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof Double) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((NumberValue) valueTask).getValue().compareTo((Double) filterValues.get(0)) > 0;
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case GREATER_EQUALS: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof Double) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((NumberValue) valueTask).getValue().compareTo((Double) filterValues.get(0)) >= 0;
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case LESS_THAN: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof Double) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((NumberValue) valueTask).getValue().compareTo((Double) filterValues.get(0)) < 0;
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case LESS_EQUALS: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof Double) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((NumberValue) valueTask).getValue().compareTo((Double) filterValues.get(0)) <= 0;
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case IN_RANGE: {
+				if (filterValues.size() == 2 && filterValues.get(0) instanceof Double && filterValues.get(1) instanceof Double) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						double min = (Double) filterValues.get(0);
+						double max = (Double) filterValues.get(1);
+						double val = ((NumberValue) valueTask).getValue();
+						return min <= val && max >= val;
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case NOT_IN_RANGE: {
+				if (filterValues.size() == 2 && filterValues.get(0) instanceof Double && filterValues.get(1) instanceof Double) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						double min = (Double) filterValues.get(0);
+						double max = (Double) filterValues.get(1);
+						double val = ((NumberValue) valueTask).getValue();
+						return !(min <= val && max >= val);
+					}
+				} else {
+					return false;
+				}
+			}
+
+			default: {
+				return false;
 			}
 		}
 
-		if (operation == FilterOperation.EQUALS) {
-			double filterValue = (double) values.get(0);
-			return MathUtils.isNearlyEqual(filterValue, (double) taskValue, getDecPlaces(attribute));
-		}
-
-		if (operation == FilterOperation.NOT_EQUALS) {
-			double filterValue = (double) values.get(0);
-			return !MathUtils.isNearlyEqual(filterValue, (double) taskValue, getDecPlaces(attribute));
-		}
-
-		if (operation == FilterOperation.GREATER_THAN) {
-			double filterValue = (double) values.get(0);
-			return filterValue < (double) taskValue;
-		}
-
-		if (operation == FilterOperation.GREATER_EQUALS) {
-			double filterValue = (double) values.get(0);
-			return filterValue <= (double) taskValue;
-		}
-
-		if (operation == FilterOperation.LESS_THAN) {
-			double filterValue = (double) values.get(0);
-			return filterValue > (double) taskValue;
-		}
-
-		if (operation == FilterOperation.LESS_EQUALS) {
-			double filterValue = (double) values.get(0);
-			return filterValue >= (double) taskValue;
-		}
-
-		if (operation == FilterOperation.IN_RANGE) {
-			double filterValueMin = (double) values.get(0);
-			double filterValueMax = (double) values.get(1);
-			return filterValueMin <= (double) taskValue && (double) taskValue <= filterValueMax;
-		}
-
-		if (operation == FilterOperation.NOT_IN_RANGE) {
-			double filterValueMin = (double) values.get(0);
-			double filterValueMax = (double) values.get(1);
-			return !(filterValueMin <= (double) taskValue && (double) taskValue <= filterValueMax);
-		}
-
-		return false;
 	}
 
 
 
 
-	public static boolean isValidTaskValue(TaskAttribute attribute, Object value) {
-		if (value.getClass() == DATA_TYPES.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE)) {
-			final double number = (Double) value;
+	public static boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+		if (value.getAttType() == AttributeType.NUMBER) {
+			final double number = ((NumberValue) value).getValue();
 			final double min = getMinValue(attribute).doubleValue();
 			final double max = getMaxValue(attribute).doubleValue();
 			return min <= number && number <= max;
 		} else {
-			return value.getClass() == NoValue.class;
+			return value.getAttType() == null;
 		}
 	}
 
 
 
 
-	public static Object generateValidTaskValue(Object oldValue, TaskAttribute attribute, boolean preferNoValue) {
-		if(preferNoValue) {
+	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+		if (preferNoValue) {
 			return new NoValue();
 		} else {
-			if(getUseDefault(attribute)) {
-				return getDefaultValue(attribute).doubleValue();
+			if (getUseDefault(attribute)) {
+				return getDefaultValue(attribute);
 			} else {
-				final double number = (oldValue instanceof NoValue) ? 0.0 : (Double) oldValue;
+				final double number = (oldValue.getAttType() != AttributeType.NUMBER) ? 0.0 : ((NumberValue) oldValue).getValue();
 				final double min = getMinValue(attribute).doubleValue();
 				final double max = getMaxValue(attribute).doubleValue();
-				if(number < min) {
-					return min;
+				if (number < min) {
+					return new NumberValue(min);
 				} else {
-					return max;
+					return new NumberValue(max);
 				}
 			}
 		}

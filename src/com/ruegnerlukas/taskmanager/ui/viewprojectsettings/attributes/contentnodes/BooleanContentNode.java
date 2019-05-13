@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.BoolValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.BooleanAttributeLogic;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
@@ -109,7 +110,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(boolean defaultValue) {
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new BoolValue(defaultValue));
 		checkChanges();
 	}
 
@@ -153,7 +154,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalDefaultValue() {
-		return (boolean) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE);
+		return ((BoolValue) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE)).getValue();
 	}
 
 

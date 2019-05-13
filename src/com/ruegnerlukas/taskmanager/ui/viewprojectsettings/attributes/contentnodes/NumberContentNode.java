@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentno
 
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NumberValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
@@ -299,8 +300,8 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 
-	private void onDefaultValue(Number newValue) {
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, newValue);
+	private void onDefaultValue(Double newValue) {
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new NumberValue(newValue));
 		checkChanges();
 	}
 
@@ -396,7 +397,7 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private Number getLocalDefaultValue() {
-		return (Number) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE);
+		return ((NumberValue) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE)).getValue();
 	}
 
 

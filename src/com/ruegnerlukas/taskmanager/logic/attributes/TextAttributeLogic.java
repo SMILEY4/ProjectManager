@@ -2,11 +2,13 @@ package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TextValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;
@@ -31,8 +33,8 @@ public class TextAttributeLogic {
 		mapTypes.put(TEXT_CHAR_LIMIT, Integer.class);
 		mapTypes.put(TEXT_MULTILINE, Boolean.class);
 		mapTypes.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
-		mapTypes.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
-		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, String.class);
+		mapTypes.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, TextValue.class);
+		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, TextValue.class);
 		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
 
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
@@ -69,7 +71,7 @@ public class TextAttributeLogic {
 		setCharLimit(attribute, 100);
 		setMultiline(attribute, false);
 		setUseDefault(attribute, false);
-		setDefaultValue(attribute, "");
+		setDefaultValue(attribute, new TextValue(""));
 	}
 
 
@@ -83,7 +85,7 @@ public class TextAttributeLogic {
 
 
 	public static int getCharLimit(TaskAttribute attribute) {
-		return attribute.getValue(TEXT_CHAR_LIMIT, Integer.class);
+		return attribute.getValue(TEXT_CHAR_LIMIT);
 	}
 
 
@@ -97,7 +99,7 @@ public class TextAttributeLogic {
 
 
 	public static boolean getMultiline(TaskAttribute attribute) {
-		return attribute.getValue(TEXT_MULTILINE, Boolean.class);
+		return attribute.getValue(TEXT_MULTILINE);
 	}
 
 
@@ -111,93 +113,127 @@ public class TextAttributeLogic {
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
-	public static void setDefaultValue(TaskAttribute attribute, String defaultValue) {
+	public static void setDefaultValue(TaskAttribute attribute, TextValue defaultValue) {
 		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
 	}
 
 
 
 
-	public static String getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
+	public static TextValue getDefaultValue(TaskAttribute attribute) {
+		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE);
 	}
 
 
 
 
 	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
-		TaskAttribute attribute = criteria.attribute.get();
-		FilterOperation operation = criteria.operation.get();
-		List<Object> values = criteria.values;
-		Object taskValue = TaskLogic.getValue(task, attribute);
+		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
+		List<Object> filterValues = criteria.values;
 
-		if (operation == FilterOperation.HAS_VALUE) {
-			boolean filterValue = (Boolean) values.get(0);
-			if (filterValue) {
-				return taskValue != null && !(taskValue instanceof NoValue);
-			} else {
-				return taskValue == null || (taskValue instanceof NoValue);
+		switch (criteria.operation.get()) {
+
+			case HAS_VALUE: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof Boolean) {
+					boolean valueFilter = (Boolean) filterValues.get(0);
+					return valueFilter == (valueTask.getAttType() == null);
+				} else {
+					return false;
+				}
+			}
+
+			case EQUALS: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof String) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((TextValue) valueTask).getValue().equals((String) filterValues.get(0));
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case EQUALS_IGNORE_CASE: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof String) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((TextValue) valueTask).getValue().equalsIgnoreCase((String) filterValues.get(0));
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case NOT_EQUALS: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof String) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return !((TextValue) valueTask).getValue().equals((String) filterValues.get(0));
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case CONTAINS: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof String) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((TextValue) valueTask).getValue().contains((String) filterValues.get(0));
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case CONTAINS_NOT: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof String) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return !((TextValue) valueTask).getValue().contains((String) filterValues.get(0));
+					}
+				} else {
+					return false;
+				}
+			}
+
+			default: {
+				return false;
 			}
 		}
-
-		if (operation == FilterOperation.EQUALS) {
-			String filterValue = (String) values.get(0);
-			return filterValue.equals((String) taskValue);
-		}
-
-		if (operation == FilterOperation.EQUALS_IGNORE_CASE) {
-			String filterValue = (String) values.get(0);
-			return filterValue.equalsIgnoreCase((String) taskValue);
-		}
-
-		if (operation == FilterOperation.NOT_EQUALS) {
-			String filterValue = (String) values.get(0);
-			return !filterValue.equals((String) taskValue);
-		}
-
-		if (operation == FilterOperation.CONTAINS) {
-			String filterValue = (String) values.get(0);
-			return ((String) taskValue).contains(filterValue);
-		}
-
-		if (operation == FilterOperation.CONTAINS_NOT) {
-			String filterValue = (String) values.get(0);
-			return !((String) taskValue).contains(filterValue);
-		}
-
-
-		return false;
 	}
 
 
 
 
-	public static boolean isValidTaskValue(TaskAttribute attribute, Object value) {
-		if (value.getClass() == DATA_TYPES.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE)) {
-			String str = (String) value;
-			return str.length() <= getCharLimit(attribute);
-		} else if (value.getClass() == NoValue.class) {
-			return true;
+	public static boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+		if (value.getAttType() == AttributeType.TEXT) {
+			return ((TextValue) value).getValue().length() <= getCharLimit(attribute);
 		} else {
-			return false;
+			return value.getAttType() == null;
 		}
 	}
 
 
 
 
-	public static Object generateValidTaskValue(Object oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
 		if (preferNoValue) {
 			return new NoValue();
 		} else {
-			final String value = (oldValue instanceof NoValue) ? "" : (String) oldValue;
-			return value.substring(0, Math.min(value.length(), getCharLimit(attribute)));
+			final String value = (oldValue.getAttType() == null) ? "" : ((TextValue) oldValue).getValue();
+			return new TextValue(value.substring(0, Math.min(value.length(), getCharLimit(attribute))));
 		}
 	}
 

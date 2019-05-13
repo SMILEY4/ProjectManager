@@ -61,7 +61,7 @@
 //		content.getChildren().clear();
 //
 //		// refresh queue
-//		List<Task> tasksProject = Logic.tasks.getTasks().getValue();
+//		List<Task> tasksProject = Logic.tasks.getTasks().getValueOrDefault();
 //		List<Task> invalidTasks = new ArrayList<>();
 //		for (Task task : queue) {
 //			if (!tasksProject.contains(task)) {
@@ -76,7 +76,7 @@
 //
 //			// label
 //			Label label = new Label();
-//			label.setText("T-" + ((NumberValue) Logic.tasks.getAttributeValue(task, IDAttributeData.NAME).getValue()).getInt());
+//			label.setText("T-" + ((NumberValue) Logic.tasks.getAttributeValue(task, IDAttributeData.NAME).getValueOrDefault()).getInt());
 //			label.setMinHeight(32);
 //			label.setMaxHeight(32);
 //			if (i == queue.size() - 1) {

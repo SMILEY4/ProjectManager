@@ -2,7 +2,6 @@ package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.Project;
-import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskGroup;
@@ -10,6 +9,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -82,9 +82,9 @@ public class TaskDisplayLogic {
 					Task taskRef = group.tasks.get(0);
 
 					for (TaskAttribute attribute : group.attributes) {
-						Object valueRef = TaskLogic.getValue(taskRef, attribute);
-						Object valueTask = TaskLogic.getValue(task, attribute);
-						if (!valueRef.equals(valueTask)) {
+						TaskValue<?> valueRef = TaskLogic.getValueOrDefault(taskRef, attribute);
+						TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, attribute);
+						if (valueRef.compare(valueTask) != 0) {
 							continue outer;
 						}
 					}
@@ -227,10 +227,10 @@ public class TaskDisplayLogic {
 	private static List<TaskGroup> splitTaskGroup(TaskGroup group, TaskAttribute attribute) {
 
 		// sort projectdata into buckets
-		Map<Object, List<Task>> buckets = new HashMap<>();
+		Map<TaskValue, List<Task>> buckets = new HashMap<>();
 		for (int i = 0, n = group.tasks.size(); i < n; i++) {
 			Task task = group.tasks.get(i);
-			Object value = TaskLogic.getValue(task, attribute);
+			TaskValue value = TaskLogic.getValueOrDefault(task, attribute);
 
 			if (!buckets.containsKey(value)) {
 				buckets.put(value, new ArrayList<>());
@@ -240,7 +240,7 @@ public class TaskDisplayLogic {
 
 		// convert buckets to groups
 		List<TaskGroup> groups = new ArrayList<>();
-		for (Object value : buckets.keySet()) {
+		for (TaskValue value : buckets.keySet()) {
 
 			List<Task> tasks = buckets.get(value);
 			if (tasks != null && !tasks.isEmpty()) {
@@ -270,14 +270,14 @@ public class TaskDisplayLogic {
 
 			if (comparatorType != null) {
 				Comparator<Task> comparatorTask = (tx, ty) -> {
-					final Object vx = TaskLogic.getValue(tx, sortElement.attribute.get());
-					final Object vy = TaskLogic.getValue(ty, sortElement.attribute.get());
+					final TaskValue<?> vx = TaskLogic.getValueOrDefault(tx, sortElement.attribute.get());
+					final TaskValue<?> vy = TaskLogic.getValueOrDefault(ty, sortElement.attribute.get());
 
-					if (vx instanceof NoValue || vx == null) {
-						return (vy instanceof NoValue || vy == null) ? 0 : -1;
+					if (vx.getAttType() == null) {
+						return (vy.getAttType() == null) ? 0 : -1;
 					}
-					if (vy instanceof NoValue || vy == null) {
-						return (vx instanceof NoValue || vx == null) ? 0 : +1;
+					if (vy.getAttType() == null) {
+						return (vx.getAttType() == null) ? 0 : +1;
 					}
 					return comparatorType.compare(vx, vy);
 				};

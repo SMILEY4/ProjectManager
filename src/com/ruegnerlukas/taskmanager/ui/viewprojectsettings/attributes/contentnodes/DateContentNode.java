@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.DateValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.DateAttributeLogic;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
@@ -105,7 +106,7 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(LocalDate defaultValue) {
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new DateValue(defaultValue));
 		checkChanges();
 	}
 
@@ -149,7 +150,7 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private LocalDate getLocalDefaultValue() {
-		return (LocalDate) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE);
+		return ((DateValue) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE)).getValue();
 	}
 
 

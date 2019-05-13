@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.data.projectdata;
 
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
@@ -17,13 +18,13 @@ public class Task {
 
 	private Map<TaskAttribute, List<EventHandler<ActionEvent>>> listeners = new HashMap<>();
 
-	public ObservableMap<TaskAttribute, Object> attributes = FXCollections.observableHashMap();
+	public ObservableMap<TaskAttribute, TaskValue<?>> attributes = FXCollections.observableHashMap();
 
 
 
 
 	public Task() {
-		attributes.addListener((MapChangeListener<TaskAttribute, Object>) c -> {
+		attributes.addListener((MapChangeListener<TaskAttribute, TaskValue<?>>) c -> {
 			List<EventHandler<ActionEvent>> list = listeners.get(c.getKey());
 			if(list != null) {
 				for (EventHandler<ActionEvent> handler : list) {
@@ -36,8 +37,8 @@ public class Task {
 
 
 
-	public <T> T getValue(TaskAttribute attribute, Class<T> type) {
-		return (T) attributes.get(attribute);
+	public TaskValue<?> getValue(TaskAttribute attribute) {
+		return attributes.get(attribute);
 	}
 
 

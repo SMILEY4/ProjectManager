@@ -9,6 +9,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.IDValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 public class ProjectLogic {
@@ -76,6 +77,7 @@ public class ProjectLogic {
 
 
 	public static boolean addAttributeToProject(Project project, TaskAttribute attribute) {
+
 		// check name
 		for (TaskAttribute att : project.data.attributes) {
 			if (att.name.get().equals(attribute.name.get())) {
@@ -100,7 +102,7 @@ public class ProjectLogic {
 
 	public static boolean removeAttributeFromProject(Project project, TaskAttribute attribute) {
 
-		if(!project.data.attributes.remove(attribute)) {
+		if (!project.data.attributes.remove(attribute)) {
 			return false;
 		}
 
@@ -141,10 +143,10 @@ public class ProjectLogic {
 
 	public static boolean addTaskToProject(Project project, Task task) {
 		TaskAttribute attribute = AttributeLogic.findAttribute(project, AttributeType.ID);
-		if (TaskLogic.getTrueValue(task, attribute, Integer.class) == null) {
+		if (TaskLogic.getTaskValue(task, attribute).getAttType() == null) {
 			final int id = project.settings.idCounter.get();
 			project.settings.idCounter.set(id + 1);
-			TaskLogic.setValue(project, task, attribute, id);
+			TaskLogic.setValue(project, task, attribute, new IDValue(id));
 		}
 		project.data.tasks.add(task);
 		return true;

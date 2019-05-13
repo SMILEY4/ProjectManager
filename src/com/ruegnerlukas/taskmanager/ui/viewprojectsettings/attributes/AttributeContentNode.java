@@ -61,7 +61,7 @@ public abstract class AttributeContentNode extends AnchorPane {
 		for (String key : attribute.values.keySet()) {
 			Object value = values.get(key);
 			if (value != null) {
-				AttributeLogic.setTaskAttributeValue(Data.projectProperty.get(), attribute, key, value, true);
+				AttributeLogic.setAttributeValue(Data.projectProperty.get(), attribute, key, value, true);
 			}
 		}
 	}
@@ -71,8 +71,7 @@ public abstract class AttributeContentNode extends AnchorPane {
 
 	protected void discardValues(Map<String, Object> map) {
 		for (String key : attribute.values.keySet()) {
-			Object value = attribute.getValue(key, Object.class);
-			map.put(key, value);
+			map.put(key, attribute.getValue(key));
 		}
 	}
 
@@ -81,7 +80,7 @@ public abstract class AttributeContentNode extends AnchorPane {
 
 	protected boolean compareValues(Map<String, Object> values) {
 		for (String key : attribute.values.keySet()) {
-			Object valueAttribute = attribute.getValue(key, Object.class);
+			Object valueAttribute = attribute.getValue(key);
 			Object valueMap = values.get(key);
 			if (valueAttribute instanceof Object[]) {
 				Object[] arrayAttribute = (Object[]) valueAttribute;

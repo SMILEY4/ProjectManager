@@ -3,11 +3,13 @@ package com.ruegnerlukas.taskmanager.logic.attributes;
 import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.simpleutils.arrays.ArrayUtils;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.ChoiceValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;
@@ -64,7 +66,7 @@ public class ChoiceAttributeLogic {
 		attribute.values.clear();
 		setValueList(attribute, new String[]{});
 		setUseDefault(attribute, false);
-		setDefaultValue(attribute, "");
+		setDefaultValue(attribute, new ChoiceValue(""));
 	}
 
 
@@ -117,7 +119,7 @@ public class ChoiceAttributeLogic {
 
 
 	public static String[] getValueList(TaskAttribute attribute) {
-		return attribute.getValue(CHOICE_VALUE_LIST, String[].class);
+		return attribute.getValue(CHOICE_VALUE_LIST);
 	}
 
 
@@ -144,71 +146,95 @@ public class ChoiceAttributeLogic {
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
-	public static void setDefaultValue(TaskAttribute attribute, String defaultValue) {
+	public static void setDefaultValue(TaskAttribute attribute, ChoiceValue defaultValue) {
 		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
 	}
 
 
 
 
-	public static String getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
+	public static ChoiceValue getDefaultValue(TaskAttribute attribute) {
+		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE);
 	}
 
 
 
 
 	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
-		TaskAttribute attribute = criteria.attribute.get();
-		FilterOperation operation = criteria.operation.get();
-		List<Object> values = criteria.values;
-		Object taskValue = TaskLogic.getValue(task, attribute);
 
-		if (operation == FilterOperation.HAS_VALUE) {
-			boolean filterValue = (Boolean) values.get(0);
-			if (filterValue) {
-				return taskValue != null && !(taskValue instanceof NoValue);
-			} else {
-				return taskValue == null || (taskValue instanceof NoValue);
+		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
+		List<Object> filterValues = criteria.values;
+
+		switch (criteria.operation.get()) {
+
+			case HAS_VALUE: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof Boolean) {
+					boolean valueFilter = (Boolean) filterValues.get(0);
+					return valueFilter == (valueTask.getAttType() == null);
+				} else {
+					return false;
+				}
+			}
+
+			case EQUALS: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof String) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((String) filterValues.get(0)).equalsIgnoreCase(((ChoiceValue) valueTask).getValue());
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case NOT_EQUALS: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof String) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return !((String) filterValues.get(0)).equalsIgnoreCase(((ChoiceValue) valueTask).getValue());
+					}
+				} else {
+					return false;
+				}
+			}
+
+			default: {
+				return false;
 			}
 		}
 
-		if (operation == FilterOperation.EQUALS) {
-			String filterValue = (String) values.get(0);
-			return filterValue.equals(taskValue);
-		}
-
-		if (operation == FilterOperation.NOT_EQUALS) {
-			String filterValue = (String) values.get(0);
-			return !filterValue.equals(taskValue);
-		}
-
-		return false;
 	}
 
 
 
 
-	public static boolean isValidTaskValue(TaskAttribute attribute, Object value) {
-		if (value.getClass() == DATA_TYPES.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE)) {
-			String str = (String) value;
-			return ArrayUtils.contains(getValueList(attribute), str);
+	public static boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+		if (value.getAttType() == null) {
+			return true;
+		} else if (value.getAttType() == AttributeType.CHOICE) {
+			return ArrayUtils.contains(getValueList(attribute), ((ChoiceValue) value).getValue());
 		} else {
-			return value.getClass() == NoValue.class;
+			return false;
 		}
 	}
 
 
 
 
-	public static Object generateValidTaskValue(Object oldValue, TaskAttribute attribute, boolean preferNoValue) {
-		return preferNoValue ? new NoValue() : (getValueList(attribute).length == 0 ? new NoValue() : getValueList(attribute)[0]);
+	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+		if (preferNoValue || getValueList(attribute).length == 0) {
+			return new NoValue();
+		} else {
+			return new ChoiceValue(getValueList(attribute)[0]);
+		}
 	}
 
 }

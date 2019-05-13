@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.LastUpdatedValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import javafx.scene.control.Label;
 
@@ -38,7 +39,7 @@ public class ItemLastUpdated extends SimpleSidebarItem {
 
 	@Override
 	protected void setupInitialValue() {
-		final LocalDateTime lastUpdated = (LocalDateTime) TaskLogic.getValue(getTask(), getAttribute());
+		final LocalDateTime lastUpdated = ((LastUpdatedValue) TaskLogic.getValueOrDefault(getTask(), getAttribute())).getValue();
 		label.setText(lastUpdated.format(DateTimeFormatter.ISO_DATE_TIME));
 	}
 

@@ -1,9 +1,11 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
 import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.ChoiceValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
@@ -39,9 +41,9 @@ public class ItemChoice extends SimpleSidebarItem {
 
 	@Override
 	protected void setupInitialValue() {
-		final Object objValue = TaskLogic.getValue(getTask(), getAttribute());
-		if (objValue != null && !(objValue instanceof NoValue)) {
-			choice.getSelectionModel().select((String) objValue);
+		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
+		if (objValue != null && objValue.getAttType() != null) {
+			choice.getSelectionModel().select(((ChoiceValue) objValue).getValue());
 			this.setEmpty(false);
 		} else {
 			setEmpty(true);
@@ -54,7 +56,7 @@ public class ItemChoice extends SimpleSidebarItem {
 	@Override
 	protected void setupLogic() {
 		choice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), newValue);
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new ChoiceValue(newValue));
 		});
 	}
 
@@ -81,7 +83,7 @@ public class ItemChoice extends SimpleSidebarItem {
 				choice.getSelectionModel().clearSelection();
 			} else {
 				final String value = valueList[0];
-				TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), value);
+				TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new ChoiceValue(value));
 				choice.getSelectionModel().select(value);
 			}
 		}

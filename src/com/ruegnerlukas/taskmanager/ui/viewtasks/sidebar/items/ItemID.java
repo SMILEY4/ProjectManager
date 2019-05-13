@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.IDValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import javafx.scene.control.Label;
 
@@ -35,7 +36,7 @@ public class ItemID extends SimpleSidebarItem {
 
 	@Override
 	protected void setupInitialValue() {
-		final int id = (Integer) TaskLogic.getValue(getTask(), getAttribute());
+		final int id = ((IDValue) TaskLogic.getValueOrDefault(getTask(), getAttribute())).getValue();
 		label.setText(Integer.toString(id));
 	}
 

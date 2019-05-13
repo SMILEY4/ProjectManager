@@ -7,6 +7,8 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.IDValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import javafx.scene.control.ListCell;
 
 public class ComboboxUtils {
@@ -186,7 +188,11 @@ public class ComboboxUtils {
 					setText("T-?");
 					for (TaskAttribute attribute : item.attributes.keySet()) {
 						if (attribute.type.get() == AttributeType.ID) {
-							final int id = item.getValue(attribute, Integer.class);
+							int id = -1;
+							TaskValue<?> valueID = item.getValue(attribute);
+							if (valueID != null && valueID.getAttType() != null) {
+								id = ((IDValue) valueID).getValue();
+							}
 							setText("T-" + id);
 							break;
 						}

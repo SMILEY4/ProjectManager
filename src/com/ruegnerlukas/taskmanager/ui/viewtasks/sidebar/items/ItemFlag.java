@@ -4,6 +4,7 @@ import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.FlagValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.TaskFlagAttributeLogic;
 import com.ruegnerlukas.taskmanager.utils.uielements.ComboboxUtils;
@@ -42,7 +43,7 @@ public class ItemFlag extends SimpleSidebarItem {
 
 	@Override
 	protected void setupInitialValue() {
-		final TaskFlag flag = (TaskFlag) TaskLogic.getValue(getTask(), getAttribute());
+		final TaskFlag flag = ((FlagValue) TaskLogic.getValueOrDefault(getTask(), getAttribute())).getValue();
 		choiceFlag.getSelectionModel().select(flag);
 	}
 
@@ -52,7 +53,7 @@ public class ItemFlag extends SimpleSidebarItem {
 	@Override
 	protected void setupLogic() {
 		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), newValue);
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new FlagValue(newValue));
 		});
 	}
 

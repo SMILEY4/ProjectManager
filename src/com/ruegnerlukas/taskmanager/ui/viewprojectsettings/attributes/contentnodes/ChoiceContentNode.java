@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.ChoiceValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
@@ -162,7 +163,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(String defaultValue) {
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new ChoiceValue(defaultValue));
 		fieldValues.removeCssStyleClass(null, "tag-default");
 		if(getLocalUseDefault()) {
 			fieldValues.addCssStyleClass(getLocalDefaultValue(), "tag-default");
@@ -232,7 +233,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private String getLocalDefaultValue() {
-		return (String) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE);
+		return ((ChoiceValue) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE)).getValue();
 	}
 
 

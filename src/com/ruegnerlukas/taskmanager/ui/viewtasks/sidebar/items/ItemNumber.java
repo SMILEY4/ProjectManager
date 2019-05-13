@@ -2,9 +2,11 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NumberValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
 import com.ruegnerlukas.taskmanager.utils.uielements.SpinnerUtils;
@@ -48,9 +50,9 @@ public class ItemNumber extends SimpleSidebarItem {
 
 	@Override
 	protected void setupInitialValue() {
-		final Object objValue = TaskLogic.getValue(getTask(), getAttribute());
-		if (objValue != null && !(objValue instanceof NoValue)) {
-			spinner.getValueFactory().setValue((Double) objValue);
+		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
+		if (objValue != null && objValue.getAttType() != null) {
+			spinner.getValueFactory().setValue(((NumberValue) objValue).getValue());
 			this.setEmpty(false);
 		} else {
 			setEmpty(true);
@@ -63,7 +65,7 @@ public class ItemNumber extends SimpleSidebarItem {
 	@Override
 	protected void setupLogic() {
 		spinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), newValue);
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NumberValue(newValue));
 		}));
 	}
 
@@ -85,7 +87,7 @@ public class ItemNumber extends SimpleSidebarItem {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NoValue());
 		} else {
 			final double value = Math.max(NumberAttributeLogic.getMinValue(getAttribute()).doubleValue(), 0.0);
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), value);
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NumberValue(value));
 			spinner.getValueFactory().setValue(MathUtils.setDecPlaces(value, NumberAttributeLogic.getDecPlaces(getAttribute())));
 		}
 	}

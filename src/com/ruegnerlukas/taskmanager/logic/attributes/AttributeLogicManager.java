@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -177,11 +178,12 @@ public class AttributeLogicManager {
 			}
 
 
-			// all classes have method "isValidTaskValue(TaskAttribute,Object):boolean"
+			// all classes have method "isValidTaskValue(TaskAttribute,TaskValue):boolean"
 			boolean hasMethod_isValidTaskValue = false;
 			for (Method method : methods) {
 				if ("isValidTaskValue".equals(method.getName()) && method.getParameterCount() == 2
 						&& method.getParameterTypes()[0] == TaskAttribute.class
+						&& method.getParameterTypes()[1] == TaskValue.class
 						&& method.getReturnType() == boolean.class) {
 					hasMethod_isValidTaskValue = true;
 					break;
@@ -192,11 +194,11 @@ public class AttributeLogicManager {
 			}
 
 
-			// all classes have method "generateValidTaskValue(Object,TaskAttribute,boolean):Object"
+			// all classes have method "generateValidTaskValue(TaskValue,TaskAttribute,boolean):Object"
 			boolean hasMethod_generateValidValue = false;
 			for (Method method : methods) {
 				if ("generateValidTaskValue".equals(method.getName()) && method.getParameterCount() == 3
-						&& method.getParameterTypes()[0] == Object.class
+						&& method.getParameterTypes()[0] == TaskValue.class
 						&& method.getParameterTypes()[1] == TaskAttribute.class
 						&& method.getParameterTypes()[2] == boolean.class
 						&& method.getReturnType() != Void.class) {
@@ -344,8 +346,8 @@ public class AttributeLogicManager {
 
 
 
-	public static boolean isValidTaskValue(TaskAttribute attribute, Object value) {
-		Method method = getMethod(getLogicClass(attribute.type.get()), "isValidTaskValue", TaskAttribute.class, Object.class);
+	public static boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+		Method method = getMethod(getLogicClass(attribute.type.get()), "isValidTaskValue", TaskAttribute.class, TaskValue.class);
 		try {
 			return (Boolean) method.invoke(null, attribute, value);
 		} catch (IllegalAccessException | InvocationTargetException e) {
@@ -356,12 +358,12 @@ public class AttributeLogicManager {
 
 
 
-	public static Object generateValidTaskValue(Object oldValue, TaskAttribute attribute, boolean preferNoValue) {
-		Method method = getMethod(getLogicClass(attribute.type.get()), "generateValidTaskValue", Object.class, TaskAttribute.class, boolean.class);
+	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+		Method method = getMethod(getLogicClass(attribute.type.get()), "generateValidTaskValue", TaskValue.class, TaskAttribute.class, boolean.class);
 		try {
-			return method.invoke(null, oldValue, attribute, preferNoValue);
+			return (TaskValue<?>) method.invoke(null, oldValue, attribute, preferNoValue);
 		} catch (IllegalAccessException | InvocationTargetException e) {
-			return false;
+			return null;
 		}
 	}
 

@@ -1,9 +1,9 @@
 package com.ruegnerlukas.taskmanager.logic;
 
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.AndFilterCriteria;
@@ -13,6 +13,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriter
 import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.*;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 import javafx.collections.ListChangeListener;
@@ -125,15 +126,15 @@ public class TaskLogic {
 		TaskAttribute idAttribute = AttributeLogic.findAttribute(project, AttributeType.ID);
 		final int id = project.settings.idCounter.get();
 		project.settings.idCounter.set(id + 1);
-		setValue(project, task, idAttribute, id);
+		setValue(project, task, idAttribute, new IDValue(id));
 
 		// set date created
 		TaskAttribute createdAttribute = AttributeLogic.findAttribute(project, AttributeType.CREATED);
-		setValue(project, task, createdAttribute, time);
+		setValue(project, task, createdAttribute, new CreatedValue(time));
 
 		// set last updated
 		TaskAttribute updatedAttribute = AttributeLogic.findAttribute(project, AttributeType.LAST_UPDATED);
-		setValue(project, task, updatedAttribute, time);
+		setValue(project, task, updatedAttribute, new LastUpdatedValue(time));
 
 		// TEMP
 
@@ -142,10 +143,10 @@ public class TaskLogic {
 		TaskAttribute numberAttribute = AttributeLogic.findAttribute(project, AttributeType.NUMBER);
 
 		if (numberAttribute != null) {
-			setValue(project, task, numberAttribute, randNumber);
+			setValue(project, task, numberAttribute, new NumberValue(randNumber));
 
 			TaskAttribute descriptionAttribute = AttributeLogic.findAttribute(project, AttributeType.DESCRIPTION);
-			setValue(project, task, descriptionAttribute, "Some Text " + randNumber);
+			setValue(project, task, descriptionAttribute, new DescriptionValue("Some Text " + randNumber));
 		}
 
 
@@ -155,25 +156,12 @@ public class TaskLogic {
 
 
 
-	public static <T> T getValue(Task task, TaskAttribute attribute, Class<T> type) {
-		Object trueValue = getTrueValue(task, attribute);
-		if (trueValue == null || trueValue instanceof NoValue) {
-			if (AttributeLogic.getUsesDefault(attribute)) {
-				return (T) AttributeLogic.getDefaultValue(attribute);
-			} else {
-				return null;
-			}
-		} else {
-			return (T) trueValue;
-		}
-	}
 
 
 
-
-	public static Object getValue(Task task, TaskAttribute attribute) {
-		Object trueValue = getTrueValue(task, attribute);
-		if (trueValue == null || trueValue instanceof NoValue) {
+	public static TaskValue getValueOrDefault(Task task, TaskAttribute attribute) {
+		TaskValue<?> trueValue = getTaskValue(task, attribute);
+		if (trueValue.getAttType() != attribute.type.get()) {
 			if (AttributeLogic.getUsesDefault(attribute)) {
 				return AttributeLogic.getDefaultValue(attribute);
 			} else {
@@ -187,32 +175,29 @@ public class TaskLogic {
 
 
 
-	public static <T> T getTrueValue(Task task, TaskAttribute attribute, Class<T> type) {
-		Object value = getTrueValue(task, attribute);
-		if (value == null || value instanceof NoValue || value.getClass() != type) {
-			return null;
+	public static TaskValue<?> getTaskValue(Task task, TaskAttribute attribute) {
+		TaskValue<?> value = task.attributes.get(attribute);
+		if (value == null) {
+			return new NoValue();
 		} else {
-			return (T) value;
+			return value;
 		}
 	}
 
 
 
 
-	public static Object getTrueValue(Task task, TaskAttribute attribute) {
-		return task.attributes.get(attribute);
-	}
 
 
 
-
-	public static boolean setValue(Project project, Task task, TaskAttribute attribute, Object value) {
-		if(value == null) {
+	public static boolean setValue(Project project, Task task, TaskAttribute attribute, TaskValue<?> value) {
+		if(value == null || value.getAttType() != attribute.type.get()) {
 			value = new NoValue();
 		}
 
 		// validate value
 		if (!AttributeLogicManager.isValidTaskValue(attribute, value)) {
+			Logger.get().debug("Failed to set task value: " + attribute.name.get() + " - invalid value: " + value + (value != null ? "."+value.getValue() : "") );
 			return false;
 		}
 

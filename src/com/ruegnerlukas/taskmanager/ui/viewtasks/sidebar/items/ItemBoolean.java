@@ -1,9 +1,11 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
 import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.BoolValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
 import javafx.scene.control.CheckBox;
@@ -39,9 +41,9 @@ public class ItemBoolean extends SimpleSidebarItem {
 	@Override
 	protected void setupInitialValue() {
 
-		final Object objValue = TaskLogic.getValue(getTask(), getAttribute());
-		if (objValue != null && !(objValue instanceof NoValue)) {
-			checkBox.setSelected((Boolean) objValue);
+		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
+		if (objValue != null && objValue.getAttType() != null) {
+			checkBox.setSelected( ((BoolValue)objValue).getValue());
 			this.setEmpty(false);
 		} else {
 			setEmpty(true);
@@ -55,7 +57,7 @@ public class ItemBoolean extends SimpleSidebarItem {
 	@Override
 	protected void setupLogic() {
 		checkBox.setOnAction(event -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), checkBox.isSelected());
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new BoolValue(checkBox.isSelected()));
 		});
 	}
 
@@ -76,7 +78,7 @@ public class ItemBoolean extends SimpleSidebarItem {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NoValue());
 		} else {
 			final boolean value = false;
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), value);
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new BoolValue(value));
 			checkBox.setSelected(value);
 		}
 	}

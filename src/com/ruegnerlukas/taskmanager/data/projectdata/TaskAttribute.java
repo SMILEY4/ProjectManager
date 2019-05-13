@@ -23,7 +23,7 @@ public class TaskAttribute {
 
 
 
-	public <T> T getValue(String key, Class<? extends T> type) {
+	public <T> T getValue(String key) {
 		return (T) values.get(key);
 	}
 

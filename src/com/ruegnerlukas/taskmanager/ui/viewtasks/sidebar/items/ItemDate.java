@@ -1,9 +1,11 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
 import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.projectdata.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.DateValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.DateAttributeLogic;
 import javafx.scene.control.DatePicker;
@@ -41,9 +43,9 @@ public class ItemDate extends SimpleSidebarItem {
 
 	@Override
 	protected void setupInitialValue() {
-		final Object objValue = TaskLogic.getValue(getTask(), getAttribute());
-		if (objValue != null && !(objValue instanceof NoValue)) {
-			picker.setValue((LocalDate) objValue);
+		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
+		if (objValue != null && objValue.getAttType() != null) {
+			picker.setValue( ((DateValue)objValue).getValue());
 			this.setEmpty(false);
 		} else {
 			setEmpty(true);
@@ -56,7 +58,7 @@ public class ItemDate extends SimpleSidebarItem {
 	@Override
 	protected void setupLogic() {
 		picker.setOnAction(event -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), picker.getValue());
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new DateValue(picker.getValue()));
 		});
 	}
 
@@ -78,7 +80,7 @@ public class ItemDate extends SimpleSidebarItem {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NoValue());
 		} else {
 			final LocalDate value = LocalDate.now();
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), value);
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new DateValue(value));
 			picker.setValue(value);
 		}
 	}

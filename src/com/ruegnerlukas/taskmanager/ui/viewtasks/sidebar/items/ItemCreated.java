@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.CreatedValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import javafx.scene.control.Label;
 
@@ -21,7 +22,7 @@ public class ItemCreated extends SimpleSidebarItem {
 
 	@Override
 	protected void setupControls() {
-		final LocalDateTime created = (LocalDateTime) TaskLogic.getValue(getTask(), getAttribute());
+		final LocalDateTime created = ((CreatedValue) TaskLogic.getValueOrDefault(getTask(), getAttribute())).getValue();
 		Label label = new Label(created.format(DateTimeFormatter.ISO_DATE_TIME));
 		this.setValueNode(label);
 

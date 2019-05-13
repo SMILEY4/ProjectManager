@@ -2,9 +2,14 @@ package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.simpleutils.arrays.ArrayUtils;
-import com.ruegnerlukas.taskmanager.data.projectdata.*;
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.FlagValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;
@@ -27,12 +32,11 @@ public class TaskFlagAttributeLogic {
 		Map<String, Class<?>> map = new HashMap<>();
 		map.put(FLAG_FLAG_LIST, TaskFlag[].class);
 		map.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
-		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, TaskFlag.class);
-		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, TaskFlag.class);
+		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, FlagValue.class);
+		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, FlagValue.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
-		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{TaskFlag.class});
 		mapData.put(FilterOperation.NOT_EQUALS, new Class<?>[]{TaskFlag.class});
 		FILTER_DATA = Collections.unmodifiableMap(mapData);
@@ -62,7 +66,7 @@ public class TaskFlagAttributeLogic {
 		TaskFlag defaultFlag = new TaskFlag("Default", TaskFlag.FlagColor.GRAY);
 		setFlagList(attribute, new TaskFlag[]{defaultFlag});
 		setUseDefault(attribute, true);
-		setDefaultValue(attribute, defaultFlag);
+		setDefaultValue(attribute, new FlagValue(defaultFlag));
 	}
 
 
@@ -104,7 +108,7 @@ public class TaskFlagAttributeLogic {
 
 
 	public static TaskFlag[] getFlagList(TaskAttribute attribute) {
-		return attribute.getValue(FLAG_FLAG_LIST, TaskFlag[].class);
+		return attribute.getValue(FLAG_FLAG_LIST);
 	}
 
 
@@ -131,77 +135,84 @@ public class TaskFlagAttributeLogic {
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
+		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
-	private static void setDefaultValue(TaskAttribute attribute, TaskFlag defaultValue) {
+	private static void setDefaultValue(TaskAttribute attribute, FlagValue defaultValue) {
 		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
 	}
 
 
 
 
-	public static TaskFlag getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE, TaskFlag.class);
+	public static FlagValue getDefaultValue(TaskAttribute attribute) {
+		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE);
 	}
 
 
 
 
 	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
-		TaskAttribute attribute = criteria.attribute.get();
-		FilterOperation operation = criteria.operation.get();
-		List<Object> values = criteria.values;
-		Object taskValue = TaskLogic.getValue(task, attribute);
+		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
+		List<Object> filterValues = criteria.values;
 
-		if (operation == FilterOperation.HAS_VALUE) {
-			boolean filterValue = (Boolean) values.get(0);
-			if (filterValue) {
-				return taskValue != null && !(taskValue instanceof NoValue);
-			} else {
-				return taskValue == null || (taskValue instanceof NoValue);
+		switch (criteria.operation.get()) {
+
+			case EQUALS: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof TaskFlag) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((FlagValue) valueTask).getValue() == filterValues.get(0);
+					}
+				} else {
+					return false;
+				}
+			}
+
+			case NOT_EQUALS: {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof TaskFlag) {
+					if (valueTask.getAttType() == null) {
+						return false;
+					} else {
+						return ((FlagValue) valueTask).getValue() != filterValues.get(0);
+					}
+				} else {
+					return false;
+				}
+			}
+
+			default: {
+				return false;
 			}
 		}
 
-		if (operation == FilterOperation.EQUALS) {
-			TaskFlag filterValue = (TaskFlag) values.get(0);
-			return filterValue.equals(taskValue);
-		}
-
-		if (operation == FilterOperation.NOT_EQUALS) {
-			TaskFlag filterValue = (TaskFlag) values.get(0);
-			return !filterValue.equals(taskValue);
-		}
-
-		return false;
 	}
 
 
 
 
-	public static boolean isValidTaskValue(TaskAttribute attribute, Object value) {
-		if (value.getClass() == DATA_TYPES.get(AttributeLogic.ATTRIB_TASK_VALUE_TYPE)) {
-			TaskFlag flag = (TaskFlag) value;
-			return ArrayUtils.contains(getFlagList(attribute), flag);
-		} else if (value.getClass() == NoValue.class) {
-			return true;
+	public static boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+		if (value.getAttType() == AttributeType.FLAG) {
+			FlagValue valueFlag = (FlagValue) value;
+			return ArrayUtils.contains(getFlagList(attribute), valueFlag.getValue());
 		} else {
-			return false;
+			return value.getAttType() == null;
 		}
 	}
 
 
 
 
-	public static Object generateValidTaskValue(Object oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
 		TaskFlag[] flags = getFlagList(attribute);
 		if (flags.length == 0) {
 			return getDefaultValue(attribute);
 		} else {
-			return flags[0];
+			return new FlagValue(flags[0]);
 		}
 	}
 

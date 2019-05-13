@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TextValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.TextAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
@@ -193,7 +194,7 @@ public class TextContentNode extends AttributeContentNode {
 	private void onDefaultValue(String newValue) {
 		String text = getLocalMultiline() ? newValue : newValue.replaceAll(System.lineSeparator(), "");
 		text = text.substring(0, Math.min(text.length(), getLocalCharLimit()));
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, text);
+		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new TextValue(text));
 		fieldDefaultValue.setTextSilent(text);
 		checkChanges();
 	}
@@ -262,7 +263,7 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private String getLocalDefaultValue() {
-		return (String) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE);
+		return ((TextValue) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE)).getValue();
 	}
 
 
