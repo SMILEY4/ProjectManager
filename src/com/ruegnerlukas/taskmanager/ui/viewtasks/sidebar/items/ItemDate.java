@@ -67,7 +67,7 @@ public class ItemDate extends SimpleSidebarItem {
 
 	@Override
 	public void dispose() {
-
+		super.dispose();
 	}
 
 

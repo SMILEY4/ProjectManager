@@ -62,7 +62,7 @@ public class ItemFlag extends SimpleSidebarItem {
 
 	@Override
 	public void dispose() {
-
+		super.dispose();
 	}
 
 

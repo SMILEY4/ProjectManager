@@ -53,7 +53,7 @@ public class ItemID extends SimpleSidebarItem {
 
 	@Override
 	public void dispose() {
-
+		super.dispose();
 	}
 
 

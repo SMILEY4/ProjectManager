@@ -163,6 +163,9 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(String defaultValue) {
+		if(defaultValue == null) {
+			return;
+		}
 		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new ChoiceValue(defaultValue));
 		fieldValues.removeCssStyleClass(null, "tag-default");
 		if(getLocalUseDefault()) {

@@ -51,7 +51,7 @@ public class ItemCreated extends SimpleSidebarItem {
 
 	@Override
 	public void dispose() {
-
+		super.dispose();
 	}
 
 

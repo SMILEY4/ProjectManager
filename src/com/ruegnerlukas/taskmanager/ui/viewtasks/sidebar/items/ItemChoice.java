@@ -65,7 +65,7 @@ public class ItemChoice extends SimpleSidebarItem {
 
 	@Override
 	public void dispose() {
-
+		super.dispose();
 	}
 
 

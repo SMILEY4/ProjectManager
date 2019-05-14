@@ -80,7 +80,7 @@ public class ItemDescription extends SidebarItem {
 
 	@Override
 	public void dispose() {
-
+		super.dispose();
 	}
 
 

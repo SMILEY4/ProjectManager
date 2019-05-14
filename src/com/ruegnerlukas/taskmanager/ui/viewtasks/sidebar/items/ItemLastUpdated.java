@@ -56,7 +56,7 @@ public class ItemLastUpdated extends SimpleSidebarItem {
 
 	@Override
 	public void dispose() {
-
+		super.dispose();
 	}
 
 

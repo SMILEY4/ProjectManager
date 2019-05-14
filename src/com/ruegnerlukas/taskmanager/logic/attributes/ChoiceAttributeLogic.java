@@ -32,8 +32,8 @@ public class ChoiceAttributeLogic {
 		Map<String, Class<?>> mapTypes = new HashMap<>();
 		mapTypes.put(CHOICE_VALUE_LIST, String[].class);
 		mapTypes.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
-		mapTypes.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, String.class);
-		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, String.class);
+		mapTypes.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, ChoiceValue.class);
+		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, ChoiceValue.class);
 		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
 
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();

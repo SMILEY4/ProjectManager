@@ -66,6 +66,7 @@ public class ItemBoolean extends SimpleSidebarItem {
 
 	@Override
 	public void dispose() {
+		super.dispose();
 	}
 
 

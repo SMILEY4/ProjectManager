@@ -74,6 +74,7 @@ public class ItemNumber extends SimpleSidebarItem {
 
 	@Override
 	public void dispose() {
+		super.dispose();
 	}
 
 
