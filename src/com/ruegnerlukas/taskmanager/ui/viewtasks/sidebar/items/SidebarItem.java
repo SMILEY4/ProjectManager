@@ -3,6 +3,8 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
+import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -52,6 +54,7 @@ public abstract class SidebarItem extends AnchorPane {
 
 	private FXChangeListener<String> listenerName;
 	private FXChangeListener<AttributeType> listenerType;
+	private EventHandler<AttributeValueChangeEvent> handlerChange;
 
 
 
@@ -78,7 +81,19 @@ public abstract class SidebarItem extends AnchorPane {
 			}
 		};
 
+		handlerChange = (e) -> {
+			if (e.getAttribute() == getAttribute()) {
+				onAttChangedEvent(e);
+			}
+		};
+		AttributeLogic.addOnAttributeValueChanged(handlerChange);
+
 	}
+
+
+
+
+	protected abstract void onAttChangedEvent(AttributeValueChangeEvent e);
 
 
 
@@ -116,6 +131,7 @@ public abstract class SidebarItem extends AnchorPane {
 		listenerType.removeFromAll();
 		handlerAttribNameChanged = null;
 		handlerAttribTypeChanged = null;
+		AttributeLogic.removeOnAttributeValueChanged(handlerChange);
 	}
 
 }

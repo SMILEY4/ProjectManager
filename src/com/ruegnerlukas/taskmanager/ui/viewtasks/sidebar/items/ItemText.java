@@ -7,6 +7,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TextValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.TextAttributeLogic;
+import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MultiTextField;
 import javafx.scene.control.Label;
@@ -31,10 +32,20 @@ public class ItemText extends SidebarItem {
 
 
 
+	@Override
+	protected void onAttChangedEvent(AttributeValueChangeEvent e) {
+		setupControls();
+		setupInitialValue();
+		setupLogic();
+	}
+
+
+
+
 	private void setupControls() {
 		VBox box = new VBox();
 		AnchorUtils.setAnchors(box, 0, 0, 0, 0);
-		this.getChildren().add(box);
+		this.getChildren().setAll(box);
 
 		Label label = new Label(getAttribute().name.get() + ":");
 		box.getChildren().add(label);
@@ -51,7 +62,7 @@ public class ItemText extends SidebarItem {
 	private void setupInitialValue() {
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {
-			area.setText( ((TextValue)objValue).getValue());
+			area.setText(((TextValue) objValue).getValue());
 		} else {
 			area.setText("");
 		}

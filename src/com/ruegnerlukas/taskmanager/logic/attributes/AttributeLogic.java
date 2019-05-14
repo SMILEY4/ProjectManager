@@ -7,6 +7,8 @@ import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
+import javafx.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,12 +75,14 @@ public class AttributeLogic {
 		Map<String, Class<?>> map = AttributeLogicManager.getDataTypeMap(attribute.type.get());
 		if (newValue.getClass() != map.get(key)) {
 			Logger.get().debug("Failed to set attribute value: " + key + "  -  wrong datatype. "
-					+ "Expected: " +map.get(key).getSimpleName() + ", Actual: " + newValue.getClass().getSimpleName());
+					+ "Expected: " + map.get(key).getSimpleName() + ", Actual: " + newValue.getClass().getSimpleName());
 			return false;
 		}
 
 		// set value
+		Object prevValue = attribute.values.get(key);
 		attribute.values.put(key, newValue);
+		onAttributeValueChanged(attribute, key, prevValue, newValue);
 
 		// check tasks for changes
 		List<Task> tasks = project.data.tasks;
@@ -92,6 +96,35 @@ public class AttributeLogic {
 		}
 
 		return true;
+	}
+
+
+
+
+	private static final List<EventHandler<AttributeValueChangeEvent>> valueChangedHandlers = new ArrayList<>();
+
+
+
+
+	public static void addOnAttributeValueChanged(EventHandler<AttributeValueChangeEvent> handler) {
+		valueChangedHandlers.add(handler);
+	}
+
+
+
+
+	public static void removeOnAttributeValueChanged(EventHandler<AttributeValueChangeEvent> handler) {
+		valueChangedHandlers.remove(handler);
+	}
+
+
+
+
+	private static void onAttributeValueChanged(TaskAttribute attribute, String key, Object prevValue, Object newValue) {
+		AttributeValueChangeEvent event = new AttributeValueChangeEvent(attribute, key, prevValue, newValue);
+		for (EventHandler<AttributeValueChangeEvent> handler : valueChangedHandlers) {
+			handler.handle(event);
+		}
 	}
 
 

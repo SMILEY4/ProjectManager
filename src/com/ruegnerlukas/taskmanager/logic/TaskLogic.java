@@ -16,7 +16,9 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.*;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
+import com.ruegnerlukas.taskmanager.logic.events.TaskValueChangeEvent;
 import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -156,9 +158,6 @@ public class TaskLogic {
 
 
 
-
-
-
 	public static TaskValue getValueOrDefault(Task task, TaskAttribute attribute) {
 		TaskValue<?> trueValue = getTaskValue(task, attribute);
 		if (trueValue.getAttType() != attribute.type.get()) {
@@ -187,22 +186,21 @@ public class TaskLogic {
 
 
 
-
-
-
 	public static boolean setValue(Project project, Task task, TaskAttribute attribute, TaskValue<?> value) {
-		if(value == null || value.getAttType() != attribute.type.get()) {
+		if (value == null || value.getAttType() != attribute.type.get()) {
 			value = new NoValue();
 		}
 
 		// validate value
 		if (!AttributeLogicManager.isValidTaskValue(attribute, value)) {
-			Logger.get().debug("Failed to set task value: " + attribute.name.get() + " - invalid value: " + value + (value != null ? "."+value.getValue() : "") );
+			Logger.get().debug("Failed to set task value: " + attribute.name.get() + " - invalid value: " + value + (value != null ? "." + value.getValue() : ""));
 			return false;
 		}
 
 		// set value
+		TaskValue<?> prevValue = task.attributes.get(attribute);
 		task.attributes.put(attribute, value);
+		onTaskValueChanged(task, attribute, prevValue, value);
 
 		// check/update displayed tasks
 		boolean modifiedDisplay = false;
@@ -239,6 +237,35 @@ public class TaskLogic {
 		}
 
 		return true;
+	}
+
+
+
+
+	private static final List<EventHandler<TaskValueChangeEvent>> valueChangedHandlers = new ArrayList<>();
+
+
+
+
+	public static void addOnTaskValueChanged(EventHandler<TaskValueChangeEvent> handler) {
+		valueChangedHandlers.add(handler);
+	}
+
+
+
+
+	public static void removeOnTaskValueChanged(EventHandler<TaskValueChangeEvent> handler) {
+		valueChangedHandlers.remove(handler);
+	}
+
+
+
+
+	private static void onTaskValueChanged(Task task, TaskAttribute attribute, TaskValue<?> prevValue, TaskValue<?> newValue) {
+		TaskValueChangeEvent event = new TaskValueChangeEvent(task, attribute, prevValue, newValue);
+		for (EventHandler<TaskValueChangeEvent> handler : valueChangedHandlers) {
+			handler.handle(event);
+		}
 	}
 
 

@@ -74,7 +74,6 @@ public class ItemNumber extends SimpleSidebarItem {
 
 	@Override
 	public void dispose() {
-
 	}
 
 
@@ -82,7 +81,6 @@ public class ItemNumber extends SimpleSidebarItem {
 
 	@Override
 	protected void onSetEmpty(boolean empty) {
-		this.setEmpty(empty);
 		if (empty) {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NoValue());
 		} else {
@@ -90,6 +88,7 @@ public class ItemNumber extends SimpleSidebarItem {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NumberValue(value));
 			spinner.getValueFactory().setValue(MathUtils.setDecPlaces(value, NumberAttributeLogic.getDecPlaces(getAttribute())));
 		}
+		this.setEmpty(empty);
 	}
 
 }

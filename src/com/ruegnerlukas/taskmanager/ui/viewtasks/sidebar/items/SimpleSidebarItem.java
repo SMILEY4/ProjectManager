@@ -2,6 +2,9 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
+import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
@@ -22,6 +25,7 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 	private boolean showButton;
 	private boolean isEmpty;
+
 
 
 
@@ -67,11 +71,12 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 		// label empty
-		labelEmpty = new Label("no value");
+		labelEmpty = new Label();
 		labelEmpty.setDisable(true);
 		labelEmpty.setAlignment(Pos.CENTER);
 		AnchorUtils.setAnchors(labelEmpty, 0, 34, 0, 0);
 		paneRight.getChildren().add(labelEmpty);
+		setEmptyText();
 
 
 		// box value
@@ -88,7 +93,6 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 		this.setOnAttribNameChanged(event -> {
 			this.setText(attribute.name.get() + ":");
 		});
-
 
 		setupControls();
 		setupInitialValue();
@@ -141,11 +145,46 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 			labelEmpty.setVisible(true);
 			boxValue.setDisable(true);
 			boxValue.setVisible(false);
+			setEmptyText();
+
 		} else {
 			labelEmpty.setVisible(false);
 			boxValue.setDisable(false);
 			boxValue.setVisible(true);
 		}
+	}
+
+
+
+
+	private void setEmptyText() {
+		TaskValue<?> value = TaskLogic.getTaskValue(getTask(), getAttribute());
+		if (value.getAttType() == null) {
+			TaskValue<?> valueOD = TaskLogic.getValueOrDefault(getTask(), getAttribute());
+			if (valueOD.getAttType() == null) {
+				labelEmpty.setText("no value");
+			} else {
+				labelEmpty.setText(valueOD.getValue().toString());
+			}
+		}
+	}
+
+
+
+
+	public void onAttChangedEvent(AttributeValueChangeEvent event) {
+		setEmptyText();
+		setupControls();
+		setupInitialValue();
+		setupLogic();
+	}
+
+
+
+
+	@Override
+	public void dispose() {
+		super.dispose();
 	}
 
 
