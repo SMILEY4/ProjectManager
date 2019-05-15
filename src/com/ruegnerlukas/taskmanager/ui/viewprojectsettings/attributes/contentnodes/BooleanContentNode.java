@@ -197,7 +197,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 	@Override
 	public double getContentHeight() {
-		return 136;
+		return 171;
 	}
 
 }

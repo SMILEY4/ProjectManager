@@ -310,7 +310,7 @@ public class TextContentNode extends AttributeContentNode {
 
 	@Override
 	public double getContentHeight() {
-		return 310;
+		return 345;
 	}
 
 }

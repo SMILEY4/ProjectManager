@@ -186,7 +186,9 @@ public class AttributeLogic {
 
 
 	public static void setCardDisplayType(TaskAttribute attribute, TaskAttribute.CardDisplayType type) {
+		TaskAttribute.CardDisplayType prev = (TaskAttribute.CardDisplayType) attribute.values.get(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE);
 		attribute.values.put(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE, type);
+		onAttributeValueChanged(attribute, TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE, prev, type);
 	}
 
 

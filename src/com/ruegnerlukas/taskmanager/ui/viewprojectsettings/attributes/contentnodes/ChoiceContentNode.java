@@ -282,7 +282,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 	@Override
 	public double getContentHeight() {
-		return 175;
+		return 210;
 	}
 
 }

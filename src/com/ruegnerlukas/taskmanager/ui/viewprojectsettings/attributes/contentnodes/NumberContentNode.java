@@ -444,7 +444,7 @@ public class NumberContentNode extends AttributeContentNode {
 
 	@Override
 	public double getContentHeight() {
-		return 247;
+		return 282;
 	}
 
 }

@@ -25,26 +25,13 @@ public class Task {
 
 	public Task() {
 		attributes.addListener((MapChangeListener<TaskAttribute, TaskValue<?>>) c -> {
-
-
-			System.out.println("CHANGE");
-			if(c.wasAdded()) {
-				System.out.println(" + " + c.getValueAdded().getAttType() + "." + c.getValueAdded().getValue());
-			}
-			if(c.wasRemoved()) {
-				System.out.println(" - " + c.getValueRemoved().getAttType() + "." + c.getValueRemoved().getValue());
-			}
-
 			List<EventHandler<ActionEvent>> list = listeners.get(c.getKey());
-			if(list != null) {
+			if (list != null) {
 				for (EventHandler<ActionEvent> handler : list) {
 					handler.handle(new ActionEvent());
 				}
 			}
 		});
-
-
-
 	}
 
 

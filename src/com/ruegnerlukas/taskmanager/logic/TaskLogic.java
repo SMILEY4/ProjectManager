@@ -188,8 +188,6 @@ public class TaskLogic {
 
 	public static boolean setValue(Project project, Task task, TaskAttribute attribute, TaskValue<?> value) {
 
-		System.out.println("SET VALUE: " + attribute.name.get() + " = " + value);
-
 		// validate value
 		if (!AttributeLogicManager.isValidTaskValue(attribute, value == null ? new NoValue() : value)) {
 			Logger.get().debug("Failed to set task value: " + attribute.name.get() + " - invalid value: " + value + (value != null ? "." + value.getValue() : ""));
