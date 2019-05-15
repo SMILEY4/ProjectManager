@@ -7,6 +7,7 @@ import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.ComboboxUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.TagBar;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -24,6 +25,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 	private TagBar fieldValues;
 	private CheckBox cbUseDefault;
 	private ComboBox<String> choiceDefaultValue;
+	private ComboBox<TaskAttribute.CardDisplayType> choiceDisplayType;
 	private Button btnDiscard;
 	private Button btnSave;
 
@@ -37,8 +39,8 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 		// set value
 		values.put(ChoiceAttributeLogic.CHOICE_VALUE_LIST, ChoiceAttributeLogic.getValueList(attribute));
-		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, ChoiceAttributeLogic.getUseDefault(attribute));
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, ChoiceAttributeLogic.getDefaultValue(attribute));
+		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, ChoiceAttributeLogic.getUseDefault(attribute));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, ChoiceAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -52,6 +54,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 		buildValuesListField(vbox);
 		buildUseDefault(vbox);
 		buildDefaultValue(vbox);
+		buildCardDisplayType(vbox);
 		buildButtons(vbox);
 
 		checkChanges();
@@ -110,6 +113,41 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 
+	private void buildCardDisplayType(VBox root) {
+
+		HBox boxAlignDefault = ContentNodeUtils.buildEntryWithAlignment(root, "Display on Task-Card:");
+
+		choiceDisplayType = new ComboBox<>();
+		choiceDisplayType.setButtonCell(ComboboxUtils.createListCellCardDisplayType());
+		choiceDisplayType.setCellFactory(param -> ComboboxUtils.createListCellCardDisplayType());
+		choiceDisplayType.getItems().addAll(TaskAttribute.CardDisplayType.values());
+		choiceDisplayType.setMinSize(60, 32);
+		choiceDisplayType.setPrefSize(150, 32);
+		choiceDisplayType.setMaxSize(150, 32);
+		boxAlignDefault.getChildren().add(choiceDisplayType);
+		choiceDisplayType.getSelectionModel().select(getDisplayType());
+		choiceDisplayType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			onDisplayType(newValue);
+		});
+	}
+
+
+
+
+	private TaskAttribute.CardDisplayType getDisplayType() {
+		return AttributeLogic.getCardDisplayType(attribute);
+	}
+
+
+
+
+	private void onDisplayType(TaskAttribute.CardDisplayType type) {
+		AttributeLogic.setCardDisplayType(attribute, type);
+	}
+
+
+
+
 	private void buildButtons(VBox root) {
 		Button[] buttons = ContentNodeUtils.buildButtons(root);
 		btnDiscard = buttons[0];
@@ -150,10 +188,10 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean useDefault) {
-		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
+		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
 		choiceDefaultValue.setDisable(!getLocalUseDefault());
 		fieldValues.removeCssStyleClass(null, "tag-default");
-		if(getLocalUseDefault()) {
+		if (getLocalUseDefault()) {
 			fieldValues.addCssStyleClass(getLocalDefaultValue(), "tag-default");
 		}
 		checkChanges();
@@ -163,12 +201,12 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(String defaultValue) {
-		if(defaultValue == null) {
+		if (defaultValue == null) {
 			return;
 		}
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new ChoiceValue(defaultValue));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new ChoiceValue(defaultValue));
 		fieldValues.removeCssStyleClass(null, "tag-default");
-		if(getLocalUseDefault()) {
+		if (getLocalUseDefault()) {
 			fieldValues.addCssStyleClass(getLocalDefaultValue(), "tag-default");
 		}
 		checkChanges();
@@ -211,7 +249,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 		cbUseDefault.setSelected(getLocalUseDefault());
 
 		fieldValues.removeCssStyleClass(null, "tag-default");
-		if(getLocalUseDefault()) {
+		if (getLocalUseDefault()) {
 			fieldValues.addCssStyleClass(defaultValue, "tag-default");
 		}
 
@@ -229,14 +267,14 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(AttributeLogic.ATTRIB_USE_DEFAULT);
+		return (boolean) values.get(TaskAttribute.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	private String getLocalDefaultValue() {
-		return ((ChoiceValue) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE)).getValue();
+		return ((ChoiceValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
 	}
 
 

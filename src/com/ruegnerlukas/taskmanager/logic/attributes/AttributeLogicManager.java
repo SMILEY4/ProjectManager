@@ -68,7 +68,7 @@ public class AttributeLogicManager {
 					hasField_dataTypes = true;
 					try {
 						Map<String, Class<?>> map = (Map<String, Class<?>>) field.get(null);
-						if (!map.containsKey(AttributeLogic.ATTRIB_TASK_VALUE_TYPE)) {
+						if (!map.containsKey(TaskAttribute.ATTRIB_TASK_VALUE_TYPE)) {
 							errors.add("ERROR - Logic class of type " + type + " is missing the \"ATTRIB_TASK_VALUE_TYPE\" entry in \"DATA_TYPES\"");
 						}
 					} catch (IllegalAccessException e) {

@@ -27,7 +27,7 @@ public class DependencyAttributeLogic {
 
 	static {
 		Map<String, Class<?>> mapTypes = new HashMap<>();
-		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, DependencyValue.class);
+		mapTypes.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, DependencyValue.class);
 		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
 
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();

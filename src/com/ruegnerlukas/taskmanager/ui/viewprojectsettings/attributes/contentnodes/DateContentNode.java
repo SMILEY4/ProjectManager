@@ -1,15 +1,17 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.DateValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.DateAttributeLogic;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.ComboboxUtils;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -23,6 +25,7 @@ public class DateContentNode extends AttributeContentNode {
 
 	private CheckBox cbUseDefault;
 	private DatePicker pickerDefaultValue;
+	private ComboBox<TaskAttribute.CardDisplayType> choiceDisplayType;
 	private Button btnDiscard;
 	private Button btnSave;
 
@@ -35,8 +38,8 @@ public class DateContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, DateAttributeLogic.getUseDefault(attribute));
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, DateAttributeLogic.getDefaultValue(attribute));
+		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, DateAttributeLogic.getUseDefault(attribute));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, DateAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -49,6 +52,7 @@ public class DateContentNode extends AttributeContentNode {
 
 		buildUseDefault(vbox);
 		buildDefaultValue(vbox);
+		buildCardDisplayType(vbox);
 		buildButtons(vbox);
 
 		checkChanges();
@@ -77,9 +81,44 @@ public class DateContentNode extends AttributeContentNode {
 		pickerDefaultValue.setMaxSize(150, 32);
 		boxAlignDefault.getChildren().add(pickerDefaultValue);
 		pickerDefaultValue.setDisable(!getLocalUseDefault());
-		pickerDefaultValue.setOnAction(event-> {
+		pickerDefaultValue.setOnAction(event -> {
 			onDefaultValue(pickerDefaultValue.getValue());
 		});
+	}
+
+
+
+
+	private void buildCardDisplayType(VBox root) {
+
+		HBox boxAlignDefault = ContentNodeUtils.buildEntryWithAlignment(root, "Display on Task-Card:");
+
+		choiceDisplayType = new ComboBox<>();
+		choiceDisplayType.setButtonCell(ComboboxUtils.createListCellCardDisplayType());
+		choiceDisplayType.setCellFactory(param -> ComboboxUtils.createListCellCardDisplayType());
+		choiceDisplayType.getItems().addAll(TaskAttribute.CardDisplayType.values());
+		choiceDisplayType.setMinSize(60, 32);
+		choiceDisplayType.setPrefSize(150, 32);
+		choiceDisplayType.setMaxSize(150, 32);
+		boxAlignDefault.getChildren().add(choiceDisplayType);
+		choiceDisplayType.getSelectionModel().select(getDisplayType());
+		choiceDisplayType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			onDisplayType(newValue);
+		});
+	}
+
+
+
+
+	private TaskAttribute.CardDisplayType getDisplayType() {
+		return AttributeLogic.getCardDisplayType(attribute);
+	}
+
+
+
+
+	private void onDisplayType(TaskAttribute.CardDisplayType type) {
+		AttributeLogic.setCardDisplayType(attribute, type);
 	}
 
 
@@ -97,7 +136,7 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean useDefault) {
-		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
+		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
 		pickerDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -106,7 +145,7 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(LocalDate defaultValue) {
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new DateValue(defaultValue));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new DateValue(defaultValue));
 		checkChanges();
 	}
 
@@ -143,14 +182,14 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(AttributeLogic.ATTRIB_USE_DEFAULT);
+		return (boolean) values.get(TaskAttribute.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	private LocalDate getLocalDefaultValue() {
-		return ((DateValue) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE)).getValue();
+		return ((DateValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
 	}
 
 

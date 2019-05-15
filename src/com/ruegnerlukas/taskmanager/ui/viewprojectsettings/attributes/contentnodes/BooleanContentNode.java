@@ -1,9 +1,9 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.BoolValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.BooleanAttributeLogic;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -23,6 +23,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 	private CheckBox cbUseDefault;
 	private ComboBox<Boolean> choiceDefaultValue;
+	private ComboBox<TaskAttribute.CardDisplayType> choiceDisplayType;
 	private Button btnDiscard;
 	private Button btnSave;
 
@@ -35,8 +36,8 @@ public class BooleanContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, BooleanAttributeLogic.getUseDefault(attribute));
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, BooleanAttributeLogic.getDefaultValue(attribute));
+		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, BooleanAttributeLogic.getUseDefault(attribute));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, BooleanAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -49,6 +50,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 		buildUseDefault(vbox);
 		buildDefaultValue(vbox);
+		buildCardDisplayType(vbox);
 		buildButtons(vbox);
 
 		checkChanges();
@@ -67,14 +69,12 @@ public class BooleanContentNode extends AttributeContentNode {
 
 	private void buildDefaultValue(VBox root) {
 
-		// default value
 		HBox boxAlignDefault = ContentNodeUtils.buildEntryWithAlignment(root, "Default Value:");
 
 		choiceDefaultValue = new ComboBox<>();
 		choiceDefaultValue.setButtonCell(ComboboxUtils.createListCellBoolean());
 		choiceDefaultValue.setCellFactory(param -> ComboboxUtils.createListCellBoolean());
 		choiceDefaultValue.getItems().addAll(true, false);
-		choiceDefaultValue.getSelectionModel().select(getLocalDefaultValue());
 		choiceDefaultValue.setMinSize(60, 32);
 		choiceDefaultValue.setPrefSize(150, 32);
 		choiceDefaultValue.setMaxSize(150, 32);
@@ -84,6 +84,41 @@ public class BooleanContentNode extends AttributeContentNode {
 		choiceDefaultValue.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			onDefaultValue(newValue);
 		});
+	}
+
+
+
+
+	private void buildCardDisplayType(VBox root) {
+
+		HBox boxAlignDefault = ContentNodeUtils.buildEntryWithAlignment(root, "Display on Task-Card:");
+
+		choiceDisplayType = new ComboBox<>();
+		choiceDisplayType.setButtonCell(ComboboxUtils.createListCellCardDisplayType());
+		choiceDisplayType.setCellFactory(param -> ComboboxUtils.createListCellCardDisplayType());
+		choiceDisplayType.getItems().addAll(TaskAttribute.CardDisplayType.values());
+		choiceDisplayType.setMinSize(60, 32);
+		choiceDisplayType.setPrefSize(150, 32);
+		choiceDisplayType.setMaxSize(150, 32);
+		boxAlignDefault.getChildren().add(choiceDisplayType);
+		choiceDisplayType.getSelectionModel().select(getDisplayType());
+		choiceDisplayType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			onDisplayType(newValue);
+		});
+	}
+
+
+
+
+	private TaskAttribute.CardDisplayType getDisplayType() {
+		return AttributeLogic.getCardDisplayType(attribute);
+	}
+
+
+
+
+	private void onDisplayType(TaskAttribute.CardDisplayType type) {
+		AttributeLogic.setCardDisplayType(attribute, type);
 	}
 
 
@@ -101,7 +136,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean useDefault) {
-		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
+		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
 		choiceDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -110,7 +145,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(boolean defaultValue) {
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new BoolValue(defaultValue));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new BoolValue(defaultValue));
 		checkChanges();
 	}
 
@@ -147,14 +182,14 @@ public class BooleanContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(AttributeLogic.ATTRIB_USE_DEFAULT);
+		return (boolean) values.get(TaskAttribute.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	private boolean getLocalDefaultValue() {
-		return ((BoolValue) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE)).getValue();
+		return ((BoolValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
 	}
 
 

@@ -32,9 +32,9 @@ public class TextAttributeLogic {
 		Map<String, Class<?>> mapTypes = new HashMap<>();
 		mapTypes.put(TEXT_CHAR_LIMIT, Integer.class);
 		mapTypes.put(TEXT_MULTILINE, Boolean.class);
-		mapTypes.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
-		mapTypes.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, TextValue.class);
-		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, TextValue.class);
+		mapTypes.put(TaskAttribute.ATTRIB_USE_DEFAULT, Boolean.class);
+		mapTypes.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, TextValue.class);
+		mapTypes.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, TextValue.class);
 		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
 
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
@@ -106,28 +106,28 @@ public class TextAttributeLogic {
 
 
 	public static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
+		attribute.values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
 	}
 
 
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT);
+		return attribute.getValue(TaskAttribute.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	public static void setDefaultValue(TaskAttribute attribute, TextValue defaultValue) {
-		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
+		attribute.values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, defaultValue);
 	}
 
 
 
 
 	public static TextValue getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE);
+		return attribute.getValue(TaskAttribute.ATTRIB_DEFAULT_VALUE);
 	}
 
 

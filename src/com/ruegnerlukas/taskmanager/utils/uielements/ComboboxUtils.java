@@ -75,6 +75,27 @@ public class ComboboxUtils {
 //
 //
 //
+
+
+
+
+	public static ListCell<TaskAttribute.CardDisplayType> createListCellCardDisplayType() {
+		return new ListCell<TaskAttribute.CardDisplayType>() {
+			@Override
+			protected void updateItem(TaskAttribute.CardDisplayType item, boolean empty) {
+				super.updateItem(item, empty);
+				if (item == null || empty) {
+					setText("");
+				} else {
+					setText(item.text);
+				}
+			}
+		};
+	}
+
+
+
+
 	public static ListCell<Boolean> createListCellBoolean() {
 		return new ListCell<Boolean>() {
 			@Override

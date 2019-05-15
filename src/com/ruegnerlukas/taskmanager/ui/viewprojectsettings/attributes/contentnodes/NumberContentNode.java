@@ -8,10 +8,12 @@ import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.ComboboxUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.SpinnerUtils;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -27,6 +29,7 @@ public class NumberContentNode extends AttributeContentNode {
 	private Spinner<Double> spinnerMaxValue;
 	private CheckBox cbUseDefault;
 	private Spinner<Double> spinnerDefaultValue;
+	private ComboBox<TaskAttribute.CardDisplayType> choiceDisplayType;
 	private Button btnDiscard;
 	private Button btnSave;
 
@@ -42,8 +45,8 @@ public class NumberContentNode extends AttributeContentNode {
 		values.put(NumberAttributeLogic.NUMBER_DEC_PLACES, NumberAttributeLogic.getDecPlaces(attribute));
 		values.put(NumberAttributeLogic.NUMBER_MIN_VALUE, NumberAttributeLogic.getMinValue(attribute));
 		values.put(NumberAttributeLogic.NUMBER_MAX_VALUE, NumberAttributeLogic.getMaxValue(attribute));
-		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, NumberAttributeLogic.getUseDefault(attribute));
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, NumberAttributeLogic.getDefaultValue(attribute));
+		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, NumberAttributeLogic.getUseDefault(attribute));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, NumberAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -59,6 +62,7 @@ public class NumberContentNode extends AttributeContentNode {
 		buildMaxValue(vbox);
 		buildUseDefault(vbox);
 		buildDefaultValue(vbox);
+		buildCardDisplayType(vbox);
 		buildButtons(vbox);
 
 		checkChanges();
@@ -189,6 +193,41 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 
+	private void buildCardDisplayType(VBox root) {
+
+		HBox boxAlignDefault = ContentNodeUtils.buildEntryWithAlignment(root, "Display on Task-Card:");
+
+		choiceDisplayType = new ComboBox<>();
+		choiceDisplayType.setButtonCell(ComboboxUtils.createListCellCardDisplayType());
+		choiceDisplayType.setCellFactory(param -> ComboboxUtils.createListCellCardDisplayType());
+		choiceDisplayType.getItems().addAll(TaskAttribute.CardDisplayType.values());
+		choiceDisplayType.setMinSize(60, 32);
+		choiceDisplayType.setPrefSize(150, 32);
+		choiceDisplayType.setMaxSize(150, 32);
+		boxAlignDefault.getChildren().add(choiceDisplayType);
+		choiceDisplayType.getSelectionModel().select(getDisplayType());
+		choiceDisplayType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			onDisplayType(newValue);
+		});
+	}
+
+
+
+
+	private TaskAttribute.CardDisplayType getDisplayType() {
+		return AttributeLogic.getCardDisplayType(attribute);
+	}
+
+
+
+
+	private void onDisplayType(TaskAttribute.CardDisplayType type) {
+		AttributeLogic.setCardDisplayType(attribute, type);
+	}
+
+
+
+
 	private void buildButtons(VBox root) {
 		Button[] buttons = ContentNodeUtils.buildButtons(root);
 		btnDiscard = buttons[0];
@@ -292,7 +331,7 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean newValue) {
-		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, newValue);
+		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, newValue);
 		spinnerDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -301,7 +340,7 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(Double newValue) {
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new NumberValue(newValue));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new NumberValue(newValue));
 		checkChanges();
 	}
 
@@ -390,14 +429,14 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(AttributeLogic.ATTRIB_USE_DEFAULT);
+		return (boolean) values.get(TaskAttribute.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	private Number getLocalDefaultValue() {
-		return ((NumberValue) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE)).getValue();
+		return ((NumberValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
 	}
 
 

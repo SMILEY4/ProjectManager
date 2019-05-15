@@ -3,7 +3,6 @@ package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentno
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.FlagValue;
-import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.TaskFlagAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
@@ -40,7 +39,7 @@ public class FlagContentNode extends AttributeContentNode {
 
 		// set values
 		values.put(TaskFlagAttributeLogic.FLAG_FLAG_LIST, TaskFlagAttributeLogic.getFlagList(attribute));
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, TaskFlagAttributeLogic.getDefaultValue(attribute));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, TaskFlagAttributeLogic.getDefaultValue(attribute));
 
 
 		// root box
@@ -244,7 +243,7 @@ public class FlagContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(TaskFlag defaultValue) {
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new FlagValue(defaultValue));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new FlagValue(defaultValue));
 		checkChanges();
 	}
 
@@ -356,7 +355,7 @@ public class FlagContentNode extends AttributeContentNode {
 
 
 	private TaskFlag getLocalDefaultValue() {
-		return ((FlagValue) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE)).getValue();
+		return ((FlagValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
 	}
 
 

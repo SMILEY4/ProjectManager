@@ -27,9 +27,9 @@ public class BooleanAttributeLogic {
 
 	static {
 		Map<String, Class<?>> mapTypes = new HashMap<>();
-		mapTypes.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
-		mapTypes.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, BoolValue.class);
-		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, BoolValue.class);
+		mapTypes.put(TaskAttribute.ATTRIB_USE_DEFAULT, Boolean.class);
+		mapTypes.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, BoolValue.class);
+		mapTypes.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, BoolValue.class);
 		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
 
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
@@ -68,28 +68,28 @@ public class BooleanAttributeLogic {
 
 
 	public static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
+		attribute.values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
 	}
 
 
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT);
+		return attribute.getValue(TaskAttribute.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	public static void setDefaultValue(TaskAttribute attribute, BoolValue defaultValue) {
-		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
+		attribute.values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, defaultValue);
 	}
 
 
 
 
 	public static BoolValue getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE);
+		return attribute.getValue(TaskAttribute.ATTRIB_DEFAULT_VALUE);
 	}
 
 

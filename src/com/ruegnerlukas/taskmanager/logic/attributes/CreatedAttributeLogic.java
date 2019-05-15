@@ -27,7 +27,7 @@ public class CreatedAttributeLogic {
 
 	static {
 		Map<String, Class<?>> mapTypes = new HashMap<>();
-		mapTypes.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, CreatedValue.class);
+		mapTypes.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, CreatedValue.class);
 		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
 
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();

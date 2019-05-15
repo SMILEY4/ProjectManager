@@ -7,11 +7,13 @@ import com.ruegnerlukas.taskmanager.logic.attributes.TextAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
-import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MultiTextField;
+import com.ruegnerlukas.taskmanager.utils.uielements.ComboboxUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.SpinnerUtils;
+import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MultiTextField;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Spinner;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -26,6 +28,7 @@ public class TextContentNode extends AttributeContentNode {
 	private CheckBox cbMultiline;
 	private CheckBox cbUseDefault;
 	private MultiTextField fieldDefaultValue;
+	private ComboBox<TaskAttribute.CardDisplayType> choiceDisplayType;
 	private Button btnDiscard;
 	private Button btnSave;
 
@@ -40,8 +43,8 @@ public class TextContentNode extends AttributeContentNode {
 		// set value
 		values.put(TextAttributeLogic.TEXT_CHAR_LIMIT, TextAttributeLogic.getCharLimit(attribute));
 		values.put(TextAttributeLogic.TEXT_MULTILINE, TextAttributeLogic.getMultiline(attribute));
-		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, TextAttributeLogic.getUseDefault(attribute));
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, TextAttributeLogic.getDefaultValue(attribute));
+		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, TextAttributeLogic.getUseDefault(attribute));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, TextAttributeLogic.getDefaultValue(attribute));
 
 		// root box
 		VBox vbox = new VBox();
@@ -54,6 +57,7 @@ public class TextContentNode extends AttributeContentNode {
 		buildCharLimit(vbox);
 		buildMultiline(vbox);
 		buildUseDefault(vbox);
+		buildCardDisplayType(vbox);
 		buildDefaultValue(vbox);
 		buildButtons(vbox);
 
@@ -150,6 +154,41 @@ public class TextContentNode extends AttributeContentNode {
 
 
 
+	private void buildCardDisplayType(VBox root) {
+
+		HBox boxAlignDefault = ContentNodeUtils.buildEntryWithAlignment(root, "Display on Task-Card:");
+
+		choiceDisplayType = new ComboBox<>();
+		choiceDisplayType.setButtonCell(ComboboxUtils.createListCellCardDisplayType());
+		choiceDisplayType.setCellFactory(param -> ComboboxUtils.createListCellCardDisplayType());
+		choiceDisplayType.getItems().addAll(TaskAttribute.CardDisplayType.values());
+		choiceDisplayType.setMinSize(60, 32);
+		choiceDisplayType.setPrefSize(150, 32);
+		choiceDisplayType.setMaxSize(150, 32);
+		boxAlignDefault.getChildren().add(choiceDisplayType);
+		choiceDisplayType.getSelectionModel().select(getDisplayType());
+		choiceDisplayType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			onDisplayType(newValue);
+		});
+	}
+
+
+
+
+	private TaskAttribute.CardDisplayType getDisplayType() {
+		return AttributeLogic.getCardDisplayType(attribute);
+	}
+
+
+
+
+	private void onDisplayType(TaskAttribute.CardDisplayType type) {
+		AttributeLogic.setCardDisplayType(attribute, type);
+	}
+
+
+
+
 	private void buildButtons(VBox root) {
 		Button[] buttons = ContentNodeUtils.buildButtons(root);
 		btnDiscard = buttons[0];
@@ -183,7 +222,7 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean newValue) {
-		values.put(AttributeLogic.ATTRIB_USE_DEFAULT, newValue);
+		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, newValue);
 		fieldDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -194,7 +233,7 @@ public class TextContentNode extends AttributeContentNode {
 	private void onDefaultValue(String newValue) {
 		String text = getLocalMultiline() ? newValue : newValue.replaceAll(System.lineSeparator(), "");
 		text = text.substring(0, Math.min(text.length(), getLocalCharLimit()));
-		values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, new TextValue(text));
+		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new TextValue(text));
 		fieldDefaultValue.setTextSilent(text);
 		checkChanges();
 	}
@@ -256,14 +295,14 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(AttributeLogic.ATTRIB_USE_DEFAULT);
+		return (boolean) values.get(TaskAttribute.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	private String getLocalDefaultValue() {
-		return ((TextValue) values.get(AttributeLogic.ATTRIB_DEFAULT_VALUE)).getValue();
+		return ((TextValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
 	}
 
 

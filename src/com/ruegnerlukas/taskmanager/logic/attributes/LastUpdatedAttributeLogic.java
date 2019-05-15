@@ -27,7 +27,7 @@ public class LastUpdatedAttributeLogic {
 
 	static {
 		Map<String, Class<?>> map = new HashMap<>();
-		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, LastUpdatedValue.class);
+		map.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, LastUpdatedValue.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();

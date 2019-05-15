@@ -31,9 +31,9 @@ public class TaskFlagAttributeLogic {
 	static {
 		Map<String, Class<?>> map = new HashMap<>();
 		map.put(FLAG_FLAG_LIST, TaskFlag[].class);
-		map.put(AttributeLogic.ATTRIB_USE_DEFAULT, Boolean.class);
-		map.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, FlagValue.class);
-		map.put(AttributeLogic.ATTRIB_TASK_VALUE_TYPE, FlagValue.class);
+		map.put(TaskAttribute.ATTRIB_USE_DEFAULT, Boolean.class);
+		map.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, FlagValue.class);
+		map.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, FlagValue.class);
 		DATA_TYPES = Collections.unmodifiableMap(map);
 
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
@@ -128,28 +128,28 @@ public class TaskFlagAttributeLogic {
 
 
 	private static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(AttributeLogic.ATTRIB_USE_DEFAULT, useDefault);
+		attribute.values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
 	}
 
 
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_USE_DEFAULT);
+		return attribute.getValue(TaskAttribute.ATTRIB_USE_DEFAULT);
 	}
 
 
 
 
 	private static void setDefaultValue(TaskAttribute attribute, FlagValue defaultValue) {
-		attribute.values.put(AttributeLogic.ATTRIB_DEFAULT_VALUE, defaultValue);
+		attribute.values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, defaultValue);
 	}
 
 
 
 
 	public static FlagValue getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(AttributeLogic.ATTRIB_DEFAULT_VALUE);
+		return attribute.getValue(TaskAttribute.ATTRIB_DEFAULT_VALUE);
 	}
 
 
