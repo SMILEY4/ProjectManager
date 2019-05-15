@@ -1,388 +1,300 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.architecture.Response;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.*;
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.Project;
-import com.ruegnerlukas.taskmanager.data.Task;
-import com.ruegnerlukas.taskmanager.data.groups.TaskGroupData;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskFlag;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.data.TaskAttributeData;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.FlagValue;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NoValue;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.NumberValue;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.values.TaskAttributeValue;
-import com.ruegnerlukas.taskmanager.logic.attributes.validation.AttributeValidator;
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.AndFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.OrFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.*;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
+import com.ruegnerlukas.taskmanager.logic.events.TaskValueChangeEvent;
+import javafx.collections.ListChangeListener;
+import javafx.event.EventHandler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class TaskLogic {
 
 
-	//======================//
-	//       INTERNAL       //
-	//======================//
+	public static void init() {
 
+		Data.projectProperty.addListener(((observable, oldValue, newProject) -> {
+			if (newProject != null) {
 
+				// add listeners to "remove taskattribute"
+				newProject.data.attributes.addListener((ListChangeListener<TaskAttribute>) c -> {
+					while (c.next()) {
+						if (c.wasRemoved()) {
+							for (TaskAttribute attribute : c.getRemoved()) {
+								if (newProject.data.filterData.get() != null) {
+									FilterCriteria criteria = newProject.data.filterData.get();
+									if (criteria.type == FilterCriteria.CriteriaType.TERMINAL
+											&& ((TerminalFilterCriteria) criteria).attribute.get() == attribute) {
+										setFilter(newProject, null, null);
+									} else {
+										int nRemoved = removeAttributeFromFilterCriteria(criteria, attribute);
+										if (nRemoved > 0) {
+											newProject.temporaryData.lastGroupsValid.set(false);
+										}
+									}
 
+								}
+								if (newProject.data.groupData.get() != null && newProject.data.groupData.get().attributes.contains(attribute)) {
+									if (newProject.data.groupData.get().attributes.remove(attribute)) {
+										newProject.temporaryData.lastGroupsValid.set(false);
+										if (newProject.data.groupData.get().attributes.isEmpty()) {
+											setGroupData(newProject, null, null);
+										}
+									}
+								}
+								if (newProject.data.sortData.get() != null) {
+									for (int i = 0; i < newProject.data.sortData.get().sortElements.size(); i++) {
+										SortElement element = newProject.data.sortData.get().sortElements.get(i);
+										if (element.attribute.get() == attribute) {
+											newProject.data.sortData.get().sortElements.remove(element);
+											newProject.temporaryData.lastGroupsValid.set(false);
+											if (newProject.data.sortData.get().sortElements.isEmpty()) {
+												setSortData(newProject, null, null);
+											}
+											break;
+										}
+									}
+								}
+							}
+						}
+					}
+				});
 
-	TaskLogic() {
-
-		// attribute removed
-		EventManager.registerListener(e -> {
-			AttributeRemovedEvent event = (AttributeRemovedEvent) e;
-			onAttributeRemoved(event.getAttribute());
-		}, AttributeRemovedEvent.class);
-
-
-		// attribute created
-		EventManager.registerListener(e -> {
-			AttributeCreatedEvent event = (AttributeCreatedEvent) e;
-			onAttributeCreated(event.getAttribute());
-		}, AttributeCreatedEvent.class);
-
-
-		// attribute changed
-		EventManager.registerListener(e -> {
-			AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
-			onAttributeChanged(event.getAttribute(), event.getChangedVars());
-		}, AttributeUpdatedEvent.class);
-
-		// recommend task-group-refresh
-		EventManager.registerListener(e -> {
-			EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
-		}, AttributeRemovedEvent.class, FilterCriteriaChangedEvent.class, GroupOrderChangedEvent.class, SortElementsChangedEvent.class, TaskCreatedEvent.class, TaskDeletedEvent.class, PresetLoadEvent.class);
-
-		EventManager.registerListener(e -> {
-			AttributeTypeChangedEvent event = (AttributeTypeChangedEvent) e;
-			if (isAttributeRelevant(event.getAttribute()) || Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
-				EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
 			}
-		}, AttributeTypeChangedEvent.class);
-
-		EventManager.registerListener(e -> {
-			AttributeUpdatedEvent event = (AttributeUpdatedEvent) e;
-			if (isAttributeRelevant(event.getAttribute()) || Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
-				EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
-			}
-		}, AttributeUpdatedEvent.class);
-
-		EventManager.registerListener(e -> {
-			TaskValueChangedEvent event = (TaskValueChangedEvent) e;
-			if (isAttributeRelevant(event.getAttribute()) || Logic.filter.isAttributeRelevant(event.getAttribute()) || Logic.group.isAttributeRelevant(event.getAttribute()) || Logic.sort.isAttributeRelevant(event.getAttribute())) {
-				EventManager.fireEvent(new RefreshTaskDisplayRecommendationEvent(this));
-			}
-		}, TaskValueChangedEvent.class);
-
+		}));
 	}
 
 
 
 
-	private boolean isAttributeRelevant(TaskAttribute attribute) {
-		TaskAttributeType type = attribute.data.getType();
-		return (type == TaskAttributeType.FLAG || type == TaskAttributeType.DESCRIPTION || type == TaskAttributeType.ID);
-	}
-
-
-
-
-	protected List<Task> getTasksInternal() {
-		return Logic.project.getProject().tasks;
-	}
-
-
-
-
-	private void onAttributeCreated(TaskAttribute attribute) {
-//		List<Task> tasks = getTasksInternal();
-//		for (int i = 0; i < tasks.size(); i++) {
-//			setAttributeValue(tasks.get(i), attribute, new NoValue());
-//		}
-	}
-
-
-
-
-	private void onAttributeRemoved(TaskAttribute attribute) {
-		List<Task> tasks = getTasksInternal();
-		for (int i = 0; i < tasks.size(); i++) {
-			removeAttribute(tasks.get(i), attribute);
-		}
-	}
-
-
-
-
-	private void onAttributeChanged(TaskAttribute attribute, Map<TaskAttributeData.Var, TaskAttributeValue> changedVars) {
-
-		// update tasks when a TaskFlag was removed
-		if (changedVars.containsKey(TaskAttributeData.Var.FLAG_ATT_FLAGS)) {
-			FlagAttributeData flagData = (FlagAttributeData) Logic.attribute.findAttribute(TaskAttributeType.FLAG).data;
-			List<Task> taskList = Logic.project.getProject().tasks;
-			for (Task task : taskList) {
-				TaskFlag currFlag = ((FlagValue) getValue(task, Logic.attribute.findAttribute(FlagAttributeData.NAME))).getFlag();
-				if (!flagData.hasFlag(currFlag)) {
-					setAttributeValue(task, attribute, new FlagValue(flagData.defaultFlag));
+	@SuppressWarnings ("Duplicates")
+	private static int removeAttributeFromFilterCriteria(FilterCriteria criteria, TaskAttribute attribute) {
+		int nRemoved = 0;
+		if (criteria.type == FilterCriteria.CriteriaType.AND) {
+			AndFilterCriteria andCriteria = (AndFilterCriteria) criteria;
+			List<FilterCriteria> toRemove = new ArrayList<>();
+			for (int i = 0; i < andCriteria.subCriteria.size(); i++) {
+				FilterCriteria child = andCriteria.subCriteria.get(i);
+				if (child.type == FilterCriteria.CriteriaType.TERMINAL && ((TerminalFilterCriteria) child).attribute.get() == attribute) {
+					toRemove.add(child);
+				} else if (child.type != FilterCriteria.CriteriaType.TERMINAL) {
+					nRemoved += removeAttributeFromFilterCriteria(child, attribute);
 				}
 			}
+			andCriteria.subCriteria.removeAll(toRemove);
+			nRemoved += toRemove.size();
 		}
-
+		if (criteria.type == FilterCriteria.CriteriaType.OR) {
+			OrFilterCriteria orCriteria = (OrFilterCriteria) criteria;
+			List<FilterCriteria> toRemove = new ArrayList<>();
+			for (int i = 0; i < orCriteria.subCriteria.size(); i++) {
+				FilterCriteria child = orCriteria.subCriteria.get(i);
+				if (child.type == FilterCriteria.CriteriaType.TERMINAL && ((TerminalFilterCriteria) child).attribute.get() == attribute) {
+					toRemove.add(child);
+				} else if (child.type != FilterCriteria.CriteriaType.TERMINAL) {
+					nRemoved += removeAttributeFromFilterCriteria(child, attribute);
+				}
+			}
+			orCriteria.subCriteria.removeAll(toRemove);
+			nRemoved += toRemove.size();
+		}
+		return nRemoved;
 	}
 
 
 
 
-	protected boolean setValue(Task task, TaskAttribute attribute, TaskAttributeValue value) {
-		AttributeValidator validator = AttributeLogic.VALIDATOR_MAP.get(attribute.data.getType());
-		if (validator.validate(attribute.data, value)) {
-			task.attributes.put(attribute, value);
-			return true;
+	public static Task createTask(Project project) {
+		Task task = new Task();
+
+		LocalDateTime time = LocalDateTime.now();
+
+		// set id
+		TaskAttribute idAttribute = AttributeLogic.findAttribute(project, AttributeType.ID);
+		final int id = project.settings.idCounter.get();
+		project.settings.idCounter.set(id + 1);
+		setValue(project, task, idAttribute, new IDValue(id));
+
+		// set date created
+		TaskAttribute createdAttribute = AttributeLogic.findAttribute(project, AttributeType.CREATED);
+		setValue(project, task, createdAttribute, new CreatedValue(time));
+
+		// set last updated
+		TaskAttribute updatedAttribute = AttributeLogic.findAttribute(project, AttributeType.LAST_UPDATED);
+		setValue(project, task, updatedAttribute, new LastUpdatedValue(time));
+
+		// TEMP
+
+		// set random number
+		double randNumber = new Random().nextInt(5);
+		TaskAttribute numberAttribute = AttributeLogic.findAttribute(project, AttributeType.NUMBER);
+
+		if (numberAttribute != null) {
+			setValue(project, task, numberAttribute, new NumberValue(randNumber));
+
+			TaskAttribute descriptionAttribute = AttributeLogic.findAttribute(project, AttributeType.DESCRIPTION);
+			setValue(project, task, descriptionAttribute, new DescriptionValue("Some Text " + randNumber));
+		}
+
+
+		return task;
+	}
+
+
+
+
+	public static TaskValue getValueOrDefault(Task task, TaskAttribute attribute) {
+		TaskValue<?> trueValue = getTaskValue(task, attribute);
+		if (trueValue.getAttType() != attribute.type.get()) {
+			if (AttributeLogic.getUsesDefault(attribute)) {
+				return AttributeLogic.getDefaultValue(attribute);
+			} else {
+				return new NoValue();
+			}
 		} else {
+			return trueValue;
+		}
+	}
+
+
+
+
+	public static TaskValue<?> getTaskValue(Task task, TaskAttribute attribute) {
+		TaskValue<?> value = task.attributes.get(attribute);
+		if (value == null) {
+			return new NoValue();
+		} else {
+			return value;
+		}
+	}
+
+
+
+
+	public static boolean setValue(Project project, Task task, TaskAttribute attribute, TaskValue<?> value) {
+
+		System.out.println("SET VALUE: " + attribute.name.get() + " = " + value);
+
+		// validate value
+		if (!AttributeLogicManager.isValidTaskValue(attribute, value == null ? new NoValue() : value)) {
+			Logger.get().debug("Failed to set task value: " + attribute.name.get() + " - invalid value: " + value + (value != null ? "." + value.getValue() : ""));
 			return false;
 		}
-	}
 
-
-
-
-	protected TaskAttributeValue getValue(Task task, TaskAttribute attribute) {
-		if (task.attributes.containsKey(attribute)) {
-			return task.attributes.get(attribute);
-		} else if (attribute.data.usesDefault()) {
-			return attribute.data.getDefault();
+		// set value
+		TaskValue<?> prevValue = task.attributes.get(attribute);
+		if(value == null) {
+			task.attributes.remove(attribute);
 		} else {
-			return new NoValue();
+			task.attributes.put(attribute, value);
 		}
-	}
+		onTaskValueChanged(task, attribute, prevValue, value);
 
+		// check/update displayed tasks
+		boolean modifiedDisplay = false;
 
+		// check filter data
+		if (!modifiedDisplay && project.data.filterData.get() != null) {
+			FilterCriteria filterData = project.data.filterData.get();
+			if (getUsedFilterAttributes(filterData).contains(attribute)) {
+				modifiedDisplay = true;
+			}
+		}
 
+		// check group data
+		if (!modifiedDisplay && project.data.groupData.get() != null) {
+			TaskGroupData groupData = project.data.groupData.get();
+			if (groupData.attributes.contains(attribute)) {
+				modifiedDisplay = true;
+			}
+		}
 
-	protected boolean hasValue(Task task, TaskAttribute attribute) {
-		return task.attributes.containsKey(attribute);
-	}
-
-
-	//======================//
-	//        GETTER        //
-	//======================//
-
-
-
-
-	public Response<List<Task>> getTaskWithValue(TaskAttribute attribute) {
-		Project project = Logic.project.getProject();
-		if (project != null) {
-			List<Task> allTasks = project.tasks;
-			List<Task> tasks = new ArrayList<>();
-			for (int i = 0; i < allTasks.size(); i++) {
-				Task task = allTasks.get(i);
-				if (hasValue(task, attribute)) {
-					tasks.add(task);
+		// check sort data
+		if (!modifiedDisplay && project.data.sortData.get() != null) {
+			SortData sortData = project.data.sortData.get();
+			for (SortElement element : sortData.sortElements) {
+				if (element.attribute.get() == attribute) {
+					modifiedDisplay = true;
+					break;
 				}
 			}
-			return new Response<List<Task>>().complete(tasks);
+		}
 
-		} else {
-			return new Response<List<Task>>().complete(new ArrayList<>(), Response.State.FAIL);
+		if (modifiedDisplay) {
+			TaskDisplayLogic.onTaskModified(project, task, attribute);
+		}
+
+		return true;
+	}
+
+
+
+
+	private static final List<EventHandler<TaskValueChangeEvent>> valueChangedHandlers = new ArrayList<>();
+
+
+
+
+	public static void addOnTaskValueChanged(EventHandler<TaskValueChangeEvent> handler) {
+		valueChangedHandlers.add(handler);
+	}
+
+
+
+
+	public static void removeOnTaskValueChanged(EventHandler<TaskValueChangeEvent> handler) {
+		valueChangedHandlers.remove(handler);
+	}
+
+
+
+
+	private static void onTaskValueChanged(Task task, TaskAttribute attribute, TaskValue<?> prevValue, TaskValue<?> newValue) {
+		TaskValueChangeEvent event = new TaskValueChangeEvent(task, attribute, prevValue, newValue);
+		for (EventHandler<TaskValueChangeEvent> handler : valueChangedHandlers) {
+			handler.handle(event);
 		}
 	}
 
 
 
 
-	public Response<TaskGroupData> getTaskGroups() {
-		Project project = Logic.project.getProject();
-		if (project != null) {
-			List<Task> allTasks = project.tasks;
-			List<Task> filteredTasks = Logic.filter.applyFilters(allTasks);
-			TaskGroupData groupedTasks = Logic.group.applyGroups(filteredTasks);
-			Logic.sort.applySort(groupedTasks);
-			groupedTasks.tasks.addAll(filteredTasks);
-			return new Response<TaskGroupData>().complete(groupedTasks);
-		} else {
-			return new Response<TaskGroupData>().complete(null, Response.State.FAIL);
-		}
+	protected static List<TaskAttribute> getUsedFilterAttributes(FilterCriteria criteria) {
+		List<TaskAttribute> attributes = new ArrayList<>();
+		getUsedFilterAttributes(criteria, attributes);
+		return attributes;
 	}
 
 
 
 
-	/**
-	 * Requests a list of all tasks
-	 */
-	public Response<List<Task>> getTasks() {
-		Project project = Logic.project.getProject();
-		if (project != null) {
-			return new Response<List<Task>>().complete(project.tasks);
-		} else {
-			return new Response<List<Task>>().complete(new ArrayList<>(), Response.State.FAIL);
+	private static void getUsedFilterAttributes(FilterCriteria criteria, List<TaskAttribute> attributes) {
+		if (criteria.type == FilterCriteria.CriteriaType.TERMINAL) {
+			attributes.add(((TerminalFilterCriteria) criteria).attribute.get());
 		}
-	}
-
-
-
-
-	/**
-	 * Requests a list of all tasks with the given value for a given attribute
-	 */
-	public Response<List<Task>> getTasks(TaskAttribute attribute, TaskAttributeValue value) {
-		Project project = Logic.project.getProject();
-		if (project != null) {
-
-			AttributeValidator validator = AttributeLogic.VALIDATOR_MAP.get(attribute.data.getType());
-			if (validator.validate(attribute.data, value)) {
-				List<Task> tasks = new ArrayList<>();
-				for (int i = 0; i < project.tasks.size(); i++) {
-					Task task = project.tasks.get(i);
-					TaskAttributeValue taskValue = getValue(task, attribute);
-					if (taskValue.equals(value)) {
-						tasks.add(task);
-					}
-				}
-
-			} else {
-				return new Response<List<Task>>().complete(new ArrayList<>(), Response.State.FAIL);
+		if (criteria.type == FilterCriteria.CriteriaType.AND) {
+			for (FilterCriteria child : ((AndFilterCriteria) criteria).subCriteria) {
+				getUsedFilterAttributes(child, attributes);
 			}
-
-			return new Response<List<Task>>().complete(project.tasks);
-
-
-		} else {
-			return new Response<List<Task>>().complete(new ArrayList<>(), Response.State.FAIL);
 		}
-	}
-
-
-
-
-	/**
-	 * Request the value of the given task for the given attribute. If the value is not set for the task,
-	 * it returns the default value or "NoValue"
-	 */
-	public Response<TaskAttributeValue> getAttributeValue(Task task, String attributeName) {
-
-		Project project = Logic.project.getProject();
-		if (project != null) {
-
-			if (task == null) {
-				return new Response<TaskAttributeValue>().complete(null, Response.State.FAIL);
-
-			} else if (!project.tasks.contains(task)) {
-				return new Response<TaskAttributeValue>().complete(null, Response.State.FAIL);
-
-			} else {
-
-				TaskAttribute attribute = Logic.attribute.findAttribute(attributeName);
-				if (attribute == null) {
-					return new Response<TaskAttributeValue>().complete(null, Response.State.FAIL);
-
-				} else {
-					TaskAttributeValue value = getValue(task, attribute);
-					return new Response<TaskAttributeValue>().complete(value);
-				}
-
-			}
-
-		} else {
-			return new Response<TaskAttributeValue>().complete(null, Response.State.FAIL);
-		}
-
-	}
-
-
-
-
-	public Response<Task> getTaskByID(int id) {
-		Project project = Logic.project.getProject();
-		if (project != null) {
-			for (int i = 0, n = getTasksInternal().size(); i < n; i++) {
-				Task task = getTasksInternal().get(i);
-				if (task.getID() == id) {
-					return new Response<Task>().complete(task);
-				}
-			}
-			return new Response<Task>().complete(null, Response.State.FAIL);
-		} else {
-			return new Response<Task>().complete(null, Response.State.FAIL);
-		}
-	}
-
-
-	//======================//
-	//        SETTER        //
-	//======================//
-
-
-
-
-
-
-	/**
-	 * Creates a new Task <p>
-	 * Events: <p>
-	 * - TaskCreatedEvent: when the task was created
-	 */
-	public Response<Task> createNewTask() {
-
-		Project project = Logic.project.getProject();
-		if (project != null) {
-
-			// createItem task
-			Task task = new Task();
-
-			// set default attrib-values
-			for (TaskAttribute attribute : project.attributes) {
-				if (attribute.data.usesDefault()) {
-					setValue(task, attribute, attribute.data.getDefault());
-				}
-			}
-			setValue(task, Logic.attribute.findAttribute(TaskAttributeType.ID), new NumberValue(project.idCounter++));
-
-			// add to project
-			project.tasks.add(task);
-			EventManager.fireEvent(new TaskCreatedEvent(task, this));
-			return new Response<Task>().complete(task);
-
-		} else {
-			return new Response<Task>().complete(null, Response.State.FAIL);
-		}
-	}
-
-
-
-
-	/**
-	 * Deletes the given task. The task is still saved in the archived-task-list <p>
-	 * Events: <p>
-	 * - TaskDeletedEvent: when the task was deleted
-	 */
-	public void deleteTask(Task task) {
-		Project project = Logic.project.getProject();
-		if (project != null) {
-			boolean removed = project.tasks.remove(task);
-			if (removed) {
-
-				project.archivedTasks.add(task);
-				if (project.archivedTasks.size() > project.archivedTasksLimit) {
-					project.archivedTasks.remove(0);
-				}
-
-				List<TaskAttribute> attributes = Logic.attribute.findAttributes(TaskAttributeType.DEPENDENCY);
-				for (TaskAttribute attribute : attributes) {
-					List<Task> dependOn = Logic.dependencies.getDependentOnInternal(task, attribute);
-					for (Task dep : dependOn) {
-						Logic.dependencies.deleteDependency(dep, task, attribute);
-					}
-				}
-
-				EventManager.fireEvent(new TaskDeletedEvent(task, this));
+		if (criteria.type == FilterCriteria.CriteriaType.OR) {
+			for (FilterCriteria child : ((OrFilterCriteria) criteria).subCriteria) {
+				getUsedFilterAttributes(child, attributes);
 			}
 		}
 	}
@@ -390,53 +302,36 @@ public class TaskLogic {
 
 
 
-	/**
-	 * Sets the value of a given task and attribute to the given value <p>
-	 * Events: <p>
-	 * - TaskValueChangedRejection: when the value could not be changed (NOT_ALLOWED = the value is invalid , NOT_EXISTS = given task, attribute or value is null or is not part of project) <p>
-	 * - TaskValueChangedRejection: when the value of the task and attribute was changed
-	 */
-	public void setAttributeValue(Task task, String attributeName, TaskAttributeValue value) {
-		Project project = Logic.project.getProject();
-		if (project != null) {
-			TaskAttribute attribute = Logic.attribute.findAttribute(attributeName);
-			setAttributeValue(task, attribute, value);
-		}
+	public static void setFilter(Project project, FilterCriteria criteria, String preset) {
+		project.data.filterData.set(criteria);
+		project.data.selectedFilterPreset.set(preset);
 	}
 
 
 
 
-	/**
-	 * Sets the value of a given task and attribute to the given value <p>
-	 * Events: <p>
-	 * - TaskValueChangedRejection: when the value could not be changed (NOT_ALLOWED = the value is invalid , NOT_EXISTS = given task, attribute or value is null or is not part of project) <p>
-	 * - TaskValueChangedRejection: when the value of the task and attribute was changed
-	 */
-	public void setAttributeValue(Task task, TaskAttribute attribute, TaskAttributeValue value) {
+	public static void setGroupData(Project project, TaskGroupData groupData, String preset) {
+		if (preset == null && groupData != null && groupData.attributes.isEmpty() && groupData.customHeaderString.get() == null) {
+			project.data.groupData.set(null);
+			project.data.selectedGroupPreset.set(null);
+		} else {
 
-		Project project = Logic.project.getProject();
-		if (project != null) {
-
-			if (task == null || attribute == null || value == null || !project.tasks.contains(task) || !project.attributes.contains(attribute)) {
-				EventManager.fireEvent(new TaskValueChangedRejection(task, attribute, null, value, EventCause.NOT_EXISTS, this));
-
-			} else if (attribute.data.getType() == TaskAttributeType.ID) {
-				EventManager.fireEvent(new TaskValueChangedRejection(task, attribute, null, value, EventCause.NOT_ALLOWED, this));
-
-			} else {
-				TaskAttributeValue oldValue = getValue(task, attribute);
-				if (!oldValue.equals(value)) {
-					if (setValue(task, attribute, value)) {
-						EventManager.fireEvent(new TaskValueChangedEvent(task, attribute, oldValue, value, this));
+			// remove duplicates
+			if (groupData != null) {
+				Set<TaskAttribute> attributes = new HashSet<>();
+				Iterator<TaskAttribute> iter = groupData.attributes.iterator();
+				while (iter.hasNext()) {
+					TaskAttribute a = iter.next();
+					if (attributes.contains(a)) {
+						iter.remove();
 					} else {
-						EventManager.fireEvent(new TaskValueChangedRejection(task, attribute, oldValue, value, EventCause.NOT_ALLOWED, this));
+						attributes.add(a);
 					}
 				}
-
-
 			}
 
+			project.data.groupData.set(groupData);
+			project.data.selectedGroupPreset.set(preset);
 		}
 
 	}
@@ -444,81 +339,28 @@ public class TaskLogic {
 
 
 
-	/**
-	 * Clears the value of a given task and attribute <p>
-	 * Events: <p>
-	 * - TaskValueChangedRejection: when the value could not be cleared (NOT_ALLOWED = the value is invalid, NOT_EXISTS = given task or attribute is null or is not part of project) <p>
-	 * - TaskValueChangedRejection: when the value of the task and attribute was changed
-	 */
-	public void removeAttribute(Task task, TaskAttribute attribute) {
+	public static void setSortData(Project project, SortData sortData, String preset) {
+		if (preset == null && sortData != null && sortData.sortElements.isEmpty()) {
+			project.data.sortData.set(null);
+			project.data.selectedSortPreset.set(null);
+		} else {
 
-		Project project = Logic.project.getProject();
-		if (project != null) {
-
-			TaskAttributeValue oldValue = getValue(task, attribute);
-
-			if (project.tasks.contains(task)) {
-
-				if (attribute.data.getType() == TaskAttributeType.ID) {
-					EventManager.fireEvent(new TaskValueChangedRejection(task, attribute, null, null, EventCause.NOT_ALLOWED, this));
-				} else {
-					task.attributes.remove(attribute);
-					EventManager.fireEvent(new TaskValueChangedEvent(task, attribute, oldValue, null, this));
-				}
-
-			} else {
-				EventManager.fireEvent(new TaskValueChangedRejection(task, attribute, oldValue, null, EventCause.NOT_EXISTS, this));
-
-			}
-
-		}
-
-	}
-
-
-
-
-	public static final String CORR_BEH_DELETE = "Delete values";
-	public static final String CORR_BEH_DEFAULT = "Set Values to default value";
-
-
-
-
-	public void correctTaskValues(TaskAttribute attribute, String behaviour, boolean onlyInvalid) {
-
-		Project project = Logic.project.getProject();
-		if (project != null) {
-
-			List<Task> allTasks = project.tasks;
-			List<Task> affectedTasks = new ArrayList<>();
-			for (int i = 0; i < allTasks.size(); i++) {
-				Task task = allTasks.get(i);
-				if (hasValue(task, attribute)) {
-					affectedTasks.add(task);
-				}
-			}
-
-			for (Task task : affectedTasks) {
-
-				TaskAttributeValue value = getValue(task, attribute);
-				AttributeValidator validator = AttributeLogic.VALIDATOR_MAP.get(attribute.data.getType());
-				if (onlyInvalid && validator.validate(attribute.data, value)) {
-					continue;
-				}
-
-				if (behaviour.equals(CORR_BEH_DELETE)) {
-					removeAttribute(task, attribute);
-				}
-				if (behaviour.equals(CORR_BEH_DEFAULT)) {
-					if (attribute.data.usesDefault()) {
-						setAttributeValue(task, attribute, attribute.data.getDefault());
+			// remove duplicates
+			if (sortData != null) {
+				List<SortElement> toRemove = new ArrayList<>();
+				Set<TaskAttribute> attributes = new HashSet<>();
+				for (SortElement e : sortData.sortElements) {
+					if (attributes.contains(e.attribute.get())) {
+						toRemove.add(e);
 					} else {
-						removeAttribute(task, attribute);
+						attributes.add(e.attribute.get());
 					}
 				}
-
+				sortData.sortElements.removeAll(toRemove);
 			}
 
+			project.data.sortData.set(sortData);
+			project.data.selectedSortPreset.set(preset);
 		}
 
 	}

@@ -5,8 +5,13 @@ import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.builder.DefaultMessageBuilder;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.ui.main.MainView;
-import com.ruegnerlukas.taskmanager.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.logic.PresetLogic;
+import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
+import com.ruegnerlukas.taskmanager.logic.TaskDisplayLogic;
+import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
+import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.ui.viewmain.MainView;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
@@ -32,8 +37,24 @@ public class TaskManager extends Application {
 			}
 		}, "Shutdown-thread"));
 
-		// start application
 		Logger.get().blankLine();
+
+		// initialize logic
+		System.out.println("Initializing Logic");
+		String[] status = AttributeLogicManager.validateLogicClasses();
+		for (String str : status) {
+			if (str.startsWith("ERROR")) {
+				System.err.println(str);
+			} else {
+				System.out.println(str);
+			}
+		}
+		ProjectLogic.init();
+		PresetLogic.init();
+		TaskLogic.init();
+		TaskDisplayLogic.init();
+
+		// start application
 		Logger.get().info("Starting Application (" + JarLocation.getJarLocation(TaskManager.class));
 		Logger.get().info("System information:   JAVA = " + SystemUtils.getJavaRuntimeName() + " " + SystemUtils.getJavaVersion() + ",   OS = " + SystemUtils.getOSName());
 		launch(args);

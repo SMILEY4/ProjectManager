@@ -1,173 +1,162 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.architecture.Response;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.EventManager;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectClosedEvent;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectCreatedEvent;
-import com.ruegnerlukas.taskmanager.architecture.eventsystem.events.ProjectRenamedEvent;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.Project;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.TaskAttributeType;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.data.DescriptionAttributeData;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.data.FlagAttributeData;
-import com.ruegnerlukas.taskmanager.data.taskAttributes.data.IDAttributeData;
-
-import java.io.File;
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
+import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.IDValue;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 public class ProjectLogic {
 
 
-	//======================//
-	//       INTERNAL       //
-	//======================//
-
-
-
-
-	protected Project getProject() {
-		return Data.get().project;
+	public static void init() {
 	}
 
 
 
 
-	protected void setProject(Project project) {
-		Data.get().project = project;
-	}
-
-
-	//======================//
-	//        GETTER        //
-	//======================//
-
-
-
-
-	/**
-	 * checks, if a project is currently open
-	 */
-	public Response<Boolean> getIsProjectOpen() {
-		return new Response<Boolean>().complete(getProject() != null);
+	public static void closeCurrentProject() {
+		setCurrentProject(null);
 	}
 
 
 
 
-	/**
-	 * request the currently opened project. Returns FAIL, if no project opened.
-	 */
-	public Response<Project> getCurrentProject() {
-		Project project = getProject();
-		return new Response<Project>().complete(project, project != null ? Response.State.SUCCESS : Response.State.FAIL);
-	}
-
-
-	//======================//
-	//        SETTER        //
-	//======================//
-
-
-
-
-	/**
-	 * Closes the old project and opens a new project <p>
-	 * Events: <p>
-	 * - ProjectClosedEvent: if a previous project was closed in the process<p>
-	 * - ProjectCreatedEvent: after the project was created
-	 */
-	public void createProject() {
-		createProject("New Project");
+	public static void setCurrentProject(Project project) {
+		Data.projectProperty.set(project);
 	}
 
 
 
 
-	/**
-	 * Closes the old project and opens a new project with the given name <p>
-	 * Events: <p>
-	 * - ProjectClosedEvent: if a previous project was closed in the process<p>
-	 * - ProjectCreatedEvent: after the project was created
-	 */
-	public void createProject(String name) {
+	public static Project createNewProject() {
+		return createNewProject("New Project");
+	}
 
-		// close prev. project
-		Project prevProject = getProject();
-		if (prevProject != null) {
-			setProject(null);
-			EventManager.fireEvent(new ProjectClosedEvent(prevProject, this));
+
+
+
+	public static Project createNewProject(String name) {
+		Project project = new Project();
+		project.settings.name.set(name);
+		for (AttributeType type : AttributeType.getFixedTypes()) {
+			project.data.attributes.add(AttributeLogic.createTaskAttribute(type, type.display + " Attribute"));
+		}
+		project.data.attributes.add(AttributeLogic.createTaskAttribute(AttributeType.NUMBER));
+		return project;
+	}
+
+
+
+
+	public static void saveProject(Project project) {
+		System.out.println("TODO: save current project."); // TODO
+	}
+
+
+
+
+	public static void renameProject(Project project, String newName) {
+		project.settings.name.set(newName);
+	}
+
+
+
+
+	public static void lockSwitchTaskAttributes(Project project) {
+		project.settings.attributesLocked.set(!project.settings.attributesLocked.get());
+	}
+
+
+
+
+	public static boolean addAttributeToProject(Project project, TaskAttribute attribute) {
+
+		// check name
+		for (TaskAttribute att : project.data.attributes) {
+			if (att.name.get().equals(attribute.name.get())) {
+				return false;
+			}
+		}
+		// check type
+		if (attribute.type.get().fixed) {
+			for (TaskAttribute att : project.data.attributes) {
+				if (att.type.get() == attribute.type.get()) {
+					return false;
+				}
+			}
+		}
+		// add attribute
+		project.data.attributes.add(attribute);
+		return true;
+	}
+
+
+
+
+	public static boolean removeAttributeFromProject(Project project, TaskAttribute attribute) {
+
+		if (!project.data.attributes.remove(attribute)) {
+			return false;
 		}
 
-		// createItem/open new project
-		Project newProject = new Project(name);
-		newProject.attributes.add(new TaskAttribute(IDAttributeData.NAME, TaskAttributeType.ID));
-		newProject.attributes.add(new TaskAttribute(FlagAttributeData.NAME, TaskAttributeType.FLAG));
-		newProject.attributes.add(new TaskAttribute(DescriptionAttributeData.NAME, TaskAttributeType.DESCRIPTION));
-		setProject(newProject);
-		EventManager.fireEvent(new ProjectCreatedEvent(newProject, this));
-	}
-
-
-
-
-	/**
-	 * TODO: load project oes nothing
-	 */
-	public void loadProject(File rootFile) {
-		// TODO load project
-	}
-
-
-
-
-	/**
-	 * TODO: save project oes nothing
-	 */
-	public void saveProject() {
-		// TODO save project
-	}
-
-
-
-
-	/**
-	 * closes the current project<p>
-	 * Events: <p>
-	 * - ProjectClosedEvent: when a project was closed
-	 */
-	public void closeProject() {
-		Project project = getProject();
-		if (project != null) {
-			setProject(null);
-			EventManager.fireEvent(new ProjectClosedEvent(project, this));
-		}
-	}
-
-
-
-
-	/**
-	 * renames the current project to the given name. The new name can not be empty.<p>
-	 * Events: <p>
-	 * - ProjectRenamedEvent: when the project was renamed
-	 */
-	public void renameProject(String name) {
-
-		// get project
-		Project project = getProject();
-		if (project == null) {
-			return;
+		// check filter data
+		if (project.data.filterData.get() != null) {
+			FilterCriteria filterData = project.data.filterData.get();
+			if (TaskLogic.getUsedFilterAttributes(filterData).contains(attribute)) {
+				project.temporaryData.lastGroupsValid.set(false);
+				return true;
+			}
 		}
 
-		// get names
-		String newName = name.trim();
-		String oldName = getProject().name;
-
-		// rename project
-		if (!newName.isEmpty()) {
-			project.name = newName;
-			EventManager.fireEvent(new ProjectRenamedEvent(oldName, newName, this));
+		// check group data
+		if (project.data.groupData.get() != null) {
+			TaskGroupData groupData = project.data.groupData.get();
+			if (groupData.attributes.contains(attribute)) {
+				project.temporaryData.lastGroupsValid.set(false);
+				return true;
+			}
 		}
+
+		// check sort data
+		if (project.data.sortData.get() != null) {
+			SortData sortData = project.data.sortData.get();
+			for (SortElement element : sortData.sortElements) {
+				if (element.attribute.get() == attribute) {
+					project.temporaryData.lastGroupsValid.set(false);
+					return true;
+				}
+			}
+		}
+
+		return true;
+	}
+
+
+
+
+	public static boolean addTaskToProject(Project project, Task task) {
+		TaskAttribute attribute = AttributeLogic.findAttribute(project, AttributeType.ID);
+		if (TaskLogic.getTaskValue(task, attribute).getAttType() == null) {
+			final int id = project.settings.idCounter.get();
+			project.settings.idCounter.set(id + 1);
+			TaskLogic.setValue(project, task, attribute, new IDValue(id));
+		}
+		project.data.tasks.add(task);
+		return true;
+	}
+
+
+
+
+	public static boolean removeTaskFromProject(Project project, Task task) {
+		return project.data.tasks.remove(task);
 	}
 
 

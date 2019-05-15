@@ -1,17 +1,14 @@
 package com.ruegnerlukas.taskmanager.data;
 
 
+import com.ruegnerlukas.taskmanager.utils.CustomProperty;
+
 public class Data {
 
-	private static final Data data = new Data();
-	
-	public static Data get() {
-		return data;
-	}
-	
-	
-	
-	public Project project = null;
 
-	
+	public static CustomProperty<Project> projectProperty = new CustomProperty<>();
+
+
 }
+
+
