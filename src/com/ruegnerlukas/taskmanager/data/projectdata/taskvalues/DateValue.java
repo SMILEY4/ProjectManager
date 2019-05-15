@@ -23,4 +23,12 @@ public class DateValue extends TaskValue<LocalDate> {
 		}
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "TaskValue.Date@" + Integer.toHexString(this.hashCode()) + " = " + getValue();
+	}
+
 }

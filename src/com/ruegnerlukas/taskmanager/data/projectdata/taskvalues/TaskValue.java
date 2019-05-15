@@ -55,4 +55,5 @@ public abstract class TaskValue<T> {
 
 	public abstract int compare(TaskValue<?> other);
 
+
 }

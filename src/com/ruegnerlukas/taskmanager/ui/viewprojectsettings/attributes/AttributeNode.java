@@ -210,7 +210,7 @@ public class AttributeNode extends AnchorPane {
 
 	protected void onTypeSelected(AttributeType oldValue, AttributeType newValue) {
 		if (oldValue != newValue) {
-			AttributeLogic.setTaskAttributeType(getAttribute(), newValue);
+			AttributeLogic.setTaskAttributeType(Data.projectProperty.get(), getAttribute(), newValue);
 			setAttributeContent();
 		}
 	}

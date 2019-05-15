@@ -20,4 +20,12 @@ public class NoValue extends TaskValue {
 	}
 
 
+
+
+	@Override
+	public String toString() {
+		return "TaskValue.NoValue@" + Integer.toHexString(this.hashCode());
+	}
+
+
 }

@@ -29,4 +29,13 @@ public class FlagValue extends TaskValue<TaskFlag> {
 
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "TaskValue.Flag@" + Integer.toHexString(this.hashCode()) + " = " + getValue();
+	}
+
+
 }

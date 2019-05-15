@@ -8,7 +8,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
 import javafx.scene.control.ComboBox;
 
 
@@ -33,7 +32,7 @@ public class ItemChoice extends SimpleSidebarItem {
 		choice.getItems().addAll(ChoiceAttributeLogic.getValueList(getAttribute()));
 
 		this.setValueNode(choice);
-		this.setShowButton(!NumberAttributeLogic.getUseDefault(getAttribute()));
+		this.setShowButton(true);
 	}
 
 
@@ -44,9 +43,12 @@ public class ItemChoice extends SimpleSidebarItem {
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {
 			choice.getSelectionModel().select(((ChoiceValue) objValue).getValue());
-			this.setEmpty(false);
-		} else {
+		}
+		final TaskValue<?> objValueRAW = TaskLogic.getTaskValue(getTask(), getAttribute());
+		if (objValueRAW == null || objValueRAW.getAttType() == null) {
 			setEmpty(true);
+		} else {
+			setEmpty(false);
 		}
 	}
 
@@ -73,7 +75,6 @@ public class ItemChoice extends SimpleSidebarItem {
 
 	@Override
 	protected void onSetEmpty(boolean empty) {
-		this.setEmpty(empty);
 		if (empty) {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NoValue());
 		} else {
@@ -87,6 +88,7 @@ public class ItemChoice extends SimpleSidebarItem {
 				choice.getSelectionModel().select(value);
 			}
 		}
+		this.setEmpty(empty);
 	}
 
 }

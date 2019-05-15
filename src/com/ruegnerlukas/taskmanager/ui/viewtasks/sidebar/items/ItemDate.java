@@ -7,7 +7,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.DateValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.DateAttributeLogic;
 import javafx.scene.control.DatePicker;
 
 import java.time.LocalDate;
@@ -35,7 +34,7 @@ public class ItemDate extends SimpleSidebarItem {
 
 		this.setValueNode(picker);
 		this.setText(getAttribute().name.getName() + ":");
-		this.setShowButton(!DateAttributeLogic.getUseDefault(getAttribute()));
+		this.setShowButton(true);
 	}
 
 
@@ -46,9 +45,12 @@ public class ItemDate extends SimpleSidebarItem {
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {
 			picker.setValue( ((DateValue)objValue).getValue());
-			this.setEmpty(false);
-		} else {
+		}
+		final TaskValue<?> objValueRAW = TaskLogic.getTaskValue(getTask(), getAttribute());
+		if (objValueRAW == null || objValueRAW.getAttType() == null) {
 			setEmpty(true);
+		} else {
+			setEmpty(false);
 		}
 	}
 
@@ -75,7 +77,6 @@ public class ItemDate extends SimpleSidebarItem {
 
 	@Override
 	protected void onSetEmpty(boolean empty) {
-		this.setEmpty(empty);
 		if (empty) {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NoValue());
 		} else {
@@ -83,6 +84,7 @@ public class ItemDate extends SimpleSidebarItem {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new DateValue(value));
 			picker.setValue(value);
 		}
+		this.setEmpty(empty);
 	}
 
 

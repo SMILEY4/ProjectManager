@@ -61,9 +61,15 @@ public class AttributeLogic {
 
 
 
-	public static void setTaskAttributeType(TaskAttribute attribute, AttributeType newType) {
+	public static void setTaskAttributeType(Project project, TaskAttribute attribute, AttributeType newType) {
 		AttributeLogicManager.initTaskAttribute(attribute, newType);
 		attribute.type.set(newType);
+
+		List<Task> tasks = project.data.tasks;
+		for (int i = 0, n = tasks.size(); i < n; i++) {
+			Task task = tasks.get(i);
+			TaskLogic.setValue(project, task, attribute, null);
+		}
 	}
 
 
@@ -88,7 +94,7 @@ public class AttributeLogic {
 		List<Task> tasks = project.data.tasks;
 		for (int i = 0, n = tasks.size(); i < n; i++) {
 			Task task = tasks.get(i);
-			TaskValue<?> value = TaskLogic.getValueOrDefault(task, attribute);
+			TaskValue<?> value = TaskLogic.getTaskValue(task, attribute);
 			if (!AttributeLogicManager.isValidTaskValue(attribute, value)) {
 				TaskValue<?> validValue = AttributeLogicManager.generateValidTaskValue(value, attribute, preferNoValueTask);
 				TaskLogic.setValue(project, task, attribute, validValue);

@@ -23,4 +23,12 @@ public class CreatedValue extends TaskValue<LocalDateTime> {
 		}
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "TaskValue.Created@" + Integer.toHexString(this.hashCode()) + " = " + getValue();
+	}
+
 }

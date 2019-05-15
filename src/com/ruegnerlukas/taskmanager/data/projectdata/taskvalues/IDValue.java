@@ -21,4 +21,13 @@ public class IDValue extends TaskValue<Integer> {
 		}
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "TaskValue.ID@" + Integer.toHexString(this.hashCode()) + " = " + getValue();
+	}
+
+
 }

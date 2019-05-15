@@ -21,4 +21,12 @@ public class DescriptionValue extends TaskValue<String> {
 		}
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "TaskValue.Description@" + Integer.toHexString(this.hashCode()) + " = " + getValue();
+	}
+
 }

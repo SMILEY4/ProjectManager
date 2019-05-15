@@ -32,4 +32,13 @@ public class DependencyValue extends TaskValue<Task[]> {
 		}
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "TaskValue.Dependency@" + Integer.toHexString(this.hashCode()) + " = n=" + getValue().length;
+	}
+
+
 }

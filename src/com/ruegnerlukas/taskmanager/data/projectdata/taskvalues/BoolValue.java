@@ -21,4 +21,13 @@ public class BoolValue extends TaskValue<Boolean> {
 		}
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "TaskValue.Bool@" + Integer.toHexString(this.hashCode()) + " = " + getValue();
+	}
+
+
 }

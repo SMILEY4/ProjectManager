@@ -187,19 +187,22 @@ public class TaskLogic {
 
 
 	public static boolean setValue(Project project, Task task, TaskAttribute attribute, TaskValue<?> value) {
-		if (value == null || value.getAttType() != attribute.type.get()) {
-			value = new NoValue();
-		}
+
+		System.out.println("SET VALUE: " + attribute.name.get() + " = " + value);
 
 		// validate value
-		if (!AttributeLogicManager.isValidTaskValue(attribute, value)) {
+		if (!AttributeLogicManager.isValidTaskValue(attribute, value == null ? new NoValue() : value)) {
 			Logger.get().debug("Failed to set task value: " + attribute.name.get() + " - invalid value: " + value + (value != null ? "." + value.getValue() : ""));
 			return false;
 		}
 
 		// set value
 		TaskValue<?> prevValue = task.attributes.get(attribute);
-		task.attributes.put(attribute, value);
+		if(value == null) {
+			task.attributes.remove(attribute);
+		} else {
+			task.attributes.put(attribute, value);
+		}
 		onTaskValueChanged(task, attribute, prevValue, value);
 
 		// check/update displayed tasks

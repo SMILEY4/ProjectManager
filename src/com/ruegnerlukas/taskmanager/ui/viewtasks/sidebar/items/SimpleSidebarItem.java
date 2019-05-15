@@ -88,7 +88,6 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 		paneRight.getChildren().add(boxValue);
 
 
-		this.setEmpty(true);
 		this.setText(attribute.name.get() + ":");
 		this.setOnAttribNameChanged(event -> {
 			this.setText(attribute.name.get() + ":");
@@ -97,7 +96,9 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 		setupControls();
 		setupInitialValue();
 		setupLogic();
+
 	}
+
 
 
 
@@ -134,6 +135,8 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 
+
+
 	protected abstract void onSetEmpty(boolean empty);
 
 
@@ -145,13 +148,12 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 			labelEmpty.setVisible(true);
 			boxValue.setDisable(true);
 			boxValue.setVisible(false);
-			setEmptyText();
-
 		} else {
 			labelEmpty.setVisible(false);
 			boxValue.setDisable(false);
 			boxValue.setVisible(true);
 		}
+		setEmptyText();
 	}
 
 
@@ -172,7 +174,7 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 
-	public void onAttChangedEvent(AttributeValueChangeEvent event) {
+	public void onAttChangedEvent(AttributeValueChangeEvent e) {
 		setEmptyText();
 		setupControls();
 		setupInitialValue();

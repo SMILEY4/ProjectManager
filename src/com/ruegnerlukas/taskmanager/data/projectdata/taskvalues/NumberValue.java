@@ -35,4 +35,12 @@ public class NumberValue extends TaskValue<Double> {
 		}
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "TaskValue.Number@" + Integer.toHexString(this.hashCode()) + " = " + getValue();
+	}
+
 }

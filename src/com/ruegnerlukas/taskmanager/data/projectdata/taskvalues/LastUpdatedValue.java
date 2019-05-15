@@ -23,4 +23,13 @@ public class LastUpdatedValue extends TaskValue<LocalDateTime> {
 		}
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "TaskValue.LastUpdated@" + Integer.toHexString(this.hashCode()) + " = " + getValue();
+	}
+
+
 }

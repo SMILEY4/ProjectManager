@@ -7,7 +7,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.BoolValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
 import javafx.scene.control.CheckBox;
 
 
@@ -32,7 +31,7 @@ public class ItemBoolean extends SimpleSidebarItem {
 		checkBox.setText("");
 
 		this.setValueNode(checkBox);
-		this.setShowButton(!NumberAttributeLogic.getUseDefault(getAttribute()));
+		this.setShowButton(true);
 	}
 
 
@@ -40,15 +39,16 @@ public class ItemBoolean extends SimpleSidebarItem {
 
 	@Override
 	protected void setupInitialValue() {
-
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {
 			checkBox.setSelected( ((BoolValue)objValue).getValue());
-			this.setEmpty(false);
-		} else {
-			setEmpty(true);
 		}
-
+		final TaskValue<?> objValueRAW = TaskLogic.getTaskValue(getTask(), getAttribute());
+		if (objValueRAW == null || objValueRAW.getAttType() == null) {
+			setEmpty(true);
+		} else {
+			setEmpty(false);
+		}
 	}
 
 
@@ -74,7 +74,6 @@ public class ItemBoolean extends SimpleSidebarItem {
 
 	@Override
 	protected void onSetEmpty(boolean empty) {
-		this.setEmpty(empty);
 		if (empty) {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NoValue());
 		} else {
@@ -82,6 +81,7 @@ public class ItemBoolean extends SimpleSidebarItem {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new BoolValue(value));
 			checkBox.setSelected(value);
 		}
+		this.setEmpty(empty);
 	}
 
 }

@@ -21,4 +21,12 @@ public class ChoiceValue extends TaskValue<String> {
 		}
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "TaskValue.Choice@" + Integer.toHexString(this.hashCode()) + " = " + getValue();
+	}
+
 }
