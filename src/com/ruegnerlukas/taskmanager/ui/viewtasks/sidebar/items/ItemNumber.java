@@ -30,7 +30,6 @@ public class ItemNumber extends SimpleSidebarItem {
 
 	@Override
 	protected void setupControls() {
-		System.out.println("   setup controls");
 		spinner = new Spinner<>();
 		spinner.setEditable(true);
 		SpinnerUtils.initSpinner(
@@ -51,7 +50,6 @@ public class ItemNumber extends SimpleSidebarItem {
 
 	@Override
 	protected void setupInitialValue() {
-
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {
 			spinner.getValueFactory().setValue(((NumberValue) objValue).getValue());
@@ -63,7 +61,6 @@ public class ItemNumber extends SimpleSidebarItem {
 		} else {
 			setEmpty(false);
 		}
-
 	}
 
 

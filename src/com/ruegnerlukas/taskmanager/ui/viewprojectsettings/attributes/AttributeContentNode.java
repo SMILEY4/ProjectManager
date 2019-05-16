@@ -80,6 +80,9 @@ public abstract class AttributeContentNode extends AnchorPane {
 
 	protected boolean compareValues(Map<String, Object> values) {
 		for (String key : attribute.values.keySet()) {
+			if(key.equals(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE)) {
+				continue;
+			}
 			Object valueAttribute = attribute.getValue(key);
 			Object valueMap = values.get(key);
 			if (valueAttribute instanceof Object[]) {
