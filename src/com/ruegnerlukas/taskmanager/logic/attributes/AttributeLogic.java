@@ -185,21 +185,20 @@ public class AttributeLogic {
 
 
 
-	public static void setCardDisplayType(TaskAttribute attribute, TaskAttribute.CardDisplayType type) {
-		TaskAttribute.CardDisplayType prev = (TaskAttribute.CardDisplayType) attribute.values.get(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE);
-		attribute.values.put(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE, type);
-		onAttributeValueChanged(attribute, TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE, prev, type);
+	public static void setShowOnTaskCard(TaskAttribute attribute, boolean showOnCard) {
+		boolean prev = attribute.values.containsKey(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE) ? (Boolean) attribute.values.get(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE) : false;
+		attribute.values.put(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE, showOnCard);
+		onAttributeValueChanged(attribute, TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE, prev, showOnCard);
 	}
 
 
 
 
-	public static TaskAttribute.CardDisplayType getCardDisplayType(TaskAttribute attribute) {
-		final TaskAttribute.CardDisplayType type = (TaskAttribute.CardDisplayType) attribute.values.get(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE);
-		if (type == null) {
-			return TaskAttribute.CardDisplayType.NONE;
+	public static boolean getShowOnTaskCard(TaskAttribute attribute) {
+		if (attribute.values.containsKey(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE)) {
+			return (Boolean) attribute.values.get(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE);
 		} else {
-			return type;
+			return false;
 		}
 	}
 

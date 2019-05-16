@@ -8,6 +8,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskGroup;
 import com.ruegnerlukas.taskmanager.logic.TaskDisplayLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.content.card.TaskCard;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXListChangeListener;

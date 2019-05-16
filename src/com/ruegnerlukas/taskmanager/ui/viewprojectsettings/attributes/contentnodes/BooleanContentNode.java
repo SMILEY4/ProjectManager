@@ -23,7 +23,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 	private CheckBox cbUseDefault;
 	private ComboBox<Boolean> choiceDefaultValue;
-	private ComboBox<TaskAttribute.CardDisplayType> choiceDisplayType;
+	private ComboBox<Boolean> choiceShowOnCard;
 	private Button btnDiscard;
 	private Button btnSave;
 
@@ -93,32 +93,32 @@ public class BooleanContentNode extends AttributeContentNode {
 
 		HBox boxAlignDefault = ContentNodeUtils.buildEntryWithAlignment(root, "Display on Task-Card:");
 
-		choiceDisplayType = new ComboBox<>();
-		choiceDisplayType.setButtonCell(ComboboxUtils.createListCellCardDisplayType());
-		choiceDisplayType.setCellFactory(param -> ComboboxUtils.createListCellCardDisplayType());
-		choiceDisplayType.getItems().addAll(TaskAttribute.CardDisplayType.values());
-		choiceDisplayType.setMinSize(60, 32);
-		choiceDisplayType.setPrefSize(150, 32);
-		choiceDisplayType.setMaxSize(150, 32);
-		boxAlignDefault.getChildren().add(choiceDisplayType);
-		choiceDisplayType.getSelectionModel().select(getDisplayType());
-		choiceDisplayType.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			onDisplayType(newValue);
+		choiceShowOnCard = new ComboBox<>();
+		choiceShowOnCard.setButtonCell(ComboboxUtils.createListCellBoolean());
+		choiceShowOnCard.setCellFactory(param -> ComboboxUtils.createListCellBoolean());
+		choiceShowOnCard.getItems().addAll(true, false);
+		choiceShowOnCard.setMinSize(60, 32);
+		choiceShowOnCard.setPrefSize(150, 32);
+		choiceShowOnCard.setMaxSize(150, 32);
+		boxAlignDefault.getChildren().add(choiceShowOnCard);
+		choiceShowOnCard.getSelectionModel().select(getShowOnCard());
+		choiceShowOnCard.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			setShowOnCard(newValue);
 		});
 	}
 
 
 
 
-	private TaskAttribute.CardDisplayType getDisplayType() {
-		return AttributeLogic.getCardDisplayType(attribute);
+	private boolean getShowOnCard() {
+		return AttributeLogic.getShowOnTaskCard(attribute);
 	}
 
 
 
 
-	private void onDisplayType(TaskAttribute.CardDisplayType type) {
-		AttributeLogic.setCardDisplayType(attribute, type);
+	private void setShowOnCard(boolean show) {
+		AttributeLogic.setShowOnTaskCard(attribute, show);
 	}
 
 

@@ -14,33 +14,6 @@ public class TaskAttribute {
 	public static final String ATTRIB_CARD_DISPLAY_TYPE = "attrib_card_display_type";
 
 
-
-
-
-
-	public enum CardDisplayType {
-		NONE("Don't Show"),
-		ICON("Icon"),
-		KV_PAIR("Key-Value-Pair"),
-		BOTH("Both");
-
-		public final String text;
-
-
-
-
-		CardDisplayType(String text) {
-			this.text = text;
-		}
-
-
-	}
-
-
-
-
-
-
 	public final SimpleStringProperty name = new SimpleStringProperty();
 	public final CustomProperty<AttributeType> type = new CustomProperty<>();
 	public final ObservableMap<String, Object> values = FXCollections.observableHashMap();

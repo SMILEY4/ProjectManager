@@ -6,6 +6,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskGroup;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.content.card.TaskCard;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXListChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.collections.ListChangeListener;
@@ -26,7 +27,7 @@ public class TaskList extends AnchorPane {
 	@FXML private Label labelTitle;
 	@FXML private VBox boxCards;
 
-	protected TaskContent parent;
+	private TaskContent parent;
 
 
 
@@ -80,6 +81,13 @@ public class TaskList extends AnchorPane {
 			addTaskCard(taskGroup.tasks.get(i));
 		}
 
+	}
+
+
+
+
+	public TaskContent getTaskContent() {
+		return parent;
 	}
 
 
