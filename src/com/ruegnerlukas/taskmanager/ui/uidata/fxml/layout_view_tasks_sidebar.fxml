@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
@@ -8,7 +9,7 @@
 <AnchorPane fx:id="rootSidebar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="0.0" minWidth="0.0" prefHeight="720.0" prefWidth="386.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane fx:id="paneBreadcrumb" maxHeight="36.0" minHeight="36.0" minWidth="0.0" prefHeight="36.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <ScrollPane fitToWidth="true" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <ScrollPane fitToWidth="true" minHeight="0.0" minWidth="0.0" AnchorPane.bottomAnchor="42.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="36.0">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0">
                <children>
@@ -21,5 +22,13 @@
             </AnchorPane>
         </content>
       </ScrollPane>
+      <VBox alignment="CENTER" maxHeight="42.0" minHeight="42.0" minWidth="0.0" prefHeight="42.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+         <children>
+            <Button fx:id="btnDeleteTask" maxHeight="32.0" maxWidth="150.0" minHeight="32.0" minWidth="10.0" mnemonicParsing="false" prefHeight="32.0" prefWidth="150.0" text="Delete Task" />
+         </children>
+         <padding>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+         </padding>
+      </VBox>
    </children>
 </AnchorPane>

@@ -138,21 +138,44 @@ public class TaskLogic {
 		TaskAttribute updatedAttribute = AttributeLogic.findAttribute(project, AttributeType.LAST_UPDATED);
 		setValue(project, task, updatedAttribute, new LastUpdatedValue(time));
 
-		// TEMP
+		return task;
+	}
 
-		// set random number
-		double randNumber = new Random().nextInt(5);
-		TaskAttribute numberAttribute = AttributeLogic.findAttribute(project, AttributeType.NUMBER);
 
-		if (numberAttribute != null) {
-			setValue(project, task, numberAttribute, new NumberValue(randNumber));
 
-			TaskAttribute descriptionAttribute = AttributeLogic.findAttribute(project, AttributeType.DESCRIPTION);
-			setValue(project, task, descriptionAttribute, new DescriptionValue("Some Text " + randNumber));
+
+	public static void deleteTask(Project project, Task task) {
+		boolean removed = project.data.tasks.remove(task);
+
+		if (removed) {
+
+			// remove from dependencies
+			List<TaskAttribute> dependencyAttributes = AttributeLogic.findAttributes(project, AttributeType.DEPENDENCY);
+			for (int i = 0, n = project.data.tasks.size(); i < n; i++) {
+				Task t = project.data.tasks.get(i);
+				for (TaskAttribute attribute : dependencyAttributes) {
+					TaskValue<?> taskValue = TaskLogic.getValueOrDefault(t, attribute);
+					if (taskValue.getAttType() == AttributeType.DEPENDENCY) {
+						DependencyValue value = (DependencyValue) taskValue;
+						Set<Task> dependencies = new HashSet<>(Arrays.asList(value.getValue()));
+						if (dependencies.contains(task)) {
+							if (dependencies.size() == 1) {
+								TaskLogic.setValue(project, t, attribute, new NoValue());
+							} else {
+								Task[] array = new Task[dependencies.size() - 1];
+								for (int j = 0, k = 0; j < dependencies.size(); j++) {
+									if (value.getValue()[j] != task) {
+										array[k++] = value.getValue()[j];
+									}
+								}
+								TaskLogic.setValue(project, t, attribute, new DependencyValue(array));
+							}
+						}
+					}
+				}
+			}
 		}
 
-
-		return task;
 	}
 
 
@@ -196,7 +219,7 @@ public class TaskLogic {
 
 		// set value
 		TaskValue<?> prevValue = task.attributes.get(attribute);
-		if(value == null) {
+		if (value == null) {
 			task.attributes.remove(attribute);
 		} else {
 			task.attributes.put(attribute, value);

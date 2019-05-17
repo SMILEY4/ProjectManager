@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
@@ -13,6 +14,7 @@ import com.ruegnerlukas.taskmanager.utils.listeners.FXListChangeListener;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Separator;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
@@ -27,7 +29,7 @@ public class TasksSidebar {
 
 	@FXML private AnchorPane paneBreadcrumb;
 	@FXML private VBox boxAttributes;
-
+	@FXML private Button btnDeleteTask;
 
 	private Task currentTask = null;
 
@@ -55,6 +57,12 @@ public class TasksSidebar {
 				setTask(currentTask);
 			}
 		};
+
+		btnDeleteTask.setOnAction(e -> {
+			if(currentTask != null) {
+				TaskLogic.deleteTask(Data.projectProperty.get(), currentTask);
+			}
+		});
 	}
 
 
