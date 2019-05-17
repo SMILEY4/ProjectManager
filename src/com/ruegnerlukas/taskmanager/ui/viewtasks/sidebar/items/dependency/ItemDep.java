@@ -34,7 +34,7 @@ public class ItemDep extends HBox {
 		this.getChildren().add(label0);
 
 		final IDValue valueID = (IDValue) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID));
-		Label labelTask = new Label("T-" + valueID.getValue().intValue());
+		Label labelTask = new Label("T-" + valueID.getValue());
 		this.getChildren().add(labelTask);
 
 		Button btnRemove = new Button("x");
