@@ -31,7 +31,6 @@ public class DependencyAttributeLogic {
 		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
 
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
-		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
 		mapData.put(FilterOperation.DEPENDENT_ON, new Class<?>[]{Task.class});
 		mapData.put(FilterOperation.PREREQUISITE_OF, new Class<?>[]{Task.class});
 		mapData.put(FilterOperation.INDEPENDENT, new Class<?>[]{Boolean.class});
@@ -71,28 +70,14 @@ public class DependencyAttributeLogic {
 
 		switch (criteria.operation.get()) {
 
-			case HAS_VALUE: {
-				if (filterValues.size() == 1 && filterValues.get(0) instanceof Boolean) {
-					boolean valueFilter = (Boolean) filterValues.get(0);
-					return valueFilter == (valueTask.getAttType() == null);
-				} else {
-					return false;
-				}
-			}
-
 			case DEPENDENT_ON: {
-				if (filterValues.size() == 1 && filterValues.get(0) instanceof Task[]) {
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof Task) {
 					if (valueTask.getAttType() == null) {
 						return false;
 					} else {
-						Task[] tasksFilter = (Task[]) filterValues.get(0);
+						Task tasksFilter = (Task) filterValues.get(0);
 						List<Task> list = Arrays.asList((Task[]) ((DependencyValue) valueTask).getValue());
-						for (Task t : tasksFilter) {
-							if (list.contains(t)) {
-								return true;
-							}
-						}
-						return false;
+						return list.contains(tasksFilter);
 					}
 				} else {
 					return false;
@@ -100,34 +85,25 @@ public class DependencyAttributeLogic {
 			}
 
 			case PREREQUISITE_OF: {
-				if (filterValues.size() == 1 && filterValues.get(0) instanceof Task[]) {
-					if (valueTask.getAttType() == null) {
-						return false;
-					} else {
-						Task[] tasksFilter = (Task[]) filterValues.get(0);
-						for (Task t : tasksFilter) {
-							TaskValue<?> valueT = TaskLogic.getValueOrDefault(t, criteria.attribute.get());
-							if (valueT.getAttType() == null) {
-								continue;
-							}
-							List<Task> list = Arrays.asList(((DependencyValue) valueT).getValue());
-							if (list.contains(task)) {
-								return true;
-							}
+				if (filterValues.size() == 1 && filterValues.get(0) instanceof Task) {
+					Task tasksFilter = (Task) filterValues.get(0);
+					TaskValue<?> valueFilter = TaskLogic.getValueOrDefault(tasksFilter, criteria.attribute.get());
+					if (valueFilter.getAttType() != null) {
+						List<Task> list = Arrays.asList(((DependencyValue) valueFilter).getValue());
+						if (list.contains(task)) {
+							return true;
 						}
-						return false;
 					}
-				} else {
 					return false;
 				}
 			}
 
 			case INDEPENDENT: {
 				if (filterValues.size() == 1 && filterValues.get(0) instanceof Boolean) {
+					boolean isIndependent = (boolean) filterValues.get(0);
 					if (valueTask.getAttType() == null) {
-						return true;
+						return isIndependent;
 					} else {
-						boolean isIndependent = (boolean) filterValues.get(0);
 						if (isIndependent) {
 							return ((DependencyValue) valueTask).getValue().length == 0;
 						} else {
