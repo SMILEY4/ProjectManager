@@ -1,9 +1,9 @@
-package com.ruegnerlukas.taskmanager.ui.viewtasks.header;
+package com.ruegnerlukas.taskmanager.utils;
 
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public abstract class TasksPopup extends AnchorPane {
+public abstract class PopupBase extends AnchorPane {
 
 
 	private Stage stage;
@@ -13,7 +13,7 @@ public abstract class TasksPopup extends AnchorPane {
 
 
 
-	public TasksPopup(int width, int height) {
+	public PopupBase(int width, int height) {
 		this.width = width;
 		this.height = height;
 	}

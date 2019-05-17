@@ -38,6 +38,7 @@ public class UIDataHandler {
 		stylesheetPaths.put(UIModule.POPUP_FILTER, "style/style_popup_filter.css");
 		stylesheetPaths.put(UIModule.CONTROL_EDITABLE_AREA, "style/style_control_editablearea.css");
 		stylesheetPaths.put(UIModule.CONTROL_EDITABLE_LABEL, "style/style_control_editablelabel.css");
+		stylesheetPaths.put(UIModule.POPUP_DEPENDENCY, "style/style_popup_dependency.css");
 
 		// fxml-files
 		fxmlPaths.put(UIModule.VIEW_MAIN, "fxml/layout_view_main.fxml");
@@ -53,6 +54,8 @@ public class UIDataHandler {
 		fxmlPaths.put(UIModule.POPUP_GROUPBY, "fxml/layout_popup_groupby.fxml");
 		fxmlPaths.put(UIModule.POPUP_PRESETS, "fxml/layout_popup_presets.fxml");
 		fxmlPaths.put(UIModule.POPUP_FILTER, "fxml/layout_popup_filter.fxml");
+		fxmlPaths.put(UIModule.POPUP_DEPENDENCY, "fxml/layout_popup_dependency.fxml");
+
 	}
 
 
@@ -100,7 +103,7 @@ public class UIDataHandler {
 
 
 	public static void reloadAll() {
-		System.out.println("Reload Styles: All");
+		System.out.println("Reloading Styles: All");
 		for (Parent root : roots.keySet()) {
 			setStyle(root, roots.get(root));
 		}

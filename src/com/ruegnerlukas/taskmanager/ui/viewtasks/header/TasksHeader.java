@@ -14,6 +14,7 @@ import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupgroup.PopupGroup;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupmasterpreset.PopupMasterPreset;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupsort.PopupSort;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
+import com.ruegnerlukas.taskmanager.utils.PopupBase;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXEventAdapter;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXGenericChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
@@ -191,7 +192,7 @@ public class TasksHeader {
 
 
 
-	private void openPopup(TasksPopup popup) {
+	private void openPopup(PopupBase popup) {
 		Stage stage = new Stage();
 		popup.setStage(stage);
 		popup.create();

@@ -37,7 +37,7 @@ public abstract class SidebarItem extends AnchorPane {
 			case DATE:
 				return new ItemDate(attribute, task);
 			case DEPENDENCY:
-				return null; // TODO
+				return new ItemDependency(attribute, task);
 			default:
 				return null;
 		}

@@ -10,7 +10,7 @@ import com.ruegnerlukas.taskmanager.logic.PresetLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
-import com.ruegnerlukas.taskmanager.ui.viewtasks.header.TasksPopup;
+import com.ruegnerlukas.taskmanager.utils.PopupBase;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.application.Platform;
@@ -24,7 +24,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class PopupMasterPreset extends TasksPopup {
+public class PopupMasterPreset extends PopupBase {
 
 
 	// header

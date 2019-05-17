@@ -7,7 +7,7 @@ import com.ruegnerlukas.taskmanager.logic.PresetLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
-import com.ruegnerlukas.taskmanager.ui.viewtasks.header.TasksPopup;
+import com.ruegnerlukas.taskmanager.utils.PopupBase;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.fxml.FXML;
@@ -20,7 +20,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
-public class PopupFilter extends TasksPopup {
+public class PopupFilter extends PopupBase {
 
 
 	// header
@@ -106,16 +106,9 @@ public class PopupFilter extends TasksPopup {
 		});
 
 
-		// button cancel
-		btnCancel.setOnAction(event -> {
-			onCancel();
-		});
-
-
-		// button accept
-		btnAccept.setOnAction(event -> {
-			onAccept();
-		});
+		// button cancel / accept
+		btnCancel.setOnAction(event -> onCancel());
+		btnAccept.setOnAction(event -> onAccept());
 
 
 		// load initial data
