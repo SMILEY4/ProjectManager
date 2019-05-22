@@ -263,7 +263,7 @@ public class FlagContentNode extends AttributeContentNode {
 	@Override
 	protected boolean compareValues(Map<String, Object> values) {
 
-		if (new FlagValue(getLocalDefaultValue()) != TaskFlagAttributeLogic.getDefaultValue(attribute)) {
+		if (new FlagValue(getLocalDefaultValue()).compare(TaskFlagAttributeLogic.getDefaultValue(attribute)) != 0) {
 			return false;
 		}
 
