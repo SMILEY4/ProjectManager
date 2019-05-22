@@ -139,7 +139,7 @@ public class TaskContent {
 		}
 
 		if (selectionType == SELECTION_BREADCRUMB) {
-			if(task != null) {
+			if (task != null) {
 				setSelectedTask(task);
 				jumpToTask(task);
 			}
@@ -168,9 +168,12 @@ public class TaskContent {
 	}
 
 
+
+
 	public void reselectTask() {
 		setSelectedTask(selectedTask.get());
 	}
+
 
 
 
@@ -192,7 +195,7 @@ public class TaskContent {
 			TaskGroup group = taskGroups.get(i);
 			addTaskList(group);
 		}
-		if(selectedTask.get() != null) {
+		if (selectedTask.get() != null) {
 			setSelectedTask(selectedTask.get());
 		}
 	}
@@ -285,6 +288,13 @@ public class TaskContent {
 
 	public AnchorPane getAnchorPane() {
 		return this.root;
+	}
+
+
+
+
+	public Label getSidebarControlArea() {
+		return labelHideSidebar;
 	}
 
 

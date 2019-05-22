@@ -1,10 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.projectdata.Task;
-import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
-import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewmain.MainViewModule;
@@ -68,11 +64,38 @@ public class TaskView extends AnchorPane implements MainViewModule {
 		AnchorUtils.setAnchors(sidebar.getAnchorPane(), 0, 0, 0, 0);
 		paneSidebar.getChildren().add(sidebar.getAnchorPane());
 
-		// TODO TMP
-		Task task = TaskLogic.createTask(Data.projectProperty.get());
-		ProjectLogic.addTaskToProject(Data.projectProperty.get(), task);
-		sidebar.setTask(task);
+		// show / hide sidebar
+		content.getSidebarControlArea().setOnMouseClicked(e -> {
+			if (!isShowSidebar()) {
+				splitContent.setDividerPositions(0.8);
+			} else {
+				splitContent.setDividerPositions(1.0);
+			}
+		});
 
+		splitContent.getDividers().get(0).positionProperty().addListener(((observable, oldValue, newValue) -> {
+			onSidebarDivider();
+		}));
+
+		splitContent.setDividerPositions(0.8);
+	}
+
+
+
+
+	private void onSidebarDivider() {
+		if (isShowSidebar()) {
+			content.getSidebarControlArea().setText(">");
+		} else {
+			content.getSidebarControlArea().setText("<");
+		}
+	}
+
+
+
+
+	private boolean isShowSidebar() {
+		return splitContent.getDividerPositions()[0] < 0.99;
 	}
 
 
