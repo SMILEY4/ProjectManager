@@ -76,9 +76,7 @@ public class TaskList extends AnchorPane {
 			}
 		};
 
-
 		labelTitle.setText("List n=" + taskGroup.tasks.size());
-
 
 		for (int i = 0; i < taskGroup.tasks.size(); i++) {
 			addTaskCard(taskGroup.tasks.get(i));
@@ -109,6 +107,8 @@ public class TaskList extends AnchorPane {
 	private void addTaskCard(Task task) {
 		TaskCard card = new TaskCard(task, this);
 		boxCards.getChildren().add(taskGroup.tasks.indexOf(task), card);
+		parent.reselectTask();
+		jumpToTask(task);
 	}
 
 

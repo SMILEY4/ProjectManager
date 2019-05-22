@@ -39,7 +39,7 @@ public class TaskContent {
 	private FXListChangeListener<TaskGroup> listenerLastTaskGroups;
 	private FXChangeListener<Boolean> listenerValid;
 
-	public final CustomProperty<Task> selectedTask = new CustomProperty<>();
+	private final CustomProperty<Task> selectedTask = new CustomProperty<>();
 
 
 
@@ -168,6 +168,10 @@ public class TaskContent {
 	}
 
 
+	public void reselectTask() {
+		setSelectedTask(selectedTask.get());
+	}
+
 
 
 	public void jumpToTask(Task task) {
@@ -187,6 +191,9 @@ public class TaskContent {
 		for (int i = 0; i < taskGroups.size(); i++) {
 			TaskGroup group = taskGroups.get(i);
 			addTaskList(group);
+		}
+		if(selectedTask.get() != null) {
+			setSelectedTask(selectedTask.get());
 		}
 	}
 
