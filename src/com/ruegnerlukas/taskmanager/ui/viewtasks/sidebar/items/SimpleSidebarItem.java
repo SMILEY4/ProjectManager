@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
@@ -30,8 +31,8 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 
-	public SimpleSidebarItem(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public SimpleSidebarItem(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 
 
 		// root box

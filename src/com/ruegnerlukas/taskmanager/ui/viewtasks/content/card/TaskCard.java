@@ -6,12 +6,13 @@ import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.*;
+import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.content.TaskContent;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.content.TaskList;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXListChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -66,7 +67,7 @@ public class TaskCard extends AnchorPane {
 		this.setPrefSize(320, 200);
 
 		this.setOnMouseClicked(event -> {
-			parent.getTaskContent().selectTask(this.task);
+			parent.getTaskContent().selectTask(this.task, TaskContent.SELECTION_TASKCARD);
 		});
 
 		handlerChangedFlag = e -> onFlagChanged();

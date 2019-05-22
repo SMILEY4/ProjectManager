@@ -12,6 +12,7 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import com.ruegnerlukas.taskmanager.logic.events.TaskValueChangeEvent;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items.dependency.ItemDep;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items.dependency.ItemPrereq;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items.dependency.PopupDependency;
@@ -43,8 +44,8 @@ public class ItemDependency extends SidebarItem {
 
 
 
-	public ItemDependency(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public ItemDependency(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 		setupControls();
 		setupInitialValue();
 		setupLogic();

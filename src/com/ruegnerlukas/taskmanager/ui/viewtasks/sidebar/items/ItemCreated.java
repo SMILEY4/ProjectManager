@@ -4,6 +4,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.CreatedValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import javafx.scene.control.Label;
 
 import java.time.LocalDateTime;
@@ -13,8 +14,8 @@ import java.time.format.DateTimeFormatter;
 public class ItemCreated extends SimpleSidebarItem {
 
 
-	public ItemCreated(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public ItemCreated(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 	}
 
 

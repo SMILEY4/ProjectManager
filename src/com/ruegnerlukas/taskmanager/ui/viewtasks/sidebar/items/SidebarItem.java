@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -14,30 +15,30 @@ import javafx.scene.layout.AnchorPane;
 public abstract class SidebarItem extends AnchorPane {
 
 
-	public static SidebarItem createItem(TaskAttribute attribute, Task task) {
+	public static SidebarItem createItem(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		switch (attribute.type.get()) {
 			case ID:
-				return new ItemID(attribute, task);
+				return new ItemID(sidebar, attribute, task);
 			case DESCRIPTION:
-				return new ItemDescription(attribute, task);
+				return new ItemDescription(sidebar, attribute, task);
 			case CREATED:
-				return new ItemCreated(attribute, task);
+				return new ItemCreated(sidebar, attribute, task);
 			case LAST_UPDATED:
-				return new ItemLastUpdated(attribute, task);
+				return new ItemLastUpdated(sidebar, attribute, task);
 			case FLAG:
-				return new ItemFlag(attribute, task);
+				return new ItemFlag(sidebar, attribute, task);
 			case TEXT:
-				return new ItemText(attribute, task);
+				return new ItemText(sidebar, attribute, task);
 			case NUMBER:
-				return new ItemNumber(attribute, task);
+				return new ItemNumber(sidebar, attribute, task);
 			case BOOLEAN:
-				return new ItemBoolean(attribute, task);
+				return new ItemBoolean(sidebar, attribute, task);
 			case CHOICE:
-				return new ItemChoice(attribute, task);
+				return new ItemChoice(sidebar, attribute, task);
 			case DATE:
-				return new ItemDate(attribute, task);
+				return new ItemDate(sidebar, attribute, task);
 			case DEPENDENCY:
-				return new ItemDependency(attribute, task);
+				return new ItemDependency(sidebar, attribute, task);
 			default:
 				return null;
 		}
@@ -45,6 +46,8 @@ public abstract class SidebarItem extends AnchorPane {
 
 
 
+
+	private final TasksSidebar sidebar;
 
 	private final TaskAttribute attribute;
 	private final Task task;
@@ -59,7 +62,8 @@ public abstract class SidebarItem extends AnchorPane {
 
 
 
-	public SidebarItem(TaskAttribute attribute, Task task) {
+	public SidebarItem(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		this.sidebar = sidebar;
 		this.attribute = attribute;
 		this.task = task;
 
@@ -121,6 +125,13 @@ public abstract class SidebarItem extends AnchorPane {
 
 	public Task getTask() {
 		return task;
+	}
+
+
+
+
+	public TasksSidebar getSidebar() {
+		return sidebar;
 	}
 
 

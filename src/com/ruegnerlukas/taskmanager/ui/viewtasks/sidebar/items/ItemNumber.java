@@ -9,6 +9,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NumberValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.SpinnerUtils;
 import javafx.scene.control.Spinner;
 
@@ -21,8 +22,8 @@ public class ItemNumber extends SimpleSidebarItem {
 
 
 
-	public ItemNumber(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public ItemNumber(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 	}
 
 

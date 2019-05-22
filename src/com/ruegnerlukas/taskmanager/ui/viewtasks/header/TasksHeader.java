@@ -9,6 +9,7 @@ import com.ruegnerlukas.taskmanager.logic.TaskDisplayLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.TaskView;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupfilter.PopupFilter;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupgroup.PopupGroup;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupmasterpreset.PopupMasterPreset;
@@ -38,6 +39,7 @@ import java.io.IOException;
 
 public class TasksHeader {
 
+	private TaskView taskView;
 
 	@FXML private AnchorPane rootHeader;
 
@@ -64,8 +66,9 @@ public class TasksHeader {
 
 
 
-	public TasksHeader() {
+	public TasksHeader(TaskView taskView) {
 		try {
+			this.taskView = taskView;
 			Parent root = UIDataHandler.loadFXML(UIModule.VIEW_TASKS_HEADER, this);
 		} catch (IOException e) {
 			Logger.get().error("Error loading TasksHeader-FXML: " + e);

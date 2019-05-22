@@ -54,30 +54,46 @@ public class TaskView extends AnchorPane implements MainViewModule {
 	private void create() {
 
 		// header
-		header = new TasksHeader();
+		header = new TasksHeader(this);
 		AnchorUtils.setAnchors(header.getAnchorPane(), 0, 0, 0, 0);
 		paneHeader.getChildren().add(header.getAnchorPane());
 
 		// content
-		content = new TaskContent();
+		content = new TaskContent(this);
 		AnchorUtils.setAnchors(content.getAnchorPane(), 0, 0, 0, 0);
 		paneContent.getChildren().add(content.getAnchorPane());
 
 		// sidebar
-		sidebar = new TasksSidebar();
+		sidebar = new TasksSidebar(this);
 		AnchorUtils.setAnchors(sidebar.getAnchorPane(), 0, 0, 0, 0);
 		paneSidebar.getChildren().add(sidebar.getAnchorPane());
-
-		// (de-)select task
-		content.selectedTask.addListener((observable, oldValue, newValue) -> {
-			sidebar.setTask(newValue);
-		});
 
 		// TODO TMP
 		Task task = TaskLogic.createTask(Data.projectProperty.get());
 		ProjectLogic.addTaskToProject(Data.projectProperty.get(), task);
 		sidebar.setTask(task);
 
+	}
+
+
+
+
+	public TasksHeader getHeader() {
+		return header;
+	}
+
+
+
+
+	public TaskContent getContent() {
+		return content;
+	}
+
+
+
+
+	public TasksSidebar getSidebar() {
+		return sidebar;
 	}
 
 
@@ -95,7 +111,6 @@ public class TaskView extends AnchorPane implements MainViewModule {
 
 	@Override
 	public void onModuleOpen() {
-
 	}
 
 
@@ -103,7 +118,6 @@ public class TaskView extends AnchorPane implements MainViewModule {
 
 	@Override
 	public void onModuleSelected() {
-
 	}
 
 
@@ -111,7 +125,6 @@ public class TaskView extends AnchorPane implements MainViewModule {
 
 	@Override
 	public void onModuleDeselected() {
-
 	}
 
 

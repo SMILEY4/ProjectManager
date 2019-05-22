@@ -8,6 +8,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TextValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.TextAttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MultiTextField;
 import javafx.scene.control.Label;
@@ -22,8 +23,8 @@ public class ItemText extends SidebarItem {
 
 
 
-	public ItemText(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public ItemText(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 		setupControls();
 		setupInitialValue();
 		setupLogic();

@@ -7,6 +7,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.FlagValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.TaskFlagAttributeLogic;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.ComboboxUtils;
 import javafx.scene.control.ComboBox;
 
@@ -19,8 +20,8 @@ public class ItemFlag extends SimpleSidebarItem {
 
 
 
-	public ItemFlag(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public ItemFlag(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 	}
 
 

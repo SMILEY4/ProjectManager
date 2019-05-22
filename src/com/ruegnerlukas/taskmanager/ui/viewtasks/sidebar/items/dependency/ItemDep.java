@@ -6,6 +6,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.IDValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.content.TaskContent;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items.ItemDependency;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
@@ -45,7 +46,11 @@ public class ItemDep extends HBox {
 
 		btnRemove.setOnAction(event -> parent.removeDependency(this));
 
+		labelTask.setOnMouseClicked(e -> {
+			parent.getSidebar().getTaskView().getContent().selectTask(task, TaskContent.SELECTION_LINK);
+		});
 
 	}
+
 
 }

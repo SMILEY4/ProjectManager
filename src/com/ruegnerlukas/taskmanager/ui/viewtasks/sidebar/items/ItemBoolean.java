@@ -7,6 +7,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.BoolValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import javafx.scene.control.CheckBox;
 
 
@@ -18,8 +19,8 @@ public class ItemBoolean extends SimpleSidebarItem {
 
 
 
-	public ItemBoolean(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public ItemBoolean(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 	}
 
 

@@ -7,6 +7,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.DateValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import javafx.scene.control.DatePicker;
 
 import java.time.LocalDate;
@@ -20,8 +21,8 @@ public class ItemDate extends SimpleSidebarItem {
 
 
 
-	public ItemDate(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public ItemDate(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 	}
 
 

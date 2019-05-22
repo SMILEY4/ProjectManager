@@ -3,7 +3,7 @@
 Sidebar
 	- AnchorPane
 		- AnchorPane #paneBreadcrumb
-			- Breadcrumb
+			- BreadcrumbBar
 				- Button // step back
 				- HBox
 					- Label #breadcrumb_task

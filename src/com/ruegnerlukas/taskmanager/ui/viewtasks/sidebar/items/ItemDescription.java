@@ -7,6 +7,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.DescriptionValue
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
@@ -21,8 +22,8 @@ public class ItemDescription extends SidebarItem {
 
 
 
-	public ItemDescription(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public ItemDescription(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 		setupControls();
 		setupInitialValue();
 		setupLogic();

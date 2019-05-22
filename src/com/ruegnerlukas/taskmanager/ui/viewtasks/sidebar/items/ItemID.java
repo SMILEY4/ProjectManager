@@ -4,6 +4,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.IDValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import javafx.scene.control.Label;
 
 
@@ -15,8 +16,8 @@ public class ItemID extends SimpleSidebarItem {
 
 
 
-	public ItemID(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public ItemID(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 	}
 
 

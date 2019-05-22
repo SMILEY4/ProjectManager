@@ -8,6 +8,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import javafx.scene.control.ComboBox;
 
 
@@ -19,8 +20,8 @@ public class ItemChoice extends SimpleSidebarItem {
 
 
 
-	public ItemChoice(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public ItemChoice(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 	}
 
 

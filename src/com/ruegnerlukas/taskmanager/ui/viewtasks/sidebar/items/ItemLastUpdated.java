@@ -4,6 +4,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.LastUpdatedValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import javafx.scene.control.Label;
 
 import java.time.LocalDateTime;
@@ -18,8 +19,8 @@ public class ItemLastUpdated extends SimpleSidebarItem {
 
 
 
-	public ItemLastUpdated(TaskAttribute attribute, Task task) {
-		super(attribute, task);
+	public ItemLastUpdated(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
+		super(sidebar, attribute, task);
 	}
 
 
