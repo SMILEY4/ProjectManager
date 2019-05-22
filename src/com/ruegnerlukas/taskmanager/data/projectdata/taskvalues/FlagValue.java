@@ -24,7 +24,7 @@ public class FlagValue extends TaskValue<TaskFlag> {
 	@Override
 	public int compare(TaskValue<?> o) {
 		if (getAttType() != o.getAttType()) {
-			return Integer.compare(this.getAttType().ordinal(), o.getAttType() == null ? -1 : o.getAttType().ordinal());
+			return Integer.compare(this.getAttType().ordinal(), o.getAttType() == null ? 1 : o.getAttType().ordinal());
 		} else {
 			FlagValue other = (FlagValue) o;
 			int cmpName = this.getValue().name.get().compareTo(other.getValue().name.get());

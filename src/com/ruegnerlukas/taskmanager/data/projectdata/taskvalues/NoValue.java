@@ -13,7 +13,7 @@ public class NoValue extends TaskValue {
 	@Override
 	public int compare(TaskValue other) {
 		if (getAttType() != other.getAttType()) {
-			return 1;
+			return -1;
 		} else {
 			return 0;
 		}

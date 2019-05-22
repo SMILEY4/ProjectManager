@@ -23,7 +23,7 @@ public class BoolValue extends TaskValue<Boolean> {
 	@Override
 	public int compare(TaskValue<?> other) {
 		if (getAttType() != other.getAttType()) {
-			return Integer.compare(this.getAttType().ordinal(), other.getAttType() == null ? -1 : other.getAttType().ordinal());
+			return Integer.compare(this.getAttType().ordinal(), other.getAttType() == null ? 1 : other.getAttType().ordinal());
 		} else {
 			return Boolean.compare(this.getValue(), ((BoolValue) other).getValue());
 		}

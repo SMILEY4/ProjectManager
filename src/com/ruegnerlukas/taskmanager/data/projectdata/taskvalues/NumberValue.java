@@ -37,7 +37,7 @@ public class NumberValue extends TaskValue<Double> {
 	@Override
 	public int compare(TaskValue<?> other) {
 		if (getAttType() != other.getAttType()) {
-			return Integer.compare(this.getAttType().ordinal(), other.getAttType() == null ? -1 : other.getAttType().ordinal());
+			return Integer.compare(this.getAttType().ordinal(), other.getAttType() == null ? 1 : other.getAttType().ordinal());
 		} else {
 			return Double.compare(this.getValue(), ((NumberValue) other).getValue());
 		}

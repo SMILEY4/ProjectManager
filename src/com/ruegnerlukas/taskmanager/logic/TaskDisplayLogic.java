@@ -107,6 +107,8 @@ public class TaskDisplayLogic {
 				}
 			}
 
+			sortGroups(project.temporaryData.lastTaskGroups, taskGroup.attributes);
+
 			callListenersDisplayChanged(project);
 		}
 
@@ -194,14 +196,15 @@ public class TaskDisplayLogic {
 		}
 
 
-		// 2. group
+		// 2. groups
 		List<TaskGroup> groups = new ArrayList<>();
+		List<TaskAttribute> groupAttributes = (dataGroup == null ? new ArrayList<>() : dataGroup.attributes);
 
 		TaskGroup root = new TaskGroup();
 		root.tasks.addAll(filteredTasks);
 		groups.add(root);
 
-		for (TaskAttribute attribute : (dataGroup == null ? new ArrayList<TaskAttribute>() : dataGroup.attributes)) {
+		for (TaskAttribute attribute : groupAttributes) {
 			List<TaskGroup> newGroups = new ArrayList<>();
 			for (TaskGroup group : groups) {
 				newGroups.addAll(splitTaskGroup(group, attribute));
@@ -209,6 +212,8 @@ public class TaskDisplayLogic {
 			groups.clear();
 			groups.addAll(newGroups);
 		}
+
+		sortGroups(groups, groupAttributes);
 
 
 		// 3. sort
@@ -254,6 +259,31 @@ public class TaskDisplayLogic {
 		}
 
 		return groups;
+	}
+
+
+
+
+	public static void sortGroups(List<TaskGroup> groups, List<TaskAttribute> attributes) {
+
+		Comparator<TaskGroup> comparator = (groupA, groupB) ->  {
+			Task sampleA = groupA.tasks.get(0);
+			Task sampleB = groupB.tasks.get(0);
+
+			for(TaskAttribute attribute : attributes) {
+				TaskValue<?> valueA = TaskLogic.getValueOrDefault(sampleA, attribute);
+				TaskValue<?> valueB = TaskLogic.getValueOrDefault(sampleB, attribute);
+
+				int result = valueA.compare(valueB);
+				if(result != 0) {
+					return result;
+				}
+			}
+
+			return 0;
+		};
+
+		groups.sort(comparator);
 	}
 
 

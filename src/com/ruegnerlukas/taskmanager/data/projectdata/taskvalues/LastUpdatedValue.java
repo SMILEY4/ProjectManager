@@ -26,7 +26,7 @@ public class LastUpdatedValue extends TaskValue<LocalDateTime> {
 	@Override
 	public int compare(TaskValue<?> other) {
 		if (getAttType() != other.getAttType()) {
-			return Integer.compare(this.getAttType().ordinal(), other.getAttType() == null ? -1 : other.getAttType().ordinal());
+			return Integer.compare(this.getAttType().ordinal(), other.getAttType() == null ? 1 : other.getAttType().ordinal());
 		} else {
 			return this.getValue().compareTo(((LastUpdatedValue) other).getValue());
 		}

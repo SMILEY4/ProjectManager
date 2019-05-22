@@ -28,7 +28,8 @@ public class DependencyValue extends TaskValue<Task[]> {
 	@Override
 	public int compare(TaskValue<?> other) {
 		if (getAttType() != other.getAttType()) {
-			return Integer.compare(this.getAttType().ordinal(), other.getAttType() == null ? -1 : other.getAttType().ordinal());
+			return Integer.compare(this.getAttType().ordinal(), other.getAttType() == null ? 1 : other.getAttType().ordinal());
+
 		} else {
 			Set<Task> setT = new HashSet<>(Arrays.asList(this.getValue()));
 			Set<Task> setO = new HashSet<>(Arrays.asList(((DependencyValue) other).getValue()));
