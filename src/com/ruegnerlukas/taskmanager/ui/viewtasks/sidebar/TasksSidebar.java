@@ -38,6 +38,7 @@ public class TasksSidebar {
 
 	private Task currentTask = null;
 	private FXListChangeListener<TaskAttribute> listenerAttributes;
+	private FXListChangeListener<Task> listenerTasks;
 
 
 
@@ -83,6 +84,17 @@ public class TasksSidebar {
 			@Override
 			public void onChanged(ListChangeListener.Change<? extends TaskAttribute> c) {
 				setTask(currentTask);
+			}
+		};
+
+		listenerTasks = new FXListChangeListener<Task>(Data.projectProperty.get().data.tasks) {
+			@Override
+			public void onChanged(ListChangeListener.Change<? extends Task> c) {
+				List<Task> removed = getAllRemoved(c);
+				if(removed.contains(currentTask)) {
+					setTask(null);
+					breadcrumbBar.clearTasks();
+				}
 			}
 		};
 
@@ -202,6 +214,7 @@ public class TasksSidebar {
 
 	public void dispose() {
 		listenerAttributes.removeFromAll();
+		listenerTasks.removeFromAll();
 	}
 
 
