@@ -224,7 +224,7 @@ public class TaskLogic {
 		} else {
 			task.attributes.put(attribute, value);
 		}
-		onTaskValueChanged(task, attribute, prevValue, value);
+		onTaskValueChanged(project, task, attribute, prevValue, value);
 
 		// check/update displayed tasks
 		boolean modifiedDisplay = false;
@@ -285,11 +285,23 @@ public class TaskLogic {
 
 
 
-	private static void onTaskValueChanged(Task task, TaskAttribute attribute, TaskValue<?> prevValue, TaskValue<?> newValue) {
+	private static void onTaskValueChanged(Project project, Task task, TaskAttribute attribute, TaskValue<?> prevValue, TaskValue<?> newValue) {
 		TaskValueChangeEvent event = new TaskValueChangeEvent(task, attribute, prevValue, newValue);
 		for (EventHandler<TaskValueChangeEvent> handler : valueChangedHandlers) {
 			handler.handle(event);
 		}
+		if(attribute.type.get() != AttributeType.LAST_UPDATED && newValue != prevValue) {
+			if(prevValue != null && prevValue.compare(newValue) != 0) {
+				setValue(project, task, AttributeLogic.findAttribute(project, AttributeType.LAST_UPDATED), new LastUpdatedValue(LocalDateTime.now()));
+			}
+		}
+	}
+
+
+
+
+	private static void updateLastUpdated(Task task) {
+
 	}
 
 

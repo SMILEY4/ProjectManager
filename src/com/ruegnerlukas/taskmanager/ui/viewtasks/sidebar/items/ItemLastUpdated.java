@@ -1,10 +1,13 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.LastUpdatedValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.logic.events.TaskValueChangeEvent;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
+import javafx.event.EventHandler;
 import javafx.scene.control.Label;
 
 import java.time.LocalDateTime;
@@ -15,12 +18,19 @@ public class ItemLastUpdated extends SimpleSidebarItem {
 
 
 	private Label label;
+	private EventHandler<TaskValueChangeEvent> handler;
 
 
 
 
 	public ItemLastUpdated(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		handler = e -> {
+			if (e.getAttribute().type.get() == AttributeType.LAST_UPDATED && e.getTask() == this.getTask() && label != null) {
+				setupInitialValue();
+			}
+		};
+		TaskLogic.addOnTaskValueChanged(handler);
 	}
 
 
@@ -49,7 +59,6 @@ public class ItemLastUpdated extends SimpleSidebarItem {
 
 	@Override
 	protected void setupLogic() {
-
 	}
 
 
@@ -57,6 +66,7 @@ public class ItemLastUpdated extends SimpleSidebarItem {
 
 	@Override
 	public void dispose() {
+		TaskLogic.removeOnTaskValueChanged(handler);
 		super.dispose();
 	}
 
