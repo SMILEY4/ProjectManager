@@ -53,6 +53,9 @@ public abstract class TaskValue<T> {
 
 
 
+	public abstract String asDisplayableString();
+
+
 	public abstract int compare(TaskValue<?> other);
 
 

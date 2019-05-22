@@ -27,6 +27,14 @@ public class NumberValue extends TaskValue<Double> {
 
 
 	@Override
+	public String asDisplayableString() {
+		return Double.toString(getValue());
+	}
+
+
+
+
+	@Override
 	public int compare(TaskValue<?> other) {
 		if (getAttType() != other.getAttType()) {
 			return Integer.compare(this.getAttType().ordinal(), other.getAttType() == null ? -1 : other.getAttType().ordinal());

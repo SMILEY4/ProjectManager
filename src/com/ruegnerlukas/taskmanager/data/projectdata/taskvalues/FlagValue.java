@@ -14,6 +14,14 @@ public class FlagValue extends TaskValue<TaskFlag> {
 
 
 	@Override
+	public String asDisplayableString() {
+		return getValue().name.get();
+	}
+
+
+
+
+	@Override
 	public int compare(TaskValue<?> o) {
 		if (getAttType() != o.getAttType()) {
 			return Integer.compare(this.getAttType().ordinal(), o.getAttType() == null ? -1 : o.getAttType().ordinal());

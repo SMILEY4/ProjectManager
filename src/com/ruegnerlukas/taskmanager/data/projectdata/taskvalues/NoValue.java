@@ -28,4 +28,11 @@ public class NoValue extends TaskValue {
 	}
 
 
+
+
+	@Override
+	public String asDisplayableString() {
+		return "novalue";
+	}
+
 }

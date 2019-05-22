@@ -3,12 +3,21 @@ package com.ruegnerlukas.taskmanager.data.projectdata.taskvalues;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class DateValue extends TaskValue<LocalDate> {
 
 
 	public DateValue(LocalDate value) {
 		super(value, AttributeType.DATE);
+	}
+
+
+
+
+	@Override
+	public String asDisplayableString() {
+		return getValue().format(DateTimeFormatter.ISO_LOCAL_DATE);
 	}
 
 

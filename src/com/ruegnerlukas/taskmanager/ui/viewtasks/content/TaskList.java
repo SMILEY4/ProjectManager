@@ -2,8 +2,10 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.content;
 
 import com.ruegnerlukas.simpleutils.arrays.ArrayUtils;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskGroup;
+import com.ruegnerlukas.taskmanager.logic.TaskDisplayLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.content.card.TaskCard;
@@ -76,7 +78,9 @@ public class TaskList extends AnchorPane {
 			}
 		};
 
-		labelTitle.setText("List n=" + taskGroup.tasks.size());
+		String title = TaskDisplayLogic.createTaskGroupTitle(Data.projectProperty.get(), taskGroup,
+				(taskGroup.tasks.isEmpty() ? null : taskGroup.tasks.get(0)));
+		labelTitle.setText(title);
 
 		for (int i = 0; i < taskGroup.tasks.size(); i++) {
 			addTaskCard(taskGroup.tasks.get(i));

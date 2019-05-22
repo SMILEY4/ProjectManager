@@ -303,6 +303,43 @@ public class TaskDisplayLogic {
 
 
 
+	public static String createTaskGroupTitle(Project project, TaskGroup group, Task sampleTask) {
+		if (project.data.groupData.get() == null) {
+			return "All Tasks";
+		}
+
+		String headerString = project.data.groupData.get().customHeaderString.get();
+		String strHeader = "?";
+
+		if (headerString == null) {
+			StringBuilder strHeaderBuilder = new StringBuilder();
+			for (TaskAttribute attribute : group.attributes) {
+				TaskValue<?> taskValue = TaskLogic.getValueOrDefault(sampleTask, attribute);
+				strHeaderBuilder.append(taskValue.asDisplayableString()).append(", ");
+			}
+			if (strHeaderBuilder.length() >= 2) {
+				strHeader = strHeaderBuilder.toString().substring(0, strHeaderBuilder.length() - 2);
+			}
+
+
+		} else {
+			strHeader = headerString;
+			for (TaskAttribute attribute : group.attributes) {
+				if (sampleTask == null) {
+					strHeader = strHeader.replaceAll("\\{" + attribute.name.get() + "\\}", "?");
+				} else {
+					TaskValue<?> taskValue = TaskLogic.getValueOrDefault(sampleTask, attribute);
+					strHeader = strHeader.replaceAll("\\{" + attribute.name.get() + "\\}", taskValue.asDisplayableString());
+				}
+			}
+		}
+
+		return strHeader;
+	}
+
+
+
+
 	private static void callListenersDisplayChanged(Project project) {
 		List<EventHandler<ActionEvent>> listeners = project.temporaryData.listenersTaskGroupsChanged;
 		for (EventHandler<ActionEvent> listener : listeners) {

@@ -13,6 +13,14 @@ public class BoolValue extends TaskValue<Boolean> {
 
 
 	@Override
+	public String asDisplayableString() {
+		return getValue() ? "True" : "False";
+	}
+
+
+
+
+	@Override
 	public int compare(TaskValue<?> other) {
 		if (getAttType() != other.getAttType()) {
 			return Integer.compare(this.getAttType().ordinal(), other.getAttType() == null ? -1 : other.getAttType().ordinal());
