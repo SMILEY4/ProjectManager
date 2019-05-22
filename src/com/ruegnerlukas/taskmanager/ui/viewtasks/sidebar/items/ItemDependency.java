@@ -194,6 +194,10 @@ public class ItemDependency extends SidebarItem {
 
 
 	private void onOtherTaskChanged(Task otherTask, TaskValue<?> newValue) {
+		if(newValue == null) {
+			return;
+		}
+
 		// if new value contains this.getTask() && otherTask not contained in prereqList -> add otherTask to prereq list
 		if (newValue.getAttType() == AttributeType.DEPENDENCY) {
 			Set<Task> tasks = new HashSet<>(Arrays.asList(((DependencyValue) newValue).getValue()));

@@ -44,6 +44,8 @@ public class TaskCard extends AnchorPane {
 	private FXListChangeListener<TaskAttribute> listenerAttributes;
 	private EventHandler<AttributeValueChangeEvent> listenerAttribValue;
 
+	private boolean isSelected = false;
+
 
 
 
@@ -67,7 +69,9 @@ public class TaskCard extends AnchorPane {
 		this.setPrefSize(320, 200);
 
 		this.setOnMouseClicked(event -> {
-			parent.getTaskContent().selectTask(this.task, TaskContent.SELECTION_TASKCARD);
+			if (!isSelected) {
+				parent.getTaskContent().selectTask(this.task, TaskContent.SELECTION_TASKCARD);
+			}
 		});
 
 		handlerChangedFlag = e -> onFlagChanged();
@@ -137,6 +141,7 @@ public class TaskCard extends AnchorPane {
 
 
 	public void select() {
+		this.isSelected = true;
 		this.borderProperty().set(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
 	}
 
@@ -144,6 +149,7 @@ public class TaskCard extends AnchorPane {
 
 
 	public void deselect() {
+		this.isSelected = false;
 		this.borderProperty().set(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0))));
 	}
 
