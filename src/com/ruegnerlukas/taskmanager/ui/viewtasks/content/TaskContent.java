@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.content;
 
-import com.ruegnerlukas.simpleutils.arrays.ArrayUtils;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
@@ -14,6 +13,7 @@ import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXListChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.ScrollPaneUtils;
+import javafx.application.Platform;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -67,16 +67,18 @@ public class TaskContent {
 
 					for (TaskGroup group : getAllAdded(c)) {
 						addTaskList(group);
+						reselectTask();
 					}
 					for (TaskGroup group : getAllRemoved(c)) {
 						removeTaskList(group);
 					}
 					for (ListChangeListener.Change<? extends TaskGroup> permutation : getAllPermutations(c)) {
-						int[] p = new int[permutation.getTo() - permutation.getFrom()];
-						for (int i = 0; i < p.length; i++) {
-							p[i] = permutation.getPermutation(i + permutation.getFrom());
-						}
-						ArrayUtils.applyPermutation(boxTasks.getChildren(), p, permutation.getFrom());
+						applyPermutation(boxTasks.getChildren(), permutation);
+//						int[] p = new int[permutation.getTo() - permutation.getFrom()];
+//						for (int i = 0; i < p.length; i++) {
+//							p[i] = permutation.getPermutation(i + permutation.getFrom());
+//						}
+//						ArrayUtils.applyPermutation(boxTasks.getChildren(), p, permutation.getFrom());
 					}
 				}
 			}
@@ -164,7 +166,9 @@ public class TaskContent {
 			}
 			selectedTask.set(task);
 		}
-		taskView.getSidebar().setTask(task);
+		if(taskView.getSidebar() != null) {
+			taskView.getSidebar().setTask(task);
+		}
 	}
 
 
@@ -172,6 +176,9 @@ public class TaskContent {
 
 	public void reselectTask() {
 		setSelectedTask(selectedTask.get());
+		if(selectedTask.get() != null) {
+			Platform.runLater(() -> jumpToTask(selectedTask.get()));
+		}
 	}
 
 
@@ -195,9 +202,7 @@ public class TaskContent {
 			TaskGroup group = taskGroups.get(i);
 			addTaskList(group);
 		}
-		if (selectedTask.get() != null) {
-			setSelectedTask(selectedTask.get());
-		}
+		reselectTask();
 	}
 
 

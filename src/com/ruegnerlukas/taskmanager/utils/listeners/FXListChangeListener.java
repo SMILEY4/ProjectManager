@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.utils.listeners;
 
+import com.ruegnerlukas.simpleutils.arrays.ArrayUtils;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
@@ -132,6 +133,15 @@ public abstract class FXListChangeListener<E> {
 			processChange(c);
 		}
 		return listPermutations;
+	}
+
+
+	public void applyPermutation(List list, ListChangeListener.Change<? extends E> permutation) {
+		int[] p = new int[permutation.getTo() - permutation.getFrom()];
+		for (int i = 0; i < p.length; i++) {
+			p[i] = permutation.getPermutation(i + permutation.getFrom());
+		}
+		ArrayUtils.applyPermutation(list, p, permutation.getFrom());
 	}
 
 }

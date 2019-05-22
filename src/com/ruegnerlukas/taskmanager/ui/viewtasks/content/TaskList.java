@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.content;
 
-import com.ruegnerlukas.simpleutils.arrays.ArrayUtils;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
@@ -64,16 +63,18 @@ public class TaskList extends AnchorPane {
 			public void onChanged(ListChangeListener.Change<? extends Task> c) {
 				for (Task task : getAllAdded(c)) {
 					addTaskCard(task);
+					parent.reselectTask();
 				}
 				for (Task task : getAllRemoved(c)) {
 					removeTaskCard(task);
 				}
-				for (ListChangeListener.Change<? extends Task> permuation : getAllPermutations(c)) {
-					int[] p = new int[permuation.getTo() - permuation.getFrom()];
-					for (int i = 0; i < p.length; i++) {
-						p[i] = permuation.getPermutation(i + permuation.getFrom());
-					}
-					ArrayUtils.applyPermutation(boxCards.getChildren(), p, permuation.getFrom());
+				for (ListChangeListener.Change<? extends Task> permutation : getAllPermutations(c)) {
+					applyPermutation(boxCards.getChildren(), permutation);
+//					int[] p = new int[permuation.getTo() - permuation.getFrom()];
+//					for (int i = 0; i < p.length; i++) {
+//						p[i] = permuation.getPermutation(i + permuation.getFrom());
+//					}
+//					ArrayUtils.applyPermutation(boxCards.getChildren(), p, permuation.getFrom());
 				}
 			}
 		};
@@ -111,8 +112,6 @@ public class TaskList extends AnchorPane {
 	private void addTaskCard(Task task) {
 		TaskCard card = new TaskCard(task, this);
 		boxCards.getChildren().add(taskGroup.tasks.indexOf(task), card);
-		parent.reselectTask();
-		jumpToTask(task);
 	}
 
 
