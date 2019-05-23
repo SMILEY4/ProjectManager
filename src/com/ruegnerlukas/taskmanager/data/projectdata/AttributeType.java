@@ -7,6 +7,7 @@ public enum AttributeType {
 	CREATED("Created", true),
 	LAST_UPDATED("Last Updated", true),
 	FLAG("Flag", true),
+
 	TEXT("Text", false),
 	NUMBER("Number", false),
 	BOOLEAN("Boolean", false),

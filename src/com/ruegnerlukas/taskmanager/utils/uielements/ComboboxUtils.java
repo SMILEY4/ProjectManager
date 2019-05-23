@@ -190,7 +190,7 @@ public class ComboboxUtils {
 					setText("");
 				} else {
 					setText("T-?");
-					for (TaskAttribute attribute : item.attributes.keySet()) {
+					for (TaskAttribute attribute : item.values.keySet()) {
 						if (attribute.type.get() == AttributeType.ID) {
 							int id = -1;
 							TaskValue<?> valueID = item.getValue(attribute);

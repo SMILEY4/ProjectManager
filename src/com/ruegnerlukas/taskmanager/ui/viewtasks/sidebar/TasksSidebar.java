@@ -122,7 +122,7 @@ public class TasksSidebar {
 
 		if (task != null) {
 
-			// add fixed attributes
+			// add fixed values
 			addAttribute(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION), task);
 			addAttribute(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID), task);
 			addAttribute(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.CREATED), task);
@@ -132,7 +132,7 @@ public class TasksSidebar {
 			// add seperator
 			boxAttributes.getChildren().add(new Separator());
 
-			// add remaining/custom attributes
+			// add remaining/custom values
 			List<TaskAttribute> attributes = Data.projectProperty.get().data.attributes;
 			for (TaskAttribute attribute : attributes) {
 				if (!attribute.type.get().fixed) {

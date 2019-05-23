@@ -238,7 +238,8 @@ public class DateAttributeLogic {
 
 
 	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
-		return new NoValue();
+		return oldValue.getAttType() == AttributeType.DATE ? new DateValue((LocalDate)oldValue.getValue())
+				: (preferNoValue ? new NoValue() : new DateValue(LocalDate.now()));
 	}
 
 }

@@ -31,7 +31,20 @@ public class TaskLogic {
 		Data.projectProperty.addListener(((observable, oldValue, newProject) -> {
 			if (newProject != null) {
 
-				// add listeners to "remove taskattribute"
+				// add listener to "tasks"
+				// -> task removed -> remove task from dependencies
+				newProject.data.tasks.addListener((ListChangeListener<Task>) c -> {
+					while (c.next()) {
+						if (c.wasRemoved()) {
+							for (Task task : c.getRemoved()) {
+								removeFromDependencies(Data.projectProperty.get(), task);
+							}
+						}
+					}
+				});
+
+				// add listeners to "taskattributes"
+				// -> attr. removed -> update filter/group/sort data
 				newProject.data.attributes.addListener((ListChangeListener<TaskAttribute>) c -> {
 					while (c.next()) {
 						if (c.wasRemoved()) {
@@ -119,6 +132,37 @@ public class TaskLogic {
 
 
 
+	private static void removeFromDependencies(Project project, Task task) {
+		// remove from dependencies
+		List<TaskAttribute> dependencyAttributes = AttributeLogic.findAttributes(project, AttributeType.DEPENDENCY);
+		for (int i = 0, n = project.data.tasks.size(); i < n; i++) {
+			Task t = project.data.tasks.get(i);
+			for (TaskAttribute attribute : dependencyAttributes) {
+				TaskValue<?> taskValue = TaskLogic.getValueOrDefault(t, attribute);
+				if (taskValue.getAttType() == AttributeType.DEPENDENCY) {
+					DependencyValue value = (DependencyValue) taskValue;
+					Set<Task> dependencies = new HashSet<>(Arrays.asList(value.getValue()));
+					if (dependencies.contains(task)) {
+						if (dependencies.size() == 1) {
+							TaskLogic.setValue(project, t, attribute, new NoValue());
+						} else {
+							Task[] array = new Task[dependencies.size() - 1];
+							for (int j = 0, k = 0; j < dependencies.size(); j++) {
+								if (value.getValue()[j] != task) {
+									array[k++] = value.getValue()[j];
+								}
+							}
+							TaskLogic.setValue(project, t, attribute, new DependencyValue(array));
+						}
+					}
+				}
+			}
+		}
+	}
+
+
+
+
 	public static Task createTask(Project project) {
 		Task task = new Task();
 
@@ -145,37 +189,7 @@ public class TaskLogic {
 
 
 	public static void deleteTask(Project project, Task task) {
-		boolean removed = project.data.tasks.remove(task);
-
-		if (removed) {
-
-			// remove from dependencies
-			List<TaskAttribute> dependencyAttributes = AttributeLogic.findAttributes(project, AttributeType.DEPENDENCY);
-			for (int i = 0, n = project.data.tasks.size(); i < n; i++) {
-				Task t = project.data.tasks.get(i);
-				for (TaskAttribute attribute : dependencyAttributes) {
-					TaskValue<?> taskValue = TaskLogic.getValueOrDefault(t, attribute);
-					if (taskValue.getAttType() == AttributeType.DEPENDENCY) {
-						DependencyValue value = (DependencyValue) taskValue;
-						Set<Task> dependencies = new HashSet<>(Arrays.asList(value.getValue()));
-						if (dependencies.contains(task)) {
-							if (dependencies.size() == 1) {
-								TaskLogic.setValue(project, t, attribute, new NoValue());
-							} else {
-								Task[] array = new Task[dependencies.size() - 1];
-								for (int j = 0, k = 0; j < dependencies.size(); j++) {
-									if (value.getValue()[j] != task) {
-										array[k++] = value.getValue()[j];
-									}
-								}
-								TaskLogic.setValue(project, t, attribute, new DependencyValue(array));
-							}
-						}
-					}
-				}
-			}
-		}
-
+		project.data.tasks.remove(task);
 	}
 
 
@@ -198,7 +212,7 @@ public class TaskLogic {
 
 
 	public static TaskValue<?> getTaskValue(Task task, TaskAttribute attribute) {
-		TaskValue<?> value = task.attributes.get(attribute);
+		TaskValue<?> value = task.values.get(attribute);
 		if (value == null) {
 			return new NoValue();
 		} else {
@@ -218,11 +232,11 @@ public class TaskLogic {
 		}
 
 		// set value
-		TaskValue<?> prevValue = task.attributes.get(attribute);
+		TaskValue<?> prevValue = task.values.get(attribute);
 		if (value == null) {
-			task.attributes.remove(attribute);
+			task.values.remove(attribute);
 		} else {
-			task.attributes.put(attribute, value);
+			task.values.put(attribute, value);
 		}
 		onTaskValueChanged(project, task, attribute, prevValue, value);
 
@@ -286,22 +300,19 @@ public class TaskLogic {
 
 
 	private static void onTaskValueChanged(Project project, Task task, TaskAttribute attribute, TaskValue<?> prevValue, TaskValue<?> newValue) {
+
+		// fire event
 		TaskValueChangeEvent event = new TaskValueChangeEvent(task, attribute, prevValue, newValue);
 		for (EventHandler<TaskValueChangeEvent> handler : valueChangedHandlers) {
 			handler.handle(event);
 		}
-		if(attribute.type.get() != AttributeType.LAST_UPDATED && newValue != prevValue) {
-			if(prevValue != null && prevValue.compare(newValue) != 0) {
+
+		// update "last_changed"
+		if (attribute.type.get() != AttributeType.LAST_UPDATED && newValue != prevValue) {
+			if (prevValue != null && prevValue.compare(newValue) != 0) {
 				setValue(project, task, AttributeLogic.findAttribute(project, AttributeType.LAST_UPDATED), new LastUpdatedValue(LocalDateTime.now()));
 			}
 		}
-	}
-
-
-
-
-	private static void updateLastUpdated(Task task) {
-
 	}
 
 

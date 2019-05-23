@@ -79,7 +79,7 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 		});
 
 
-		// lock attributes
+		// lock values
 		final boolean isLocked = Data.projectProperty.get().settings.attributesLocked.get();
 		ButtonUtils.makeIconButton(btnLockAttributes, isLocked ? SVGIcons.LOCK_CLOSED : SVGIcons.LOCK_OPEN, 1, "black");
 		btnLockAttributes.setOnAction(event -> {
@@ -93,7 +93,7 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 		});
 
 
-		// add attributes
+		// add values
 		for (TaskAttribute attribute : Data.projectProperty.get().data.attributes) {
 			AttributeNode node = new AttributeNode(attribute);
 			attributeNodeList.add(node);

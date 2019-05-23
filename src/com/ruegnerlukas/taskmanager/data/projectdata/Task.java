@@ -7,10 +7,7 @@ import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class Task {
@@ -18,13 +15,13 @@ public class Task {
 
 	private Map<TaskAttribute, List<EventHandler<ActionEvent>>> listeners = new HashMap<>();
 
-	public ObservableMap<TaskAttribute, TaskValue<?>> attributes = FXCollections.observableHashMap();
+	public ObservableMap<TaskAttribute, TaskValue<?>> values = FXCollections.observableHashMap();
 
 
 
 
 	public Task() {
-		attributes.addListener((MapChangeListener<TaskAttribute, TaskValue<?>>) c -> {
+		values.addListener((MapChangeListener<TaskAttribute, TaskValue<?>>) c -> {
 			List<EventHandler<ActionEvent>> list = listeners.get(c.getKey());
 			if (list != null) {
 				for (EventHandler<ActionEvent> handler : list) {
@@ -38,7 +35,7 @@ public class Task {
 
 
 	public TaskValue<?> getValue(TaskAttribute attribute) {
-		return attributes.get(attribute);
+		return values.get(attribute);
 	}
 
 

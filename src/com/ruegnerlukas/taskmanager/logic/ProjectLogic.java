@@ -48,7 +48,6 @@ public class ProjectLogic {
 		for (AttributeType type : AttributeType.getFixedTypes()) {
 			project.data.attributes.add(AttributeLogic.createTaskAttribute(type, type.display + " Attribute"));
 		}
-		project.data.attributes.add(AttributeLogic.createTaskAttribute(AttributeType.NUMBER));
 		return project;
 	}
 
