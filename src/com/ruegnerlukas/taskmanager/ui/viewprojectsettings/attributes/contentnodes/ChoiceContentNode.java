@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.ChoiceValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
@@ -29,7 +30,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 	private Button btnDiscard;
 	private Button btnSave;
 
-	private Map<String, Object> values = new HashMap<>();
+	private Map<AttributeValueType, AttributeValue<?>> values = new HashMap<>();
 
 
 
@@ -38,9 +39,9 @@ public class ChoiceContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(ChoiceAttributeLogic.CHOICE_VALUE_LIST, ChoiceAttributeLogic.getValueList(attribute));
-		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, ChoiceAttributeLogic.getUseDefault(attribute));
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, ChoiceAttributeLogic.getDefaultValue(attribute));
+		values.put(AttributeValueType.CHOICE_VALUES, new ChoiceListValue(ChoiceAttributeLogic.getValueList(attribute)));
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(ChoiceAttributeLogic.getUseDefault(attribute)));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(ChoiceAttributeLogic.getDefaultValue(attribute)));
 
 
 		// root box
@@ -160,7 +161,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void onValueList(String... valueList) {
-		values.put(ChoiceAttributeLogic.CHOICE_VALUE_LIST, valueList);
+		values.put(AttributeValueType.CHOICE_VALUES, new ChoiceListValue(valueList));
 
 		choiceDefaultValue.getItems().clear();
 		choiceDefaultValue.getItems().addAll(valueList);
@@ -188,7 +189,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean useDefault) {
-		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 		choiceDefaultValue.setDisable(!getLocalUseDefault());
 		fieldValues.removeCssStyleClass(null, "tag-default");
 		if (getLocalUseDefault()) {
@@ -204,7 +205,7 @@ public class ChoiceContentNode extends AttributeContentNode {
 		if (defaultValue == null) {
 			return;
 		}
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new ChoiceValue(defaultValue));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(new ChoiceValue(defaultValue)));
 		fieldValues.removeCssStyleClass(null, "tag-default");
 		if (getLocalUseDefault()) {
 			fieldValues.addCssStyleClass(getLocalDefaultValue(), "tag-default");
@@ -260,21 +261,36 @@ public class ChoiceContentNode extends AttributeContentNode {
 
 
 	private String[] getLocalValueList() {
-		return (String[]) values.get(ChoiceAttributeLogic.CHOICE_VALUE_LIST);
+		ChoiceListValue value = (ChoiceListValue) values.get(AttributeValueType.CHOICE_VALUES);
+		if (value != null) {
+			return value.getValue();
+		} else {
+			return new String[0];
+		}
 	}
 
 
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(TaskAttribute.ATTRIB_USE_DEFAULT);
+		UseDefaultValue value = (UseDefaultValue) values.get(AttributeValueType.USE_DEFAULT);
+		if (value != null) {
+			return value.getValue();
+		} else {
+			return false;
+		}
 	}
 
 
 
 
 	private String getLocalDefaultValue() {
-		return ((ChoiceValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
+		DefaultValue value = (DefaultValue) values.get(AttributeValueType.DEFAULT_VALUE);
+		if (value != null) {
+			return ((ChoiceValue) value.getValue()).getValue();
+		} else {
+			return "";
+		}
 	}
 
 

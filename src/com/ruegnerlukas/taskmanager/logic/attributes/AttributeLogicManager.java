@@ -10,8 +10,9 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AttributeLogicManager {
 
@@ -36,198 +37,198 @@ public class AttributeLogicManager {
 	}
 
 
-
-
-	public static String[] validateLogicClasses() {
-
-		List<String> errors = new ArrayList<>();
-
-
-		// all classes exist and are registered
-		for (AttributeType type : AttributeType.values()) {
-			if (!LOGIC_CLASSES.containsKey(type)) {
-				errors.add("ERR - Logic class for type " + type + " does not exist / is not registered.");
-			}
-		}
-
-
-		// all classes are valid
-		for (AttributeType type : AttributeType.values()) {
-			Class<?> logicClass = LOGIC_CLASSES.get(type);
-			if (logicClass == null) {
-				continue;
-			}
-			List<Field> fields = new ArrayList<>(Arrays.asList(logicClass.getFields()));
-			List<Method> methods = new ArrayList<>(Arrays.asList(logicClass.getMethods()));
-
-
-			// all classes have final field "DATA_TYPES"
-			boolean hasField_dataTypes = false;
-			for (Field field : fields) {
-				if ("DATA_TYPES".equals(field.getName()) && Map.class == field.getType() && Modifier.isFinal(field.getModifiers())) {
-					hasField_dataTypes = true;
-					try {
-						Map<String, Class<?>> map = (Map<String, Class<?>>) field.get(null);
-						if (!map.containsKey(TaskAttribute.ATTRIB_TASK_VALUE_TYPE)) {
-							errors.add("ERROR - Logic class of type " + type + " is missing the \"ATTRIB_TASK_VALUE_TYPE\" entry in \"DATA_TYPES\"");
-						}
-					} catch (IllegalAccessException e) {
-						e.printStackTrace();
-					}
-					break;
-				}
-			}
-			if (!hasField_dataTypes) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final DATA_TYPES:Map<String,Class<?>>\"");
-			}
-
-
-			// all classes have final field "COMPARATOR_ASC"
-			boolean hasField_comparatorAsc = false;
-			for (Field field : fields) {
-				if ("COMPARATOR_ASC".equals(field.getName()) && Comparator.class == field.getType() && Modifier.isFinal(field.getModifiers())) {
-					hasField_comparatorAsc = true;
-					break;
-				}
-			}
-			if (!hasField_comparatorAsc) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final COMPARATOR_ASC:Comparator\"");
-			}
-
-
-			// all classes have final field "COMPARATOR_DESC"
-			boolean hasField_comparatorDesc = false;
-			for (Field field : fields) {
-				if ("COMPARATOR_DESC".equals(field.getName()) && Comparator.class == field.getType() && Modifier.isFinal(field.getModifiers())) {
-					hasField_comparatorDesc = true;
-					break;
-				}
-			}
-			if (!hasField_comparatorDesc) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final COMPARATOR_DESC:Comparator\"");
-			}
-
-
-			// all classes have final field "FILTER_DATA"
-			boolean hasField_filterData = false;
-			for (Field field : fields) {
-				if ("FILTER_DATA".equals(field.getName()) && Map.class == field.getType() && Modifier.isFinal(field.getModifiers())) {
-					hasField_filterData = true;
-					break;
-				}
-			}
-			if (!hasField_filterData) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final FILTER_DATA:Map<FilterOperation,Class[]>\"");
-			}
-
-
-			// all classes have method "createAttribute():TaskAttribute"
-			boolean hasMethod_createAttribute = false;
-			for (Method method : methods) {
-				if ("createAttribute".equals(method.getName()) && method.getParameterCount() == 0 && method.getReturnType() == TaskAttribute.class) {
-					hasMethod_createAttribute = true;
-					break;
-				}
-			}
-			if (!hasMethod_createAttribute) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the method \"createAttribute():TaskAttribute\"");
-			}
-
-
-			// all classes have method "createAttribute(String):TaskAttribute"
-			boolean hasMethod_createNamedAttribute = false;
-			for (Method method : methods) {
-				if ("createAttribute".equals(method.getName()) && method.getParameterCount() == 1
-						&& method.getParameterTypes()[0] == String.class && method.getReturnType() == TaskAttribute.class) {
-					hasMethod_createNamedAttribute = true;
-					break;
-				}
-			}
-			if (!hasMethod_createNamedAttribute) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the method \"createAttribute(String):TaskAttribute\"");
-			}
-
-
-			// all classes have method "initAttribute(TaskAttribute):void"
-			boolean hasMethod_initAttribute = false;
-			for (Method method : methods) {
-				if ("initAttribute".equals(method.getName()) && method.getParameterCount() == 1
-						&& method.getParameterTypes()[0] == TaskAttribute.class && method.getReturnType() == Void.TYPE) {
-					hasMethod_initAttribute = true;
-					break;
-				}
-			}
-			if (!hasMethod_initAttribute) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the method \"initAttribute(TaskAttribute):void\"");
-			}
-
-
-			// all classes have method "matchesFilter(Task,TerminalFilterCriteria):boolean"
-			boolean hasMethod_matchesFilter = false;
-			for (Method method : methods) {
-				if ("matchesFilter".equals(method.getName()) && method.getParameterCount() == 2
-						&& method.getParameterTypes()[0] == Task.class
-						&& method.getParameterTypes()[1] == TerminalFilterCriteria.class
-						&& method.getReturnType() == boolean.class) {
-					hasMethod_matchesFilter = true;
-					break;
-				}
-			}
-			if (!hasMethod_matchesFilter) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the method \"matchesFilter(Task,TerminalFilterCriteria):boolean\"");
-			}
-
-
-			// all classes have method "isValidTaskValue(TaskAttribute,TaskValue):boolean"
-			boolean hasMethod_isValidTaskValue = false;
-			for (Method method : methods) {
-				if ("isValidTaskValue".equals(method.getName()) && method.getParameterCount() == 2
-						&& method.getParameterTypes()[0] == TaskAttribute.class
-						&& method.getParameterTypes()[1] == TaskValue.class
-						&& method.getReturnType() == boolean.class) {
-					hasMethod_isValidTaskValue = true;
-					break;
-				}
-			}
-			if (!hasMethod_isValidTaskValue) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the method \"isValidTaskValue(TaskAttribute,Object):boolean\"");
-			}
-
-
-			// all classes have method "generateValidTaskValue(TaskValue,TaskAttribute,boolean):Object"
-			boolean hasMethod_generateValidValue = false;
-			for (Method method : methods) {
-				if ("generateValidTaskValue".equals(method.getName()) && method.getParameterCount() == 3
-						&& method.getParameterTypes()[0] == TaskValue.class
-						&& method.getParameterTypes()[1] == TaskAttribute.class
-						&& method.getParameterTypes()[2] == boolean.class
-						&& method.getReturnType() != Void.class) {
-					hasMethod_generateValidValue = true;
-					break;
-				}
-			}
-			if (!hasMethod_generateValidValue) {
-				errors.add("ERROR - Logic class of type " + type + " is missing the method \"generateValidTaskValue(Object,TaskAttribute,boolean):Object\"");
-			}
-
-		}
-
-
-		// print errors / status
-		if (!errors.isEmpty()) {
-			String[] errorArray = new String[errors.size()];
-			for (int i = 0; i < errors.size(); i++) {
-				errorArray[i] = errors.get(i);
-			}
-			return errorArray;
-		} else {
-			return new String[]{"AttributeLogic - OK"};
-		}
-
-
-	}
-
-
+//
+//
+//	public static String[] validateLogicClasses() {
+//
+//		List<String> errors = new ArrayList<>();
+//
+//
+//		// all classes exist and are registered
+//		for (AttributeType type : AttributeType.values()) {
+//			if (!LOGIC_CLASSES.containsKey(type)) {
+//				errors.add("ERR - Logic class for type " + type + " does not exist / is not registered.");
+//			}
+//		}
+//
+//
+//		// all classes are valid
+//		for (AttributeType type : AttributeType.values()) {
+//			Class<?> logicClass = LOGIC_CLASSES.get(type);
+//			if (logicClass == null) {
+//				continue;
+//			}
+//			List<Field> fields = new ArrayList<>(Arrays.asList(logicClass.getFields()));
+//			List<Method> methods = new ArrayList<>(Arrays.asList(logicClass.getMethods()));
+//
+//
+//			// all classes have final field "DATA_TYPES"
+//			boolean hasField_dataTypes = false;
+//			for (Field field : fields) {
+//				if ("DATA_TYPES".equals(field.getName()) && Map.class == field.getType() && Modifier.isFinal(field.getModifiers())) {
+//					hasField_dataTypes = true;
+//					try {
+//						Map<String, Class<?>> map = (Map<String, Class<?>>) field.get(null);
+//						if (!map.containsKey(TaskAttribute.ATTRIB_TASK_VALUE_TYPE)) {
+//							errors.add("ERROR - Logic class of type " + type + " is missing the \"ATTRIB_TASK_VALUE_TYPE\" entry in \"DATA_TYPES\"");
+//						}
+//					} catch (IllegalAccessException e) {
+//						e.printStackTrace();
+//					}
+//					break;
+//				}
+//			}
+//			if (!hasField_dataTypes) {
+//				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final DATA_TYPES:Map<String,Class<?>>\"");
+//			}
+//
+//
+//			// all classes have final field "COMPARATOR_ASC"
+//			boolean hasField_comparatorAsc = false;
+//			for (Field field : fields) {
+//				if ("COMPARATOR_ASC".equals(field.getName()) && Comparator.class == field.getType() && Modifier.isFinal(field.getModifiers())) {
+//					hasField_comparatorAsc = true;
+//					break;
+//				}
+//			}
+//			if (!hasField_comparatorAsc) {
+//				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final COMPARATOR_ASC:Comparator\"");
+//			}
+//
+//
+//			// all classes have final field "COMPARATOR_DESC"
+//			boolean hasField_comparatorDesc = false;
+//			for (Field field : fields) {
+//				if ("COMPARATOR_DESC".equals(field.getName()) && Comparator.class == field.getType() && Modifier.isFinal(field.getModifiers())) {
+//					hasField_comparatorDesc = true;
+//					break;
+//				}
+//			}
+//			if (!hasField_comparatorDesc) {
+//				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final COMPARATOR_DESC:Comparator\"");
+//			}
+//
+//
+//			// all classes have final field "FILTER_DATA"
+//			boolean hasField_filterData = false;
+//			for (Field field : fields) {
+//				if ("FILTER_DATA".equals(field.getName()) && Map.class == field.getType() && Modifier.isFinal(field.getModifiers())) {
+//					hasField_filterData = true;
+//					break;
+//				}
+//			}
+//			if (!hasField_filterData) {
+//				errors.add("ERROR - Logic class of type " + type + " is missing the field \"final FILTER_DATA:Map<FilterOperation,Class[]>\"");
+//			}
+//
+//
+//			// all classes have method "createAttribute():TaskAttribute"
+//			boolean hasMethod_createAttribute = false;
+//			for (Method method : methods) {
+//				if ("createAttribute".equals(method.getName()) && method.getParameterCount() == 0 && method.getReturnType() == TaskAttribute.class) {
+//					hasMethod_createAttribute = true;
+//					break;
+//				}
+//			}
+//			if (!hasMethod_createAttribute) {
+//				errors.add("ERROR - Logic class of type " + type + " is missing the method \"createAttribute():TaskAttribute\"");
+//			}
+//
+//
+//			// all classes have method "createAttribute(String):TaskAttribute"
+//			boolean hasMethod_createNamedAttribute = false;
+//			for (Method method : methods) {
+//				if ("createAttribute".equals(method.getName()) && method.getParameterCount() == 1
+//						&& method.getParameterTypes()[0] == String.class && method.getReturnType() == TaskAttribute.class) {
+//					hasMethod_createNamedAttribute = true;
+//					break;
+//				}
+//			}
+//			if (!hasMethod_createNamedAttribute) {
+//				errors.add("ERROR - Logic class of type " + type + " is missing the method \"createAttribute(String):TaskAttribute\"");
+//			}
+//
+//
+//			// all classes have method "initAttribute(TaskAttribute):void"
+//			boolean hasMethod_initAttribute = false;
+//			for (Method method : methods) {
+//				if ("initAttribute".equals(method.getName()) && method.getParameterCount() == 1
+//						&& method.getParameterTypes()[0] == TaskAttribute.class && method.getReturnType() == Void.TYPE) {
+//					hasMethod_initAttribute = true;
+//					break;
+//				}
+//			}
+//			if (!hasMethod_initAttribute) {
+//				errors.add("ERROR - Logic class of type " + type + " is missing the method \"initAttribute(TaskAttribute):void\"");
+//			}
+//
+//
+//			// all classes have method "matchesFilter(Task,TerminalFilterCriteria):boolean"
+//			boolean hasMethod_matchesFilter = false;
+//			for (Method method : methods) {
+//				if ("matchesFilter".equals(method.getName()) && method.getParameterCount() == 2
+//						&& method.getParameterTypes()[0] == Task.class
+//						&& method.getParameterTypes()[1] == TerminalFilterCriteria.class
+//						&& method.getReturnType() == boolean.class) {
+//					hasMethod_matchesFilter = true;
+//					break;
+//				}
+//			}
+//			if (!hasMethod_matchesFilter) {
+//				errors.add("ERROR - Logic class of type " + type + " is missing the method \"matchesFilter(Task,TerminalFilterCriteria):boolean\"");
+//			}
+//
+//
+//			// all classes have method "isValidTaskValue(TaskAttribute,TaskValue):boolean"
+//			boolean hasMethod_isValidTaskValue = false;
+//			for (Method method : methods) {
+//				if ("isValidTaskValue".equals(method.getName()) && method.getParameterCount() == 2
+//						&& method.getParameterTypes()[0] == TaskAttribute.class
+//						&& method.getParameterTypes()[1] == TaskValue.class
+//						&& method.getReturnType() == boolean.class) {
+//					hasMethod_isValidTaskValue = true;
+//					break;
+//				}
+//			}
+//			if (!hasMethod_isValidTaskValue) {
+//				errors.add("ERROR - Logic class of type " + type + " is missing the method \"isValidTaskValue(TaskAttribute,Object):boolean\"");
+//			}
+//
+//
+//			// all classes have method "generateValidTaskValue(TaskValue,TaskAttribute,boolean):Object"
+//			boolean hasMethod_generateValidValue = false;
+//			for (Method method : methods) {
+//				if ("generateValidTaskValue".equals(method.getName()) && method.getParameterCount() == 3
+//						&& method.getParameterTypes()[0] == TaskValue.class
+//						&& method.getParameterTypes()[1] == TaskAttribute.class
+//						&& method.getParameterTypes()[2] == boolean.class
+//						&& method.getReturnType() != Void.class) {
+//					hasMethod_generateValidValue = true;
+//					break;
+//				}
+//			}
+//			if (!hasMethod_generateValidValue) {
+//				errors.add("ERROR - Logic class of type " + type + " is missing the method \"generateValidTaskValue(Object,TaskAttribute,boolean):Object\"");
+//			}
+//
+//		}
+//
+//
+//		// print errors / status
+//		if (!errors.isEmpty()) {
+//			String[] errorArray = new String[errors.size()];
+//			for (int i = 0; i < errors.size(); i++) {
+//				errorArray[i] = errors.get(i);
+//			}
+//			return errorArray;
+//		} else {
+//			return new String[]{"AttributeLogic - OK"};
+//		}
+//
+//
+//	}
+//
+//
 
 
 	public static Map<String, Class<?>> getDataTypeMap(AttributeType type) {

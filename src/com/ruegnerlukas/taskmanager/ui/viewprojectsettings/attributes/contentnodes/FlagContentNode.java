@@ -2,6 +2,10 @@ package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentno
 
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.DefaultValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.FlagListValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.FlagValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.TaskFlagAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
@@ -29,7 +33,7 @@ public class FlagContentNode extends AttributeContentNode {
 	private Button btnDiscard;
 	private Button btnSave;
 
-	private Map<String, Object> values = new HashMap<>();
+	private Map<AttributeValueType, AttributeValue<?>> values = new HashMap<>();
 
 
 
@@ -38,8 +42,8 @@ public class FlagContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set values
-		values.put(TaskFlagAttributeLogic.FLAG_FLAG_LIST, TaskFlagAttributeLogic.getFlagList(attribute));
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, TaskFlagAttributeLogic.getDefaultValue(attribute));
+		values.put(AttributeValueType.FLAG_LIST, new FlagListValue(TaskFlagAttributeLogic.getFlagList(attribute)));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(TaskFlagAttributeLogic.getDefaultValue(attribute)));
 
 
 		// root box
@@ -222,7 +226,7 @@ public class FlagContentNode extends AttributeContentNode {
 
 
 	private void onFlagList() {
-		values.put(TaskFlagAttributeLogic.FLAG_FLAG_LIST, collectLocalFlagList());
+		values.put(AttributeValueType.FLAG_LIST, new FlagListValue(collectLocalFlagList()));
 		TaskFlag defaultFlag = getLocalDefaultValue();
 		choiceDefaultValue.getItems().clear();
 		choiceDefaultValue.getItems().addAll(getLocalFlagList());
@@ -243,7 +247,7 @@ public class FlagContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(TaskFlag defaultValue) {
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new FlagValue(defaultValue));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(new FlagValue(defaultValue)));
 		checkChanges();
 	}
 
@@ -261,7 +265,7 @@ public class FlagContentNode extends AttributeContentNode {
 
 
 	@Override
-	protected boolean compareValues(Map<String, Object> values) {
+	protected boolean compareValues(Map<AttributeValueType, AttributeValue<?>> values) {
 
 		if (new FlagValue(getLocalDefaultValue()).compare(TaskFlagAttributeLogic.getDefaultValue(attribute)) != 0) {
 			return false;
@@ -292,7 +296,7 @@ public class FlagContentNode extends AttributeContentNode {
 		for (Node node : boxFlagNodes.getChildren()) {
 			((FlagNode) node).commitValues();
 		}
-		values.put(TaskFlagAttributeLogic.FLAG_FLAG_LIST, getLocalFlagList());
+		values.put(AttributeValueType.FLAG_LIST, new FlagListValue(getLocalFlagList()));
 		saveValues(values);
 		checkChanges();
 	}
@@ -348,14 +352,24 @@ public class FlagContentNode extends AttributeContentNode {
 
 
 	private TaskFlag[] getLocalFlagList() {
-		return (TaskFlag[]) values.get(TaskFlagAttributeLogic.FLAG_FLAG_LIST);
+		FlagListValue value = (FlagListValue)values.get(AttributeValueType.FLAG_LIST);
+		if(value != null) {
+			return value.getValue();
+		} else {
+			return new TaskFlag[0];
+		}
 	}
 
 
 
 
 	private TaskFlag getLocalDefaultValue() {
-		return ((FlagValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
+		DefaultValue value = (DefaultValue)values.get(AttributeValueType.DEFAULT_VALUE);
+		if(value != null) {
+			return ((FlagValue)value.getValue()).getValue();
+		} else {
+			return null;
+		}
 	}
 
 

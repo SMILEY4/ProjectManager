@@ -15,7 +15,6 @@ import java.util.*;
 public class IDAttributeLogic {
 
 
-	public static final Map<String, Class<?>> DATA_TYPES;
 	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
 	public static final Comparator<Integer> COMPARATOR_ASC = Integer::compareTo;
@@ -25,10 +24,6 @@ public class IDAttributeLogic {
 
 
 	static {
-		Map<String, Class<?>> mapTypes = new HashMap<>();
-		mapTypes.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, IDValue.class);
-		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
-
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{Integer.class});
 		mapData.put(FilterOperation.NOT_EQUALS, new Class<?>[]{Integer.class});

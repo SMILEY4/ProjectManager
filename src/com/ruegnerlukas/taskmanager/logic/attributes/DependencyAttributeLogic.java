@@ -16,7 +16,6 @@ import java.util.*;
 public class DependencyAttributeLogic {
 
 
-	public static final Map<String, Class<?>> DATA_TYPES;
 	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
 	public static final Comparator<Task[]> COMPARATOR_ASC = Comparator.comparingInt(x -> x.length);
@@ -26,10 +25,6 @@ public class DependencyAttributeLogic {
 
 
 	static {
-		Map<String, Class<?>> mapTypes = new HashMap<>();
-		mapTypes.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, DependencyValue.class);
-		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
-
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.DEPENDENT_ON, new Class<?>[]{Task.class});
 		mapData.put(FilterOperation.PREREQUISITE_OF, new Class<?>[]{Task.class});

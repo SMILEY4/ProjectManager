@@ -1,6 +1,10 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.DefaultValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.UseDefaultValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.DateValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.DateAttributeLogic;
@@ -29,7 +33,7 @@ public class DateContentNode extends AttributeContentNode {
 	private Button btnDiscard;
 	private Button btnSave;
 
-	private Map<String, Object> values = new HashMap<>();
+	private Map<AttributeValueType, AttributeValue<?>> values = new HashMap<>();
 
 
 
@@ -38,8 +42,8 @@ public class DateContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, DateAttributeLogic.getUseDefault(attribute));
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, DateAttributeLogic.getDefaultValue(attribute));
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(DateAttributeLogic.getUseDefault(attribute)));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(DateAttributeLogic.getDefaultValue(attribute)));
 
 
 		// root box
@@ -136,7 +140,7 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean useDefault) {
-		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 		pickerDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -145,7 +149,7 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(LocalDate defaultValue) {
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new DateValue(defaultValue));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(new DateValue(defaultValue)));
 		checkChanges();
 	}
 
@@ -182,14 +186,24 @@ public class DateContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(TaskAttribute.ATTRIB_USE_DEFAULT);
+		UseDefaultValue value = (UseDefaultValue)values.get(AttributeValueType.USE_DEFAULT);
+		if(value != null) {
+			return value.getValue();
+		} else {
+			return false;
+		}
 	}
 
 
 
 
 	private LocalDate getLocalDefaultValue() {
-		return ((DateValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
+		DefaultValue value = (DefaultValue)values.get(AttributeValueType.USE_DEFAULT);
+		if(value != null) {
+			return ((DateValue)value.getValue()).getValue();
+		} else {
+			return null;
+		}
 	}
 
 

@@ -4,6 +4,7 @@ import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
@@ -16,10 +17,6 @@ import java.util.*;
 public class TextAttributeLogic {
 
 
-	public static final String TEXT_CHAR_LIMIT = "text_char_limit";
-	public static final String TEXT_MULTILINE = "text_multiline";
-
-	public static final Map<String, Class<?>> DATA_TYPES;
 	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
 	public static final Comparator<String> COMPARATOR_ASC = String::compareTo;
@@ -29,14 +26,6 @@ public class TextAttributeLogic {
 
 
 	static {
-		Map<String, Class<?>> mapTypes = new HashMap<>();
-		mapTypes.put(TEXT_CHAR_LIMIT, Integer.class);
-		mapTypes.put(TEXT_MULTILINE, Boolean.class);
-		mapTypes.put(TaskAttribute.ATTRIB_USE_DEFAULT, Boolean.class);
-		mapTypes.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, TextValue.class);
-		mapTypes.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, TextValue.class);
-		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
-
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{String.class});
@@ -78,56 +67,76 @@ public class TextAttributeLogic {
 
 
 	public static void setCharLimit(TaskAttribute attribute, int limit) {
-		attribute.values.put(TEXT_CHAR_LIMIT, limit);
+		attribute.values.put(AttributeValueType.TEXT_CHAR_LIMIT, new TextCharLimitValue(limit));
 	}
 
 
 
 
 	public static int getCharLimit(TaskAttribute attribute) {
-		return attribute.getValue(TEXT_CHAR_LIMIT);
+		TextCharLimitValue value = (TextCharLimitValue) attribute.getValue(AttributeValueType.TEXT_CHAR_LIMIT);
+		if(value == null) {
+			return 128;
+		} else {
+			return value.getValue();
+		}
 	}
 
 
 
 
 	public static void setMultiline(TaskAttribute attribute, boolean multiline) {
-		attribute.values.put(TEXT_MULTILINE, multiline);
+		attribute.values.put(AttributeValueType.TEXT_MULTILINE, new TextMultilineValue(multiline));
 	}
 
 
 
 
 	public static boolean getMultiline(TaskAttribute attribute) {
-		return attribute.getValue(TEXT_MULTILINE);
+		TextMultilineValue value = (TextMultilineValue) attribute.getValue(AttributeValueType.TEXT_MULTILINE);
+		if(value == null) {
+			return false;
+		} else {
+			return value.getValue();
+		}
 	}
 
 
 
 
 	public static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
+		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(TaskAttribute.ATTRIB_USE_DEFAULT);
+		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
+		if(value == null) {
+			return false;
+		} else {
+			return value.getValue();
+		}
 	}
 
 
 
 
 	public static void setDefaultValue(TaskAttribute attribute, TextValue defaultValue) {
-		attribute.values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, defaultValue);
+		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
 	public static TextValue getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(TaskAttribute.ATTRIB_DEFAULT_VALUE);
+		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
+		if(value == null) {
+			return null;
+		} else {
+			return (TextValue) value.getValue();
+		}
 	}
 
 

@@ -1,6 +1,10 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.DefaultValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.UseDefaultValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.BoolValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.BooleanAttributeLogic;
@@ -27,7 +31,7 @@ public class BooleanContentNode extends AttributeContentNode {
 	private Button btnDiscard;
 	private Button btnSave;
 
-	private Map<String, Object> values = new HashMap<>();
+	private Map<AttributeValueType, AttributeValue<?>> values = new HashMap<>();
 
 
 
@@ -36,8 +40,8 @@ public class BooleanContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, BooleanAttributeLogic.getUseDefault(attribute));
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, BooleanAttributeLogic.getDefaultValue(attribute));
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(BooleanAttributeLogic.getUseDefault(attribute)));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(BooleanAttributeLogic.getDefaultValue(attribute)));
 
 
 		// root box
@@ -136,7 +140,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean useDefault) {
-		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 		choiceDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -145,7 +149,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 
 	private void onDefaultValue(boolean defaultValue) {
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new BoolValue(defaultValue));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(new BoolValue(defaultValue)));
 		checkChanges();
 	}
 
@@ -182,14 +186,24 @@ public class BooleanContentNode extends AttributeContentNode {
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(TaskAttribute.ATTRIB_USE_DEFAULT);
+		UseDefaultValue value = (UseDefaultValue) values.get(AttributeValueType.USE_DEFAULT);
+		if(value != null) {
+			return value.getValue();
+		} else {
+			return false;
+		}
 	}
 
 
 
 
 	private boolean getLocalDefaultValue() {
-		return ((BoolValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
+		DefaultValue value = (DefaultValue) values.get(AttributeValueType.DEFAULT_VALUE);
+		if(value != null) {
+			return ((BoolValue)value.getValue()).getValue();
+		} else {
+			return false;
+		}
 	}
 
 

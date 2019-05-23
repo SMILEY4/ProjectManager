@@ -3,6 +3,8 @@ package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes.*;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -57,11 +59,11 @@ public abstract class AttributeContentNode extends AnchorPane {
 
 
 
-	protected void saveValues(Map<String, Object> values) {
-		for (String key : attribute.values.keySet()) {
-			Object value = values.get(key);
+	protected void saveValues(Map<AttributeValueType, AttributeValue<?>> values) {
+		for (AttributeValueType type : attribute.values.keySet()) {
+			AttributeValue value = values.get(type);
 			if (value != null) {
-				AttributeLogic.setAttributeValue(Data.projectProperty.get(), attribute, key, value, true);
+				AttributeLogic.setAttributeValue(Data.projectProperty.get(), attribute, value, true);
 			}
 		}
 	}
@@ -69,38 +71,28 @@ public abstract class AttributeContentNode extends AnchorPane {
 
 
 
-	protected void discardValues(Map<String, Object> map) {
-		for (String key : attribute.values.keySet()) {
-			map.put(key, attribute.getValue(key));
+	protected void discardValues(Map<AttributeValueType, AttributeValue<?>> map) {
+		for (AttributeValueType type : attribute.values.keySet()) {
+			map.put(type, attribute.getValue(type));
 		}
 	}
 
 
 
 
-	protected boolean compareValues(Map<String, Object> values) {
-		for (String key : attribute.values.keySet()) {
-			if(key.equals(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE)) {
+	/**
+	 * @return true, if both values all given values are equal to the values of the attribute
+	 * */
+	protected boolean compareValues(Map<AttributeValueType, AttributeValue<?>> values) {
+		for (AttributeValueType type : attribute.values.keySet()) {
+			if(type.equals(AttributeValueType.CARD_DISPLAY_TYPE)) {
 				continue;
-			}
-			Object valueAttribute = attribute.getValue(key);
-			Object valueMap = values.get(key);
-			if (valueAttribute instanceof Object[]) {
-				Object[] arrayAttribute = (Object[]) valueAttribute;
-				Object[] arrayMap = (Object[]) valueMap;
-				if (arrayAttribute.length != arrayMap.length) {
-					return false;
-				}
-				for (int i = 0; i < arrayAttribute.length; i++) {
-					if (!arrayAttribute[i].equals(arrayMap[i])) {
-						return false;
-					}
-				}
 
-			} else {
-				if (valueAttribute == null || !valueAttribute.equals(valueMap)) {
-					return false;
-				}
+			}
+			AttributeValue<?> valueAttribute = attribute.getValue(type);
+			AttributeValue<?> valueMap = values.get(type);
+			if(!valueAttribute.equals(valueMap)) {
+				return false;
 			}
 		}
 		return true;

@@ -6,6 +6,10 @@ import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.DefaultValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.FlagListValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.UseDefaultValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.FlagValue;
@@ -17,9 +21,6 @@ import java.util.*;
 public class TaskFlagAttributeLogic {
 
 
-	public static final String FLAG_FLAG_LIST = "flag_flag_list";
-
-	public static final Map<String, Class<?>> DATA_TYPES;
 	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
 	public static final Comparator<TaskFlag> COMPARATOR_ASC = Comparator.comparing(x -> x.name.get());
@@ -29,13 +30,6 @@ public class TaskFlagAttributeLogic {
 
 
 	static {
-		Map<String, Class<?>> map = new HashMap<>();
-		map.put(FLAG_FLAG_LIST, TaskFlag[].class);
-		map.put(TaskAttribute.ATTRIB_USE_DEFAULT, Boolean.class);
-		map.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, FlagValue.class);
-		map.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, FlagValue.class);
-		DATA_TYPES = Collections.unmodifiableMap(map);
-
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{TaskFlag.class});
 		mapData.put(FilterOperation.NOT_EQUALS, new Class<?>[]{TaskFlag.class});
@@ -101,14 +95,19 @@ public class TaskFlagAttributeLogic {
 
 
 	public static void setFlagList(TaskAttribute attribute, TaskFlag[] list) {
-		attribute.values.put(FLAG_FLAG_LIST, list);
+		attribute.values.put(AttributeValueType.FLAG_LIST, new FlagListValue(list));
 	}
 
 
 
 
 	public static TaskFlag[] getFlagList(TaskAttribute attribute) {
-		return attribute.getValue(FLAG_FLAG_LIST);
+		FlagListValue value = (FlagListValue) attribute.getValue(AttributeValueType.FLAG_LIST);
+		if (value == null) {
+			return new TaskFlag[]{};
+		} else {
+			return value.getValue();
+		}
 	}
 
 
@@ -128,28 +127,38 @@ public class TaskFlagAttributeLogic {
 
 
 	private static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
+		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(TaskAttribute.ATTRIB_USE_DEFAULT);
+		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
+		if (value == null) {
+			return false;
+		} else {
+			return value.getValue();
+		}
 	}
 
 
 
 
 	private static void setDefaultValue(TaskAttribute attribute, FlagValue defaultValue) {
-		attribute.values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, defaultValue);
+		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
 	public static FlagValue getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(TaskAttribute.ATTRIB_DEFAULT_VALUE);
+		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
+		if (value == null) {
+			return null;
+		} else {
+			return (FlagValue) value.getValue();
+		}
 	}
 
 

@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TextValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.TextAttributeLogic;
@@ -32,7 +33,7 @@ public class TextContentNode extends AttributeContentNode {
 	private Button btnDiscard;
 	private Button btnSave;
 
-	private Map<String, Object> values = new HashMap<>();
+	private Map<AttributeValueType, AttributeValue<?>> values = new HashMap<>();
 
 
 
@@ -41,10 +42,10 @@ public class TextContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(TextAttributeLogic.TEXT_CHAR_LIMIT, TextAttributeLogic.getCharLimit(attribute));
-		values.put(TextAttributeLogic.TEXT_MULTILINE, TextAttributeLogic.getMultiline(attribute));
-		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, TextAttributeLogic.getUseDefault(attribute));
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, TextAttributeLogic.getDefaultValue(attribute));
+		values.put(AttributeValueType.TEXT_CHAR_LIMIT, new TextCharLimitValue(TextAttributeLogic.getCharLimit(attribute)));
+		values.put(AttributeValueType.TEXT_MULTILINE, new TextMultilineValue(TextAttributeLogic.getMultiline(attribute)));
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(TextAttributeLogic.getUseDefault(attribute)));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(TextAttributeLogic.getDefaultValue(attribute)));
 
 		// root box
 		VBox vbox = new VBox();
@@ -201,7 +202,7 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private void onCharLimit(int newValue) {
-		values.put(TextAttributeLogic.TEXT_CHAR_LIMIT, newValue);
+		values.put(AttributeValueType.TEXT_CHAR_LIMIT, new TextCharLimitValue(newValue));
 		if (fieldDefaultValue.getText().length() > getLocalCharLimit()) {
 			fieldDefaultValue.setText(fieldDefaultValue.getText().substring(0, getLocalCharLimit()));
 		}
@@ -212,7 +213,7 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private void onMultiline(boolean newValue) {
-		values.put(TextAttributeLogic.TEXT_MULTILINE, newValue);
+		values.put(AttributeValueType.TEXT_MULTILINE, new TextMultilineValue(newValue));
 		setDefaultValueHeight();
 		fieldDefaultValue.setMultiline(getLocalMultiline());
 		checkChanges();
@@ -222,7 +223,7 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private void onUseDefault(boolean newValue) {
-		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, newValue);
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(newValue));
 		fieldDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -233,7 +234,7 @@ public class TextContentNode extends AttributeContentNode {
 	private void onDefaultValue(String newValue) {
 		String text = getLocalMultiline() ? newValue : newValue.replaceAll(System.lineSeparator(), "");
 		text = text.substring(0, Math.min(text.length(), getLocalCharLimit()));
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new TextValue(text));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(new TextValue(text)));
 		fieldDefaultValue.setTextSilent(text);
 		checkChanges();
 	}
@@ -281,28 +282,48 @@ public class TextContentNode extends AttributeContentNode {
 
 
 	private int getLocalCharLimit() {
-		return (int) values.get(TextAttributeLogic.TEXT_CHAR_LIMIT);
+		TextCharLimitValue value = (TextCharLimitValue)values.get(AttributeValueType.TEXT_CHAR_LIMIT);
+		if(value != null) {
+			return value.getValue();
+		} else {
+			return 128;
+		}
 	}
 
 
 
 
 	private boolean getLocalMultiline() {
-		return (boolean) values.get(TextAttributeLogic.TEXT_MULTILINE);
+		TextMultilineValue value = (TextMultilineValue)values.get(AttributeValueType.TEXT_MULTILINE);
+		if(value != null) {
+			return value.getValue();
+		} else {
+			return false;
+		}
 	}
 
 
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(TaskAttribute.ATTRIB_USE_DEFAULT);
+		UseDefaultValue value = (UseDefaultValue)values.get(AttributeValueType.USE_DEFAULT);
+		if(value != null) {
+			return value.getValue();
+		} else {
+			return false;
+		}
 	}
 
 
 
 
 	private String getLocalDefaultValue() {
-		return ((TextValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
+		DefaultValue value = (DefaultValue)values.get(AttributeValueType.DEFAULT_VALUE);
+		if(value != null) {
+			return ((TextValue)value.getValue()).getValue();
+		} else {
+			return "";
+		}
 	}
 
 

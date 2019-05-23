@@ -5,6 +5,10 @@ import com.ruegnerlukas.simpleutils.arrays.ArrayUtils;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.ChoiceListValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.DefaultValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.UseDefaultValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.ChoiceValue;
@@ -17,9 +21,6 @@ import java.util.*;
 public class ChoiceAttributeLogic {
 
 
-	public static final String CHOICE_VALUE_LIST = "choice_value_list";
-
-	public static final Map<String, Class<?>> DATA_TYPES;
 	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
 	public static final Comparator<String> COMPARATOR_ASC = String::compareTo;
@@ -29,13 +30,6 @@ public class ChoiceAttributeLogic {
 
 
 	static {
-		Map<String, Class<?>> mapTypes = new HashMap<>();
-		mapTypes.put(CHOICE_VALUE_LIST, String[].class);
-		mapTypes.put(TaskAttribute.ATTRIB_USE_DEFAULT, Boolean.class);
-		mapTypes.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, ChoiceValue.class);
-		mapTypes.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, ChoiceValue.class);
-		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
-
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{String.class});
@@ -112,14 +106,19 @@ public class ChoiceAttributeLogic {
 
 
 	public static void setValueList(TaskAttribute attribute, String... valueList) {
-		attribute.values.put(CHOICE_VALUE_LIST, valueList);
+		attribute.values.put(AttributeValueType.CHOICE_VALUES, new ChoiceListValue(valueList));
 	}
 
 
 
 
 	public static String[] getValueList(TaskAttribute attribute) {
-		return attribute.getValue(CHOICE_VALUE_LIST);
+		ChoiceListValue value = (ChoiceListValue) attribute.getValue(AttributeValueType.CHOICE_VALUES);
+		if(value == null) {
+			return new String[]{};
+		} else {
+			return value.getValue();
+		}
 	}
 
 
@@ -139,28 +138,38 @@ public class ChoiceAttributeLogic {
 
 
 	public static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
+		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(TaskAttribute.ATTRIB_USE_DEFAULT);
+		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
+		if(value == null) {
+			return false;
+		} else {
+			return value.getValue();
+		}
 	}
 
 
 
 
 	public static void setDefaultValue(TaskAttribute attribute, ChoiceValue defaultValue) {
-		attribute.values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, defaultValue);
+		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
 	public static ChoiceValue getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(TaskAttribute.ATTRIB_DEFAULT_VALUE);
+		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
+		if(value == null) {
+			return null;
+		} else {
+			return (ChoiceValue) value.getValue();
+		}
 	}
 
 

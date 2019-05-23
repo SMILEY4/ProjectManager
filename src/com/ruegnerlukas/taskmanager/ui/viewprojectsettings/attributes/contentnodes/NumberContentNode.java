@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentno
 
 import com.ruegnerlukas.simplemath.MathUtils;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NumberValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
@@ -33,7 +34,7 @@ public class NumberContentNode extends AttributeContentNode {
 	private Button btnDiscard;
 	private Button btnSave;
 
-	private Map<String, Object> values = new HashMap<>();
+	private Map<AttributeValueType, AttributeValue<?>> values = new HashMap<>();
 
 
 
@@ -42,11 +43,11 @@ public class NumberContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(NumberAttributeLogic.NUMBER_DEC_PLACES, NumberAttributeLogic.getDecPlaces(attribute));
-		values.put(NumberAttributeLogic.NUMBER_MIN_VALUE, NumberAttributeLogic.getMinValue(attribute));
-		values.put(NumberAttributeLogic.NUMBER_MAX_VALUE, NumberAttributeLogic.getMaxValue(attribute));
-		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, NumberAttributeLogic.getUseDefault(attribute));
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, NumberAttributeLogic.getDefaultValue(attribute));
+		values.put(AttributeValueType.NUMBER_DEC_PLACES, new NumberDecPlacesValue(NumberAttributeLogic.getDecPlaces(attribute)));
+		values.put(AttributeValueType.NUMBER_MIN, new NumberMinValue(NumberAttributeLogic.getMinValue(attribute).doubleValue()));
+		values.put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(NumberAttributeLogic.getMaxValue(attribute).doubleValue()));
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(NumberAttributeLogic.getUseDefault(attribute)));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(NumberAttributeLogic.getDefaultValue(attribute)));
 
 
 		// root box
@@ -239,8 +240,8 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 
-	private void onMinValue(double newValue) {
-		values.put(NumberAttributeLogic.NUMBER_MIN_VALUE, newValue);
+	private void onMinValue(double minValue) {
+		values.put(AttributeValueType.NUMBER_MIN, new NumberMinValue(minValue));
 
 		SpinnerUtils.initSpinner(
 				spinnerMaxValue,
@@ -266,8 +267,8 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 
-	private void onMaxValue(double newValue) {
-		values.put(NumberAttributeLogic.NUMBER_MAX_VALUE, newValue);
+	private void onMaxValue(double maxValue) {
+		values.put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(maxValue));
 
 		SpinnerUtils.initSpinner(
 				spinnerMinValue,
@@ -293,9 +294,9 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 
-	private void onDecPlaces(int newValue) {
+	private void onDecPlaces(int decPlaces) {
 
-		values.put(NumberAttributeLogic.NUMBER_DEC_PLACES, newValue);
+		values.put(AttributeValueType.NUMBER_DEC_PLACES, new NumberDecPlacesValue(decPlaces));
 
 		SpinnerUtils.initSpinner(
 				spinnerMinValue,
@@ -330,8 +331,8 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 
-	private void onUseDefault(boolean newValue) {
-		values.put(TaskAttribute.ATTRIB_USE_DEFAULT, newValue);
+	private void onUseDefault(boolean useDefault) {
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 		spinnerDefaultValue.setDisable(!getLocalUseDefault());
 		checkChanges();
 	}
@@ -339,8 +340,8 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 
-	private void onDefaultValue(Double newValue) {
-		values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, new NumberValue(newValue));
+	private void onDefaultValue(Double defaultValue) {
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(new NumberValue(defaultValue)));
 		checkChanges();
 	}
 
@@ -408,35 +409,60 @@ public class NumberContentNode extends AttributeContentNode {
 
 
 	private int getLocalDecPlaces() {
-		return (int) values.get(NumberAttributeLogic.NUMBER_DEC_PLACES);
+		NumberDecPlacesValue value = (NumberDecPlacesValue) values.get(AttributeValueType.NUMBER_DEC_PLACES);
+		if(value != null) {
+			return value.getValue();
+		} else {
+			return 0;
+		}
 	}
 
 
 
 
 	private Number getLocalMinValue() {
-		return (Number) values.get(NumberAttributeLogic.NUMBER_MIN_VALUE);
+		NumberMinValue value = (NumberMinValue) values.get(AttributeValueType.NUMBER_MIN);
+		if(value != null) {
+			return value.getValue();
+		} else {
+			return (double)Integer.MIN_VALUE;
+		}
 	}
 
 
 
 
 	private Number getLocalMaxValue() {
-		return (Number) values.get(NumberAttributeLogic.NUMBER_MAX_VALUE);
+		NumberMaxValue value = (NumberMaxValue) values.get(AttributeValueType.NUMBER_MAX);
+		if(value != null) {
+			return value.getValue();
+		} else {
+			return (double)Integer.MAX_VALUE;
+		}
 	}
 
 
 
 
 	private boolean getLocalUseDefault() {
-		return (boolean) values.get(TaskAttribute.ATTRIB_USE_DEFAULT);
+		UseDefaultValue value = (UseDefaultValue) values.get(AttributeValueType.USE_DEFAULT);
+		if(value != null) {
+			return value.getValue();
+		} else {
+			return false;
+		}
 	}
 
 
 
 
 	private Number getLocalDefaultValue() {
-		return ((NumberValue) values.get(TaskAttribute.ATTRIB_DEFAULT_VALUE)).getValue();
+		DefaultValue value = (DefaultValue) values.get(AttributeValueType.DEFAULT_VALUE);
+		if(value != null) {
+			return ((NumberValue)value.getValue()).getValue();
+		} else {
+			return 0.0;
+		}
 	}
 
 

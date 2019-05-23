@@ -4,6 +4,7 @@ import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
@@ -16,11 +17,6 @@ import java.util.*;
 public class NumberAttributeLogic {
 
 
-	public static final String NUMBER_DEC_PLACES = "number_dec_places";
-	public static final String NUMBER_MIN_VALUE = "number_min_value";
-	public static final String NUMBER_MAX_VALUE = "number_max_value";
-
-	public static final Map<String, Class<?>> DATA_TYPES;
 	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
 	public static final Comparator<Double> COMPARATOR_ASC = Double::compareTo;
@@ -30,15 +26,6 @@ public class NumberAttributeLogic {
 
 
 	static {
-		Map<String, Class<?>> mapTypes = new HashMap<>();
-		mapTypes.put(NUMBER_DEC_PLACES, Integer.class);
-		mapTypes.put(NUMBER_MIN_VALUE, Double.class);
-		mapTypes.put(NUMBER_MAX_VALUE, Double.class);
-		mapTypes.put(TaskAttribute.ATTRIB_USE_DEFAULT, Boolean.class);
-		mapTypes.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, NumberValue.class);
-		mapTypes.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, NumberValue.class);
-		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
-
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{Double.class});
@@ -84,84 +71,110 @@ public class NumberAttributeLogic {
 
 
 	public static void setDecPlaces(TaskAttribute attribute, int decPlaces) {
-		attribute.values.put(NUMBER_DEC_PLACES, decPlaces);
+		attribute.values.put(AttributeValueType.NUMBER_DEC_PLACES, new NumberDecPlacesValue(decPlaces));
 	}
 
 
 
 
 	public static int getDecPlaces(TaskAttribute attribute) {
-		return attribute.getValue(NUMBER_DEC_PLACES);
+		NumberDecPlacesValue value = (NumberDecPlacesValue) attribute.getValue(AttributeValueType.NUMBER_DEC_PLACES);
+		if(value == null) {
+			return 0;
+		} else {
+			return value.getValue();
+		}
+
 	}
 
 
 
 
 	public static void setMinValue(TaskAttribute attribute, int minValue) {
-		attribute.values.put(NUMBER_MIN_VALUE, (double) minValue);
+		attribute.values.put(AttributeValueType.NUMBER_MIN, new NumberMinValue(minValue));
 	}
 
 
 
 
 	public static void setMinValue(TaskAttribute attribute, double minValue) {
-		attribute.values.put(NUMBER_MIN_VALUE, minValue);
+		attribute.values.put(AttributeValueType.NUMBER_MIN, new NumberMinValue(minValue));
 	}
 
 
 
 
 	public static Number getMinValue(TaskAttribute attribute) {
-		return attribute.getValue(NUMBER_MIN_VALUE);
+		NumberMinValue value = (NumberMinValue) attribute.getValue(AttributeValueType.NUMBER_MIN);
+		if(value == null) {
+			return (double) Integer.MIN_VALUE;
+		} else {
+			return value.getValue();
+		}
 	}
 
 
 
 
 	public static void setMaxValue(TaskAttribute attribute, int maxValue) {
-		attribute.values.put(NUMBER_MAX_VALUE, (double) maxValue);
+		attribute.values.put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(maxValue));
 	}
 
 
 
 
 	public static void setMaxValue(TaskAttribute attribute, double maxValue) {
-		attribute.values.put(NUMBER_MAX_VALUE, maxValue);
+		attribute.values.put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(maxValue));
 	}
 
 
 
 
 	public static Number getMaxValue(TaskAttribute attribute) {
-		return attribute.getValue(NUMBER_MAX_VALUE);
+		NumberMaxValue value = (NumberMaxValue) attribute.getValue(AttributeValueType.NUMBER_MAX);
+		if(value == null) {
+			return (double) Integer.MAX_VALUE;
+		} else {
+			return value.getValue();
+		}
 	}
 
 
 
 
 	public static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
+		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(TaskAttribute.ATTRIB_USE_DEFAULT);
+		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
+		if(value == null) {
+			return false;
+		} else {
+			return value.getValue();
+		}
 	}
 
 
 
 
 	public static void setDefaultValue(TaskAttribute attribute, NumberValue defaultValue) {
-		attribute.values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, defaultValue);
+		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
 	public static NumberValue getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(TaskAttribute.ATTRIB_DEFAULT_VALUE);
+		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
+		if(value == null) {
+			return null;
+		} else {
+			return (NumberValue) value.getValue();
+		}
 	}
 
 

@@ -1,10 +1,10 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
@@ -12,7 +12,6 @@ import javafx.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class AttributeLogic {
 
@@ -68,28 +67,23 @@ public class AttributeLogic {
 
 
 
-	public static boolean setAttributeValue(Project project, TaskAttribute attribute, String key, Object newValue, boolean preferNoValueTask) {
+	public static boolean setAttributeValue(Project project, TaskAttribute attribute, AttributeValue<?> value, boolean preferNoValueTask) {
 
 		// validate value
-		Map<String, Class<?>> map = AttributeLogicManager.getDataTypeMap(attribute.type.get());
-		if (newValue.getClass() != map.get(key)) {
-			Logger.get().debug("Failed to set attribute value: " + key + "  -  wrong datatype. "
-					+ "Expected: " + map.get(key).getSimpleName() + ", Actual: " + newValue.getClass().getSimpleName());
-			return false;
-		}
+		// TODO ?
 
 		// set value
-		Object prevValue = attribute.values.get(key);
-		attribute.values.put(key, newValue);
-		onAttributeValueChanged(attribute, key, prevValue, newValue);
+		AttributeValue<?> prevValue = attribute.values.get(value.getType());
+		attribute.values.put(value.getType(), value);
+		onAttributeValueChanged(attribute, value.getType(), prevValue, value);
 
 		// check tasks for changes
 		List<Task> tasks = project.data.tasks;
 		for (int i = 0, n = tasks.size(); i < n; i++) {
 			Task task = tasks.get(i);
-			TaskValue<?> value = TaskLogic.getTaskValue(task, attribute);
-			if (!AttributeLogicManager.isValidTaskValue(attribute, value)) {
-				TaskValue<?> validValue = AttributeLogicManager.generateValidTaskValue(value, attribute, preferNoValueTask);
+			TaskValue<?> taskValue = TaskLogic.getTaskValue(task, attribute);
+			if (!AttributeLogicManager.isValidTaskValue(attribute, taskValue)) {
+				TaskValue<?> validValue = AttributeLogicManager.generateValidTaskValue(taskValue, attribute, preferNoValueTask);
 				TaskLogic.setValue(project, task, attribute, validValue);
 			}
 		}
@@ -119,8 +113,8 @@ public class AttributeLogic {
 
 
 
-	private static void onAttributeValueChanged(TaskAttribute attribute, String key, Object prevValue, Object newValue) {
-		AttributeValueChangeEvent event = new AttributeValueChangeEvent(attribute, key, prevValue, newValue);
+	private static void onAttributeValueChanged(TaskAttribute attribute, AttributeValueType type, AttributeValue<?> prevValue, AttributeValue<?> newValue) {
+		AttributeValueChangeEvent event = new AttributeValueChangeEvent(attribute, type, prevValue, newValue);
 		for (EventHandler<AttributeValueChangeEvent> handler : valueChangedHandlers) {
 			handler.handle(event);
 		}
@@ -167,9 +161,9 @@ public class AttributeLogic {
 
 
 	public static boolean getUsesDefault(TaskAttribute attribute) {
-		Boolean value = attribute.getValue(TaskAttribute.ATTRIB_USE_DEFAULT);
+		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
 		if (value != null) {
-			return value;
+			return value.getValue();
 		} else {
 			return false;
 		}
@@ -179,26 +173,33 @@ public class AttributeLogic {
 
 
 	public static TaskValue<?> getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(TaskAttribute.ATTRIB_DEFAULT_VALUE);
+		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
+		if (value == null) {
+			return null;
+		} else {
+			return value.getValue();
+		}
 	}
 
 
 
 
 	public static void setShowOnTaskCard(TaskAttribute attribute, boolean showOnCard) {
-		boolean prev = attribute.values.containsKey(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE) ? (Boolean) attribute.values.get(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE) : false;
-		attribute.values.put(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE, showOnCard);
-		onAttributeValueChanged(attribute, TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE, prev, showOnCard);
+		CardDisplayTypeValue prev = (CardDisplayTypeValue) attribute.values.get(AttributeValueType.CARD_DISPLAY_TYPE);
+		CardDisplayTypeValue value = new CardDisplayTypeValue(showOnCard);
+		attribute.values.put(AttributeValueType.CARD_DISPLAY_TYPE, value);
+		onAttributeValueChanged(attribute, AttributeValueType.CARD_DISPLAY_TYPE, prev, value);
 	}
 
 
 
 
 	public static boolean getShowOnTaskCard(TaskAttribute attribute) {
-		if (attribute.values.containsKey(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE)) {
-			return (Boolean) attribute.values.get(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE);
-		} else {
+		CardDisplayTypeValue value = (CardDisplayTypeValue) attribute.values.get(AttributeValueType.CARD_DISPLAY_TYPE);
+		if (value == null) {
 			return false;
+		} else {
+			return value.getValue();
 		}
 	}
 

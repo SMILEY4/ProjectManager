@@ -16,7 +16,6 @@ import java.util.*;
 public class CreatedAttributeLogic {
 
 
-	public static final Map<String, Class<?>> DATA_TYPES;
 	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
 	public static final Comparator<LocalDateTime> COMPARATOR_ASC = LocalDateTime::compareTo;
@@ -26,10 +25,6 @@ public class CreatedAttributeLogic {
 
 
 	static {
-		Map<String, Class<?>> mapTypes = new HashMap<>();
-		mapTypes.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, CreatedValue.class);
-		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
-
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{LocalDateTime.class});
 		mapData.put(FilterOperation.NOT_EQUALS, new Class<?>[]{LocalDateTime.class});

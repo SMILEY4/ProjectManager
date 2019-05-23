@@ -4,6 +4,9 @@ import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.DefaultValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.UseDefaultValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.DescriptionValue;
@@ -15,7 +18,6 @@ import java.util.*;
 public class DescriptionAttributeLogic {
 
 
-	public static final Map<String, Class<?>> DATA_TYPES;
 	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
 	public static final Comparator<String> COMPARATOR_ASC = String::compareTo;
@@ -25,12 +27,6 @@ public class DescriptionAttributeLogic {
 
 
 	static {
-		Map<String, Class<?>> mapTypes = new HashMap<>();
-		mapTypes.put(TaskAttribute.ATTRIB_USE_DEFAULT, Boolean.class);
-		mapTypes.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, DescriptionValue.class);
-		mapTypes.put(TaskAttribute.ATTRIB_TASK_VALUE_TYPE, DescriptionValue.class);
-		DATA_TYPES = Collections.unmodifiableMap(mapTypes);
-
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{String.class});
 		mapData.put(FilterOperation.EQUALS_IGNORE_CASE, new Class<?>[]{String.class});
@@ -69,28 +65,38 @@ public class DescriptionAttributeLogic {
 
 
 	private static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(TaskAttribute.ATTRIB_USE_DEFAULT, useDefault);
+		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
 	public static boolean getUseDefault(TaskAttribute attribute) {
-		return attribute.getValue(TaskAttribute.ATTRIB_USE_DEFAULT);
+		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
+		if(value == null) {
+			return false;
+		} else {
+			return value.getValue();
+		}
 	}
 
 
 
 
 	private static void setDefaultValue(TaskAttribute attribute, DescriptionValue defaultValue) {
-		attribute.values.put(TaskAttribute.ATTRIB_DEFAULT_VALUE, defaultValue);
+		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
 	public static DescriptionValue getDefaultValue(TaskAttribute attribute) {
-		return attribute.getValue(TaskAttribute.ATTRIB_DEFAULT_VALUE);
+		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
+		if(value == null) {
+			return null;
+		} else {
+			return (DescriptionValue) value.getValue();
+		}
 	}
 
 

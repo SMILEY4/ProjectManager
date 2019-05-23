@@ -6,6 +6,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
@@ -98,7 +99,7 @@ public class TaskCard extends AnchorPane {
 		};
 
 		listenerAttribValue = e -> {
-			if (e.getKey().equals(TaskAttribute.ATTRIB_CARD_DISPLAY_TYPE)) {
+			if (e.getValueType().equals(AttributeValueType.CARD_DISPLAY_TYPE)) {
 				buildAttributes();
 			}
 		};
