@@ -7,7 +7,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.DefaultValu
 import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.UseDefaultValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.BoolValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.BooleanAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -40,8 +39,8 @@ public class BooleanContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(BooleanAttributeLogic.getUseDefault(attribute)));
-		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(BooleanAttributeLogic.getDefaultValue(attribute)));
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(AttributeLogic.BOOLEAN_LOGIC.getUseDefault(attribute)));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(AttributeLogic.BOOLEAN_LOGIC.getDefaultValue(attribute)));
 
 
 		// root box
@@ -187,7 +186,7 @@ public class BooleanContentNode extends AttributeContentNode {
 
 	private boolean getLocalUseDefault() {
 		UseDefaultValue value = (UseDefaultValue) values.get(AttributeValueType.USE_DEFAULT);
-		if(value != null) {
+		if (value != null) {
 			return value.getValue();
 		} else {
 			return false;
@@ -199,8 +198,8 @@ public class BooleanContentNode extends AttributeContentNode {
 
 	private boolean getLocalDefaultValue() {
 		DefaultValue value = (DefaultValue) values.get(AttributeValueType.DEFAULT_VALUE);
-		if(value != null) {
-			return ((BoolValue)value.getValue()).getValue();
+		if (value != null) {
+			return ((BoolValue) value.getValue()).getValue();
 		} else {
 			return false;
 		}

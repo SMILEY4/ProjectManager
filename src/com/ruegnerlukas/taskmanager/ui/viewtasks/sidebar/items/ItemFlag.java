@@ -6,7 +6,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.FlagValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.TaskFlagAttributeLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.ComboboxUtils;
 import javafx.scene.control.ComboBox;
@@ -32,7 +32,7 @@ public class ItemFlag extends SimpleSidebarItem {
 		choiceFlag = new ComboBox<>();
 		choiceFlag.setButtonCell(ComboboxUtils.createListCellFlag());
 		choiceFlag.setCellFactory(param -> ComboboxUtils.createListCellFlag());
-		choiceFlag.getItems().addAll(TaskFlagAttributeLogic.getFlagList(getAttribute()));
+		choiceFlag.getItems().addAll(AttributeLogic.FLAG_LOGIC.getFlagList(getAttribute()));
 		this.setValueNode(choiceFlag);
 
 		this.setEmpty(false);

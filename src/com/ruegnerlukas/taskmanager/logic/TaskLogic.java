@@ -15,7 +15,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.*;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
 import com.ruegnerlukas.taskmanager.logic.events.TaskValueChangeEvent;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
@@ -226,7 +225,7 @@ public class TaskLogic {
 	public static boolean setValue(Project project, Task task, TaskAttribute attribute, TaskValue<?> value) {
 
 		// validate value
-		if (!AttributeLogicManager.isValidTaskValue(attribute, value == null ? new NoValue() : value)) {
+		if(!AttributeLogic.LOGIC_MODULES.get(attribute.type.get()).isValidTaskValue(attribute, value == null ? new NoValue() : value)) {
 			Logger.get().debug("Failed to set task value: " + attribute.name.get() + " - invalid value: " + value + (value != null ? "." + value.getValue() : ""));
 			return false;
 		}

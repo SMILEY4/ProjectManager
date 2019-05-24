@@ -9,8 +9,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
-import com.ruegnerlukas.taskmanager.logic.attributes.TaskFlagAttributeLogic;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
@@ -77,7 +75,7 @@ public class TerminalNode extends CriteriaNode {
 		boxOperation.setPrefWidth(150);
 		boxOperation.setMinHeight(32);
 		boxOperation.setMaxHeight(32);
-		boxOperation.getItems().addAll(AttributeLogicManager.getFilterData(terminalCriteria.attribute.get().type.get()).keySet());
+		boxOperation.getItems().addAll(AttributeLogic.LOGIC_MODULES.get(terminalCriteria.attribute.get().type.get()).getFilterData().keySet());
 		boxOperation.getSelectionModel().select(terminalCriteria.operation.get());
 		boxOperation.setOnAction(event -> onSelectFilterOperation(boxOperation.getValue()));
 		box.getChildren().add(boxOperation);
@@ -88,8 +86,8 @@ public class TerminalNode extends CriteriaNode {
 		boxValues.setSpacing(5);
 		box.getChildren().add(boxValues);
 
-		Class<?>[] dataTypes = AttributeLogicManager.getFilterData(
-				terminalCriteria.attribute.get().type.get()).get(terminalCriteria.operation.get());
+		Class<?>[] dataTypes = AttributeLogic.LOGIC_MODULES.get(terminalCriteria.attribute.get().type.get()).getFilterData()
+				.get(terminalCriteria.operation.get());
 		createValueInputFields(dataTypes, terminalCriteria.values.toArray());
 
 
@@ -117,7 +115,7 @@ public class TerminalNode extends CriteriaNode {
 
 	private void onSelectAttribute(TaskAttribute attribute) {
 		boxOperation.getItems().clear();
-		boxOperation.getItems().addAll(AttributeLogicManager.getFilterData(attribute.type.get()).keySet());
+		boxOperation.getItems().addAll(AttributeLogic.LOGIC_MODULES.get(attribute.type.get()).getFilterData().keySet());
 		boxOperation.getSelectionModel().select(0);
 		onModified();
 	}
@@ -126,7 +124,7 @@ public class TerminalNode extends CriteriaNode {
 
 
 	private void onSelectFilterOperation(FilterOperation operation) {
-		Class<?>[] dataTypes = AttributeLogicManager.getFilterData(boxAttribute.getValue().type.get()).get(operation);
+		Class<?>[] dataTypes = AttributeLogic.LOGIC_MODULES.get(boxAttribute.getValue().type.get()).getFilterData().get(operation);
 		createValueInputFields(dataTypes, null);
 		onModified();
 	}
@@ -211,7 +209,7 @@ public class TerminalNode extends CriteriaNode {
 				ComboBox<TaskFlag> node = new ComboBox<>();
 				node.setButtonCell(ComboboxUtils.createListCellFlag());
 				node.setCellFactory(param -> ComboboxUtils.createListCellFlag());
-				node.getItems().addAll(TaskFlagAttributeLogic.getFlagList(
+				node.getItems().addAll(AttributeLogic.FLAG_LOGIC.getFlagList(
 						AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG)));
 				node.setPrefWidth(200);
 				node.setMinHeight(32);
@@ -296,7 +294,7 @@ public class TerminalNode extends CriteriaNode {
 	@SuppressWarnings ("unchecked")
 	public Object[] getValues() {
 
-		Class<?>[] dataTypes = AttributeLogicManager.getFilterData(getAttribute().type.get()).get(getFilterOperation());
+		Class<?>[] dataTypes = AttributeLogic.LOGIC_MODULES.get(getAttribute().type.get()).getFilterData().get(getFilterOperation());
 
 		Object[] values = new Object[dataTypes.length];
 		for (int i = 0; i < values.length; i++) {

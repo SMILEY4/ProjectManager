@@ -7,8 +7,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.*;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.*;
-import com.ruegnerlukas.taskmanager.utils.LoremIpsum;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -36,7 +35,7 @@ public class TestProjectFactory {
 				for(String choice : choices) {
 					array[j++] = choice;
 				}
-				ChoiceAttributeLogic.setValueList(attribute, array);
+				AttributeLogic.CHOICE_LOGIC.setValueList(attribute, array);
 			}
 
 		}
@@ -86,24 +85,24 @@ public class TestProjectFactory {
 			switch (attribute.type.get()) {
 				case TEXT: {
 					TextValue value = new TextValue(LoremIpsum.get(random.nextInt(20)+5, true));
-					return TextAttributeLogic.generateValidTaskValue(value, attribute, false);
+					return AttributeLogic.TEXT_LOGIC.generateValidTaskValue(value, attribute, false);
 				}
 				case NUMBER: {
 					NumberValue value = new NumberValue(random.nextFloat()*random.nextInt(100) - 50);
-					return NumberAttributeLogic.generateValidTaskValue(value, attribute, false);
+					return AttributeLogic.NUMBER_LOGIC.generateValidTaskValue(value, attribute, false);
 				}
 				case BOOLEAN: {
 					BoolValue value = new BoolValue(random.nextBoolean());
-					return BooleanAttributeLogic.generateValidTaskValue(value, attribute, false);
+					return AttributeLogic.BOOLEAN_LOGIC.generateValidTaskValue(value, attribute, false);
 				}
 				case CHOICE: {
-					String[] choices = ChoiceAttributeLogic.getValueList(attribute);
+					String[] choices = AttributeLogic.CHOICE_LOGIC.getValueList(attribute);
 					ChoiceValue value = new ChoiceValue(choices[random.nextInt(choices.length)]);
-					return ChoiceAttributeLogic.generateValidTaskValue(value, attribute, false);
+					return AttributeLogic.CHOICE_LOGIC.generateValidTaskValue(value, attribute, false);
 				}
 				case DATE: {
 					DateValue value = new DateValue(LocalDate.now().plusDays(random.nextInt(10)));
-					return DateAttributeLogic.generateValidTaskValue(value, attribute, false);
+					return AttributeLogic.DATE_LOGIC.generateValidTaskValue(value, attribute, false);
 				}
 				default: {
 					return new NoValue();

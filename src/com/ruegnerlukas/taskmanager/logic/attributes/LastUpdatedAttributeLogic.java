@@ -13,18 +13,18 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import java.time.LocalDateTime;
 import java.util.*;
 
-public class LastUpdatedAttributeLogic {
+public class LastUpdatedAttributeLogic implements AttributeLogicModule {
 
 
-	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+	private final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
-	public static final Comparator<LocalDateTime> COMPARATOR_ASC = LocalDateTime::compareTo;
-	public static final Comparator<LocalDateTime> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
-
-
+	private final Comparator<LocalDateTime> COMPARATOR_ASC = LocalDateTime::compareTo;
+	private final Comparator<LocalDateTime> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
-	static {
+
+
+	protected LastUpdatedAttributeLogic() {
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{LocalDateTime.class});
 		mapData.put(FilterOperation.NOT_EQUALS, new Class<?>[]{LocalDateTime.class});
@@ -40,30 +40,54 @@ public class LastUpdatedAttributeLogic {
 
 
 
-	public static TaskAttribute createAttribute() {
+	@Override
+	public Map<FilterOperation, Class<?>[]> getFilterData() {
+		return FILTER_DATA;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorAsc() {
+		return COMPARATOR_ASC;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorDesc() {
+		return COMPARATOR_DESC;
+	}
+
+
+
+
+	public TaskAttribute createAttribute() {
 		return createAttribute("LastUpdatedAttribute " + RandomUtils.generateRandomHexString(8));
 	}
 
 
 
 
-	public static TaskAttribute createAttribute(String name) {
+	public TaskAttribute createAttribute(String name) {
 		TaskAttribute attribute = new TaskAttribute(name, AttributeType.LAST_UPDATED);
-		LastUpdatedAttributeLogic.initAttribute(attribute);
+		this.initAttribute(attribute);
 		return attribute;
 	}
 
 
 
 
-	public static void initAttribute(TaskAttribute attribute) {
+	public void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 	}
 
 
 
 
-	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
 
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
 		List<Object> filterValues = criteria.values;
@@ -182,14 +206,14 @@ public class LastUpdatedAttributeLogic {
 
 
 
-	public static boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
 		return value.getAttType() == AttributeType.LAST_UPDATED;
 	}
 
 
 
 
-	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
 		return null;
 	}
 

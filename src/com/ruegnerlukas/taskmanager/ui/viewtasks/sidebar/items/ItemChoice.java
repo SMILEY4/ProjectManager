@@ -7,6 +7,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.ChoiceValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import javafx.scene.control.ComboBox;
@@ -30,7 +31,7 @@ public class ItemChoice extends SimpleSidebarItem {
 	@Override
 	protected void setupControls() {
 		choice = new ComboBox<>();
-		choice.getItems().addAll(ChoiceAttributeLogic.getValueList(getAttribute()));
+		choice.getItems().addAll(AttributeLogic.CHOICE_LOGIC.getValueList(getAttribute()));
 
 		this.setValueNode(choice);
 		this.setShowButton(true);
@@ -79,7 +80,7 @@ public class ItemChoice extends SimpleSidebarItem {
 		if (empty) {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NoValue());
 		} else {
-			final String[] valueList = ChoiceAttributeLogic.getValueList(getAttribute());
+			final String[] valueList = AttributeLogic.CHOICE_LOGIC.getValueList(getAttribute());
 			if (valueList.length == 0) {
 				TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NoValue());
 				choice.getSelectionModel().clearSelection();

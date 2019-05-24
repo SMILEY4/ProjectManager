@@ -15,18 +15,18 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;
 
-public class DescriptionAttributeLogic {
+public class DescriptionAttributeLogic implements AttributeLogicModule {
 
 
-	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+	private final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
-	public static final Comparator<String> COMPARATOR_ASC = String::compareTo;
-	public static final Comparator<String> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
-
-
+	private final Comparator<String> COMPARATOR_ASC = String::compareTo;
+	private final Comparator<String> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
-	static {
+
+
+	protected DescriptionAttributeLogic() {
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{String.class});
 		mapData.put(FilterOperation.EQUALS_IGNORE_CASE, new Class<?>[]{String.class});
@@ -39,23 +39,47 @@ public class DescriptionAttributeLogic {
 
 
 
-	public static TaskAttribute createAttribute() {
+	@Override
+	public Map<FilterOperation, Class<?>[]> getFilterData() {
+		return FILTER_DATA;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorAsc() {
+		return COMPARATOR_ASC;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorDesc() {
+		return COMPARATOR_DESC;
+	}
+
+
+
+
+	public TaskAttribute createAttribute() {
 		return createAttribute("DescriptionAttribute " + RandomUtils.generateRandomHexString(8));
 	}
 
 
 
 
-	public static TaskAttribute createAttribute(String name) {
+	public TaskAttribute createAttribute(String name) {
 		TaskAttribute attribute = new TaskAttribute(name, AttributeType.DESCRIPTION);
-		DescriptionAttributeLogic.initAttribute(attribute);
+		this.initAttribute(attribute);
 		return attribute;
 	}
 
 
 
 
-	public static void initAttribute(TaskAttribute attribute) {
+	public void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 		setUseDefault(attribute, true);
 		setDefaultValue(attribute, new DescriptionValue(""));
@@ -64,14 +88,14 @@ public class DescriptionAttributeLogic {
 
 
 
-	private static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
+	private void setUseDefault(TaskAttribute attribute, boolean useDefault) {
 		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
-	public static boolean getUseDefault(TaskAttribute attribute) {
+	public boolean getUseDefault(TaskAttribute attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
 		if(value == null) {
 			return false;
@@ -83,14 +107,14 @@ public class DescriptionAttributeLogic {
 
 
 
-	private static void setDefaultValue(TaskAttribute attribute, DescriptionValue defaultValue) {
+	private void setDefaultValue(TaskAttribute attribute, DescriptionValue defaultValue) {
 		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
-	public static DescriptionValue getDefaultValue(TaskAttribute attribute) {
+	public DescriptionValue getDefaultValue(TaskAttribute attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
 		if(value == null) {
 			return null;
@@ -102,7 +126,7 @@ public class DescriptionAttributeLogic {
 
 
 
-	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
 
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
 		List<Object> filterValues = criteria.values;
@@ -178,14 +202,14 @@ public class DescriptionAttributeLogic {
 
 
 
-	public static boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
 		return value.getAttType() == AttributeType.DESCRIPTION;
 	}
 
 
 
 
-	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
 		return null;
 	}
 

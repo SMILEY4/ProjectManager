@@ -4,7 +4,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TextValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.TextAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -42,10 +41,10 @@ public class TextContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(AttributeValueType.TEXT_CHAR_LIMIT, new TextCharLimitValue(TextAttributeLogic.getCharLimit(attribute)));
-		values.put(AttributeValueType.TEXT_MULTILINE, new TextMultilineValue(TextAttributeLogic.getMultiline(attribute)));
-		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(TextAttributeLogic.getUseDefault(attribute)));
-		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(TextAttributeLogic.getDefaultValue(attribute)));
+		values.put(AttributeValueType.TEXT_CHAR_LIMIT, new TextCharLimitValue(AttributeLogic.TEXT_LOGIC.getCharLimit(attribute)));
+		values.put(AttributeValueType.TEXT_MULTILINE, new TextMultilineValue(AttributeLogic.TEXT_LOGIC.getMultiline(attribute)));
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(AttributeLogic.TEXT_LOGIC.getUseDefault(attribute)));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(AttributeLogic.TEXT_LOGIC.getDefaultValue(attribute)));
 
 		// root box
 		VBox vbox = new VBox();

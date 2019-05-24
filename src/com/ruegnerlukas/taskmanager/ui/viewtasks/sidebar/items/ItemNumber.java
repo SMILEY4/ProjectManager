@@ -8,6 +8,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NumberValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.SpinnerUtils;
@@ -35,11 +36,11 @@ public class ItemNumber extends SimpleSidebarItem {
 		spinner.setEditable(true);
 		SpinnerUtils.initSpinner(
 				spinner,
-				MathUtils.setDecPlaces(0, NumberAttributeLogic.getDecPlaces(getAttribute())),
-				NumberAttributeLogic.getMinValue(getAttribute()).doubleValue(),
-				NumberAttributeLogic.getMaxValue(getAttribute()).doubleValue(),
-				1.0 / Math.pow(10, NumberAttributeLogic.getDecPlaces(getAttribute())),
-				NumberAttributeLogic.getDecPlaces(getAttribute()),
+				MathUtils.setDecPlaces(0, AttributeLogic.NUMBER_LOGIC.getDecPlaces(getAttribute())),
+				AttributeLogic.NUMBER_LOGIC.getMinValue(getAttribute()).doubleValue(),
+				AttributeLogic.NUMBER_LOGIC.getMaxValue(getAttribute()).doubleValue(),
+				1.0 / Math.pow(10, AttributeLogic.NUMBER_LOGIC.getDecPlaces(getAttribute())),
+				AttributeLogic.NUMBER_LOGIC.getDecPlaces(getAttribute()),
 				true, null);
 
 		this.setValueNode(spinner);
@@ -90,9 +91,9 @@ public class ItemNumber extends SimpleSidebarItem {
 		if (empty) {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NoValue());
 		} else {
-			final double value = Math.max(NumberAttributeLogic.getMinValue(getAttribute()).doubleValue(), 0.0);
+			final double value = Math.max(AttributeLogic.NUMBER_LOGIC.getMinValue(getAttribute()).doubleValue(), 0.0);
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NumberValue(value));
-			spinner.getValueFactory().setValue(MathUtils.setDecPlaces(value, NumberAttributeLogic.getDecPlaces(getAttribute())));
+			spinner.getValueFactory().setValue(MathUtils.setDecPlaces(value, AttributeLogic.NUMBER_LOGIC.getDecPlaces(getAttribute())));
 		}
 		this.setEmpty(empty);
 	}

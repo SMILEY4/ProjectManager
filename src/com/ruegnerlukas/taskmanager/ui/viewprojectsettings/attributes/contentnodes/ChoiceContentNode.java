@@ -4,7 +4,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.ChoiceValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -39,9 +38,9 @@ public class ChoiceContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(AttributeValueType.CHOICE_VALUES, new ChoiceListValue(ChoiceAttributeLogic.getValueList(attribute)));
-		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(ChoiceAttributeLogic.getUseDefault(attribute)));
-		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(ChoiceAttributeLogic.getDefaultValue(attribute)));
+		values.put(AttributeValueType.CHOICE_VALUES, new ChoiceListValue(AttributeLogic.CHOICE_LOGIC.getValueList(attribute)));
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(AttributeLogic.CHOICE_LOGIC.getUseDefault(attribute)));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(AttributeLogic.CHOICE_LOGIC.getDefaultValue(attribute)));
 
 
 		// root box

@@ -10,7 +10,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
-import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -294,10 +294,8 @@ public class TaskDisplayLogic {
 		for (int i = dataSort.size() - 1; i >= 0; i--) {
 			SortElement sortElement = dataSort.get(i);
 
-			final Comparator comparatorType =
-					sortElement.dir.get() == SortElement.SortDir.ASC ?
-						  AttributeLogicManager.getComparatorAsc(sortElement.attribute.get().type.get())
-						: AttributeLogicManager.getComparatorDesc(sortElement.attribute.get().type.get());
+			final Comparator comparatorType = AttributeLogic.LOGIC_MODULES.get(sortElement.attribute.get().type.get())
+					.getComparator(sortElement.dir.get());
 
 			if (comparatorType != null) {
 				Comparator<Task> comparatorTask = (tx, ty) -> {

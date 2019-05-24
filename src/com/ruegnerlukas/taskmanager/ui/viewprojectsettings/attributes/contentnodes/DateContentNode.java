@@ -7,7 +7,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.DefaultValu
 import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.UseDefaultValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.DateValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.DateAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -42,8 +41,8 @@ public class DateContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(DateAttributeLogic.getUseDefault(attribute)));
-		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(DateAttributeLogic.getDefaultValue(attribute)));
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(AttributeLogic.DATE_LOGIC.getUseDefault(attribute)));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(AttributeLogic.DATE_LOGIC.getDefaultValue(attribute)));
 
 
 		// root box

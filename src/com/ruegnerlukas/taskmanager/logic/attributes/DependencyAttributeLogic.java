@@ -13,18 +13,18 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;
 
-public class DependencyAttributeLogic {
+public class DependencyAttributeLogic implements AttributeLogicModule{
 
 
-	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+	private final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
-	public static final Comparator<Task[]> COMPARATOR_ASC = Comparator.comparingInt(x -> x.length);
-	public static final Comparator<Task[]> COMPARATOR_DESC = (x, y) -> Integer.compare(x.length, y.length) * -1;
-
-
+	private final Comparator<Task[]> COMPARATOR_ASC = Comparator.comparingInt(x -> x.length);
+	private final Comparator<Task[]> COMPARATOR_DESC = (x, y) -> Integer.compare(x.length, y.length) * -1;
 
 
-	static {
+
+
+	protected DependencyAttributeLogic() {
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.DEPENDENT_ON, new Class<?>[]{Task.class});
 		mapData.put(FilterOperation.PREREQUISITE_OF, new Class<?>[]{Task.class});
@@ -35,30 +35,54 @@ public class DependencyAttributeLogic {
 
 
 
-	public static TaskAttribute createAttribute() {
+	@Override
+	public Map<FilterOperation, Class<?>[]> getFilterData() {
+		return FILTER_DATA;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorAsc() {
+		return COMPARATOR_ASC;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorDesc() {
+		return COMPARATOR_DESC;
+	}
+
+
+
+
+	public TaskAttribute createAttribute() {
 		return createAttribute("DependencyAttribute " + RandomUtils.generateRandomHexString(8));
 	}
 
 
 
 
-	public static TaskAttribute createAttribute(String name) {
+	public TaskAttribute createAttribute(String name) {
 		TaskAttribute attribute = new TaskAttribute(name, AttributeType.DEPENDENCY);
-		DependencyAttributeLogic.initAttribute(attribute);
+		this.initAttribute(attribute);
 		return attribute;
 	}
 
 
 
 
-	public static void initAttribute(TaskAttribute attribute) {
+	public void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 	}
 
 
 
 
-	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
 
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
 		List<Object> filterValues = criteria.values;
@@ -120,14 +144,14 @@ public class DependencyAttributeLogic {
 
 
 
-	public static boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
 		return value.getAttType() == AttributeType.DEPENDENCY || value.getAttType() == null;
 	}
 
 
 
 
-	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
 		return new NoValue();
 	}
 

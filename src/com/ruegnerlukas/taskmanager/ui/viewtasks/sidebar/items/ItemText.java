@@ -6,7 +6,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TextValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.TextAttributeLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -52,7 +52,7 @@ public class ItemText extends SidebarItem {
 		box.getChildren().add(label);
 
 		area = new MultiTextField();
-		area.setMultiline(TextAttributeLogic.getMultiline(getAttribute()));
+		area.setMultiline(AttributeLogic.TEXT_LOGIC.getMultiline(getAttribute()));
 		setValueHeight();
 		box.getChildren().add(area);
 	}
@@ -90,7 +90,7 @@ public class ItemText extends SidebarItem {
 
 
 	private void setValueHeight() {
-		final double height = TextAttributeLogic.getMultiline(getAttribute()) ? MultiTextField.calculateOptimalHeight(5) : 32;
+		final double height = AttributeLogic.TEXT_LOGIC.getMultiline(getAttribute()) ? MultiTextField.calculateOptimalHeight(5) : 32;
 		area.setMinSize(60, height);
 		area.setPrefSize(10000, height);
 		area.setMaxSize(10000, height);

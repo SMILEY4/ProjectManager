@@ -5,15 +5,52 @@ import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
+import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import javafx.event.EventHandler;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class AttributeLogic {
+
+
+	public static final BooleanAttributeLogic BOOLEAN_LOGIC = new BooleanAttributeLogic();
+	public static final ChoiceAttributeLogic CHOICE_LOGIC = new ChoiceAttributeLogic();
+	public static final CreatedAttributeLogic CREATED_LOGIC = new CreatedAttributeLogic();
+	public static final DateAttributeLogic DATE_LOGIC = new DateAttributeLogic();
+	public static final DependencyAttributeLogic DEPENDENCY_LOGIC = new DependencyAttributeLogic();
+	public static final DescriptionAttributeLogic DESCRIPTION_LOGIC = new DescriptionAttributeLogic();
+	public static final IDAttributeLogic ID_LOGIC = new IDAttributeLogic();
+	public static final LastUpdatedAttributeLogic LAST_UPDATED_LOGIC = new LastUpdatedAttributeLogic();
+	public static final NumberAttributeLogic NUMBER_LOGIC = new NumberAttributeLogic();
+	public static final TaskFlagAttributeLogic FLAG_LOGIC = new TaskFlagAttributeLogic();
+	public static final TextAttributeLogic TEXT_LOGIC = new TextAttributeLogic();
+
+	public static final Map<AttributeType, AttributeLogicModule> LOGIC_MODULES;
+
+
+
+
+	static {
+		Map<AttributeType, AttributeLogicModule> map = new HashMap<>();
+		map.put(AttributeType.BOOLEAN, BOOLEAN_LOGIC);
+		map.put(AttributeType.CHOICE, CHOICE_LOGIC);
+		map.put(AttributeType.CREATED, CREATED_LOGIC);
+		map.put(AttributeType.DATE, DATE_LOGIC);
+		map.put(AttributeType.DEPENDENCY, DEPENDENCY_LOGIC);
+		map.put(AttributeType.DESCRIPTION, DESCRIPTION_LOGIC);
+		map.put(AttributeType.ID, ID_LOGIC);
+		map.put(AttributeType.LAST_UPDATED, LAST_UPDATED_LOGIC);
+		map.put(AttributeType.NUMBER, NUMBER_LOGIC);
+		map.put(AttributeType.FLAG, FLAG_LOGIC);
+		map.put(AttributeType.TEXT, TEXT_LOGIC);
+		LOGIC_MODULES = Collections.unmodifiableMap(map);
+	}
+
+
 
 
 	public static TaskAttribute createTaskAttribute(AttributeType type) {
@@ -24,14 +61,14 @@ public class AttributeLogic {
 
 
 	public static TaskAttribute createTaskAttribute(AttributeType type, String name) {
-		return AttributeLogicManager.createTaskAttribute(type, name);
+		return LOGIC_MODULES.get(type).createAttribute(name);
 	}
 
 
 
 
 	public static void initTaskAttribute(TaskAttribute attribute) {
-		AttributeLogicManager.initTaskAttribute(attribute);
+		LOGIC_MODULES.get(attribute.type.get()).initAttribute(attribute);
 	}
 
 
@@ -54,7 +91,7 @@ public class AttributeLogic {
 
 
 	public static void setTaskAttributeType(Project project, TaskAttribute attribute, AttributeType newType) {
-		AttributeLogicManager.initTaskAttribute(attribute, newType);
+		LOGIC_MODULES.get(newType).initAttribute(attribute);
 		attribute.type.set(newType);
 
 		List<Task> tasks = project.data.tasks;
@@ -82,8 +119,8 @@ public class AttributeLogic {
 		for (int i = 0, n = tasks.size(); i < n; i++) {
 			Task task = tasks.get(i);
 			TaskValue<?> taskValue = TaskLogic.getTaskValue(task, attribute);
-			if (!AttributeLogicManager.isValidTaskValue(attribute, taskValue)) {
-				TaskValue<?> validValue = AttributeLogicManager.generateValidTaskValue(taskValue, attribute, preferNoValueTask);
+			if (!LOGIC_MODULES.get(attribute.type.get()).isValidTaskValue(attribute, taskValue)) {
+				TaskValue<?> validValue = LOGIC_MODULES.get(attribute.type.get()).generateValidTaskValue(taskValue, attribute, preferNoValueTask);
 				TaskLogic.setValue(project, task, attribute, validValue);
 			}
 		}
@@ -203,5 +240,33 @@ public class AttributeLogic {
 		}
 	}
 
+
+
+
+	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
+		Map<FilterOperation, Class<?>[]> FILTER_DATA = LOGIC_MODULES.get(criteria.attribute.get().type.get()).getFilterData();
+
+		// is invalid operation
+		if (!FILTER_DATA.containsKey(criteria.operation.get())) {
+			return false;
+		}
+
+		// has invalid amount of values
+		Class<?>[] dataTypes = FILTER_DATA.get(criteria.operation.get());
+		if (dataTypes.length != criteria.values.size()) {
+			return false;
+		}
+
+		// in invalid datatype
+		for (int i = 0; i < dataTypes.length; i++) {
+			Class<?> expected = dataTypes[i];
+			Class<?> actual = criteria.values.get(i).getClass();
+			if (actual != expected) {
+				return false;
+			}
+		}
+
+		return true;
+	}
 
 }

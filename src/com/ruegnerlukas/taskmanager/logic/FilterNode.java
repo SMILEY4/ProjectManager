@@ -5,7 +5,7 @@ import com.ruegnerlukas.taskmanager.data.projectdata.filter.AndFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.OrFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
-import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogicManager;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -66,8 +66,9 @@ public class FilterNode {
 
 	public boolean matches(Task task) {
 		if (this.criteria.type == FilterCriteria.CriteriaType.TERMINAL) {
-			if(AttributeLogicManager.isValidFilterOperation(task, (TerminalFilterCriteria) criteria)) {
-				return AttributeLogicManager.matchesFilter(task, (TerminalFilterCriteria) criteria);
+			TerminalFilterCriteria terminal = (TerminalFilterCriteria)criteria;
+			if(AttributeLogic.isValidFilterOperation(task, terminal)) {
+				return AttributeLogic.LOGIC_MODULES.get(terminal.attribute.get().type.get()).matchesFilter(task, terminal);
 			} else {
 				return false;
 			}

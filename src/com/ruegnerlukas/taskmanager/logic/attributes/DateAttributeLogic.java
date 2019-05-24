@@ -17,18 +17,18 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import java.time.LocalDate;
 import java.util.*;
 
-public class DateAttributeLogic {
+public class DateAttributeLogic implements AttributeLogicModule {
 
 
-	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+	private final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
-	public static final Comparator<LocalDate> COMPARATOR_ASC = LocalDate::compareTo;
-	public static final Comparator<LocalDate> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
-
-
+	private final Comparator<LocalDate> COMPARATOR_ASC = LocalDate::compareTo;
+	private final Comparator<LocalDate> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
-	static {
+
+
+	protected DateAttributeLogic() {
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{LocalDate.class});
@@ -45,23 +45,47 @@ public class DateAttributeLogic {
 
 
 
-	public static TaskAttribute createAttribute() {
+	@Override
+	public Map<FilterOperation, Class<?>[]> getFilterData() {
+		return FILTER_DATA;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorAsc() {
+		return COMPARATOR_ASC;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorDesc() {
+		return COMPARATOR_DESC;
+	}
+
+
+
+
+	public TaskAttribute createAttribute() {
 		return createAttribute("DateAttribute " + RandomUtils.generateRandomHexString(8));
 	}
 
 
 
 
-	public static TaskAttribute createAttribute(String name) {
+	public TaskAttribute createAttribute(String name) {
 		TaskAttribute attribute = new TaskAttribute(name, AttributeType.DATE);
-		DateAttributeLogic.initAttribute(attribute);
+		this.initAttribute(attribute);
 		return attribute;
 	}
 
 
 
 
-	public static void initAttribute(TaskAttribute attribute) {
+	public void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 		setUseDefault(attribute, false);
 		setDefaultValue(attribute, new DateValue(LocalDate.now()));
@@ -70,14 +94,14 @@ public class DateAttributeLogic {
 
 
 
-	public static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
+	public void setUseDefault(TaskAttribute attribute, boolean useDefault) {
 		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
-	public static boolean getUseDefault(TaskAttribute attribute) {
+	public boolean getUseDefault(TaskAttribute attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
 		if(value == null) {
 			return false;
@@ -89,14 +113,14 @@ public class DateAttributeLogic {
 
 
 
-	public static void setDefaultValue(TaskAttribute attribute, DateValue defaultValue) {
+	public void setDefaultValue(TaskAttribute attribute, DateValue defaultValue) {
 		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
-	public static DateValue getDefaultValue(TaskAttribute attribute) {
+	public DateValue getDefaultValue(TaskAttribute attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
 		if(value == null) {
 			return null;
@@ -108,7 +132,7 @@ public class DateAttributeLogic {
 
 
 
-	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
 
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
 		List<Object> filterValues = criteria.values;
@@ -236,14 +260,14 @@ public class DateAttributeLogic {
 
 
 
-	public static boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
 		return value.getAttType() == AttributeType.DATE || value.getAttType() == null;
 	}
 
 
 
 
-	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
 		return oldValue.getAttType() == AttributeType.DATE ? new DateValue((LocalDate)oldValue.getValue())
 				: (preferNoValue ? new NoValue() : new DateValue(LocalDate.now()));
 	}

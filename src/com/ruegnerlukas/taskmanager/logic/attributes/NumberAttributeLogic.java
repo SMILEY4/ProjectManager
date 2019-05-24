@@ -14,18 +14,18 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;
 
-public class NumberAttributeLogic {
+public class NumberAttributeLogic implements AttributeLogicModule {
 
 
-	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+	private final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
-	public static final Comparator<Double> COMPARATOR_ASC = Double::compareTo;
-	public static final Comparator<Double> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
-
-
+	private final Comparator<Double> COMPARATOR_ASC = Double::compareTo;
+	private final Comparator<Double> COMPARATOR_DESC = (x, y) -> x.compareTo(y) * -1;
 
 
-	static {
+
+
+	protected NumberAttributeLogic() {
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.HAS_VALUE, new Class<?>[]{Boolean.class});
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{Double.class});
@@ -42,23 +42,47 @@ public class NumberAttributeLogic {
 
 
 
-	public static TaskAttribute createAttribute() {
+	@Override
+	public Map<FilterOperation, Class<?>[]> getFilterData() {
+		return FILTER_DATA;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorAsc() {
+		return COMPARATOR_ASC;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorDesc() {
+		return COMPARATOR_DESC;
+	}
+
+
+
+
+	public TaskAttribute createAttribute() {
 		return createAttribute("NumberAttribute " + RandomUtils.generateRandomHexString(8));
 	}
 
 
 
 
-	public static TaskAttribute createAttribute(String name) {
+	public TaskAttribute createAttribute(String name) {
 		TaskAttribute attribute = new TaskAttribute(name, AttributeType.NUMBER);
-		NumberAttributeLogic.initAttribute(attribute);
+		this.initAttribute(attribute);
 		return attribute;
 	}
 
 
 
 
-	public static void initAttribute(TaskAttribute attribute) {
+	public void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 		setDecPlaces(attribute, 1);
 		setMinValue(attribute, -10);
@@ -70,16 +94,16 @@ public class NumberAttributeLogic {
 
 
 
-	public static void setDecPlaces(TaskAttribute attribute, int decPlaces) {
+	public void setDecPlaces(TaskAttribute attribute, int decPlaces) {
 		attribute.values.put(AttributeValueType.NUMBER_DEC_PLACES, new NumberDecPlacesValue(decPlaces));
 	}
 
 
 
 
-	public static int getDecPlaces(TaskAttribute attribute) {
+	public int getDecPlaces(TaskAttribute attribute) {
 		NumberDecPlacesValue value = (NumberDecPlacesValue) attribute.getValue(AttributeValueType.NUMBER_DEC_PLACES);
-		if(value == null) {
+		if (value == null) {
 			return 0;
 		} else {
 			return value.getValue();
@@ -90,23 +114,23 @@ public class NumberAttributeLogic {
 
 
 
-	public static void setMinValue(TaskAttribute attribute, int minValue) {
+	public void setMinValue(TaskAttribute attribute, int minValue) {
 		attribute.values.put(AttributeValueType.NUMBER_MIN, new NumberMinValue(minValue));
 	}
 
 
 
 
-	public static void setMinValue(TaskAttribute attribute, double minValue) {
+	public void setMinValue(TaskAttribute attribute, double minValue) {
 		attribute.values.put(AttributeValueType.NUMBER_MIN, new NumberMinValue(minValue));
 	}
 
 
 
 
-	public static Number getMinValue(TaskAttribute attribute) {
+	public Number getMinValue(TaskAttribute attribute) {
 		NumberMinValue value = (NumberMinValue) attribute.getValue(AttributeValueType.NUMBER_MIN);
-		if(value == null) {
+		if (value == null) {
 			return (double) Integer.MIN_VALUE;
 		} else {
 			return value.getValue();
@@ -116,23 +140,23 @@ public class NumberAttributeLogic {
 
 
 
-	public static void setMaxValue(TaskAttribute attribute, int maxValue) {
+	public void setMaxValue(TaskAttribute attribute, int maxValue) {
 		attribute.values.put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(maxValue));
 	}
 
 
 
 
-	public static void setMaxValue(TaskAttribute attribute, double maxValue) {
+	public void setMaxValue(TaskAttribute attribute, double maxValue) {
 		attribute.values.put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(maxValue));
 	}
 
 
 
 
-	public static Number getMaxValue(TaskAttribute attribute) {
+	public Number getMaxValue(TaskAttribute attribute) {
 		NumberMaxValue value = (NumberMaxValue) attribute.getValue(AttributeValueType.NUMBER_MAX);
-		if(value == null) {
+		if (value == null) {
 			return (double) Integer.MAX_VALUE;
 		} else {
 			return value.getValue();
@@ -142,16 +166,16 @@ public class NumberAttributeLogic {
 
 
 
-	public static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
+	public void setUseDefault(TaskAttribute attribute, boolean useDefault) {
 		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
-	public static boolean getUseDefault(TaskAttribute attribute) {
+	public boolean getUseDefault(TaskAttribute attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
-		if(value == null) {
+		if (value == null) {
 			return false;
 		} else {
 			return value.getValue();
@@ -161,16 +185,16 @@ public class NumberAttributeLogic {
 
 
 
-	public static void setDefaultValue(TaskAttribute attribute, NumberValue defaultValue) {
+	public void setDefaultValue(TaskAttribute attribute, NumberValue defaultValue) {
 		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
-	public static NumberValue getDefaultValue(TaskAttribute attribute) {
+	public NumberValue getDefaultValue(TaskAttribute attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
-		if(value == null) {
+		if (value == null) {
 			return null;
 		} else {
 			return (NumberValue) value.getValue();
@@ -180,7 +204,7 @@ public class NumberAttributeLogic {
 
 
 
-	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
 
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
 		List<Object> filterValues = criteria.values;
@@ -308,7 +332,7 @@ public class NumberAttributeLogic {
 
 
 
-	public static boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
 		if (value.getAttType() == AttributeType.NUMBER) {
 			final double number = ((NumberValue) value).getValue();
 			final double min = getMinValue(attribute).doubleValue();
@@ -322,7 +346,7 @@ public class NumberAttributeLogic {
 
 
 
-	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
 		if (preferNoValue) {
 			return new NoValue();
 		} else {

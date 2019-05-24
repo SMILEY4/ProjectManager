@@ -5,7 +5,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NumberValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -43,11 +42,11 @@ public class NumberContentNode extends AttributeContentNode {
 		super(attribute);
 
 		// set value
-		values.put(AttributeValueType.NUMBER_DEC_PLACES, new NumberDecPlacesValue(NumberAttributeLogic.getDecPlaces(attribute)));
-		values.put(AttributeValueType.NUMBER_MIN, new NumberMinValue(NumberAttributeLogic.getMinValue(attribute).doubleValue()));
-		values.put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(NumberAttributeLogic.getMaxValue(attribute).doubleValue()));
-		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(NumberAttributeLogic.getUseDefault(attribute)));
-		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(NumberAttributeLogic.getDefaultValue(attribute)));
+		values.put(AttributeValueType.NUMBER_DEC_PLACES, new NumberDecPlacesValue(AttributeLogic.NUMBER_LOGIC.getDecPlaces(attribute)));
+		values.put(AttributeValueType.NUMBER_MIN, new NumberMinValue(AttributeLogic.NUMBER_LOGIC.getMinValue(attribute).doubleValue()));
+		values.put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(AttributeLogic.NUMBER_LOGIC.getMaxValue(attribute).doubleValue()));
+		values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(AttributeLogic.NUMBER_LOGIC.getUseDefault(attribute)));
+		values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(AttributeLogic.NUMBER_LOGIC.getDefaultValue(attribute)));
 
 
 		// root box

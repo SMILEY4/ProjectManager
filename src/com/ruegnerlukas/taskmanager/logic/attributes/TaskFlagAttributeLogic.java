@@ -18,18 +18,18 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;
 
-public class TaskFlagAttributeLogic {
+public class TaskFlagAttributeLogic implements AttributeLogicModule {
 
 
-	public static final Map<FilterOperation, Class<?>[]> FILTER_DATA;
+	private final Map<FilterOperation, Class<?>[]> FILTER_DATA;
 
-	public static final Comparator<TaskFlag> COMPARATOR_ASC = Comparator.comparing(x -> x.name.get());
-	public static final Comparator<TaskFlag> COMPARATOR_DESC = (x, y) -> x.name.get().compareTo(y.name.get()) * -1;
-
-
+	private final Comparator<TaskFlag> COMPARATOR_ASC = Comparator.comparing(x -> x.name.get());
+	private final Comparator<TaskFlag> COMPARATOR_DESC = (x, y) -> x.name.get().compareTo(y.name.get()) * -1;
 
 
-	static {
+
+
+	protected TaskFlagAttributeLogic() {
 		Map<FilterOperation, Class<?>[]> mapData = new HashMap<>();
 		mapData.put(FilterOperation.EQUALS, new Class<?>[]{TaskFlag.class});
 		mapData.put(FilterOperation.NOT_EQUALS, new Class<?>[]{TaskFlag.class});
@@ -39,23 +39,47 @@ public class TaskFlagAttributeLogic {
 
 
 
-	public static TaskAttribute createAttribute() {
+	@Override
+	public Map<FilterOperation, Class<?>[]> getFilterData() {
+		return FILTER_DATA;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorAsc() {
+		return COMPARATOR_ASC;
+	}
+
+
+
+
+	@Override
+	public Comparator getComparatorDesc() {
+		return COMPARATOR_DESC;
+	}
+
+
+
+
+	public TaskAttribute createAttribute() {
 		return createAttribute("FlagAttribute " + RandomUtils.generateRandomHexString(8));
 	}
 
 
 
 
-	public static TaskAttribute createAttribute(String name) {
+	public TaskAttribute createAttribute(String name) {
 		TaskAttribute attribute = new TaskAttribute(name, AttributeType.FLAG);
-		TaskFlagAttributeLogic.initAttribute(attribute);
+		this.initAttribute(attribute);
 		return attribute;
 	}
 
 
 
 
-	public static void initAttribute(TaskAttribute attribute) {
+	public void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 		TaskFlag defaultFlag = new TaskFlag("Default", TaskFlag.FlagColor.GRAY);
 		setFlagList(attribute, new TaskFlag[]{defaultFlag});
@@ -66,7 +90,7 @@ public class TaskFlagAttributeLogic {
 
 
 
-	public static void addFlagToList(TaskAttribute attribute, TaskFlag flag) {
+	public void addFlagToList(TaskAttribute attribute, TaskFlag flag) {
 		if (!containsFlag(attribute, flag)) {
 			TaskFlag[] list = getFlagList(attribute);
 			TaskFlag[] newList = Arrays.copyOf(list, list.length + 1);
@@ -78,7 +102,7 @@ public class TaskFlagAttributeLogic {
 
 
 
-	public static void removeFlagFromList(TaskAttribute attribute, TaskFlag flag) {
+	public void removeFlagFromList(TaskAttribute attribute, TaskFlag flag) {
 		if (containsFlag(attribute, flag)) {
 			TaskFlag[] list = getFlagList(attribute);
 			TaskFlag[] newList = new TaskFlag[list.length - 1];
@@ -94,14 +118,14 @@ public class TaskFlagAttributeLogic {
 
 
 
-	public static void setFlagList(TaskAttribute attribute, TaskFlag[] list) {
+	public void setFlagList(TaskAttribute attribute, TaskFlag[] list) {
 		attribute.values.put(AttributeValueType.FLAG_LIST, new FlagListValue(list));
 	}
 
 
 
 
-	public static TaskFlag[] getFlagList(TaskAttribute attribute) {
+	public TaskFlag[] getFlagList(TaskAttribute attribute) {
 		FlagListValue value = (FlagListValue) attribute.getValue(AttributeValueType.FLAG_LIST);
 		if (value == null) {
 			return new TaskFlag[]{};
@@ -113,7 +137,7 @@ public class TaskFlagAttributeLogic {
 
 
 
-	public static boolean containsFlag(TaskAttribute attribute, TaskFlag flag) {
+	public boolean containsFlag(TaskAttribute attribute, TaskFlag flag) {
 		TaskFlag[] list = getFlagList(attribute);
 		for (int i = 0; i < list.length; i++) {
 			if (list[i] == flag) {
@@ -126,14 +150,14 @@ public class TaskFlagAttributeLogic {
 
 
 
-	private static void setUseDefault(TaskAttribute attribute, boolean useDefault) {
+	private void setUseDefault(TaskAttribute attribute, boolean useDefault) {
 		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
-	public static boolean getUseDefault(TaskAttribute attribute) {
+	public boolean getUseDefault(TaskAttribute attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
 		if (value == null) {
 			return false;
@@ -145,14 +169,14 @@ public class TaskFlagAttributeLogic {
 
 
 
-	private static void setDefaultValue(TaskAttribute attribute, FlagValue defaultValue) {
+	private void setDefaultValue(TaskAttribute attribute, FlagValue defaultValue) {
 		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
-	public static FlagValue getDefaultValue(TaskAttribute attribute) {
+	public FlagValue getDefaultValue(TaskAttribute attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
 		if (value == null) {
 			return null;
@@ -164,7 +188,7 @@ public class TaskFlagAttributeLogic {
 
 
 
-	public static boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
 		List<Object> filterValues = criteria.values;
 
@@ -204,7 +228,7 @@ public class TaskFlagAttributeLogic {
 
 
 
-	public static boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
 		if (value.getAttType() == AttributeType.FLAG) {
 			FlagValue valueFlag = (FlagValue) value;
 			return ArrayUtils.contains(getFlagList(attribute), valueFlag.getValue());
@@ -216,7 +240,7 @@ public class TaskFlagAttributeLogic {
 
 
 
-	public static TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
 		TaskFlag[] flags = getFlagList(attribute);
 		if (flags.length == 0) {
 			return getDefaultValue(attribute);

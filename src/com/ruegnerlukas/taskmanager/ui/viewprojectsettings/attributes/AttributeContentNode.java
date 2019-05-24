@@ -81,7 +81,7 @@ public abstract class AttributeContentNode extends AnchorPane {
 
 
 	/**
-	 * @return true, if both values all given values are equal to the values of the attribute
+	 * @return true, if all given values are equal to the values of the attribute
 	 * */
 	protected boolean compareValues(Map<AttributeValueType, AttributeValue<?>> values) {
 		for (AttributeValueType type : attribute.values.keySet()) {
