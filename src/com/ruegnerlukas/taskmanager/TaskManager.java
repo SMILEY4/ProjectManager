@@ -38,16 +38,6 @@ public class TaskManager extends Application {
 
 		Logger.get().blankLine();
 
-		// initialize logic
-//		System.out.println("Initializing Logic");
-//		String[] status = AttributeLogicManager.validateLogicClasses();
-//		for (String str : status) {
-//			if (str.startsWith("ERROR")) {
-//				System.err.println(str);
-//			} else {
-//				System.out.println(str);
-//			}
-//		}
 		ProjectLogic.init();
 		PresetLogic.init();
 		TaskLogic.init();
