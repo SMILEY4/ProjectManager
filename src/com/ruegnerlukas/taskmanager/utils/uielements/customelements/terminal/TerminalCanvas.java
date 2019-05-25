@@ -29,7 +29,7 @@ public class TerminalCanvas extends AnchorPane {
 	private Selection selection = null;
 	private Cursor cursor = new Cursor();
 
-	private int nBlockedSymbols = 0;
+	public String lineStart = "$ ";
 
 
 
@@ -51,6 +51,7 @@ public class TerminalCanvas extends AnchorPane {
 		AnchorUtils.setAnchors(canvas, 0, 0, 0, 0);
 		this.getChildren().add(canvas);
 
+		lines.add("");
 		moveCursorToEnd();
 	}
 
@@ -89,7 +90,7 @@ public class TerminalCanvas extends AnchorPane {
 
 	public void moveCursor(int d) {
 		int n = lines.isEmpty() ? 0 : lines.get(lines.size() - 1).length();
-		cursor.column = Math.min(Math.max(cursor.column + d, 0), n);
+		cursor.column = Math.min(Math.max(cursor.column + d, lineStart.length()), n);
 		repaint();
 	}
 
@@ -135,8 +136,14 @@ public class TerminalCanvas extends AnchorPane {
 		if (0 <= j && j < lines.size()) {
 			String strRow = lines.get(j);
 			int i = getColumnAt(x);
-			if (0 <= i && i < strRow.length()) {
-				return strRow.charAt(i);
+			if (j == lines.size() - 1) {
+				if (0 <= i && i < strRow.length() + lineStart.length()) {
+					return strRow.charAt(i + lineStart.length());
+				}
+			} else {
+				if (0 <= i && i < strRow.length()) {
+					return strRow.charAt(i);
+				}
 			}
 		}
 		return ' ';
@@ -276,15 +283,15 @@ public class TerminalCanvas extends AnchorPane {
 			lines.set(lines.size() - 1, newLine);
 		}
 
-		moveCursor(+1);
+		moveCursor(text.length());
 		repaint();
 	}
 
 
 
 
-	public List<String> getLines() {
-		return lines;
+	public List<String> getOldLines() {
+		return lines.isEmpty() ? new ArrayList<>() : lines.subList(0, lines.size() - 1);
 	}
 
 
@@ -292,6 +299,32 @@ public class TerminalCanvas extends AnchorPane {
 
 	public String getLastLine() {
 		return lines.isEmpty() ? "" : lines.get(lines.size() - 1);
+	}
+
+
+
+
+	public String getSelectedText() {
+		if (selection == null) {
+			return "";
+		} else {
+			int sy = Math.min(Math.max(0, selection.getRowStart()), lines.size() - 1);
+			int ey = Math.min(Math.max(0, selection.getRowEnd()), lines.size() - 1);
+			StringBuilder builder = new StringBuilder();
+			for (int i = sy; i <= ey; i++) {
+				String line = lines.get(i);
+				if (i == lines.size() - 1) {
+					line = lineStart + line;
+				}
+				for (int j = 0; j < line.length(); j++) {
+					if (selection.insideSelection(j, i)) {
+						builder.append(line.charAt(j));
+					}
+				}
+				builder.append(System.lineSeparator());
+			}
+			return builder.toString();
+		}
 	}
 
 
@@ -330,9 +363,7 @@ public class TerminalCanvas extends AnchorPane {
 		final double totalHeight = lines.size() * (cellHeight * lineSpacing);
 		final double yOffset = Math.min(0, g.getCanvas().getHeight() - totalHeight);
 
-		// draw selection
 		if (selection != null) {
-			final double ey = selection.getRowEnd() * cellHeight * lineSpacing;
 
 			g.setFill(Color.WHITE);
 
@@ -352,7 +383,7 @@ public class TerminalCanvas extends AnchorPane {
 
 					} else if (i == selection.getRowEnd()) {
 						final double ex = selection.getColEnd() * cellWidth;
-						g.fillRect(0, y, ex, cellHeight * lineSpacing);
+						g.fillRect(0, y, ex + cellWidth, cellHeight * lineSpacing);
 
 					} else {
 						g.fillRect(0, y, canvas.getWidth(), cellHeight * lineSpacing);
@@ -377,7 +408,7 @@ public class TerminalCanvas extends AnchorPane {
 		final double yOffset = Math.min(0, g.getCanvas().getHeight() - totalHeight);
 
 		final double py = (lines.isEmpty() ? 0 : lines.size() - 1) * (cellHeight * lineSpacing) + yOffset;
-		final double px = cursor.column * cellWidth;
+		final double px = (cursor.column + lineStart.length()) * cellWidth;
 
 		g.fillText("_", px, py + text.getBaselineOffset());
 	}
@@ -393,10 +424,14 @@ public class TerminalCanvas extends AnchorPane {
 		final double yOffset = Math.min(0, g.getCanvas().getHeight() - totalHeight);
 
 		for (int i = 0; i < lines.size(); i++) {
-			final String line = lines.get(i);
+			String currentLine = lines.get(i);
 			final double py = i * (cellHeight * lineSpacing) + yOffset;
 
-			for (int j = 0; j < line.length(); j++) {
+			if (i == lines.size() - 1) {
+				currentLine = lineStart + currentLine;
+			}
+
+			for (int j = 0; j < currentLine.length(); j++) {
 				final double px = j * cellWidth;
 
 				if (selection != null && selection.insideSelection(j, i)) {
@@ -404,8 +439,8 @@ public class TerminalCanvas extends AnchorPane {
 				} else {
 					g.setFill(Color.WHITE);
 				}
-				g.fillText(Character.toString(line.charAt(j)), px, py + text.getBaselineOffset());
 
+				g.fillText(Character.toString(currentLine.charAt(j)), px, py + text.getBaselineOffset());
 			}
 
 		}

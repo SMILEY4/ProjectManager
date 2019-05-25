@@ -13,6 +13,7 @@ public class TerminalView extends TerminalCanvas {
 
 
 
+
 	public TerminalView() {
 
 		this.setOnMousePressed(e -> {
@@ -53,6 +54,12 @@ public class TerminalView extends TerminalCanvas {
 			if (e.getCode() == KeyCode.DOWN) {
 				onDown();
 			}
+			if (e.isShortcutDown() && e.getCode() == KeyCode.C) {
+				onCopy();
+			}
+			if (e.isShortcutDown() && e.getCode() == KeyCode.V) {
+				onPaste();
+			}
 
 		});
 
@@ -86,6 +93,7 @@ public class TerminalView extends TerminalCanvas {
 	private void onEnter() {
 		String line = getLastLine();
 		process(line);
+		setLastLine(lineStart + line);
 		addLine("");
 		enteredLines.add(0, line);
 		indexEnteredLines = 0;
@@ -96,7 +104,7 @@ public class TerminalView extends TerminalCanvas {
 
 	private void onUp() {
 		setLastLine(enteredLines.get(indexEnteredLines));
-		indexEnteredLines = Math.min(Math.max(0, indexEnteredLines+1), enteredLines.size()-1 ) ;
+		indexEnteredLines = Math.min(Math.max(0, indexEnteredLines + 1), enteredLines.size() - 1);
 	}
 
 
@@ -104,7 +112,7 @@ public class TerminalView extends TerminalCanvas {
 
 	private void onDown() {
 		setLastLine(enteredLines.get(indexEnteredLines));
-		indexEnteredLines = Math.min(Math.max(0, indexEnteredLines-1), enteredLines.size()-1 ) ;
+		indexEnteredLines = Math.min(Math.max(0, indexEnteredLines - 1), enteredLines.size() - 1);
 	}
 
 
@@ -119,6 +127,20 @@ public class TerminalView extends TerminalCanvas {
 
 	private void onRight() {
 		moveCursor(+1);
+	}
+
+
+
+
+	private void onCopy() {
+		System.out.println("COPY: " + getSelectedText());
+	}
+
+
+
+
+	private void onPaste() {
+		insertAtCursor("-=Clipboard=-" + System.lineSeparator() + "Test");
 	}
 
 
