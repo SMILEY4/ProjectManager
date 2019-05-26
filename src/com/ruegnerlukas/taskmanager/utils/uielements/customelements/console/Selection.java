@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.utils.uielements.customelements.terminal;
+package com.ruegnerlukas.taskmanager.utils.uielements.customelements.console;
 
 public class Selection {
 
@@ -93,5 +93,6 @@ public class Selection {
 	public int getRowEnd() {
 		return Math.max(rowStart, rowEnd);
 	}
+
 
 }

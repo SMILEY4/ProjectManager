@@ -1,7 +1,6 @@
 package com.ruegnerlukas.taskmanager.utils.uielements.customelements;
 
 import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.AnchorPane;
 
 public abstract class ResizableCanvas extends Canvas {
@@ -17,24 +16,16 @@ public abstract class ResizableCanvas extends Canvas {
 			widthProperty().bind(parent.widthProperty().subtract(borderRight));
 			heightProperty().bind(parent.heightProperty().subtract(borderBottom));
 		}
-		widthProperty().addListener(evt -> repaint());
-		heightProperty().addListener(evt -> repaint());
-		repaint();
+		widthProperty().addListener(evt -> onResize());
+		heightProperty().addListener(evt -> onResize());
 	}
 
 
 
-	
-	public void repaint() {
-		GraphicsContext g = this.getGraphicsContext2D();
-//		g.clearRect(0, 0, getWidth(), getHeight());
-		onRepaint(g);
-	}
-	
 
 
 	
-	public abstract void onRepaint(GraphicsContext g);
+	public abstract void onResize();
 	
 	
 
