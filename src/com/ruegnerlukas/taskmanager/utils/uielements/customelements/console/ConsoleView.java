@@ -19,7 +19,7 @@ public class ConsoleView extends ConsoleCanvas {
 	private List<String> lastInputList = new ArrayList<>();
 	private int cmdIndex = 0;
 
-	private String startText = "text:";
+	private String startText = "$ ";
 
 
 
@@ -109,17 +109,18 @@ public class ConsoleView extends ConsoleCanvas {
 		int nPrev = startText.length();
 		this.startText = text;
 		String line = getLine(getCursorRow());
-		if(!line.isEmpty()) {
-			if(nPrev == 0) {
+		if (!line.isEmpty()) {
+			if (nPrev == 0) {
 				line = text + line;
 			} else {
 				line = text + line.substring(nPrev);
 			}
 			setLine(getCursorRow(), line, true);
-			int cCol = Math.max(0, Math.min(getCursorColumn()+(text.length()-nPrev), line.length()));
+			int cCol = Math.max(0, Math.min(getCursorColumn() + (text.length() - nPrev), line.length()));
 			setCursorPos(cCol, getCursorRow());
 		}
 	}
+
 
 
 
@@ -127,7 +128,7 @@ public class ConsoleView extends ConsoleCanvas {
 		String currLine = getLine(getCursorRow());
 
 		setLine(getCursorRow(), str, true);
-		setCursorPos(getCursorColumn(), getCursorRow()+1);
+		setCursorPos(getCursorColumn(), getCursorRow() + 1);
 
 		setLine(getCursorRow(), currLine, true);
 		setCursorPos(currLine.length(), getCursorRow());
@@ -158,20 +159,24 @@ public class ConsoleView extends ConsoleCanvas {
 
 
 	private void onUp() {
-		String next = lastInputList.get(cmdIndex);
-		setLine(getCursorRow(), startText + next, true);
-		setCursorPos(getLine(getCursorRow()).length(), getCursorRow());
-		cmdIndex = Math.min(lastInputList.size()-1, cmdIndex+1);
+		if(0 <= cmdIndex && cmdIndex < lastInputList.size()) {
+			String next = lastInputList.get(cmdIndex);
+			setLine(getCursorRow(), startText + next, true);
+			setCursorPos(getLine(getCursorRow()).length(), getCursorRow());
+			cmdIndex = Math.min(lastInputList.size() - 1, cmdIndex + 1);
+		}
 	}
 
 
 
 
 	private void onDown() {
-		String next = lastInputList.get(cmdIndex);
-		setLine(getCursorRow(), startText + next, true);
-		setCursorPos(getLine(getCursorRow()).length(), getCursorRow());
-		cmdIndex = Math.max(0, cmdIndex-1);
+		if(0 <= cmdIndex && cmdIndex < lastInputList.size()) {
+			String next = lastInputList.get(cmdIndex);
+			setLine(getCursorRow(), startText + next, true);
+			setCursorPos(getLine(getCursorRow()).length(), getCursorRow());
+			cmdIndex = Math.max(0, cmdIndex - 1);
+		}
 	}
 
 
@@ -195,7 +200,7 @@ public class ConsoleView extends ConsoleCanvas {
 		}
 		// add empty line
 		setLine(getCursorRow(), "", true);
-		setCursorPos(getCursorColumn(), getCursorRow()+1);
+		setCursorPos(getCursorColumn(), getCursorRow() + 1);
 		// start new line
 		setLine(getCursorRow(), startText, true);
 		setCursorPos(getLine(getCursorRow()).length(), getCursorRow());

@@ -14,16 +14,20 @@ public class ConsoleTest extends Application {
 
 
 
+
+
+
+
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 
-		ConsoleView console = new ConsoleView(500, 100);
+		ConsoleView console = new ConsoleView(10, 100);
 		console.setInputListener((startText, strInput) -> {
 			String[] tokens = strInput.split(" ");
-			if(tokens[0].equals("echo")) {
+			if (tokens[0].equals("echo")) {
 				console.printLine("> " + tokens[1]);
 			}
-			if(tokens[0].equals("start")) {
+			if (tokens[0].equals("start")) {
 				console.setStartText(tokens[1]);
 			}
 		});

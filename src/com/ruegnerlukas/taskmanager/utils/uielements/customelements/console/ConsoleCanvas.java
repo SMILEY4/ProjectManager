@@ -90,15 +90,35 @@ public class ConsoleCanvas extends AnchorPane {
 	public void setCursorPos(int col, int row) {
 		int lastCol = cursorColumn;
 		int lastRow = cursorRow;
+
+		// row
 		cursorRow = Math.max(0, Math.min(row, cells.length));
+
+		if (cursorRow >= cells.length) {
+			clearConsole();
+		}
+
+		if (cursorRow > getBottomRow()) {
+			int scrollToRow = getTopRow() + (cursorRow - getBottomRow());
+			setTopLine(scrollToRow);
+		}
+
+		// col
 		final int n = Math.min(cells[cursorRow].length - 1, getLine(cursorRow).length());
 		cursorColumn = Math.max(0, Math.min(col, n));
-		if(cursorRow > getBottomRow()) {
-			int scrollToRow = getTopRow() + (cursorRow - getBottomRow());
-			scrollBar.setValue(Math.max(0, Math.min(scrollToRow, cells.length-1)));
-		}
+
+		// repaint
 		repaintCell(lastCol, lastRow);
 		repaintCell(cursorColumn, cursorRow);
+	}
+
+
+
+
+	private void clearConsole() {
+		cells = new char[cells.length][cells[0].length];
+		cursorRow = 0;
+		repaintAll();
 	}
 
 
@@ -112,7 +132,7 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 	private int getBottomRow() {
-		return (int) (getTopRow() + canvas.getHeight() / (cellHeight * lineSpacing)) - 1;
+		return (int) Math.max(0, (getTopRow() + canvas.getHeight() / (cellHeight * lineSpacing)) - 1);
 	}
 
 
@@ -261,7 +281,7 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 	public void setTopLine(int line) {
-		scrollBar.setValue(Math.max(0, Math.min(line, cells.length)));
+		scrollBar.setValue(Math.max(0, Math.min(line, cells.length - 1)));
 	}
 
 
