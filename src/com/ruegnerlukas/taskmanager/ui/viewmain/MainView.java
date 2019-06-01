@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewmain;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.console.ConsoleWindowHandler;
 import com.ruegnerlukas.taskmanager.data.Data;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
@@ -26,7 +27,7 @@ import java.io.IOException;
  * <p>
  * <p>
  * 1. Responsible for:
- * - managing Menu-Functions (file:save,open,close;Preferences;About;...)
+ * - managing Menu-Functions (file:save,openNew,close;Preferences;About;...)
  * - Open,Close tabs
  * <p>
  * <p>
@@ -39,15 +40,15 @@ import java.io.IOException;
  * - File
  * - New Project
  * Creates a new Project.
- * If a project is already open, the user has the choice to save and/or close that project
+ * If a project is already openNew, the user has the choice to save and/or close that project
  * <p>
  * - Open Project
  * Opens a Project that was selected in the FileChooser.
- * If a project is already open, the user has the choice to save and/or close that project
+ * If a project is already openNew, the user has the choice to save and/or close that project
  * <p>
  * - Open Recent
  * Opens a recently used Project.
- * If a project is already open, the user has the choice to save and/or close that project
+ * If a project is already openNew, the user has the choice to save and/or close that project
  * <p>
  * - Save
  * Saves the current Project to its specified Location.
@@ -58,7 +59,7 @@ import java.io.IOException;
  * <p>
  * - Exit
  * Exits the application
- * If a project is currently open, the user has the choice to save and/or close that project
+ * If a project is currently openNew, the user has the choice to save and/or close that project
  * <p>
  * - Preferences
  * - Settings
@@ -80,6 +81,8 @@ public class MainView extends AnchorPane {
 	private MenuFunction functionNewProject;
 	private MenuFunction functionSaveProject;
 	private MenuFunction functionCloseProject;
+
+	private MenuFunction functionOpenConsole;
 
 	private MainViewModule moduleProjectSettings;
 	private MainViewModule moduleTabs;
@@ -159,6 +162,19 @@ public class MainView extends AnchorPane {
 		};
 
 
+		// seperator
+		menuBar.getMenus().get(0).getItems().add(new SeparatorMenuItem());
+
+
+		// openNew console
+		functionOpenConsole = new MenuFunction("File", "Open console") {
+			@Override
+			public void onAction() {
+				ConsoleWindowHandler.openNew();
+			}
+		}.addToMenuBar(menuBar);
+
+
 		new FXChangeListener<Tab>(tabPane.getSelectionModel().selectedItemProperty()) {
 			@Override
 			public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
@@ -167,6 +183,7 @@ public class MainView extends AnchorPane {
 		};
 
 	}
+
 
 
 

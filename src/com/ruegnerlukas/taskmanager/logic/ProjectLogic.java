@@ -69,7 +69,16 @@ public class ProjectLogic {
 
 
 	public static void lockSwitchTaskAttributes(Project project) {
-		project.settings.attributesLocked.set(!project.settings.attributesLocked.get());
+		lockTaskAttributes(project, !project.settings.attributesLocked.get());
+	}
+
+
+
+
+	public static void lockTaskAttributes(Project project, boolean locked) {
+		if (project.settings.attributesLocked.get() != locked) {
+			project.settings.attributesLocked.set(locked);
+		}
 	}
 
 

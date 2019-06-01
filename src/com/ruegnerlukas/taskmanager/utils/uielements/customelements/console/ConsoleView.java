@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.utils.uielements.customelements.console;
 
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -124,6 +125,19 @@ public class ConsoleView extends ConsoleCanvas {
 
 
 
+	public void printLine(Color color, String str) {
+		String currLine = getLine(getCursorRow());
+
+		setLine(getCursorRow(), str, color, true);
+		setCursorPos(getCursorColumn(), getCursorRow() + 1);
+
+		setLine(getCursorRow(), currLine, true);
+		setCursorPos(currLine.length(), getCursorRow());
+	}
+
+
+
+
 	public void printLine(String str) {
 		String currLine = getLine(getCursorRow());
 
@@ -159,7 +173,7 @@ public class ConsoleView extends ConsoleCanvas {
 
 
 	private void onUp() {
-		if(0 <= cmdIndex && cmdIndex < lastInputList.size()) {
+		if (0 <= cmdIndex && cmdIndex < lastInputList.size()) {
 			String next = lastInputList.get(cmdIndex);
 			setLine(getCursorRow(), startText + next, true);
 			setCursorPos(getLine(getCursorRow()).length(), getCursorRow());
@@ -171,7 +185,7 @@ public class ConsoleView extends ConsoleCanvas {
 
 
 	private void onDown() {
-		if(0 <= cmdIndex && cmdIndex < lastInputList.size()) {
+		if (0 <= cmdIndex && cmdIndex < lastInputList.size()) {
 			String next = lastInputList.get(cmdIndex);
 			setLine(getCursorRow(), startText + next, true);
 			setCursorPos(getLine(getCursorRow()).length(), getCursorRow());

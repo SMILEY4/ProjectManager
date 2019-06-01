@@ -18,10 +18,14 @@ import java.util.List;
 public class ConsoleCanvas extends AnchorPane {
 
 
+	public final Color COLOR_TEXT = Color.WHITE;
+	public final Color COLOR_BACKGROUND = Color.BLACK;
+
 	protected ResizableCanvas canvas;
 	protected ScrollBar scrollBar;
 
 	private char[][] cells;
+	private Color[] rowColors;
 	private double cellWidth;
 	private double cellHeight;
 	private double lineSpacing = 1.2;
@@ -64,6 +68,7 @@ public class ConsoleCanvas extends AnchorPane {
 
 		// cells
 		cells = new char[maxLines][maxChars];
+		rowColors = new Color[maxLines];
 
 		// misc
 		setFont("Consolas", 16);
@@ -117,6 +122,7 @@ public class ConsoleCanvas extends AnchorPane {
 
 	private void clearConsole() {
 		cells = new char[cells.length][cells[0].length];
+		rowColors = new Color[cells.length];
 		cursorRow = 0;
 		repaintAll();
 	}
@@ -236,8 +242,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
-	public void setLine(int row, String str, boolean repaint) {
+	public void setLine(int row, String str, Color color, boolean repaint) {
 		if (0 <= row && row < cells.length) {
+			rowColors[row] = color;
 			for (int i = 0; i < Math.min(cells[row].length, str.length()); i++) {
 				char c = str.charAt(i);
 				cells[row][i] = c;
@@ -249,6 +256,13 @@ public class ConsoleCanvas extends AnchorPane {
 				repaintLine(row);
 			}
 		}
+	}
+
+
+
+
+	public void setLine(int row, String str, boolean repaint) {
+		setLine(row, str, COLOR_TEXT, repaint);
 	}
 
 
@@ -403,7 +417,7 @@ public class ConsoleCanvas extends AnchorPane {
 		final double cellH = cellHeight * lineSpacing;
 
 		g.setFill(getBackgroundColor(col, row));
-		g.fillRect(cellX, cellY, cellW, cellH);
+		g.fillRect(cellX, cellY, cellW+1, cellH+1);
 
 		char c = cells[row][col];
 
@@ -426,9 +440,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 	private Color getBackgroundColor(int col, int row) {
 		if (selection != null && selection.insideSelection(col, row)) {
-			return Color.WHITE;
+			return COLOR_BACKGROUND.invert();
 		} else {
-			return Color.BLACK;
+			return COLOR_BACKGROUND;
 		}
 	}
 
@@ -436,10 +450,11 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 	private Color getTextColor(int col, int row) {
+		Color color = rowColors[row] == null ? COLOR_TEXT : rowColors[row];
 		if (selection != null && selection.insideSelection(col, row)) {
-			return Color.BLACK;
+			return color.invert();
 		} else {
-			return Color.WHITE;
+			return color;
 		}
 	}
 

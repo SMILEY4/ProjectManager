@@ -5,6 +5,7 @@ import com.ruegnerlukas.simpleutils.SystemUtils;
 import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.builder.DefaultMessageBuilder;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.console.CommandHandler;
 import com.ruegnerlukas.taskmanager.logic.PresetLogic;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskDisplayLogic;
@@ -42,6 +43,7 @@ public class TaskManager extends Application {
 		PresetLogic.init();
 		TaskLogic.init();
 		TaskDisplayLogic.init();
+		CommandHandler.create();
 
 		// start application
 		Logger.get().info("Starting Application (" + JarLocation.getJarLocation(TaskManager.class));
