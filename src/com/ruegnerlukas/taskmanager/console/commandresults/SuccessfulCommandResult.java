@@ -21,7 +21,7 @@ public class SuccessfulCommandResult extends CommandResult {
 
 
 
-	public boolean hasParameter(String name) {
+	public boolean hasValue(String name) {
 		return parameter.containsKey(name);
 	}
 
@@ -34,7 +34,7 @@ public class SuccessfulCommandResult extends CommandResult {
 
 
 	public <T> T getValueOrDefault(String name, T defaultValue) {
-		return hasParameter(name) ? getValue(name) : defaultValue;
+		return hasValue(name) ? getValue(name) : defaultValue;
 	}
 
 

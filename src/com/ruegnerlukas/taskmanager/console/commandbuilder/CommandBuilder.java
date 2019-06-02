@@ -25,12 +25,12 @@ public class CommandBuilder {
 
 
 	public CommandBuilder text(String text) {
+		stringList.add(text);
+		TokenExpression expr = new TokenExpression((identifierCompleted ? new Token(text) : new Token("cmd_identifier", text)));
+		expressions.add(expr);
 		if (!identifierCompleted) {
 			identifier.add(text);
 		}
-		stringList.add(text);
-		TokenExpression expr = new TokenExpression(new Token(text));
-		expressions.add(expr);
 		return this;
 	}
 

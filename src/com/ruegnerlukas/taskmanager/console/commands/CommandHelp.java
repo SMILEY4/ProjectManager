@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.console.commands;
 
+import com.ruegnerlukas.taskmanager.console.CommandHandler;
 import com.ruegnerlukas.taskmanager.console.ConsoleWindowHandler;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.Command;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.CommandBuilder;
@@ -8,21 +9,27 @@ import javafx.scene.paint.Color;
 
 import java.util.*;
 
-public class HelpCommand {
+public class CommandHelp {
 
 
-	public static Command create(List<Command> commands) {
+	public static Command create() {
 		return new CommandBuilder()
 				.text("help")
+				.optionalAlternative("category", "all", "project", "attribute", "attributes", "task", "tasks")
 				.setDescription("Prints all commands and their description")
-				.setExecutor(result -> HelpCommand.onCommand(result, commands))
+				.setExecutor(CommandHelp::onCommand)
 				.create();
 	}
 
 
 
 
-	private static void onCommand(SuccessfulCommandResult result, List<Command> allCommands) {
+	private static void onCommand(SuccessfulCommandResult result) {
+
+		String category = result.getValueOrDefault("category", "all");
+
+
+		List<Command> allCommands = CommandHandler.getCommands();
 
 		// sort commands in buckets by primary identifier
 		Map<String, List<Command>> cmdBuckets = new HashMap<>();
@@ -36,8 +43,17 @@ public class HelpCommand {
 
 
 		// print help
-		List<String> keys = new ArrayList<>(cmdBuckets.keySet());
+		List<String> keys = new ArrayList<>();
+
+		if(category.equalsIgnoreCase("all")) {
+			keys.addAll(cmdBuckets.keySet());
+		} else {
+			keys.add(category);
+		}
+
 		Collections.sort(keys);
+
+
 		for (String primaryIdentifier : keys) {
 
 			ConsoleWindowHandler.print(Color.CYAN, primaryIdentifier);

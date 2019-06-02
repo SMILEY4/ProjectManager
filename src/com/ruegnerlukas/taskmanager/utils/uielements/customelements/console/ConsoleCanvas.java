@@ -92,6 +92,14 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	public void moveCursorToEndOfLine() {
+		String line = getLine(getCursorRow());
+		setCursorPos(line.length(), getCursorRow());
+	}
+
+
+
+
 	public void setCursorPos(int col, int row) {
 		int lastCol = cursorColumn;
 		int lastRow = cursorRow;
@@ -417,7 +425,7 @@ public class ConsoleCanvas extends AnchorPane {
 		final double cellH = cellHeight * lineSpacing;
 
 		g.setFill(getBackgroundColor(col, row));
-		g.fillRect(cellX, cellY, cellW+1, cellH+1);
+		g.fillRect(cellX, cellY, cellW + 1, cellH + 1);
 
 		char c = cells[row][col];
 

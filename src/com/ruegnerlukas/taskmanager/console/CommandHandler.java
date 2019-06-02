@@ -19,10 +19,7 @@ import com.ruegnerlukas.simpleparser.parser.StringParser;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.Command;
 import com.ruegnerlukas.taskmanager.console.commandresults.FailedCommandResult;
 import com.ruegnerlukas.taskmanager.console.commandresults.SuccessfulCommandResult;
-import com.ruegnerlukas.taskmanager.console.commands.HelpCommand;
-import com.ruegnerlukas.taskmanager.console.commands.ProjectLockAttributesCommand;
-import com.ruegnerlukas.taskmanager.console.commands.ProjectRenameCommand;
-import com.ruegnerlukas.taskmanager.console.commands.ProjectSetIDCountCommand;
+import com.ruegnerlukas.taskmanager.console.commands.*;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -72,11 +69,40 @@ public class CommandHandler {
 
 	private static List<Command> createCommandList() {
 		List<Command> commands = new ArrayList<>();
-		commands.add(ProjectRenameCommand.create());
-		commands.add(ProjectLockAttributesCommand.create());
-		commands.add(ProjectSetIDCountCommand.create());
-		commands.add(HelpCommand.create(commands));
+
+		commands.add(CommandProjectRename.create());
+		commands.add(CommandProjectLockAttributes.create());
+		commands.add(CommandProjectSetIDCounter.create());
+		commands.add(CommandProjectGetName.create());
+		commands.add(CommandProjectCreate.create());
+		commands.add(CommandProjectClose.create());
+
+		commands.add(CommandAttributeRename.create());
+		commands.add(CommandAttributeInfo.create());
+		commands.add(CommandAttributeType.create());
+		commands.add(CommandAttributeSetValue.create());
+
+		commands.add(CommandAttributesRemove.create());
+		commands.add(CommandAttributesCreate.create());
+		commands.add(CommandAttributesList.create());
+
+		commands.add(CommandTaskInfo.create());
+		commands.add(CommandTaskSetValue.create());
+
+		commands.add(CommandTasksList.create());
+		commands.add(CommandTasksRemove.create());
+		commands.add(CommandTasksCreate.create());
+
+		commands.add(CommandHelp.create());
+
 		return commands;
+	}
+
+
+
+
+	public static List<Command> getCommands() {
+		return new ArrayList<>(commandMap.values());
 	}
 
 
@@ -92,7 +118,9 @@ public class CommandHandler {
 				Expression expression = node.expression;
 				if (expression.getType() == ExpressionType.TOKEN) {
 					TokenExpression tokenExpression = (TokenExpression) expression;
-					identifierList.add(tokenExpression.token.getSymbol());
+					if(tokenExpression.token.getName().equalsIgnoreCase("cmd_identifier")) {
+						identifierList.add(tokenExpression.token.getSymbol());
+					}
 				} else {
 					break;
 				}
@@ -226,6 +254,10 @@ public class CommandHandler {
 
 		return false;
 	}
+
+
+
+
 
 
 }

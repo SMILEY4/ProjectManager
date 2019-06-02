@@ -35,7 +35,7 @@ public class TextValue extends TaskValue<String> {
 
 	@Override
 	public String toString() {
-		return "TaskValue.Text@" + Integer.toHexString(this.hashCode()) + " = " + getValue();
+		return "TaskValue.Text@" + Integer.toHexString(this.hashCode()) + " = \"" + getValue() + "\"";
 	}
 
 }
