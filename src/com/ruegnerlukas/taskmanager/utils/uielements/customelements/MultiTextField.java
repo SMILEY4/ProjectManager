@@ -76,13 +76,16 @@ public class MultiTextField extends AnchorPane {
 
 
 	public void setMultiline(boolean multiline) {
+		String text = getText();
 		this.multiline = multiline;
 		this.area.setVisible(multiline);
 		this.area.setDisable(!multiline);
 		this.area.setMouseTransparent(!multiline);
+		this.area.setText(text);
 		this.field.setVisible(!multiline);
 		this.field.setDisable(multiline);
 		this.field.setMouseTransparent(multiline);
+		this.field.setText(text);
 	}
 
 

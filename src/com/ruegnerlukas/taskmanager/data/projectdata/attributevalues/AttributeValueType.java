@@ -15,7 +15,6 @@ public enum AttributeValueType {
 
 	FLAG_LIST,
 
-	TEXT_CHAR_LIMIT,
 	TEXT_MULTILINE
 
 }

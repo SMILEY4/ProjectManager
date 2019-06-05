@@ -81,29 +81,9 @@ public class TextAttributeLogic implements AttributeLogicModule {
 
 	public void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
-		setCharLimit(attribute, 100);
 		setMultiline(attribute, false);
 		setUseDefault(attribute, false);
 		setDefaultValue(attribute, new TextValue(""));
-	}
-
-
-
-
-	public void setCharLimit(TaskAttribute attribute, int limit) {
-		attribute.values.put(AttributeValueType.TEXT_CHAR_LIMIT, new TextCharLimitValue(limit));
-	}
-
-
-
-
-	public int getCharLimit(TaskAttribute attribute) {
-		TextCharLimitValue value = (TextCharLimitValue) attribute.getValue(AttributeValueType.TEXT_CHAR_LIMIT);
-		if (value == null) {
-			return 128;
-		} else {
-			return value.getValue();
-		}
 	}
 
 
@@ -252,7 +232,7 @@ public class TextAttributeLogic implements AttributeLogicModule {
 
 	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
 		if (value.getAttType() == AttributeType.TEXT) {
-			return ((TextValue) value).getValue().length() <= getCharLimit(attribute);
+			return true;
 		} else {
 			return value.getAttType() == null;
 		}
@@ -266,7 +246,7 @@ public class TextAttributeLogic implements AttributeLogicModule {
 			return new NoValue();
 		} else {
 			final String value = (oldValue.getAttType() == null) ? "" : ((TextValue) oldValue).getValue();
-			return new TextValue(value.substring(0, Math.min(value.length(), getCharLimit(attribute))));
+			return new TextValue(value);
 		}
 	}
 

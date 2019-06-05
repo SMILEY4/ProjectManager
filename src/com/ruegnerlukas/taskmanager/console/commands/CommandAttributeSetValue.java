@@ -171,10 +171,6 @@ public class CommandAttributeSetValue {
 								attribValue = new FlagListValue(flags);
 								break;
 							}
-							case "TEXT_CHAR_LIMIT": {
-								attribValue = new TextCharLimitValue(Integer.parseInt(strValue));
-								break;
-							}
 							case "TEXT_MULTILINE": {
 								attribValue = new TextMultilineValue(Boolean.parseBoolean(strValue));
 								break;

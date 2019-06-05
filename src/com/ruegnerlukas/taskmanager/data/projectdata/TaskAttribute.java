@@ -20,6 +20,8 @@ public class TaskAttribute {
 	public TaskAttribute(String name, AttributeType type) {
 		this.name.set(name);
 		this.type.set(type);
+
+
 	}
 
 

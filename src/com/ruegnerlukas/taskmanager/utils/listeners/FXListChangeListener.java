@@ -12,7 +12,6 @@ public abstract class FXListChangeListener<E> {
 
 	private final ListChangeListener<E> listener = this::onListChanged;
 
-
 	private final List<ObservableList<? extends E>> lists = new ArrayList<>();
 
 
@@ -134,6 +133,8 @@ public abstract class FXListChangeListener<E> {
 		}
 		return listPermutations;
 	}
+
+
 
 
 	public void applyPermutation(List list, ListChangeListener.Change<? extends E> permutation) {
