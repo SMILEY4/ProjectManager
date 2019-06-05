@@ -1,16 +1,17 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.Data;
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes.UnchangeableContentNode;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ComboboxUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.EditableLabel;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -20,19 +21,11 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
-import java.lang.reflect.InvocationTargetException;
-
-@SuppressWarnings ("FieldCanBeLocal") // TODO
 public class AttributeNode extends AnchorPane {
 
 
 	private static final double HEADER_HEIGHT = 35;
 
-	private AnchorPane headerPane;
-	private HBox headerBox;
-	private Button btnRemove;
-	private ComboBox<AttributeType> choiceType;
-	private EditableLabel labelName;
 	private Button btnExpand;
 	private Label labelUnsafed;
 	private boolean isExpanded = false;
@@ -41,6 +34,9 @@ public class AttributeNode extends AnchorPane {
 
 	private final TaskAttribute attribute;
 	private AttributeContentNode content;
+
+	private FXChangeListener<AttributeType> typeListener;
+	private FXChangeListener<String> nameListener;
 
 
 
@@ -55,8 +51,9 @@ public class AttributeNode extends AnchorPane {
 		this.setPrefSize(10000, HEADER_HEIGHT);
 		this.setMaxSize(10000, HEADER_HEIGHT);
 
+
 		// header pane
-		headerPane = new AnchorPane();
+		AnchorPane headerPane = new AnchorPane();
 		headerPane.setId("pane_header");
 		headerPane.setMinSize(100, HEADER_HEIGHT);
 		headerPane.setPrefSize(10000, HEADER_HEIGHT);
@@ -79,7 +76,7 @@ public class AttributeNode extends AnchorPane {
 
 
 		// box header
-		headerBox = new HBox();
+		HBox headerBox = new HBox();
 		headerBox.setMinSize(100, HEADER_HEIGHT);
 		headerBox.setPrefSize(10000, HEADER_HEIGHT);
 		headerBox.setMaxSize(10000, HEADER_HEIGHT);
@@ -89,20 +86,18 @@ public class AttributeNode extends AnchorPane {
 
 
 		// remove-button
-		btnRemove = new Button();
+		Button btnRemove = new Button();
 		btnRemove.setMinSize(32, 32);
 		btnRemove.setPrefSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
 		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f, "black");
 		btnRemove.setDisable(attribute.type.get().fixed);
 		headerBox.getChildren().add(btnRemove);
-		btnRemove.setOnAction(event -> {
-			onRemoveAttribute();
-		});
+		btnRemove.setOnAction(event -> onRemoveAttribute());
 
 
 		// choice attribute-type
-		choiceType = new ComboBox<>();
+		ComboBox<AttributeType> choiceType = new ComboBox<>();
 		choiceType.setButtonCell(ComboboxUtils.createListCellAttributeType());
 		choiceType.setCellFactory(param -> ComboboxUtils.createListCellAttributeType());
 		if (attribute.type.getValue().fixed) {
@@ -121,18 +116,28 @@ public class AttributeNode extends AnchorPane {
 				onTypeSelected(oldValue, newValue);
 			}
 		});
+		typeListener = new FXChangeListener<AttributeType>(attribute.type) {
+			@Override
+			public void changed(ObservableValue<? extends AttributeType> observable, AttributeType oldValue, AttributeType newValue) {
+				choiceType.setValue(newValue);
+			}
+		};
 
 
 		// attribute name
-		labelName = new EditableLabel(attribute.name.getValue());
+		EditableLabel labelName = new EditableLabel(attribute.name.getValue());
 		labelName.setMinSize(32, 32);
 		labelName.setPrefSize(10000, 32);
 		labelName.setMaxSize(10000, 32);
 		labelName.setDisable(attribute.type.get().fixed);
 		headerBox.getChildren().add(labelName);
-		labelName.addListener((observable, oldValue, newValue) -> {
-			onRename(oldValue, newValue);
-		});
+		labelName.addListener((observable, oldValue, newValue) -> onRename(oldValue, newValue));
+		nameListener = new FXChangeListener<String>(attribute.name) {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				labelName.setText(newValue);
+			}
+		};
 
 
 		// expand-button
@@ -150,7 +155,7 @@ public class AttributeNode extends AnchorPane {
 			}
 		});
 
-		if (attribute.type.get().fixed && AttributeContentNode.CONTENT_NODES.get(attribute.type.get()) == UnchangeableContentNode.class) {
+		if (attribute.type.get().fixed && ContentNodeFactory.isUnchangable(attribute)) {
 			btnExpand.setDisable(true);
 			btnExpand.setVisible(false);
 		}
@@ -167,6 +172,7 @@ public class AttributeNode extends AnchorPane {
 		AnchorUtils.setAnchors(contentPane, 34, 0, 0, 0);
 		this.getChildren().add(contentPane);
 
+
 		// attribute content
 		setAttributeContent();
 	}
@@ -176,21 +182,11 @@ public class AttributeNode extends AnchorPane {
 
 	private void setAttributeContent() {
 
-		Class<? extends AttributeContentNode> nodeClass = AttributeContentNode.CONTENT_NODES.get(attribute.type.get());
-		if (nodeClass == null) {
-			content = new UnchangeableContentNode(attribute);
-		} else {
-			try {
-				content = nodeClass.getDeclaredConstructor(TaskAttribute.class).newInstance(attribute);
-			} catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-				e.printStackTrace();
-				content = new UnchangeableContentNode(attribute);
-			}
-		}
-
+		content = ContentNodeFactory.create(attribute);
+		content.setParentNode(this);
 		AnchorUtils.setAnchors(content, 0, 0, 0, 0);
 		contentPane.getChildren().setAll(content);
-		onResize();
+		resize();
 
 		content.changedProperty.addListener((observable, oldValue, newValue) -> {
 			labelUnsafed.setVisible(newValue);
@@ -201,15 +197,18 @@ public class AttributeNode extends AnchorPane {
 
 
 
-	protected void onRemoveAttribute() {
+	private void onRemoveAttribute() {
 		ProjectLogic.removeAttributeFromProject(Data.projectProperty.get(), getAttribute());
 	}
 
 
 
 
-	protected void onTypeSelected(AttributeType oldValue, AttributeType newValue) {
+	private void onTypeSelected(AttributeType oldValue, AttributeType newValue) {
 		if (oldValue != newValue) {
+			if(content != null) {
+				content.dispose();
+			}
 			AttributeLogic.setTaskAttributeType(Data.projectProperty.get(), getAttribute(), newValue);
 			setAttributeContent();
 		}
@@ -218,7 +217,7 @@ public class AttributeNode extends AnchorPane {
 
 
 
-	protected void onRename(String oldValue, String newValue) {
+	private void onRename(String oldValue, String newValue) {
 		if (!oldValue.equals(newValue)) {
 			AttributeLogic.renameTaskAttribute(Data.projectProperty.get(), getAttribute(), newValue);
 		}
@@ -227,25 +226,24 @@ public class AttributeNode extends AnchorPane {
 
 
 
-	protected void onExpand() {
+	private void onExpand() {
 		isExpanded = true;
 		ButtonUtils.makeIconButton(btnExpand, SVGIcons.ARROW_UP, 0.75f, "black");
-		onResize();
+		resize();
 	}
 
 
 
 
-	protected void onCollapse() {
+	private void onCollapse() {
 		isExpanded = false;
 		ButtonUtils.makeIconButton(btnExpand, SVGIcons.ARROW_DOWN, 0.75f, "black");
-		onResize();
+		resize();
 	}
 
 
 
-
-	protected void onResize() {
+	public void resize() {
 
 		if (isExpanded) {
 			contentPane.setVisible(true);
@@ -282,6 +280,8 @@ public class AttributeNode extends AnchorPane {
 		if (content != null) {
 			content.dispose();
 		}
+		nameListener.removeFromAll();
+		typeListener.removeFromAll();
 	}
 
 }

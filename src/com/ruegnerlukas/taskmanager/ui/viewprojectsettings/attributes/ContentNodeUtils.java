@@ -31,6 +31,7 @@ public class ContentNodeUtils {
 
 
 
+
 	public static HBox buildEntryWithAlignment(VBox root, String name) {
 
 		HBox boxEntry = new HBox();
@@ -89,6 +90,8 @@ public class ContentNodeUtils {
 
 		return new Button[]{btnDiscard, btnSave};
 	}
+
+
 
 
 	public static HBox buildButtonBox() {

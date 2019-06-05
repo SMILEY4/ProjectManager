@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 import java.util.Random;
 
 
+@SuppressWarnings ("ALL")
 public class FlagNode extends HBox {
 
 
@@ -31,7 +32,6 @@ public class FlagNode extends HBox {
 
 	private Button btnRemove;
 	private Pane paneColor;
-	private EditableLabel labelName;
 
 	private final TaskFlag flag;
 	private SimpleStringProperty nameProperty = new SimpleStringProperty();
@@ -88,7 +88,7 @@ public class FlagNode extends HBox {
 
 
 		// flag name
-		labelName = new EditableLabel(flag.name.get());
+		EditableLabel labelName = new EditableLabel(flag.name.get());
 		labelName.setMinWidth(300);
 		labelName.setPrefWidth(100000);
 		labelName.setMaxWidth(100000);

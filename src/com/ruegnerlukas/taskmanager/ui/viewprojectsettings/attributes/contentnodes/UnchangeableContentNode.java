@@ -26,4 +26,12 @@ public class UnchangeableContentNode extends AttributeContentNode {
 		return 40;
 	}
 
+
+
+
+	@Override
+	public void dispose() {
+	}
+
+
 }
