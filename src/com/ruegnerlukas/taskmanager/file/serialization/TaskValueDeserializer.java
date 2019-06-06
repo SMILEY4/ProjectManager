@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.file.pojos;
+package com.ruegnerlukas.taskmanager.file.plaindataobjects;
 
 import com.google.gson.*;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.*;
