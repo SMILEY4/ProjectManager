@@ -8,7 +8,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.ChoiceAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import javafx.scene.control.ComboBox;
 
@@ -29,10 +28,12 @@ public class ItemChoice extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupControls() {
+	protected void create() {
 		choice = new ComboBox<>();
 		choice.getItems().addAll(AttributeLogic.CHOICE_LOGIC.getValueList(getAttribute()));
-
+		choice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new ChoiceValue(newValue));
+		});
 		this.setValueNode(choice);
 		this.setShowButton(true);
 	}
@@ -41,27 +42,11 @@ public class ItemChoice extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupInitialValue() {
+	protected void refresh() {
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {
 			choice.getSelectionModel().select(((ChoiceValue) objValue).getValue());
 		}
-		final TaskValue<?> objValueRAW = TaskLogic.getTaskValue(getTask(), getAttribute());
-		if (objValueRAW == null || objValueRAW.getAttType() == null) {
-			setEmpty(true);
-		} else {
-			setEmpty(false);
-		}
-	}
-
-
-
-
-	@Override
-	protected void setupLogic() {
-		choice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new ChoiceValue(newValue));
-		});
 	}
 
 

@@ -4,11 +4,12 @@ import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
-import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXMapEntryChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
+import javafx.collections.MapChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -24,16 +25,14 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 	private Button button;
 	private Label labelEmpty;
 
-	private boolean showButton;
 	private boolean isEmpty;
 
-
+	private FXMapEntryChangeListener<TaskAttribute,TaskValue<?>> listenerTaskValue;
 
 
 
 	public SimpleSidebarItem(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
-
 
 		// root box
 		HBox root = new HBox();
@@ -94,21 +93,26 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 			this.setText(attribute.name.get() + ":");
 		});
 
-		setupControls();
-		setupInitialValue();
-		setupLogic();
 
+		listenerTaskValue = new FXMapEntryChangeListener<TaskAttribute, TaskValue<?>>(getTask().values, getAttribute()) {
+			@Override
+			public void onChanged(MapChangeListener.Change<? extends TaskAttribute, ? extends TaskValue<?>> c) {
+				refresh();
+			}
+		};
+
+
+		create();
+		refresh();
+		checkEmpty();
 	}
 
 
 
 
+	protected abstract void create();
 
-	protected abstract void setupControls();
-
-	protected abstract void setupInitialValue();
-
-	protected abstract void setupLogic();
+	protected abstract void refresh();
 
 
 
@@ -128,7 +132,6 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 	public void setShowButton(boolean showButton) {
-		this.showButton = showButton;
 		button.setVisible(showButton);
 		button.setDisable(!showButton);
 	}
@@ -136,9 +139,19 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 
-
-
 	protected abstract void onSetEmpty(boolean empty);
+
+
+
+
+	private void checkEmpty() {
+		final TaskValue<?> objValue = TaskLogic.getTaskValue(getTask(), getAttribute());
+		if (objValue == null || objValue.getAttType() == null) {
+			setEmpty(true);
+		} else {
+			setEmpty(false);
+		}
+	}
 
 
 
@@ -175,11 +188,10 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 
-	public void onAttChangedEvent(AttributeValueChangeEvent e) {
+	public void onAttChangedEvent() {
 		setEmptyText();
-		setupControls();
-		setupInitialValue();
-		setupLogic();
+		refresh();
+		checkEmpty();
 	}
 
 
@@ -187,6 +199,7 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 	@Override
 	public void dispose() {
+		listenerTaskValue.removeFromAll();
 		super.dispose();
 	}
 

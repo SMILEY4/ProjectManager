@@ -28,13 +28,15 @@ public class ItemFlag extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupControls() {
+	protected void create() {
 		choiceFlag = new ComboBox<>();
 		choiceFlag.setButtonCell(ComboboxUtils.createListCellFlag());
 		choiceFlag.setCellFactory(param -> ComboboxUtils.createListCellFlag());
 		choiceFlag.getItems().addAll(AttributeLogic.FLAG_LOGIC.getFlagList(getAttribute()));
+		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new FlagValue(newValue));
+		});
 		this.setValueNode(choiceFlag);
-
 		this.setEmpty(false);
 		this.setShowButton(false);
 	}
@@ -43,19 +45,9 @@ public class ItemFlag extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupInitialValue() {
+	protected void refresh() {
 		final TaskFlag flag = ((FlagValue) TaskLogic.getValueOrDefault(getTask(), getAttribute())).getValue();
 		choiceFlag.getSelectionModel().select(flag);
-	}
-
-
-
-
-	@Override
-	protected void setupLogic() {
-		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new FlagValue(newValue));
-		});
 	}
 
 

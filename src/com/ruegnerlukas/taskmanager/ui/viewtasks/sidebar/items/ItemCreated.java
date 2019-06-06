@@ -22,11 +22,10 @@ public class ItemCreated extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupControls() {
+	protected void create() {
 		final LocalDateTime created = ((CreatedValue) TaskLogic.getValueOrDefault(getTask(), getAttribute())).getValue();
 		Label label = new Label(created.format(DateTimeFormatter.ISO_DATE_TIME));
 		this.setValueNode(label);
-
 		this.setEmpty(false);
 		this.setShowButton(false);
 	}
@@ -35,16 +34,7 @@ public class ItemCreated extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupInitialValue() {
-
-	}
-
-
-
-
-	@Override
-	protected void setupLogic() {
-
+	protected void refresh() {
 	}
 
 

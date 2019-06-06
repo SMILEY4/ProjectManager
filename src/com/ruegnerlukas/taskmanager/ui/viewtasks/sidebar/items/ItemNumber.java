@@ -9,7 +9,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NumberValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.attributes.NumberAttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.SpinnerUtils;
 import javafx.scene.control.Spinner;
@@ -31,18 +30,12 @@ public class ItemNumber extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupControls() {
+	protected void create() {
 		spinner = new Spinner<>();
 		spinner.setEditable(true);
-		SpinnerUtils.initSpinner(
-				spinner,
-				MathUtils.setDecPlaces(0, AttributeLogic.NUMBER_LOGIC.getDecPlaces(getAttribute())),
-				AttributeLogic.NUMBER_LOGIC.getMinValue(getAttribute()).doubleValue(),
-				AttributeLogic.NUMBER_LOGIC.getMaxValue(getAttribute()).doubleValue(),
-				1.0 / Math.pow(10, AttributeLogic.NUMBER_LOGIC.getDecPlaces(getAttribute())),
-				AttributeLogic.NUMBER_LOGIC.getDecPlaces(getAttribute()),
-				true, null);
-
+		spinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NumberValue(newValue));
+		}));
 		this.setValueNode(spinner);
 		this.setShowButton(true);
 	}
@@ -51,28 +44,23 @@ public class ItemNumber extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupInitialValue() {
+	protected void refresh() {
+
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
+
+		double spinnerValue = (objValue != null && objValue.getAttType() != null) ? ((NumberValue) objValue).getValue() : 0;
+		SpinnerUtils.initSpinner(
+				spinner,
+				MathUtils.setDecPlaces(spinnerValue, AttributeLogic.NUMBER_LOGIC.getDecPlaces(getAttribute())),
+				AttributeLogic.NUMBER_LOGIC.getMinValue(getAttribute()).doubleValue(),
+				AttributeLogic.NUMBER_LOGIC.getMaxValue(getAttribute()).doubleValue(),
+				1.0 / Math.pow(10, AttributeLogic.NUMBER_LOGIC.getDecPlaces(getAttribute())),
+				AttributeLogic.NUMBER_LOGIC.getDecPlaces(getAttribute()),
+				true, null);
+
 		if (objValue != null && objValue.getAttType() != null) {
 			spinner.getValueFactory().setValue(((NumberValue) objValue).getValue());
 		}
-
-		final TaskValue<?> objValueRAW = TaskLogic.getTaskValue(getTask(), getAttribute());
-		if (objValueRAW == null || objValueRAW.getAttType() == null) {
-			setEmpty(true);
-		} else {
-			setEmpty(false);
-		}
-	}
-
-
-
-
-	@Override
-	protected void setupLogic() {
-		spinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NumberValue(newValue));
-		}));
 	}
 
 

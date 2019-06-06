@@ -7,10 +7,11 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TextValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXMapEntryChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MultiTextField;
+import javafx.collections.MapChangeListener;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
@@ -19,31 +20,29 @@ public class ItemText extends SidebarItem {
 
 
 	private MultiTextField area;
+	private FXMapEntryChangeListener<TaskAttribute, TaskValue<?>> listener;
 
 
 
 
 	public ItemText(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
-		setupControls();
-		setupInitialValue();
-		setupLogic();
+		create();
+		refresh();
 	}
 
 
 
 
 	@Override
-	protected void onAttChangedEvent(AttributeValueChangeEvent e) {
-		setupControls();
-		setupInitialValue();
-		setupLogic();
+	protected void onAttChangedEvent() {
+		refresh();
 	}
 
 
 
 
-	private void setupControls() {
+	private void create() {
 		VBox box = new VBox();
 		AnchorUtils.setAnchors(box, 0, 0, 0, 0);
 		this.getChildren().setAll(box);
@@ -55,12 +54,27 @@ public class ItemText extends SidebarItem {
 		area.setMultiline(AttributeLogic.TEXT_LOGIC.getMultiline(getAttribute()));
 		setValueHeight();
 		box.getChildren().add(area);
+
+		area.textProperty().addListener(((observable, oldValue, newValue) -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new TextValue(area.getText()));
+		}));
+
+		setOnAttribNameChanged(e -> {
+			label.setText(getAttribute().name.get() + ":");
+		});
+
+		listener = new FXMapEntryChangeListener<TaskAttribute, TaskValue<?>>(getTask().values, getAttribute()) {
+			@Override
+			public void onChanged(MapChangeListener.Change<? extends TaskAttribute, ? extends TaskValue<?>> c) {
+				refresh();
+			}
+		};
 	}
 
 
 
 
-	private void setupInitialValue() {
+	private void refresh() {
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {
 			area.setText(((TextValue) objValue).getValue());
@@ -72,17 +86,9 @@ public class ItemText extends SidebarItem {
 
 
 
-	private void setupLogic() {
-		area.textProperty().addListener(((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new TextValue(area.getText()));
-		}));
-	}
-
-
-
-
 	@Override
 	public void dispose() {
+		listener.removeFromAll();
 		super.dispose();
 	}
 

@@ -3,11 +3,13 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXMapChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.AnchorPane;
@@ -57,8 +59,7 @@ public abstract class SidebarItem extends AnchorPane {
 
 	private FXChangeListener<String> listenerName;
 	private FXChangeListener<AttributeType> listenerType;
-	private EventHandler<AttributeValueChangeEvent> handlerChange;
-
+	private FXMapChangeListener<AttributeValueType, AttributeValue<?>> listenerValues;
 
 
 
@@ -85,19 +86,19 @@ public abstract class SidebarItem extends AnchorPane {
 			}
 		};
 
-		handlerChange = (e) -> {
-			if (e.getAttribute() == getAttribute()) {
-				onAttChangedEvent(e);
+		listenerValues = new FXMapChangeListener<AttributeValueType, AttributeValue<?>>(attribute.values) {
+			@Override
+			public void onChanged(MapChangeListener.Change<? extends AttributeValueType, ? extends AttributeValue<?>> c) {
+				onAttChangedEvent();
 			}
 		};
-		AttributeLogic.addOnAttributeValueChanged(handlerChange);
 
 	}
 
 
 
 
-	protected abstract void onAttChangedEvent(AttributeValueChangeEvent e);
+	protected abstract void onAttChangedEvent();
 
 
 
@@ -140,9 +141,9 @@ public abstract class SidebarItem extends AnchorPane {
 	public void dispose() {
 		listenerName.removeFromAll();
 		listenerType.removeFromAll();
+		listenerValues.removeFromAll();
 		handlerAttribNameChanged = null;
 		handlerAttribTypeChanged = null;
-		AttributeLogic.removeOnAttributeValueChanged(handlerChange);
 	}
 
 }

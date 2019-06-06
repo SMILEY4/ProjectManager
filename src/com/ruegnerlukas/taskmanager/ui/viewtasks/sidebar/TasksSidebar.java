@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.Data;
+import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
@@ -83,7 +84,15 @@ public class TasksSidebar {
 		listenerAttributes = new FXListChangeListener<TaskAttribute>(Data.projectProperty.get().data.attributes) {
 			@Override
 			public void onChanged(ListChangeListener.Change<? extends TaskAttribute> c) {
-				setTask(currentTask);
+				if (currentTask != null) {
+					if (getAllAdded(c).isEmpty()) {
+						for (TaskAttribute attribute : getAllRemoved(c)) {
+							removeAttribute(attribute);
+						}
+					} else {
+						setTask(currentTask);
+					}
+				}
 			}
 		};
 
@@ -91,7 +100,7 @@ public class TasksSidebar {
 			@Override
 			public void onChanged(ListChangeListener.Change<? extends Task> c) {
 				List<Task> removed = getAllRemoved(c);
-				if(removed.contains(currentTask)) {
+				if (removed.contains(currentTask)) {
 					setTask(null);
 					breadcrumbBar.clearTasks();
 				}
@@ -110,6 +119,7 @@ public class TasksSidebar {
 
 	public void setTask(Task task) {
 
+
 		this.currentTask = task;
 
 		// remove prev. items
@@ -122,18 +132,20 @@ public class TasksSidebar {
 
 		if (task != null) {
 
-			// add fixed values
-			addAttribute(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION), task);
-			addAttribute(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID), task);
-			addAttribute(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.CREATED), task);
-			addAttribute(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.LAST_UPDATED), task);
-			addAttribute(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG), task);
+			Project project = Data.projectProperty.get();
 
-			// add seperator
+			// add fixed values
+			addAttribute(AttributeLogic.findAttribute(project, AttributeType.DESCRIPTION), task);
+			addAttribute(AttributeLogic.findAttribute(project, AttributeType.ID), task);
+			addAttribute(AttributeLogic.findAttribute(project, AttributeType.CREATED), task);
+			addAttribute(AttributeLogic.findAttribute(project, AttributeType.LAST_UPDATED), task);
+			addAttribute(AttributeLogic.findAttribute(project, AttributeType.FLAG), task);
+
+			// add separator
 			boxAttributes.getChildren().add(new Separator());
 
 			// add remaining/custom values
-			List<TaskAttribute> attributes = Data.projectProperty.get().data.attributes;
+			List<TaskAttribute> attributes = project.data.attributes;
 			for (TaskAttribute attribute : attributes) {
 				if (!attribute.type.get().fixed) {
 					addAttribute(attribute, task);
@@ -141,6 +153,17 @@ public class TasksSidebar {
 			}
 		}
 
+	}
+
+
+
+
+	private void removeAttribute(TaskAttribute attribute) {
+		SidebarItem item = findItem(attribute);
+		if (item != null) {
+			item.dispose();
+			boxAttributes.getChildren().remove(item);
+		}
 	}
 
 

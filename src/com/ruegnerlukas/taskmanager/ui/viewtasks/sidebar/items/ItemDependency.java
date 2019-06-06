@@ -9,7 +9,6 @@ import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.DependencyValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
-import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import com.ruegnerlukas.taskmanager.logic.events.TaskValueChangeEvent;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
@@ -46,25 +45,22 @@ public class ItemDependency extends SidebarItem {
 
 	public ItemDependency(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
-		setupControls();
-		setupInitialValue();
-		setupLogic();
+		create();
+		refresh();
 	}
 
 
 
 
 	@Override
-	protected void onAttChangedEvent(AttributeValueChangeEvent e) {
-		setupControls();
-		setupInitialValue();
-		setupLogic();
+	protected void onAttChangedEvent() {
+		refresh();
 	}
 
 
 
 
-	private void setupControls() {
+	private void create() {
 
 		VBox box = new VBox();
 		box.setMinWidth(0);
@@ -122,13 +118,26 @@ public class ItemDependency extends SidebarItem {
 		boxPrereq.setPadding(new Insets(0, 0, 0, 30));
 		box.getChildren().add(boxPrereq);
 
+		setOnAttribNameChanged(e -> {
+			labelName.setText(getAttribute().name.get() + ":");
+		});
 
+		listenerDependency = e -> {
+			if(e.getAttribute() == getAttribute()) {
+				if (e.getTask() == getTask()) {
+					setDependencyValue(e.getNewValue());
+				} else {
+					onOtherTaskChanged(e.getTask(), e.getNewValue());
+				}
+			}
+		};
+		TaskLogic.addOnTaskValueChanged(listenerDependency);
 	}
 
 
 
 
-	private void setupInitialValue() {
+	private void refresh() {
 		TaskValue<?> taskValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		setDependencyValue(taskValue);
 		updatePrerequisites();
@@ -136,18 +145,6 @@ public class ItemDependency extends SidebarItem {
 
 
 
-
-	private void setupLogic() {
-		listenerDependency = e -> {
-			if (e.getTask() == getTask() && e.getAttribute() == getAttribute()) {
-				setDependencyValue(e.getNewValue());
-			}
-			if (e.getTask() != getTask() && e.getAttribute() == getAttribute()) {
-				onOtherTaskChanged(e.getTask(), e.getNewValue());
-			}
-		};
-		TaskLogic.addOnTaskValueChanged(listenerDependency);
-	}
 
 
 

@@ -24,10 +24,9 @@ public class ItemID extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupControls() {
+	protected void create() {
 		label = new Label();
 		this.setValueNode(label);
-
 		this.setEmpty(false);
 		this.setShowButton(false);
 	}
@@ -36,17 +35,9 @@ public class ItemID extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupInitialValue() {
+	protected void refresh() {
 		final int id = ((IDValue) TaskLogic.getValueOrDefault(getTask(), getAttribute())).getValue();
 		label.setText(Integer.toString(id));
-	}
-
-
-
-
-	@Override
-	protected void setupLogic() {
-
 	}
 
 

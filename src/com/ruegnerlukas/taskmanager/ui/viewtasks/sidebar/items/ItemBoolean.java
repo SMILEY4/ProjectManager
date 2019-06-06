@@ -27,10 +27,12 @@ public class ItemBoolean extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupControls() {
+	protected void create() {
 		checkBox = new CheckBox();
 		checkBox.setText("");
-
+		checkBox.setOnAction(event -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new BoolValue(checkBox.isSelected()));
+		});
 		this.setValueNode(checkBox);
 		this.setShowButton(true);
 	}
@@ -39,27 +41,11 @@ public class ItemBoolean extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupInitialValue() {
+	protected void refresh() {
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {
-			checkBox.setSelected( ((BoolValue)objValue).getValue());
+			checkBox.setSelected(((BoolValue) objValue).getValue());
 		}
-		final TaskValue<?> objValueRAW = TaskLogic.getTaskValue(getTask(), getAttribute());
-		if (objValueRAW == null || objValueRAW.getAttType() == null) {
-			setEmpty(true);
-		} else {
-			setEmpty(false);
-		}
-	}
-
-
-
-
-	@Override
-	protected void setupLogic() {
-		checkBox.setOnAction(event -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new BoolValue(checkBox.isSelected()));
-		});
 	}
 
 

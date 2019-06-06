@@ -6,9 +6,10 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.DescriptionValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
-import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXMapEntryChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
+import javafx.collections.MapChangeListener;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
@@ -18,29 +19,29 @@ public class ItemDescription extends SidebarItem {
 
 
 	private TextArea area;
+	private FXMapEntryChangeListener<TaskAttribute, TaskValue<?>> listener;
 
 
 
 
 	public ItemDescription(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
-		setupControls();
-		setupInitialValue();
-		setupLogic();
+		create();
+		refresh();
 	}
 
 
 
 
 	@Override
-	protected void onAttChangedEvent(AttributeValueChangeEvent e) {
-
+	protected void onAttChangedEvent() {
+		refresh();
 	}
 
 
 
 
-	private void setupControls() {
+	private void create() {
 		VBox box = new VBox();
 		AnchorUtils.setAnchors(box, 0, 0, 0, 0);
 		this.getChildren().setAll(box);
@@ -53,12 +54,26 @@ public class ItemDescription extends SidebarItem {
 		area.setPrefSize(10000, 200);
 		box.getChildren().add(area);
 
+		area.textProperty().addListener(((observable, oldValue, newValue) -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new DescriptionValue(area.getText()));
+		}));
+
+		setOnAttribNameChanged(e -> {
+			label.setText(getAttribute().name.get() + ":");
+		});
+
+		listener = new FXMapEntryChangeListener<TaskAttribute, TaskValue<?>>(getTask().values, getAttribute()) {
+			@Override
+			public void onChanged(MapChangeListener.Change<? extends TaskAttribute, ? extends TaskValue<?>> c) {
+				refresh();
+			}
+		};
 	}
 
 
 
 
-	private void setupInitialValue() {
+	private void refresh() {
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {
 			area.setText(((DescriptionValue) objValue).getValue());
@@ -70,17 +85,9 @@ public class ItemDescription extends SidebarItem {
 
 
 
-	private void setupLogic() {
-		area.textProperty().addListener(((observable, oldValue, newValue) -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new DescriptionValue(area.getText()));
-		}));
-	}
-
-
-
-
 	@Override
 	public void dispose() {
+		listener.removeFromAll();
 		super.dispose();
 	}
 

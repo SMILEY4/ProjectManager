@@ -29,10 +29,12 @@ public class ItemDate extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupControls() {
+	protected void create() {
 		picker = new DatePicker();
 		picker.setValue(LocalDate.now());
-
+		picker.setOnAction(event -> {
+			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new DateValue(picker.getValue()));
+		});
 		this.setValueNode(picker);
 		this.setText(getAttribute().name.getName() + ":");
 		this.setShowButton(true);
@@ -42,27 +44,11 @@ public class ItemDate extends SimpleSidebarItem {
 
 
 	@Override
-	protected void setupInitialValue() {
+	protected void refresh() {
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {
-			picker.setValue( ((DateValue)objValue).getValue());
+			picker.setValue(((DateValue) objValue).getValue());
 		}
-		final TaskValue<?> objValueRAW = TaskLogic.getTaskValue(getTask(), getAttribute());
-		if (objValueRAW == null || objValueRAW.getAttType() == null) {
-			setEmpty(true);
-		} else {
-			setEmpty(false);
-		}
-	}
-
-
-
-
-	@Override
-	protected void setupLogic() {
-		picker.setOnAction(event -> {
-			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new DateValue(picker.getValue()));
-		});
 	}
 
 

@@ -74,11 +74,6 @@ public class TaskContent {
 					}
 					for (ListChangeListener.Change<? extends TaskGroup> permutation : getAllPermutations(c)) {
 						applyPermutation(boxTasks.getChildren(), permutation);
-//						int[] p = new int[permutation.getTo() - permutation.getFrom()];
-//						for (int i = 0; i < p.length; i++) {
-//							p[i] = permutation.getPermutation(i + permutation.getFrom());
-//						}
-//						ArrayUtils.applyPermutation(boxTasks.getChildren(), p, permutation.getFrom());
 					}
 				}
 			}
