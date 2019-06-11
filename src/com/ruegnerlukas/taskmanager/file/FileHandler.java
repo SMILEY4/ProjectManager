@@ -5,8 +5,10 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValue;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
-import com.ruegnerlukas.taskmanager.file.pojos.TaskValueDeserializer;
+import com.ruegnerlukas.taskmanager.file.serialization.AttributeValueDeserializer;
+import com.ruegnerlukas.taskmanager.file.serialization.TaskValueDeserializer;
 import com.ruegnerlukas.taskmanager.utils.TestProjectFactory;
 
 import java.io.File;
@@ -62,6 +64,7 @@ public class FileHandler {
 
 	public static Gson buildGson() {
 		GsonBuilder builder = new GsonBuilder();
+		builder.registerTypeAdapter(AttributeValue.class, new AttributeValueDeserializer());
 		builder.registerTypeAdapter(TaskValue.class, new TaskValueDeserializer());
 		builder.setPrettyPrinting();
 		Converters.registerAll(builder);

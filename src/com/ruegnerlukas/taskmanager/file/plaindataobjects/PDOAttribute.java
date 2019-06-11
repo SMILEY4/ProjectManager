@@ -1,27 +1,30 @@
-package com.ruegnerlukas.taskmanager.file.pojos;
+package com.ruegnerlukas.taskmanager.file.plaindataobjects;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValue;
+import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
 
+import java.util.HashMap;
 import java.util.Map;
 
-public class POJOAttribute {
+public class PDOAttribute {
 
 
-	public static POJOAttribute fromAttribute(TaskAttribute attribute) {
-		POJOAttribute pojo = new POJOAttribute();
-		pojo.name = attribute.name.get();
-		pojo.type = attribute.type.get();
-//		pojo.values = new HashMap<>(attribute.values);
-		return pojo;
+	public static PDOAttribute fromAttribute(TaskAttribute attribute) {
+		PDOAttribute pdo = new PDOAttribute();
+		pdo.name = attribute.name.get();
+		pdo.type = attribute.type.get();
+		pdo.values = new HashMap<>(attribute.values);
+		return pdo;
 	}
 
 
 
 
-	public static TaskAttribute toAttribute(POJOAttribute pojo) {
-		TaskAttribute attribute = new TaskAttribute(pojo.name, pojo.type);
-//		attribute.values.putAll(pojo.values);
+	public static TaskAttribute toAttribute(PDOAttribute pdo) {
+		TaskAttribute attribute = new TaskAttribute(pdo.name, pdo.type);
+		attribute.values.putAll(pdo.values);
 		return attribute;
 	}
 
@@ -30,6 +33,6 @@ public class POJOAttribute {
 
 	public String name;
 	public AttributeType type;
-	public Map<String, Object> values;
+	public Map<AttributeValueType, AttributeValue<?>> values;
 
 }

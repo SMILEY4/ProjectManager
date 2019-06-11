@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.Project;
-import com.ruegnerlukas.taskmanager.file.pojos.POJOProject;
+import com.ruegnerlukas.taskmanager.file.plaindataobjects.PDOProject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,8 +18,8 @@ public class ProjectFileReaderImpl implements ProjectFileReader {
 		try {
 			Gson gson = FileHandler.buildGson();
 			JsonReader reader = new JsonReader(new FileReader(file));
-			POJOProject pojoProject = gson.fromJson(reader, POJOProject.class);
-			return POJOProject.toProject(pojoProject);
+			PDOProject pojoProject = gson.fromJson(reader, PDOProject.class);
+			return PDOProject.toProject(pojoProject);
 		} catch (FileNotFoundException e) {
 			Logger.get().error(e);
 		}

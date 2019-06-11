@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.file.pojos;
+package com.ruegnerlukas.taskmanager.file.plaindataobjects;
 
 import com.ruegnerlukas.taskmanager.data.Project;
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
@@ -7,60 +7,60 @@ import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
 import java.util.ArrayList;
 import java.util.List;
 
-public class POJOProject {
+public class PDOProject {
 
 
-	public static POJOProject fromProject(Project project) {
+	public static PDOProject fromProject(Project project) {
 
-		POJOProject pojo = new POJOProject();
+		PDOProject pdo = new PDOProject();
 
 		// settings
-		POJOSettings pojoSettings = new POJOSettings();
-		pojo.settings = pojoSettings;
+		PDOSettings pojoSettings = new PDOSettings();
+		pdo.settings = pojoSettings;
 		pojoSettings.name = project.settings.name.get();
 		pojoSettings.attribsLocked = project.settings.attributesLocked.get();
 		pojoSettings.idCounter = project.settings.idCounter.get();
 
 		// data
-		POJOData pojoData = new POJOData();
-		pojo.data = pojoData;
+		PDOData pojoData = new PDOData();
+		pdo.data = pojoData;
 		pojoData.attributes = new ArrayList<>();
 		pojoData.tasks = new ArrayList<>();
 
 		// data.attributes
 		for(TaskAttribute attribute : project.data.attributes) {
-			pojoData.attributes.add(POJOAttribute.fromAttribute(attribute));
+			pojoData.attributes.add(PDOAttribute.fromAttribute(attribute));
 		}
 
 		// data.tasks
 		for(Task task : project.data.tasks) {
-			pojoData.tasks.add(POJOTask.fromTask(task));
+			pojoData.tasks.add(PDOTask.fromTask(task));
 		}
 
 
-		return pojo;
+		return pdo;
 	}
 
 
 
 
-	public static Project toProject(POJOProject pojo) {
+	public static Project toProject(PDOProject pdo) {
 
 		Project project = new Project();
 
 		// settings
-		project.settings.name.set(pojo.settings.name);
-		project.settings.attributesLocked.set(pojo.settings.attribsLocked);
-		project.settings.idCounter.set(pojo.settings.idCounter);
+		project.settings.name.set(pdo.settings.name);
+		project.settings.attributesLocked.set(pdo.settings.attribsLocked);
+		project.settings.idCounter.set(pdo.settings.idCounter);
 
 		// data.attributes
-		for(POJOAttribute pojoAttribute : pojo.data.attributes) {
-			project.data.attributes.add(POJOAttribute.toAttribute(pojoAttribute));
+		for(PDOAttribute pojoAttribute : pdo.data.attributes) {
+			project.data.attributes.add(PDOAttribute.toAttribute(pojoAttribute));
 		}
 
 		// data.tasks
-		for(POJOTask pojoTask : pojo.data.tasks) {
-			project.data.tasks.add(POJOTask.toTask(pojoTask, project.data.attributes));
+		for(PDOTask pojoTask : pdo.data.tasks) {
+			project.data.tasks.add(PDOTask.toTask(pojoTask, project.data.attributes));
 		}
 
 		return project;
@@ -69,8 +69,8 @@ public class POJOProject {
 
 
 
-	public POJOSettings settings;
-	public POJOData data;
+	public PDOSettings settings;
+	public PDOData data;
 
 }
 
@@ -79,7 +79,7 @@ public class POJOProject {
 
 
 
-class POJOSettings {
+class PDOSettings {
 
 
 	public String name;
@@ -93,10 +93,10 @@ class POJOSettings {
 
 
 
-class POJOData {
+class PDOData {
 
-	public List<POJOAttribute> attributes;
-	public List<POJOTask> tasks;
+	public List<PDOAttribute> attributes;
+	public List<PDOTask> tasks;
 
 }
 

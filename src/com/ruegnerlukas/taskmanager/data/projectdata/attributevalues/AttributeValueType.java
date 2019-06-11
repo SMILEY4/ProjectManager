@@ -4,7 +4,6 @@ public enum AttributeValueType {
 
 	USE_DEFAULT,
 	DEFAULT_VALUE,
-	TASK_VALUE_TYPE,
 	CARD_DISPLAY_TYPE,
 
 	NUMBER_DEC_PLACES,

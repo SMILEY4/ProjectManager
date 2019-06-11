@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.file.pojos;
+package com.ruegnerlukas.taskmanager.file.plaindataobjects;
 
 import com.ruegnerlukas.taskmanager.data.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
@@ -8,24 +8,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class POJOTask {
+public class PDOTask {
 
 
-	public static POJOTask fromTask(Task task) {
-		POJOTask pojo = new POJOTask();
-		pojo.values = new HashMap<>();
+	public static PDOTask fromTask(Task task) {
+		PDOTask pdo = new PDOTask();
+		pdo.values = new HashMap<>();
 		for (Map.Entry<TaskAttribute, TaskValue<?>> entry : task.values.entrySet()) {
-			pojo.values.put(entry.getKey().name.get(), entry.getValue());
+			pdo.values.put(entry.getKey().name.get(), entry.getValue());
 		}
-		return pojo;
+		return pdo;
 	}
 
 
 
 
-	public static Task toTask(POJOTask pojo, List<TaskAttribute> attributes) {
+	public static Task toTask(PDOTask pdo, List<TaskAttribute> attributes) {
 		Task task = new Task();
-		for (Map.Entry<String, TaskValue<?>> entry : pojo.values.entrySet()) {
+		for (Map.Entry<String, TaskValue<?>> entry : pdo.values.entrySet()) {
 			TaskAttribute attribute = null;
 			for (TaskAttribute att : attributes) {
 				if (att.name.get().equals(entry.getKey())) {

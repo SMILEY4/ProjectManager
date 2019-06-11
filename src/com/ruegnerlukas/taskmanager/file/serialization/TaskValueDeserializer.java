@@ -1,6 +1,8 @@
-package com.ruegnerlukas.taskmanager.file.plaindataobjects;
+package com.ruegnerlukas.taskmanager.file.serialization;
 
 import com.google.gson.*;
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.*;
 import com.ruegnerlukas.taskmanager.file.FileHandler;
 
@@ -14,49 +16,52 @@ public class TaskValueDeserializer implements JsonDeserializer<TaskValue<?>> {
 
 		JsonObject jsonObject = json.getAsJsonObject();
 		if(!jsonObject.has("type")) {
-			return new TextValue("ERROR: " + json.toString());
+			Logger.get().warn("Could not deserialize TaskValue: Invalid input: " + jsonObject.toString());
+			return null;
 		}
 
-		String type = jsonObject.getAsJsonPrimitive("type").getAsString();
-
+		String strType = jsonObject.getAsJsonPrimitive("type").getAsString();
+		AttributeType type = AttributeType.valueOf(strType);
+		
 		Gson gson = FileHandler.buildGson();
 
 		switch (type) {
-			case "ID": {
+			case ID: {
 				return gson.fromJson(jsonObject, IDValue.class);
 			}
-			case "DESCRIPTION": {
+			case DESCRIPTION: {
 				return gson.fromJson(jsonObject, DescriptionValue.class);
 			}
-			case "CREATED": {
+			case CREATED: {
 				return gson.fromJson(jsonObject, CreatedValue.class);
 			}
-			case "LAST_UPDATED": {
+			case LAST_UPDATED: {
 				return gson.fromJson(jsonObject, LastUpdatedValue.class);
 			}
-			case "FLAG": {
+			case FLAG: {
 				return gson.fromJson(jsonObject, FlagValue.class);
 			}
-			case "TEXT": {
+			case TEXT: {
 				return gson.fromJson(jsonObject, TextValue.class);
 			}
-			case "NUMBER": {
+			case NUMBER: {
 				return gson.fromJson(jsonObject, NumberValue.class);
 			}
-			case "BOOLEAN": {
+			case BOOLEAN: {
 				return gson.fromJson(jsonObject, BoolValue.class);
 			}
-			case "CHOICE": {
+			case CHOICE: {
 				return gson.fromJson(jsonObject, ChoiceValue.class);
 			}
-			case "DATE": {
+			case DATE: {
 				return gson.fromJson(jsonObject, DateValue.class);
 			}
-			case "DEPENDENCY": {
+			case DEPENDENCY: {
 				return gson.fromJson(jsonObject, DependencyValue.class);
 			}
 			default: {
-				return new TextValue("ERROR: " + json.toString());
+				Logger.get().warn("Could not deserialize TaskValue: Unknown type: " + type);
+				return null;
 			}
 		}
 	}
