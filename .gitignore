@@ -1,3 +1,4 @@
+.gitignore
 .DS_STORE
 .project
 .classpath
@@ -11,3 +12,4 @@
 /.idea
 /out
 /tests/
+q
