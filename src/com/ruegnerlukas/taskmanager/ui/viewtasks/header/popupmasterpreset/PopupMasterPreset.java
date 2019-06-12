@@ -1,11 +1,11 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupmasterpreset;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.projectdata.MasterPreset;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
-import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
+import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.MasterPreset;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.logic.PresetLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;

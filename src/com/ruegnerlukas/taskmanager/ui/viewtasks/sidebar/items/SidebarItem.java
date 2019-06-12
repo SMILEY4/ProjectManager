@@ -1,10 +1,10 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValue;
-import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXMapChangeListener;

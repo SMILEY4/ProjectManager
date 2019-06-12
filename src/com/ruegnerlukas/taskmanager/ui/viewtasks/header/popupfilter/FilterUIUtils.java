@@ -1,9 +1,9 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupfilter;
 
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.*;
+import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.*;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

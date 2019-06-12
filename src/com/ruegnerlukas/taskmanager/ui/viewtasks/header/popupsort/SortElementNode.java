@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupsort;
 
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
+import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ComboboxUtils;

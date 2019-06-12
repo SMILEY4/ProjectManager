@@ -1,10 +1,10 @@
 package com.ruegnerlukas.taskmanager.utils;
 
-import com.ruegnerlukas.taskmanager.data.Project;
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.*;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.*;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;

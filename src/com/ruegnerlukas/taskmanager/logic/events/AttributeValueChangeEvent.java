@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.logic.events;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValue;
-import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import javafx.event.Event;
 import javafx.event.EventTarget;
 import javafx.event.EventType;

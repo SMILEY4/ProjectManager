@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.file.plaindataobjects;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 
 import java.util.HashMap;
 import java.util.List;

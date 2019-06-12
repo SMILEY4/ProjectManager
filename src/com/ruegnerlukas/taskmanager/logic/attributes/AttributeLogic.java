@@ -1,13 +1,13 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.taskmanager.data.Project;
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.*;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
 import javafx.event.EventHandler;

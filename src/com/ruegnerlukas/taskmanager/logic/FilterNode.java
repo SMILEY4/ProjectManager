@@ -1,10 +1,10 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.AndFilterCriteria;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.OrFilterCriteria;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.AndFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.OrFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 import java.util.ArrayList;

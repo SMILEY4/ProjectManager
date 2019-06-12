@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.content.card;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.events.TaskValueChangeEvent;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;

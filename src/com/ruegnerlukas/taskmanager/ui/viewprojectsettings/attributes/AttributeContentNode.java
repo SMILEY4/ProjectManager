@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.layout.AnchorPane;
 

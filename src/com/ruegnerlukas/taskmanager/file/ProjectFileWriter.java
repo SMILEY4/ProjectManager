@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.file;
 
-import com.ruegnerlukas.taskmanager.data.Project;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 
 import java.io.File;
 

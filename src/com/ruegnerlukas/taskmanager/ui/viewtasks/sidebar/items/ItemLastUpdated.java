@@ -1,9 +1,9 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.LastUpdatedValue;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.LastUpdatedValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXMapEntryChangeListener;

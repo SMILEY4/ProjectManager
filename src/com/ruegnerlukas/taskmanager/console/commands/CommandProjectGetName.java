@@ -4,8 +4,8 @@ import com.ruegnerlukas.taskmanager.console.ConsoleWindowHandler;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.Command;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.CommandBuilder;
 import com.ruegnerlukas.taskmanager.console.commandresults.SuccessfulCommandResult;
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.Project;
+import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import javafx.scene.paint.Color;
 
 public class CommandProjectGetName {

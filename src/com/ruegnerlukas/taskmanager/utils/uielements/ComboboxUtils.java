@@ -1,14 +1,14 @@
 package com.ruegnerlukas.taskmanager.utils.uielements;
 
 
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
-import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.IDValue;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortElement;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.IDValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import javafx.scene.control.ListCell;
 
 public class ComboboxUtils {

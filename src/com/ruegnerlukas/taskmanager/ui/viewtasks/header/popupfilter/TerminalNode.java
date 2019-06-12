@@ -1,13 +1,13 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupfilter;
 
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskFlag;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;

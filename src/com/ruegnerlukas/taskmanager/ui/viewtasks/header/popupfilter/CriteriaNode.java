@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupfilter;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

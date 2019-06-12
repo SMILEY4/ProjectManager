@@ -4,11 +4,11 @@ import com.ruegnerlukas.taskmanager.console.ConsoleWindowHandler;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.Command;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.CommandBuilder;
 import com.ruegnerlukas.taskmanager.console.commandresults.SuccessfulCommandResult;
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.Project;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValue;
-import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
+import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import javafx.scene.paint.Color;
 

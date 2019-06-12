@@ -1,15 +1,15 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.Project;
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
-import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
-import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.IDValue;
+import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortElement;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGroupData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.IDValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 public class ProjectLogic {

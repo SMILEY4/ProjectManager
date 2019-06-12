@@ -1,10 +1,10 @@
 package com.ruegnerlukas.taskmanager.logic;
 
-import com.ruegnerlukas.taskmanager.data.Project;
-import com.ruegnerlukas.taskmanager.data.projectdata.MasterPreset;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
-import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskgroup.TaskGroupData;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.MasterPreset;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGroupData;
 
 public class PresetLogic {
 

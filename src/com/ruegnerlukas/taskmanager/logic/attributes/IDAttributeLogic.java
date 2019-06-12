@@ -1,13 +1,13 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.simpleutils.RandomUtils;
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterOperation;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.TerminalFilterCriteria;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.IDValue;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.TaskValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.IDValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;

@@ -3,7 +3,7 @@ package com.ruegnerlukas.taskmanager.file;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.data.Project;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.file.plaindataobjects.PDOProject;
 
 import java.io.File;

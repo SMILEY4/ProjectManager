@@ -1,11 +1,11 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupsort;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortData;
-import com.ruegnerlukas.taskmanager.data.projectdata.sort.SortElement;
+import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.logic.PresetLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;

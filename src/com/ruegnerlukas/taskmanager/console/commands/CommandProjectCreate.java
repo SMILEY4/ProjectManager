@@ -3,8 +3,8 @@ package com.ruegnerlukas.taskmanager.console.commands;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.Command;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.CommandBuilder;
 import com.ruegnerlukas.taskmanager.console.commandresults.SuccessfulCommandResult;
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.Project;
+import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 
 public class CommandProjectCreate {

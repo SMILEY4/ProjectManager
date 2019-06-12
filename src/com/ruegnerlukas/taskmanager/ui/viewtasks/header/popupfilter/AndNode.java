@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupfilter;
 
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.AndFilterCriteria;
-import com.ruegnerlukas.taskmanager.data.projectdata.filter.FilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.AndFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;

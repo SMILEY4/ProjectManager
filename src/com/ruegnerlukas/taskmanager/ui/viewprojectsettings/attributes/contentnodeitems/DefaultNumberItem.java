@@ -1,12 +1,12 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodeitems;
 
 import com.ruegnerlukas.simplemath.MathUtils;
-import com.ruegnerlukas.taskmanager.data.Data;
-import com.ruegnerlukas.taskmanager.data.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValue;
-import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.AttributeValueType;
-import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.DefaultValue;
-import com.ruegnerlukas.taskmanager.data.projectdata.taskvalues.NumberValue;
+import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.DefaultValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.NumberValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXMapEntryChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.SpinnerUtils;

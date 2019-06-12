@@ -2,7 +2,7 @@ package com.ruegnerlukas.taskmanager.file.serialization;
 
 import com.google.gson.*;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.data.projectdata.attributevalues.*;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.file.FileHandler;
 
 import java.lang.reflect.Type;
