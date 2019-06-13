@@ -15,7 +15,7 @@ public class CommandHelp {
 	public static Command create() {
 		return new CommandBuilder()
 				.text("help")
-				.optionalAlternative("category", "all", "project", "attribute", "attributes", "task", "tasks")
+				.optionalAlternative("category", "all", "project", "attribute", "attributes", "task", "tasks", "data")
 				.setDescription("Prints all commands and their description")
 				.setExecutor(CommandHelp::onCommand)
 				.create();
