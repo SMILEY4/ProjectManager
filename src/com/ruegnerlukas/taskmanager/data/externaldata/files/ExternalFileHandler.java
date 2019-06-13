@@ -1,11 +1,11 @@
 package com.ruegnerlukas.taskmanager.data.externaldata.files;
 
 import com.ruegnerlukas.taskmanager.data.externaldata.DataChange;
-import com.ruegnerlukas.taskmanager.data.externaldata.ExternalDataInterface;
+import com.ruegnerlukas.taskmanager.data.externaldata.ExternalDataHandler;
 
 import java.util.List;
 
-public class ExternalDataFiles implements ExternalDataInterface {
+public class ExternalFileHandler implements ExternalDataHandler {
 
 
 	@Override

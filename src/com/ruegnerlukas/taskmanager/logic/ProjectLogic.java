@@ -22,13 +22,17 @@ public class ProjectLogic {
 
 
 	public static void closeCurrentProject() {
-		setCurrentProject(null);
+		if(Data.projectProperty.get() != null) {
+			Data.projectProperty.get().dispose();
+			setCurrentProject(null);
+		}
 	}
 
 
 
 
 	public static void setCurrentProject(Project project) {
+		closeCurrentProject();
 		Data.projectProperty.set(project);
 	}
 

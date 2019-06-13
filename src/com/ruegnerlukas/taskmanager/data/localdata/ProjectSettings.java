@@ -1,14 +1,21 @@
 package com.ruegnerlukas.taskmanager.data.localdata;
 
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
+import com.ruegnerlukas.taskmanager.data.SyncedProperty;
 
 public class ProjectSettings {
 
-	public final SimpleStringProperty name = new SimpleStringProperty();
-	public final SimpleBooleanProperty attributesLocked = new SimpleBooleanProperty(false);
-	public final SimpleIntegerProperty idCounter = new SimpleIntegerProperty(1);
 
+	public final SyncedProperty<String> name = new SyncedProperty<>("project.settings.projectname", String.class);
+	public final SyncedProperty<Boolean> attributesLocked = new SyncedProperty<>("project.settings.attributeslocked", Boolean.class, false);
+	public final SyncedProperty<Integer> idCounter = new SyncedProperty<>("project.settings.idcounter", Integer.class, 1);
+
+
+
+
+	public void dispose() {
+		name.dispose();
+		attributesLocked.dispose();
+		idCounter.dispose();
+	}
 
 }

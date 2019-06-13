@@ -1,5 +1,7 @@
 package com.ruegnerlukas.taskmanager.data.localdata;
 
+import com.ruegnerlukas.taskmanager.data.externaldata.ExternalDataHandler;
+import com.ruegnerlukas.taskmanager.data.externaldata.files.ExternalFileHandler;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskGroup;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -17,5 +19,14 @@ public class ProjectDataTemporary {
 	public final ObservableList<TaskGroup> lastTaskGroups = FXCollections.observableArrayList();
 
 	public final List<EventHandler<ActionEvent>> listenersTaskGroupsChanged = new ArrayList<>();
+
+	public final ExternalDataHandler externalDataInterface = new ExternalFileHandler(); // TODO
+
+
+
+
+	public void dispose() {
+		// TODO
+	}
 
 }

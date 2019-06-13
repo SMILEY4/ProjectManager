@@ -1,28 +1,14 @@
 package com.ruegnerlukas.taskmanager.data.externaldata;
 
-import com.ruegnerlukas.taskmanager.data.SyncedProperty;
-
-import java.util.ArrayList;
 import java.util.List;
 
-public class ExternalDataHandler {
+public interface ExternalDataHandler {
 
 
-	private static List<SyncedProperty<?>> syncedProperties = new ArrayList<>();
+	boolean checkChanges();
 
+	List<DataChange> getAllChanges();
 
-
-
-	public static void registerSyncedProperty(SyncedProperty<?> property) {
-		syncedProperties.add(property);
-	}
-
-
-
-
-	public static void deregisterSyncedProperty(SyncedProperty<?> property) {
-		syncedProperties.remove(property);
-	}
-
+	void applyChange(DataChange change);
 
 }

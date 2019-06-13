@@ -8,7 +8,6 @@ public class Data {
 
 	public static CustomProperty<Project> projectProperty = new CustomProperty<>();
 
-
 }
 
 

@@ -32,4 +32,11 @@ public class ProjectData {
 	public final ObservableMap<String, SortData> sortPresets = FXCollections.observableHashMap();
 	public final ObservableMap<String, MasterPreset> masterPresets = FXCollections.observableHashMap();
 
+
+
+
+	public void dispose() {
+		// TODO
+	}
+
 }
