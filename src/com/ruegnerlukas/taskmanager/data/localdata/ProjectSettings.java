@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.data.localdata;
 
-import com.ruegnerlukas.taskmanager.data.SyncedProperty;
+import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedProperty;
 
 public class ProjectSettings {
 

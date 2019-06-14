@@ -1,7 +1,7 @@
 package com.ruegnerlukas.taskmanager.data.externaldata.files;
 
-import com.ruegnerlukas.taskmanager.data.externaldata.DataChange;
 import com.ruegnerlukas.taskmanager.data.externaldata.ExternalDataHandler;
+import com.ruegnerlukas.taskmanager.data.change.DataChange;
 
 import java.util.List;
 
