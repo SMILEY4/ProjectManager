@@ -5,9 +5,9 @@ import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedProperty;
 public class ProjectSettings {
 
 
-	public final SyncedProperty<String> name = new SyncedProperty<>("project.settings.projectname", String.class);
-	public final SyncedProperty<Boolean> attributesLocked = new SyncedProperty<>("project.settings.attributeslocked", Boolean.class, false);
-	public final SyncedProperty<Integer> idCounter = new SyncedProperty<>("project.settings.idcounter", Integer.class, 1);
+	public final SyncedProperty<String> name = new SyncedProperty<>("project.settings.project_name");
+	public final SyncedProperty<Boolean> attributesLocked = new SyncedProperty<>("project.settings.attributes_locked", false);
+	public final SyncedProperty<Integer> idCounter = new SyncedProperty<>("project.settings.id_counter", 1);
 
 
 

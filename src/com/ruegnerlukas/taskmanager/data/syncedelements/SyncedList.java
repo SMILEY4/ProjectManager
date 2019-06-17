@@ -2,7 +2,8 @@ package com.ruegnerlukas.taskmanager.data.syncedelements;
 
 import com.ruegnerlukas.taskmanager.data.DataHandler;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
-import com.ruegnerlukas.taskmanager.data.change.ListDataChange;
+import com.ruegnerlukas.taskmanager.data.change.ListChange;
+import com.ruegnerlukas.taskmanager.data.change.NestedChange;
 import com.sun.javafx.collections.ObservableListWrapper;
 
 import java.util.ArrayList;
@@ -11,15 +12,13 @@ public class SyncedList<E> extends ObservableListWrapper<E> implements SyncedEle
 
 
 	public final String identifier;
-	public final Class<E> type;
 
 
 
 
-	public SyncedList(String identifier, Class<E> type) {
+	public SyncedList(String identifier) {
 		super(new ArrayList<>());
 		this.identifier = identifier;
-		this.type = type;
 		DataHandler.registerSyncedElement(this);
 	}
 
@@ -28,22 +27,36 @@ public class SyncedList<E> extends ObservableListWrapper<E> implements SyncedEle
 
 	@Override
 	public void applyChange(DataChange change) {
-		if (change instanceof ListDataChange) {
-			applyChange((ListDataChange) change);
+		if (change instanceof NestedChange) {
+			NestedChange nestedChange = (NestedChange) change;
+			DataChange nextChange = nestedChange.getNext();
+			for (E e : this) {
+				if (e instanceof SyncedElement) {
+					SyncedElement managedElement = (SyncedElement) e;
+					if (managedElement.getIdentifier().equalsIgnoreCase(nextChange.getIdentifier())) {
+						managedElement.applyChange(nextChange);
+						break;
+					}
+				}
+			}
 		}
-	}
+		if (change instanceof ListChange) {
+			ListChange listChange = (ListChange) change;
 
-
-
-
-	private void applyChange(ListDataChange change) {
-		if (change.object.getClass().isAssignableFrom(type)) {
-			if (change.wasAdded) {
-				this.add((E) change.object);
+			if (listChange.wasAdded) {
+				this.add((E) listChange.objAdded);
+			} else {
+				for (E e : this) {
+					if (e instanceof SyncedElement) {
+						SyncedElement managedElement = (SyncedElement) e;
+						if (managedElement.getIdentifier().equalsIgnoreCase(listChange.removedIdentifier)) {
+							this.remove(e);
+							break;
+						}
+					}
+				}
 			}
-			if (change.wasRemoved) {
-				this.remove((E) change.object);
-			}
+
 		}
 	}
 
@@ -53,13 +66,6 @@ public class SyncedList<E> extends ObservableListWrapper<E> implements SyncedEle
 	@Override
 	public String getIdentifier() {
 		return identifier;
-	}
-
-
-
-
-	public Class<?> getType() {
-		return type;
 	}
 
 

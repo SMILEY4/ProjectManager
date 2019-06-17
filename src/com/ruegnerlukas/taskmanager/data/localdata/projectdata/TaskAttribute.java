@@ -1,18 +1,19 @@
 package com.ruegnerlukas.taskmanager.data.localdata.projectdata;
 
+import com.ruegnerlukas.taskmanager.data.change.DataChange;
+import com.ruegnerlukas.taskmanager.data.change.NestedChange;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
-import com.ruegnerlukas.taskmanager.utils.CustomProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableMap;
+import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedElement;
+import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedMap;
+import com.ruegnerlukas.taskmanager.data.syncedelements.UnmanagedSyncedProperty;
 
-public class TaskAttribute {
+public class TaskAttribute implements SyncedElement {
 
 
-	public final SimpleStringProperty name = new SimpleStringProperty();
-	public final CustomProperty<AttributeType> type = new CustomProperty<>();
-	public final ObservableMap<AttributeValueType, AttributeValue<?>> values = FXCollections.observableHashMap();
+	public final UnmanagedSyncedProperty<String> name = new UnmanagedSyncedProperty<>("name");
+	public final UnmanagedSyncedProperty<AttributeType> type = new UnmanagedSyncedProperty<>("type");
+	public final SyncedMap<AttributeValueType, AttributeValue<?>> values = new SyncedMap<>("values", true);
 
 
 
@@ -29,6 +30,42 @@ public class TaskAttribute {
 
 	public AttributeValue<?> getValue(AttributeValueType key) {
 		return values.get(key);
+	}
+
+
+
+
+	@Override
+	public void applyChange(DataChange change) {
+		if (change instanceof NestedChange) {
+			NestedChange nestedChange = (NestedChange) change;
+			DataChange nextChange = nestedChange.getNext();
+			if (nextChange.getIdentifier().equalsIgnoreCase(name.getIdentifier())) {
+				name.applyChange(nextChange);
+			}
+			if (nextChange.getIdentifier().equalsIgnoreCase(type.getIdentifier())) {
+				type.applyChange(nextChange);
+			}
+			if (nextChange.getIdentifier().equalsIgnoreCase(values.getIdentifier())) {
+				values.applyChange(nextChange);
+			}
+		}
+	}
+
+
+
+
+	@Override
+	public String getIdentifier() {
+		return name.get();
+	}
+
+
+
+
+	@Override
+	public void dispose() {
+
 	}
 
 }

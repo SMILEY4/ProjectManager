@@ -1,9 +1,7 @@
 package com.ruegnerlukas.taskmanager.data.externaldata.files;
 
-import com.ruegnerlukas.taskmanager.data.externaldata.ExternalDataHandler;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
-
-import java.util.List;
+import com.ruegnerlukas.taskmanager.data.externaldata.ExternalDataHandler;
 
 public class ExternalFileHandler implements ExternalDataHandler {
 
@@ -26,12 +24,6 @@ public class ExternalFileHandler implements ExternalDataHandler {
 
 
 
-
-	@Override
-	public List<DataChange> getAllChanges() {
-		// TODO
-		return null;
-	}
 
 
 

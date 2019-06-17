@@ -5,7 +5,7 @@ import com.ruegnerlukas.taskmanager.console.commandbuilder.Command;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.CommandBuilder;
 import com.ruegnerlukas.taskmanager.console.commandresults.SuccessfulCommandResult;
 import com.ruegnerlukas.taskmanager.data.DataHandler;
-import com.ruegnerlukas.taskmanager.data.change.ValueDataChange;
+import com.ruegnerlukas.taskmanager.data.change.ValueChange;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import javafx.scene.paint.Color;
@@ -70,7 +70,7 @@ public class CommandDataSimExternalValueChange {
 				}
 			}
 
-			ValueDataChange change = new ValueDataChange(identifier, newValue);
+			ValueChange change = new ValueChange(identifier, newValue);
 			DataHandler.onExternalChange(change);
 		}
 	}
