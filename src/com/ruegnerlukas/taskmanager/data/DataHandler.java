@@ -1,10 +1,12 @@
 package com.ruegnerlukas.taskmanager.data;
 
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
+import com.ruegnerlukas.taskmanager.data.change.ListDataChange;
 import com.ruegnerlukas.taskmanager.data.change.ValueDataChange;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedElement;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedList;
+import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedMap2D;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ListChangeListener;
@@ -24,8 +26,23 @@ public class DataHandler {
 	};
 
 	private static ListChangeListener<Object> listChangeListener = c -> {
-		// TODO
+		while (c.next()) {
+			if (c.wasPermutated()) {
+				// TODO ?
+			}
+			if (c.wasAdded()) {
+				for(Object obj : c.getAddedSubList()) {
+					DataHandler.onLocalChange(new ListDataChange(((SyncedList<Object>) c.getList()).identifier, true, false, obj));
+				}
+			}
+			if (c.wasRemoved()) {
+				for(Object obj : c.getRemoved()) {
+					DataHandler.onLocalChange(new ListDataChange(((SyncedList<Object>) c.getList()).identifier, false, true, obj));
+				}
+			}
+		}
 	};
+
 
 
 
@@ -83,6 +100,21 @@ public class DataHandler {
 	public static void deregisterSyncedElement(SyncedList<?> list) {
 		syncedElements.remove(list.identifier);
 		list.removeListener(listChangeListener);
+	}
+
+
+
+	public static void registerSyncedElement(SyncedMap2D<?,?,?> list) {
+		syncedElements.put(list.identifier, list);
+//		list.addListener(listChangeListener);
+	}
+
+
+
+
+	public static void deregisterSyncedElement(SyncedMap2D<?,?,?> list) {
+		syncedElements.remove(list.identifier);
+//		list.removeListener(listChangeListener);
 	}
 
 

@@ -7,7 +7,6 @@ public abstract class DataChange {
 
 
 
-
 	public DataChange(String identifier) {
 		this.identifier = identifier;
 	}

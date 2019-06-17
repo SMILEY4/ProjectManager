@@ -1,12 +1,9 @@
 package com.ruegnerlukas.taskmanager.data.localdata;
 
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.MasterPreset;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGroupData;
-import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedList;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -15,8 +12,7 @@ import javafx.collections.ObservableMap;
 public class ProjectData {
 
 
-	public final SyncedList<TaskAttribute> attributes = new SyncedList<>("project.data.attributes", TaskAttribute.class);
-	public final SyncedList<Task> tasks = new SyncedList<>("project.data.tasks", Task.class);
+
 //	public final ObservableList<TaskAttribute> attributes = FXCollections.observableArrayList();
 //	public final ObservableList<Task> tasks = FXCollections.observableArrayList();
 

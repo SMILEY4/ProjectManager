@@ -2,7 +2,7 @@ package com.ruegnerlukas.taskmanager.utils.map2d;
 
 import java.util.Set;
 
-interface Map2D<R, C, V> {
+public interface Map2D<R, C, V> {
 
 
 	/**
