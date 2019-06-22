@@ -6,12 +6,12 @@ import javafx.collections.ObservableMap;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class FXMapChangeListener<K, V> {
+public abstract class FXMapChangeListener<K, V> implements CustomListener<ObservableMap<K, V>> {
 
 
 	private final MapChangeListener<K, V> listener = this::onMapChanged;
-
 	private final List<ObservableMap<K, V>> maps = new ArrayList<>();
+	private boolean isSilenced = false;
 
 
 
@@ -25,6 +25,7 @@ public abstract class FXMapChangeListener<K, V> {
 
 
 
+	@Override
 	public FXMapChangeListener<K, V> addTo(ObservableMap<K, V> map) {
 		map.addListener(listener);
 		maps.add(map);
@@ -34,6 +35,7 @@ public abstract class FXMapChangeListener<K, V> {
 
 
 
+	@Override
 	public FXMapChangeListener<K, V> removeFrom(ObservableMap<K, V> map) {
 		map.removeListener(listener);
 		maps.remove(map);
@@ -43,12 +45,29 @@ public abstract class FXMapChangeListener<K, V> {
 
 
 
+	@Override
 	public FXMapChangeListener<K, V> removeFromAll() {
 		for (ObservableMap<K, V> map : maps) {
 			map.removeListener(listener);
 		}
 		maps.clear();
 		return this;
+	}
+
+
+
+
+	@Override
+	public void setSilenced(boolean silenced) {
+		this.isSilenced = silenced;
+	}
+
+
+
+
+	@Override
+	public boolean isSilenced() {
+		return this.isSilenced;
 	}
 
 
@@ -62,7 +81,9 @@ public abstract class FXMapChangeListener<K, V> {
 
 
 	protected void onMapChanged(MapChangeListener.Change<? extends K, ? extends V> c) {
-		onChanged(c);
+		if (!isSilenced()) {
+			onChanged(c);
+		}
 	}
 
 

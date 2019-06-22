@@ -7,12 +7,12 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class FXListChangeListener<E> {
+public abstract class FXListChangeListener<E> implements CustomListener<ObservableList<E>> {
 
 
 	private final ListChangeListener<E> listener = this::onListChanged;
-
 	private final List<ObservableList<? extends E>> lists = new ArrayList<>();
+	private boolean isSilenced = false;
 
 
 
@@ -26,7 +26,8 @@ public abstract class FXListChangeListener<E> {
 
 
 
-	public FXListChangeListener<E> addTo(ObservableList<? extends E> list) {
+	@Override
+	public FXListChangeListener<E> addTo(ObservableList<E> list) {
 		list.addListener(listener);
 		lists.add(list);
 		return this;
@@ -35,7 +36,8 @@ public abstract class FXListChangeListener<E> {
 
 
 
-	public FXListChangeListener<E> removeFrom(ObservableList<? extends E> list) {
+	@Override
+	public FXListChangeListener<E> removeFrom(ObservableList<E> list) {
 		list.removeListener(listener);
 		lists.remove(list);
 		return this;
@@ -44,12 +46,29 @@ public abstract class FXListChangeListener<E> {
 
 
 
+	@Override
 	public FXListChangeListener<E> removeFromAll() {
 		for (ObservableList<? extends E> list : lists) {
 			list.removeListener(listener);
 		}
 		lists.clear();
 		return this;
+	}
+
+
+
+
+	@Override
+	public void setSilenced(boolean silenced) {
+		this.isSilenced = silenced;
+	}
+
+
+
+
+	@Override
+	public boolean isSilenced() {
+		return this.isSilenced;
 	}
 
 
@@ -71,8 +90,10 @@ public abstract class FXListChangeListener<E> {
 
 
 	private void onListChanged(ListChangeListener.Change<? extends E> c) {
-		valid = false;
-		onChanged(c);
+		if (!isSilenced()) {
+			valid = false;
+			onChanged(c);
+		}
 	}
 
 

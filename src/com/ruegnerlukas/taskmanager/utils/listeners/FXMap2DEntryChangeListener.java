@@ -83,7 +83,7 @@ public abstract class FXMap2DEntryChangeListener<R, C, V> extends FXMap2DChangeL
 
 	@Override
 	protected void onMapChanged(Map2DChangeListener.Change<R, C, V> c) {
-		if (c.getRow() != null && rows.contains(c.getRow()) && c.getColumn() != null && columns.contains(c.getColumn())) {
+		if (!isSilenced() && c.getRow() != null && rows.contains(c.getRow()) && c.getColumn() != null && columns.contains(c.getColumn())) {
 			onChanged(c);
 		}
 	}

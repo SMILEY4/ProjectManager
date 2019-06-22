@@ -6,11 +6,12 @@ import javafx.beans.value.ObservableValue;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class FXChangeListener<T> {
+public abstract class FXChangeListener<T> implements CustomListener<ObservableValue<T>> {
 
 
-	private final ChangeListener<T> listener = this::changed;
+	private final ChangeListener<T> listener = this::onValueChanged;
 	private final List<ObservableValue<T>> observables = new ArrayList<>();
+	private boolean isSilenced = false;
 
 
 
@@ -24,7 +25,8 @@ public abstract class FXChangeListener<T> {
 
 
 
-	public FXChangeListener addTo(ObservableValue<T> observable) {
+	@Override
+	public FXChangeListener<T> addTo(ObservableValue<T> observable) {
 		observable.addListener(listener);
 		observables.add(observable);
 		return this;
@@ -33,7 +35,8 @@ public abstract class FXChangeListener<T> {
 
 
 
-	public FXChangeListener removeFrom(ObservableValue<T> observable) {
+	@Override
+	public FXChangeListener<T> removeFrom(ObservableValue<T> observable) {
 		observable.removeListener(listener);
 		observables.remove(observable);
 		return this;
@@ -42,7 +45,8 @@ public abstract class FXChangeListener<T> {
 
 
 
-	public FXChangeListener removeFromAll() {
+	@Override
+	public FXChangeListener<T> removeFromAll() {
 		for (ObservableValue<T> observable : observables) {
 			observable.removeListener(listener);
 		}
@@ -53,8 +57,33 @@ public abstract class FXChangeListener<T> {
 
 
 
+	@Override
+	public void setSilenced(boolean silenced) {
+		this.isSilenced = silenced;
+	}
+
+
+
+
+	@Override
+	public boolean isSilenced() {
+		return this.isSilenced;
+	}
+
+
+
+
 	public ChangeListener<T> getListener() {
 		return this.listener;
+	}
+
+
+
+
+	private void onValueChanged(ObservableValue<? extends T> observable, T oldValue, T newValue) {
+		if (!isSilenced()) {
+			changed(observable, oldValue, newValue);
+		}
 	}
 
 

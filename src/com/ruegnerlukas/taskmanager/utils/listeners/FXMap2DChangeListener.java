@@ -6,13 +6,12 @@ import com.ruegnerlukas.taskmanager.utils.map2d.ObservableMap2D;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class FXMap2DChangeListener<R, C, V> {
+public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<ObservableMap2D<R, C, V>> {
 
 
 	private final Map2DChangeListener<R, C, V> listener = this::onMapChanged;
-
-
 	private final List<ObservableMap2D<R, C, V>> maps = new ArrayList<>();
+	private boolean isSilenced = false;
 
 
 
@@ -26,6 +25,7 @@ public abstract class FXMap2DChangeListener<R, C, V> {
 
 
 
+	@Override
 	public FXMap2DChangeListener<R, C, V> addTo(ObservableMap2D<R, C, V> map) {
 		map.addListener(listener);
 		maps.add(map);
@@ -35,6 +35,7 @@ public abstract class FXMap2DChangeListener<R, C, V> {
 
 
 
+	@Override
 	public FXMap2DChangeListener<R, C, V> removeFrom(ObservableMap2D<R, C, V> map) {
 		map.removeListener(listener);
 		maps.remove(map);
@@ -44,12 +45,29 @@ public abstract class FXMap2DChangeListener<R, C, V> {
 
 
 
+	@Override
 	public FXMap2DChangeListener<R, C, V> removeFromAll() {
 		for (ObservableMap2D<R, C, V> map : maps) {
 			map.removeListener(listener);
 		}
 		maps.clear();
 		return this;
+	}
+
+
+
+
+	@Override
+	public void setSilenced(boolean silenced) {
+		this.isSilenced = silenced;
+	}
+
+
+
+
+	@Override
+	public boolean isSilenced() {
+		return this.isSilenced;
 	}
 
 
@@ -63,7 +81,9 @@ public abstract class FXMap2DChangeListener<R, C, V> {
 
 
 	protected void onMapChanged(Map2DChangeListener.Change<R, C, V> c) {
-		onChanged(c);
+		if(!isSilenced()) {
+			onChanged(c);
+		}
 	}
 
 

@@ -64,7 +64,7 @@ public abstract class FXMap2DColumnChangeListener<R, C, V> extends FXMap2DChange
 
 	@Override
 	protected void onMapChanged(Map2DChangeListener.Change<R, C, V> c) {
-		if (c.getColumn() != null && columns.contains(c.getColumn())) {
+		if (!isSilenced() && c.getColumn() != null && columns.contains(c.getColumn())) {
 			onChanged(c);
 		}
 	}

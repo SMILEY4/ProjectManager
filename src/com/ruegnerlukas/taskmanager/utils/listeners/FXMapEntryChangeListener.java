@@ -64,7 +64,7 @@ public abstract class FXMapEntryChangeListener<K, V> extends FXMapChangeListener
 
 	@Override
 	protected void onMapChanged(MapChangeListener.Change<? extends K, ? extends V> c) {
-		if (keys.contains(c.getKey())) {
+		if (!isSilenced() && keys.contains(c.getKey())) {
 			onChanged(c);
 		}
 	}

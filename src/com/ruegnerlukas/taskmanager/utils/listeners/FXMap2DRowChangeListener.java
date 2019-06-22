@@ -64,7 +64,7 @@ public abstract class FXMap2DRowChangeListener<R, C, V> extends FXMap2DChangeLis
 
 	@Override
 	protected void onMapChanged(Map2DChangeListener.Change<R, C, V> c) {
-		if (c.getRow() != null && rows.contains(c.getRow())) {
+		if (!isSilenced() && c.getRow() != null && rows.contains(c.getRow())) {
 			onChanged(c);
 		}
 	}
