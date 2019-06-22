@@ -18,4 +18,11 @@ public class ListChange extends DataChange {
 	}
 
 
+
+
+	@Override
+	public String toString() {
+		return "ListChange@" + Integer.toHexString(this.hashCode()) + ": " + getIdentifier() + " = " + (wasAdded ? "added" : "removed");
+	}
+
 }

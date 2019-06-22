@@ -20,4 +20,12 @@ public class NestedChange extends DataChange {
 		return next;
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "NestedChange@" + Integer.toHexString(this.hashCode()) + ": " + getIdentifier() + "  ->  " + getNext().toString();
+	}
+
 }

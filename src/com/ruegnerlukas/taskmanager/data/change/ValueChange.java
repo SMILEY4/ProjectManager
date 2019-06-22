@@ -20,4 +20,12 @@ public class ValueChange extends DataChange {
 		return newValue;
 	}
 
+
+
+
+	@Override
+	public String toString() {
+		return "ValueChange@" + Integer.toHexString(this.hashCode()) + ": " + getIdentifier() + " = " + newValue;
+	}
+
 }

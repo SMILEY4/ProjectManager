@@ -16,7 +16,7 @@ import javafx.collections.ObservableMap;
 public class ProjectData {
 
 
-	public final SyncedList<TaskAttribute> attributes = new SyncedList<>("project.data.attributes");
+	public final SyncedList<TaskAttribute> attributes = new SyncedList<>("project.data.attributes", null);
 
 	//	public final ObservableList<TaskAttribute> attributes = FXCollections.observableArrayList();
 	public final ObservableList<Task> tasks = FXCollections.observableArrayList();
@@ -25,10 +25,10 @@ public class ProjectData {
 	public final CustomProperty<TaskGroupData> groupData = new CustomProperty<>();
 	public final CustomProperty<SortData> sortData = new CustomProperty<>();
 
-	public final SyncedProperty<String> selectedFilterPreset = new SyncedProperty<>("project.data.preset_selected_filter");
-	public final SyncedProperty<String> selectedGroupPreset = new SyncedProperty<>("project.data.preset_selected_group");
-	public final SyncedProperty<String> selectedSortPreset = new SyncedProperty<>("project.data.preset_selected_sort");
-	public final SyncedProperty<String> selectedMasterPreset = new SyncedProperty<>("project.data.preset_selected_master");
+	public final SyncedProperty<String> selectedFilterPreset = new SyncedProperty<>("project.data.preset_selected_filter", null);
+	public final SyncedProperty<String> selectedGroupPreset = new SyncedProperty<>("project.data.preset_selected_group", null);
+	public final SyncedProperty<String> selectedSortPreset = new SyncedProperty<>("project.data.preset_selected_sort", null);
+	public final SyncedProperty<String> selectedMasterPreset = new SyncedProperty<>("project.data.preset_selected_master", null);
 
 	public final ObservableMap<String, FilterCriteria> filterPresets = FXCollections.observableHashMap();
 	public final ObservableMap<String, TaskGroupData> groupPresets = FXCollections.observableHashMap();

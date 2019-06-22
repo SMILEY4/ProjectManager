@@ -18,4 +18,11 @@ public class MapChange extends DataChange {
 	}
 
 
+
+
+	@Override
+	public String toString() {
+		return "MapChange@" + Integer.toHexString(this.hashCode()) + ": " + getIdentifier() + " = " + (wasAdded ? "added" : "removed");
+	}
+
 }

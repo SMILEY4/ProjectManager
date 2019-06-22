@@ -1,21 +1,45 @@
 package com.ruegnerlukas.taskmanager.data.syncedelements;
 
-import com.ruegnerlukas.taskmanager.data.DataHandler;
+import com.ruegnerlukas.taskmanager.data.change.DataChange;
+import com.ruegnerlukas.taskmanager.data.change.ValueChange;
+import com.ruegnerlukas.taskmanager.utils.CustomProperty;
+import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
+import javafx.beans.value.ObservableValue;
 
-public class SyncedProperty<T> extends UnmanagedSyncedProperty<T> {
+public class SyncedProperty<T> extends CustomProperty<T> implements SyncedElement {
 
 
-	public SyncedProperty(String identifier, T initialValue) {
-		super(identifier, initialValue);
-		DataHandler.registerSyncedElement(this);
+	private final SyncedNode node;
+	private final FXChangeListener<T> listener;
+
+
+
+
+	public SyncedProperty(String identifier, SyncedNode parent) {
+		this.node = new SyncedNode(identifier, parent);
+		this.node.setManagedElement(this);
+		this.listener = new FXChangeListener<T>(this) {
+			@Override
+			public void changed(ObservableValue<? extends T> observable, T oldValue, T newValue) {
+				ValueChange change = new ValueChange(node.identifier, newValue);
+				node.onManagedElementChanged(change);
+			}
+		};
 	}
 
 
 
 
-	public SyncedProperty(String identifier) {
-		super(identifier);
-		DataHandler.registerSyncedElement(this);
+	@Override
+	public void applyChange(DataChange change) {
+		if (change instanceof ValueChange) {
+			ValueChange valueChange = (ValueChange) change;
+			if (get().getClass().isAssignableFrom(valueChange.getNewValue().getClass())) {
+				this.listener.setSilenced(true);
+				this.set((T) valueChange.getNewValue());
+				this.listener.setSilenced(false);
+			}
+		}
 	}
 
 
@@ -23,8 +47,23 @@ public class SyncedProperty<T> extends UnmanagedSyncedProperty<T> {
 
 	@Override
 	public void dispose() {
-		DataHandler.deregisterSyncedElement(this);
+		node.dispose();
+		listener.removeFromAll();
 	}
 
+
+
+
+	public SyncedNode getNode() {
+		return node;
+	}
+
+
+
+
+	@Override
+	public FXChangeListener<T> getListener() {
+		return this.listener;
+	}
 
 }

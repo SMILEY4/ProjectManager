@@ -6,23 +6,34 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.A
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedElement;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedMap;
-import com.ruegnerlukas.taskmanager.data.syncedelements.UnmanagedSyncedProperty;
+import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedNode;
+import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedProperty;
 
 public class TaskAttribute implements SyncedElement {
 
 
-	public final UnmanagedSyncedProperty<String> name = new UnmanagedSyncedProperty<>("name");
-	public final UnmanagedSyncedProperty<AttributeType> type = new UnmanagedSyncedProperty<>("type");
-	public final SyncedMap<AttributeValueType, AttributeValue<?>> values = new SyncedMap<>("values", true);
+	private final SyncedNode node;
 
-
+	public final SyncedProperty<String> name;
+	public final SyncedProperty<AttributeType> type;
+	public final SyncedMap<AttributeValueType, AttributeValue<?>> values;
 
 
 	public TaskAttribute(String name, AttributeType type) {
+		this(name, type, null);
+	}
+
+	public TaskAttribute(String name, AttributeType type, SyncedNode parent) {
+		this.node = new SyncedNode(name, parent);
+		this.node.setManagedElement(this);
+
+		this.name = new SyncedProperty<>("name", node);
 		this.name.set(name);
+
+		this.type = new SyncedProperty<>("type", node);
 		this.type.set(type);
 
-
+		this.values = new SyncedMap<>("values", node);
 	}
 
 
@@ -40,13 +51,13 @@ public class TaskAttribute implements SyncedElement {
 		if (change instanceof NestedChange) {
 			NestedChange nestedChange = (NestedChange) change;
 			DataChange nextChange = nestedChange.getNext();
-			if (nextChange.getIdentifier().equalsIgnoreCase(name.getIdentifier())) {
+			if (nextChange.getIdentifier().equalsIgnoreCase(name.getNode().identifier)) {
 				name.applyChange(nextChange);
 			}
-			if (nextChange.getIdentifier().equalsIgnoreCase(type.getIdentifier())) {
+			if (nextChange.getIdentifier().equalsIgnoreCase(type.getNode().identifier)) {
 				type.applyChange(nextChange);
 			}
-			if (nextChange.getIdentifier().equalsIgnoreCase(values.getIdentifier())) {
+			if (nextChange.getIdentifier().equalsIgnoreCase(values.getNode().identifier)) {
 				values.applyChange(nextChange);
 			}
 		}
@@ -56,16 +67,16 @@ public class TaskAttribute implements SyncedElement {
 
 
 	@Override
-	public String getIdentifier() {
-		return name.get();
+	public void dispose() {
+		node.dispose();
 	}
 
 
 
 
 	@Override
-	public void dispose() {
-
+	public SyncedNode getNode() {
+		return node;
 	}
 
 }

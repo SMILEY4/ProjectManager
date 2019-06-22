@@ -8,6 +8,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.BoolValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.NumberValue;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedList;
 
 import java.util.Map;
@@ -17,23 +18,50 @@ public class DataTest {
 
 
 	public static void main(String[] args) {
-//		testNested();
+		testNested();
 //		testLists();
-		testMaps();
+//		testMaps();
+//		testEvents();
 	}
+
+
+
+
+	static void testEvents() {
+
+		SyncedList<TaskAttribute> attributes = new SyncedList<>("project.data.attributes", null);
+
+		TaskAttribute attribute0 = new TaskAttribute("Test Attribute 0", AttributeType.BOOLEAN, attributes.getNode());
+		attribute0.values.put(AttributeValueType.CARD_DISPLAY_TYPE, new CardDisplayTypeValue(false));
+		attribute0.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(new BoolValue(true)));
+		attributes.add(attribute0);
+
+		TaskAttribute attribute1 = new TaskAttribute("Test Attribute 1", AttributeType.NUMBER, attributes.getNode());
+		attribute1.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(true));
+		attribute1.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(new NumberValue(42)));
+		attributes.add(attribute1);
+
+
+		attribute1.values.remove(AttributeValueType.DEFAULT_VALUE);
+
+		attribute0.name.set("Another Name");
+
+		attributes.remove(attribute1);
+	}
+
 
 
 
 	static void testMaps() {
 
-		SyncedList<TaskAttribute> attributes = new SyncedList<>("project.data.attributes");
+		SyncedList<TaskAttribute> attributes = new SyncedList<>("project.data.attributes", null);
 		TaskAttribute attribute = new TaskAttribute("Test Attribute", AttributeType.BOOLEAN);
 		attribute.values.put(AttributeValueType.CARD_DISPLAY_TYPE, new CardDisplayTypeValue(false));
 		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(new BoolValue(true)));
 		attributes.add(attribute);
 
 		System.out.println("values prev:");
-		for(Map.Entry<AttributeValueType, AttributeValue<?>> entry : attribute.values.entrySet()) {
+		for (Map.Entry<AttributeValueType, AttributeValue<?>> entry : attribute.values.entrySet()) {
 			System.out.println("  " + entry.getKey() + ": " + entry.getValue());
 		}
 
@@ -58,7 +86,7 @@ public class DataTest {
 
 		System.out.println();
 		System.out.println("values after:");
-		for(Map.Entry<AttributeValueType, AttributeValue<?>> entry : attribute.values.entrySet()) {
+		for (Map.Entry<AttributeValueType, AttributeValue<?>> entry : attribute.values.entrySet()) {
 			System.out.println("  " + entry.getKey() + ": " + entry.getValue());
 		}
 	}
@@ -68,7 +96,7 @@ public class DataTest {
 
 	static void testLists() {
 
-		SyncedList<TaskAttribute> attributes = new SyncedList<>("project.data.attributes");
+		SyncedList<TaskAttribute> attributes = new SyncedList<>("project.data.attributes", null);
 		TaskAttribute attribute0 = new TaskAttribute("Test Attribute", AttributeType.BOOLEAN);
 		TaskAttribute attribute1 = new TaskAttribute("Some Attribute", AttributeType.BOOLEAN);
 		attributes.add(attribute0);
@@ -102,7 +130,7 @@ public class DataTest {
 
 	static void testNested() {
 
-		SyncedList<TaskAttribute> attributes = new SyncedList<>("project.data.attributes");
+		SyncedList<TaskAttribute> attributes = new SyncedList<>("project.data.attributes", null);
 		TaskAttribute attribute0 = new TaskAttribute("Test Attribute", AttributeType.BOOLEAN);
 		TaskAttribute attribute1 = new TaskAttribute("Some Attribute", AttributeType.BOOLEAN);
 		attributes.add(attribute0);
