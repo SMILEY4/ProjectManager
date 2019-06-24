@@ -24,7 +24,7 @@ public class TestProjectFactory {
 
 		// values
 		for (int i = 0; i < attTypes.length; i++) {
-			TaskAttribute attribute = AttributeLogic.createTaskAttribute(attTypes[i], attNames[i]);
+			TaskAttribute attribute = AttributeLogic.createTaskAttribute(attTypes[i], attNames[i], project);
 			ProjectLogic.addAttributeToProject(project, attribute);
 
 			if(attTypes[i] == AttributeType.CHOICE) {

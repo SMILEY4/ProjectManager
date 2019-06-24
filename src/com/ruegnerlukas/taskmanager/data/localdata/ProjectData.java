@@ -7,42 +7,46 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCrit
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedList;
+import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedMap;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedProperty;
-import com.ruegnerlukas.taskmanager.utils.CustomProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
 
 public class ProjectData {
 
 
 	public final SyncedList<TaskAttribute> attributes = new SyncedList<>("project.data.attributes", null);
+	public final SyncedList<Task> tasks = new SyncedList<>("project.data.tasks", null);
 
-	//	public final ObservableList<TaskAttribute> attributes = FXCollections.observableArrayList();
-	public final ObservableList<Task> tasks = FXCollections.observableArrayList();
+	public final SyncedProperty<FilterCriteria> filterData = new SyncedProperty<>("project.data.filter", null);
+	public final SyncedProperty<TaskGroupData> groupData = new SyncedProperty<>("project.data.group", null);
+	public final SyncedProperty<SortData> sortData = new SyncedProperty<>("project.data.sort", null);
 
-	public final CustomProperty<FilterCriteria> filterData = new CustomProperty<>();
-	public final CustomProperty<TaskGroupData> groupData = new CustomProperty<>();
-	public final CustomProperty<SortData> sortData = new CustomProperty<>();
+	public final SyncedProperty<String> presetSelectedFilter = new SyncedProperty<>("project.data.preset_selected_filter", null);
+	public final SyncedProperty<String> presetSelectedGroup = new SyncedProperty<>("project.data.preset_selected_group", null);
+	public final SyncedProperty<String> presetSelectedSort = new SyncedProperty<>("project.data.preset_selected_sort", null);
+	public final SyncedProperty<String> presetSelectedMaster = new SyncedProperty<>("project.data.preset_selected_master", null);
 
-	public final SyncedProperty<String> selectedFilterPreset = new SyncedProperty<>("project.data.preset_selected_filter", null);
-	public final SyncedProperty<String> selectedGroupPreset = new SyncedProperty<>("project.data.preset_selected_group", null);
-	public final SyncedProperty<String> selectedSortPreset = new SyncedProperty<>("project.data.preset_selected_sort", null);
-	public final SyncedProperty<String> selectedMasterPreset = new SyncedProperty<>("project.data.preset_selected_master", null);
-
-	public final ObservableMap<String, FilterCriteria> filterPresets = FXCollections.observableHashMap();
-	public final ObservableMap<String, TaskGroupData> groupPresets = FXCollections.observableHashMap();
-	public final ObservableMap<String, SortData> sortPresets = FXCollections.observableHashMap();
-	public final ObservableMap<String, MasterPreset> masterPresets = FXCollections.observableHashMap();
+	public final SyncedMap<String, FilterCriteria> presetsFilter = new SyncedMap<>("project.data.presets_filter", null);
+	public final SyncedMap<String, TaskGroupData> presetsGroup = new SyncedMap<>("project.data.presets_group", null);
+	public final SyncedMap<String, SortData> presetsSort = new SyncedMap<>("project.data.presets_sort", null);
+	public final SyncedMap<String, MasterPreset> presetsMaster = new SyncedMap<>("project.data.presets_master", null);
 
 
 
 
 	public void dispose() {
-		selectedFilterPreset.dispose();
-		selectedGroupPreset.dispose();
-		selectedSortPreset.dispose();
-		selectedMasterPreset.dispose();
+		attributes.dispose();
+		tasks.dispose();
+		filterData.dispose();
+		groupData.dispose();
+		sortData.dispose();
+		presetSelectedFilter.dispose();
+		presetSelectedGroup.dispose();
+		presetSelectedSort.dispose();
+		presetSelectedMaster.dispose();
+		presetsFilter.dispose();
+		presetsGroup.dispose();
+		presetsSort.dispose();
+		presetsMaster.dispose();
 	}
 
 }

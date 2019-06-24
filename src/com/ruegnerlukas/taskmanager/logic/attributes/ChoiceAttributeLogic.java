@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.simpleutils.arrays.ArrayUtils;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
@@ -18,7 +17,7 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;
 
-public class ChoiceAttributeLogic implements AttributeLogicModule{
+public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 	private final Map<FilterOperation, Class<?>[]> FILTER_DATA;
@@ -59,22 +58,6 @@ public class ChoiceAttributeLogic implements AttributeLogicModule{
 	@Override
 	public Comparator getComparatorDesc() {
 		return COMPARATOR_DESC;
-	}
-
-
-
-
-	public TaskAttribute createAttribute() {
-		return createAttribute("ChoiceAttribute " + RandomUtils.generateRandomHexString(8));
-	}
-
-
-
-
-	public TaskAttribute createAttribute(String name) {
-		TaskAttribute attribute = new TaskAttribute(name, AttributeType.CHOICE);
-		this.initAttribute(attribute);
-		return attribute;
 	}
 
 
@@ -138,7 +121,7 @@ public class ChoiceAttributeLogic implements AttributeLogicModule{
 
 	public String[] getValueList(TaskAttribute attribute) {
 		ChoiceListValue value = (ChoiceListValue) attribute.getValue(AttributeValueType.CHOICE_VALUES);
-		if(value == null) {
+		if (value == null) {
 			return new String[]{};
 		} else {
 			return value.getValue();
@@ -170,7 +153,7 @@ public class ChoiceAttributeLogic implements AttributeLogicModule{
 
 	public boolean getUseDefault(TaskAttribute attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
-		if(value == null) {
+		if (value == null) {
 			return false;
 		} else {
 			return value.getValue();
@@ -189,7 +172,7 @@ public class ChoiceAttributeLogic implements AttributeLogicModule{
 
 	public ChoiceValue getDefaultValue(TaskAttribute attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
-		if(value == null) {
+		if (value == null) {
 			return null;
 		} else {
 			return (ChoiceValue) value.getValue();

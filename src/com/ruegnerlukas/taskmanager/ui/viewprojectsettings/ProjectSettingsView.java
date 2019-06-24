@@ -194,10 +194,8 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 
 	private void onAddAttribute() {
-		ProjectLogic.addAttributeToProject(
-				Data.projectProperty.get(),
-				AttributeLogic.createTaskAttribute(AttributeType.getFreeTypes()[0])
-		);
+		Project project = Data.projectProperty.get();
+		ProjectLogic.addAttributeToProject(project, AttributeLogic.createTaskAttribute(AttributeType.getFreeTypes()[0], project));
 	}
 
 

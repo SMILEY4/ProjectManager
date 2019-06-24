@@ -2,12 +2,14 @@ package com.ruegnerlukas.taskmanager.data.localdata.projectdata;
 
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.NestedChange;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedElement;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedMap;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedNode;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedProperty;
+import com.ruegnerlukas.taskmanager.utils.listeners.CustomListener;
 
 public class TaskAttribute implements SyncedElement {
 
@@ -19,11 +21,16 @@ public class TaskAttribute implements SyncedElement {
 	public final SyncedMap<AttributeValueType, AttributeValue<?>> values;
 
 
-	public TaskAttribute(String name, AttributeType type) {
-		this(name, type, null);
+
+
+	public TaskAttribute(String name, AttributeType type, Project project) {
+		this(name, type, project.data.attributes.getNode());
 	}
 
-	public TaskAttribute(String name, AttributeType type, SyncedNode parent) {
+
+
+
+	private TaskAttribute(String name, AttributeType type, SyncedNode parent) {
 		this.node = new SyncedNode(name, parent);
 		this.node.setManagedElement(this);
 
@@ -68,6 +75,9 @@ public class TaskAttribute implements SyncedElement {
 
 	@Override
 	public void dispose() {
+		name.dispose();
+		type.dispose();
+		values.dispose();
 		node.dispose();
 	}
 
@@ -77,6 +87,14 @@ public class TaskAttribute implements SyncedElement {
 	@Override
 	public SyncedNode getNode() {
 		return node;
+	}
+
+
+
+
+	@Override
+	public CustomListener<?> getListener() {
+		return null;
 	}
 
 }

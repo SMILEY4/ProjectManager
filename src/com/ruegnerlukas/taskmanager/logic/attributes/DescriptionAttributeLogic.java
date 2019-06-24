@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
@@ -63,22 +62,6 @@ public class DescriptionAttributeLogic implements AttributeLogicModule {
 
 
 
-	public TaskAttribute createAttribute() {
-		return createAttribute("DescriptionAttribute " + RandomUtils.generateRandomHexString(8));
-	}
-
-
-
-
-	public TaskAttribute createAttribute(String name) {
-		TaskAttribute attribute = new TaskAttribute(name, AttributeType.DESCRIPTION);
-		this.initAttribute(attribute);
-		return attribute;
-	}
-
-
-
-
 	public void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 		setUseDefault(attribute, true);
@@ -97,7 +80,7 @@ public class DescriptionAttributeLogic implements AttributeLogicModule {
 
 	public boolean getUseDefault(TaskAttribute attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
-		if(value == null) {
+		if (value == null) {
 			return false;
 		} else {
 			return value.getValue();
@@ -116,7 +99,7 @@ public class DescriptionAttributeLogic implements AttributeLogicModule {
 
 	public DescriptionValue getDefaultValue(TaskAttribute attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
-		if(value == null) {
+		if (value == null) {
 			return null;
 		} else {
 			return (DescriptionValue) value.getValue();

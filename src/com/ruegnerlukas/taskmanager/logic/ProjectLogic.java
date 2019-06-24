@@ -50,7 +50,7 @@ public class ProjectLogic {
 		Project project = new Project();
 		project.settings.name.set(name);
 		for (AttributeType type : AttributeType.getFixedTypes()) {
-			project.data.attributes.add(AttributeLogic.createTaskAttribute(type, type.display + " Attribute"));
+			project.data.attributes.add(AttributeLogic.createTaskAttribute(type, type.display + " Attribute", project));
 		}
 		return project;
 	}

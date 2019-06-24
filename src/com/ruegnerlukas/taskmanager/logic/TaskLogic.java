@@ -163,15 +163,16 @@ public class TaskLogic {
 
 
 	public static Task createTask(Project project) {
-		Task task = new Task();
 
-		LocalDateTime time = LocalDateTime.now();
-
-		// set id
-		TaskAttribute idAttribute = AttributeLogic.findAttribute(project, AttributeType.ID);
+		// get id
 		final int id = project.settings.idCounter.get();
 		project.settings.idCounter.set(id + 1);
-		setValue(project, task, idAttribute, new IDValue(id));
+
+		// get time
+		LocalDateTime time = LocalDateTime.now();
+
+		// create task
+		Task task = new Task(id, project);
 
 		// set date created
 		TaskAttribute createdAttribute = AttributeLogic.findAttribute(project, AttributeType.CREATED);
@@ -347,7 +348,7 @@ public class TaskLogic {
 
 	public static void setFilter(Project project, FilterCriteria criteria, String preset) {
 		project.data.filterData.set(criteria);
-		project.data.selectedFilterPreset.set(preset);
+		project.data.presetSelectedFilter.set(preset);
 	}
 
 
@@ -356,7 +357,7 @@ public class TaskLogic {
 	public static void setGroupData(Project project, TaskGroupData groupData, String preset) {
 		if (preset == null && groupData != null && groupData.attributes.isEmpty() && groupData.customHeaderString.get() == null) {
 			project.data.groupData.set(null);
-			project.data.selectedGroupPreset.set(null);
+			project.data.presetSelectedGroup.set(null);
 		} else {
 
 			// remove duplicates
@@ -374,7 +375,7 @@ public class TaskLogic {
 			}
 
 			project.data.groupData.set(groupData);
-			project.data.selectedGroupPreset.set(preset);
+			project.data.presetSelectedGroup.set(preset);
 		}
 
 	}
@@ -385,7 +386,7 @@ public class TaskLogic {
 	public static void setSortData(Project project, SortData sortData, String preset) {
 		if (preset == null && sortData != null && sortData.sortElements.isEmpty()) {
 			project.data.sortData.set(null);
-			project.data.selectedSortPreset.set(null);
+			project.data.presetSelectedSort.set(null);
 		} else {
 
 			// remove duplicates
@@ -403,7 +404,7 @@ public class TaskLogic {
 			}
 
 			project.data.sortData.set(sortData);
-			project.data.selectedSortPreset.set(preset);
+			project.data.presetSelectedSort.set(preset);
 		}
 
 	}

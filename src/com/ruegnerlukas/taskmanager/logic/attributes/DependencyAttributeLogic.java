@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
@@ -13,7 +12,7 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 
 import java.util.*;
 
-public class DependencyAttributeLogic implements AttributeLogicModule{
+public class DependencyAttributeLogic implements AttributeLogicModule {
 
 
 	private final Map<FilterOperation, Class<?>[]> FILTER_DATA;
@@ -54,22 +53,6 @@ public class DependencyAttributeLogic implements AttributeLogicModule{
 	@Override
 	public Comparator getComparatorDesc() {
 		return COMPARATOR_DESC;
-	}
-
-
-
-
-	public TaskAttribute createAttribute() {
-		return createAttribute("DependencyAttribute " + RandomUtils.generateRandomHexString(8));
-	}
-
-
-
-
-	public TaskAttribute createAttribute(String name) {
-		TaskAttribute attribute = new TaskAttribute(name, AttributeType.DEPENDENCY);
-		this.initAttribute(attribute);
-		return attribute;
 	}
 
 

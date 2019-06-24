@@ -74,7 +74,7 @@ public class PopupFilter extends PopupBase {
 
 		// load preset
 		choicePreset.setPromptText("Select Preset");
-		choicePreset.getItems().addAll(Data.projectProperty.get().data.filterPresets.keySet());
+		choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsFilter.keySet());
 		choicePreset.getSelectionModel().clearSelection();
 		choicePreset.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
 			if (newValue != null) {
@@ -112,10 +112,10 @@ public class PopupFilter extends PopupBase {
 
 
 		// load initial data
-		String initialPreset = Data.projectProperty.get().data.selectedFilterPreset.get();
+		String initialPreset = Data.projectProperty.get().data.presetSelectedFilter.get();
 		if (initialPreset != null) {
 			choicePreset.getSelectionModel().select(initialPreset);
-			filterCriteria.set(Data.projectProperty.get().data.filterPresets.get(initialPreset));
+			filterCriteria.set(Data.projectProperty.get().data.presetsFilter.get(initialPreset));
 			onPresetSelected();
 		} else {
 			FilterCriteria initialCriteria = Data.projectProperty.get().data.filterData.get();
@@ -162,7 +162,7 @@ public class PopupFilter extends PopupBase {
 		boolean deleted = PresetLogic.deleteFilterPreset(Data.projectProperty.get(), name);
 		if (deleted) {
 			choicePreset.getItems().clear();
-			choicePreset.getItems().addAll(Data.projectProperty.get().data.filterPresets.keySet());
+			choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsFilter.keySet());
 			choicePreset.getSelectionModel().clearSelection();
 			onPresetDeselected();
 		}
@@ -177,7 +177,7 @@ public class PopupFilter extends PopupBase {
 		if (saved) {
 			fieldPresetName.setText("");
 			choicePreset.getItems().clear();
-			choicePreset.getItems().addAll(Data.projectProperty.get().data.filterPresets.keySet());
+			choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsFilter.keySet());
 			choicePreset.getSelectionModel().select(strName);
 			onPresetSelected();
 		}

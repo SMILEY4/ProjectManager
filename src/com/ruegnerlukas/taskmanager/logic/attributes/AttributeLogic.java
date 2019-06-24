@@ -53,15 +53,17 @@ public class AttributeLogic {
 
 
 
-	public static TaskAttribute createTaskAttribute(AttributeType type) {
-		return createTaskAttribute(type, "Attribute " + Integer.toHexString(("Attribute" + System.currentTimeMillis()).hashCode()));
+	public static TaskAttribute createTaskAttribute(AttributeType type, Project project) {
+		return createTaskAttribute(type, "Attribute " + Integer.toHexString(("Attribute" + System.currentTimeMillis()).hashCode()), project);
 	}
 
 
 
 
-	public static TaskAttribute createTaskAttribute(AttributeType type, String name) {
-		return LOGIC_MODULES.get(type).createAttribute(name);
+	public static TaskAttribute createTaskAttribute(AttributeType type, String name, Project project) {
+		TaskAttribute attribute = new TaskAttribute(name, type, project);
+		initTaskAttribute(attribute);
+		return attribute;
 	}
 
 

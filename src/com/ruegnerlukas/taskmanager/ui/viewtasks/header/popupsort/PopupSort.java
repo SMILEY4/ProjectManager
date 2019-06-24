@@ -80,7 +80,7 @@ public class PopupSort extends PopupBase {
 
 		// load preset
 		choicePreset.setPromptText("Select Preset");
-		choicePreset.getItems().addAll(Data.projectProperty.get().data.groupPresets.keySet());
+		choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsGroup.keySet());
 		choicePreset.getSelectionModel().clearSelection();
 		choicePreset.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
 			if (newValue != null) {
@@ -120,10 +120,10 @@ public class PopupSort extends PopupBase {
 
 
 		// load initial data
-		String initialPreset = Data.projectProperty.get().data.selectedSortPreset.get();
+		String initialPreset = Data.projectProperty.get().data.presetSelectedSort.get();
 		if (initialPreset != null) {
 			choicePreset.getSelectionModel().select(initialPreset);
-			sortData.set(Data.projectProperty.get().data.sortPresets.get(initialPreset));
+			sortData.set(Data.projectProperty.get().data.presetsSort.get(initialPreset));
 			onPresetSelected();
 		} else {
 			SortData initialData = Data.projectProperty.get().data.sortData.get();
@@ -171,7 +171,7 @@ public class PopupSort extends PopupBase {
 		boolean deleted = PresetLogic.deleteSortPreset(Data.projectProperty.get(), name);
 		if (deleted) {
 			choicePreset.getItems().clear();
-			choicePreset.getItems().addAll(Data.projectProperty.get().data.sortPresets.keySet());
+			choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsSort.keySet());
 			choicePreset.getSelectionModel().clearSelection();
 			onPresetDeselected();
 		}
@@ -186,7 +186,7 @@ public class PopupSort extends PopupBase {
 		if (saved) {
 			fieldPresetName.setText("");
 			choicePreset.getItems().clear();
-			choicePreset.getItems().addAll(Data.projectProperty.get().data.sortPresets.keySet());
+			choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsSort.keySet());
 			choicePreset.getSelectionModel().select(strName);
 			onPresetSelected();
 		}

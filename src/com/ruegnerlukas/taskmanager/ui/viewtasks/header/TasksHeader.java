@@ -91,37 +91,37 @@ public class TasksHeader {
 
 		// badge filter
 		showBadge(badgeFilter, false);
-		listenerBadgeFilter = new FXGenericChangeListener(Data.projectProperty.get().data.filterData, Data.projectProperty.get().data.selectedFilterPreset) {
+		listenerBadgeFilter = new FXGenericChangeListener(Data.projectProperty.get().data.filterData, Data.projectProperty.get().data.presetSelectedFilter) {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				showBadge(badgeFilter, newValue != null || Data.projectProperty.get().data.selectedFilterPreset.get() != null);
+				showBadge(badgeFilter, newValue != null || Data.projectProperty.get().data.presetSelectedFilter.get() != null);
 			}
 		};
 
 
 		// badge group
 		showBadge(badgeGroup, false);
-		listenerBadgeGroup = new FXGenericChangeListener(Data.projectProperty.get().data.groupData, Data.projectProperty.get().data.selectedGroupPreset) {
+		listenerBadgeGroup = new FXGenericChangeListener(Data.projectProperty.get().data.groupData, Data.projectProperty.get().data.presetSelectedGroup) {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				showBadge(badgeGroup, newValue != null || Data.projectProperty.get().data.selectedGroupPreset.get() != null);
+				showBadge(badgeGroup, newValue != null || Data.projectProperty.get().data.presetSelectedGroup.get() != null);
 			}
 		};
 
 
 		// badge sort
 		showBadge(badgeSort, false);
-		listenerBadgeSort = new FXGenericChangeListener(Data.projectProperty.get().data.sortData, Data.projectProperty.get().data.selectedSortPreset) {
+		listenerBadgeSort = new FXGenericChangeListener(Data.projectProperty.get().data.sortData, Data.projectProperty.get().data.presetSelectedSort) {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-				showBadge(badgeSort, newValue != null || Data.projectProperty.get().data.selectedSortPreset.get() != null);
+				showBadge(badgeSort, newValue != null || Data.projectProperty.get().data.presetSelectedSort.get() != null);
 			}
 		};
 
 
 		// badge presets
 		showBadge(badgePresets, false);
-		listenerBadgePresets = new FXGenericChangeListener(Data.projectProperty.get().data.selectedMasterPreset) {
+		listenerBadgePresets = new FXGenericChangeListener(Data.projectProperty.get().data.presetSelectedMaster) {
 			@Override
 			public void changed(ObservableValue observable, Object oldValue, Object newValue) {
 				showBadge(badgePresets, newValue != null);

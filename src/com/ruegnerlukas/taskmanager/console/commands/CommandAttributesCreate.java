@@ -109,7 +109,7 @@ public class CommandAttributesCreate {
 				}
 			}
 
-			TaskAttribute attribute = AttributeLogic.createTaskAttribute(type, name);
+			TaskAttribute attribute = AttributeLogic.createTaskAttribute(type, name, project);
 
 			if(useLogic) {
 				ProjectLogic.addAttributeToProject(project, attribute);

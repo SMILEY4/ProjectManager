@@ -1,10 +1,12 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.*;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.DefaultValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.TextMultilineValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.UseDefaultValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.NoValue;
@@ -58,22 +60,6 @@ public class TextAttributeLogic implements AttributeLogicModule {
 	@Override
 	public Comparator getComparatorDesc() {
 		return COMPARATOR_DESC;
-	}
-
-
-
-
-	public TaskAttribute createAttribute() {
-		return createAttribute("TextAttribute " + RandomUtils.generateRandomHexString(8));
-	}
-
-
-
-
-	public TaskAttribute createAttribute(String name) {
-		TaskAttribute attribute = new TaskAttribute(name, AttributeType.TEXT);
-		this.initAttribute(attribute);
-		return attribute;
 	}
 
 

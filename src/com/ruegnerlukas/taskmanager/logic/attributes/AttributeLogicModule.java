@@ -27,10 +27,6 @@ public interface AttributeLogicModule {
 
 	Comparator getComparatorDesc();
 
-	TaskAttribute createAttribute();
-
-	TaskAttribute createAttribute(String name);
-
 	void initAttribute(TaskAttribute attribute);
 
 	boolean matchesFilter(Task task, TerminalFilterCriteria criteria);

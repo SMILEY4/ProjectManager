@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
@@ -69,22 +68,6 @@ public class DateAttributeLogic implements AttributeLogicModule {
 
 
 
-	public TaskAttribute createAttribute() {
-		return createAttribute("DateAttribute " + RandomUtils.generateRandomHexString(8));
-	}
-
-
-
-
-	public TaskAttribute createAttribute(String name) {
-		TaskAttribute attribute = new TaskAttribute(name, AttributeType.DATE);
-		this.initAttribute(attribute);
-		return attribute;
-	}
-
-
-
-
 	public void initAttribute(TaskAttribute attribute) {
 		attribute.values.clear();
 		setUseDefault(attribute, false);
@@ -103,7 +86,7 @@ public class DateAttributeLogic implements AttributeLogicModule {
 
 	public boolean getUseDefault(TaskAttribute attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
-		if(value == null) {
+		if (value == null) {
 			return false;
 		} else {
 			return value.getValue();
@@ -122,7 +105,7 @@ public class DateAttributeLogic implements AttributeLogicModule {
 
 	public DateValue getDefaultValue(TaskAttribute attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
-		if(value == null) {
+		if (value == null) {
 			return null;
 		} else {
 			return (DateValue) value.getValue();
@@ -268,7 +251,7 @@ public class DateAttributeLogic implements AttributeLogicModule {
 
 
 	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
-		return oldValue.getAttType() == AttributeType.DATE ? new DateValue((LocalDate)oldValue.getValue())
+		return oldValue.getAttType() == AttributeType.DATE ? new DateValue((LocalDate) oldValue.getValue())
 				: (preferNoValue ? new NoValue() : new DateValue(LocalDate.now()));
 	}
 

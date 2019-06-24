@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.simpleutils.RandomUtils;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
@@ -59,22 +58,6 @@ public class LastUpdatedAttributeLogic implements AttributeLogicModule {
 	@Override
 	public Comparator getComparatorDesc() {
 		return COMPARATOR_DESC;
-	}
-
-
-
-
-	public TaskAttribute createAttribute() {
-		return createAttribute("LastUpdatedAttribute " + RandomUtils.generateRandomHexString(8));
-	}
-
-
-
-
-	public TaskAttribute createAttribute(String name) {
-		TaskAttribute attribute = new TaskAttribute(name, AttributeType.LAST_UPDATED);
-		this.initAttribute(attribute);
-		return attribute;
 	}
 
 

@@ -83,7 +83,7 @@ public class PopupGroup extends PopupBase {
 
 		// load preset
 		choicePreset.setPromptText("Select Preset");
-		choicePreset.getItems().addAll(Data.projectProperty.get().data.groupPresets.keySet());
+		choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsGroup.keySet());
 		choicePreset.getSelectionModel().clearSelection();
 		choicePreset.getSelectionModel().selectedItemProperty().addListener(((observable, oldValue, newValue) -> {
 			if (newValue != null) {
@@ -134,10 +134,10 @@ public class PopupGroup extends PopupBase {
 		});
 
 		// load initial data
-		String initialPreset = Data.projectProperty.get().data.selectedGroupPreset.get();
+		String initialPreset = Data.projectProperty.get().data.presetSelectedGroup.get();
 		if (initialPreset != null) {
 			choicePreset.getSelectionModel().select(initialPreset);
-			groupData.set(Data.projectProperty.get().data.groupPresets.get(initialPreset));
+			groupData.set(Data.projectProperty.get().data.presetsGroup.get(initialPreset));
 			onPresetSelected();
 		} else {
 			TaskGroupData initialData = Data.projectProperty.get().data.groupData.get();
@@ -184,7 +184,7 @@ public class PopupGroup extends PopupBase {
 		boolean deleted = PresetLogic.deleteTaskGroupPreset(Data.projectProperty.get(), name);
 		if (deleted) {
 			choicePreset.getItems().clear();
-			choicePreset.getItems().addAll(Data.projectProperty.get().data.groupPresets.keySet());
+			choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsGroup.keySet());
 			choicePreset.getSelectionModel().clearSelection();
 			onPresetDeselected();
 		}
@@ -199,7 +199,7 @@ public class PopupGroup extends PopupBase {
 		if (saved) {
 			fieldPresetName.setText("");
 			choicePreset.getItems().clear();
-			choicePreset.getItems().addAll(Data.projectProperty.get().data.groupPresets.keySet());
+			choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsGroup.keySet());
 			choicePreset.getSelectionModel().select(strName);
 			onPresetSelected();
 		}
