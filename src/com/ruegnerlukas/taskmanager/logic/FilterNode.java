@@ -68,7 +68,7 @@ public class FilterNode {
 		if (this.criteria.type == FilterCriteria.CriteriaType.TERMINAL) {
 			TerminalFilterCriteria terminal = (TerminalFilterCriteria)criteria;
 			if(AttributeLogic.isValidFilterOperation(task, terminal)) {
-				return AttributeLogic.LOGIC_MODULES.get(terminal.attribute.get().type.get()).matchesFilter(task, terminal);
+				return AttributeLogic.LOGIC_MODULES.get(terminal.attribute.type.get()).matchesFilter(task, terminal);
 			} else {
 				return false;
 			}

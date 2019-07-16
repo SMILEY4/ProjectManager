@@ -1,12 +1,19 @@
 package com.ruegnerlukas.taskmanager.data.localdata.projectdata;
 
-import javafx.beans.property.SimpleStringProperty;
-
 public class MasterPreset {
 
 
-	public final SimpleStringProperty filterPreset = new SimpleStringProperty();
-	public final SimpleStringProperty groupPreset = new SimpleStringProperty();
-	public final SimpleStringProperty sortPreset = new SimpleStringProperty();
+	public final String filterPreset;
+	public final String groupPreset;
+	public final String sortPreset;
+
+
+
+
+	public MasterPreset(String filterPreset, String groupPreset, String sortPreset) {
+		this.filterPreset = filterPreset;
+		this.groupPreset = groupPreset;
+		this.sortPreset = sortPreset;
+	}
 
 }

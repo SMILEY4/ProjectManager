@@ -11,8 +11,8 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
-import com.ruegnerlukas.taskmanager.utils.PopupBase;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
+import com.ruegnerlukas.taskmanager.utils.PopupBase;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.VBoxOrder;
 import javafx.application.Platform;
@@ -25,6 +25,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @SuppressWarnings ("Duplicates")
 public class PopupSort extends PopupBase {
@@ -285,11 +287,11 @@ public class PopupSort extends PopupBase {
 
 
 	private SortData buildSortData() {
-		SortData data = new SortData();
+		List<SortElement> sortElements = new ArrayList<>();
 		for (Node node : boxElements.getChildren()) {
-			data.sortElements.add(((SortElementNode) node).buildSortElement());
+			sortElements.add(((SortElementNode) node).buildSortElement());
 		}
-		return data;
+		return new SortData(sortElements);
 	}
 
 

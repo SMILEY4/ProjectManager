@@ -337,7 +337,7 @@ public class TaskDisplayLogic {
 			return "All Tasks";
 		}
 
-		String headerString = project.data.groupData.get().customHeaderString.get();
+		String headerString = project.data.groupData.get().customHeaderString;
 		String strHeader = "?";
 
 		if (headerString == null) {

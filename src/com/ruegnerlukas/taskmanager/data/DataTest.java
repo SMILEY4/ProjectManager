@@ -1,31 +1,19 @@
-//package com.ruegnerlukas.taskmanager.data;
-//
-//import com.ruegnerlukas.taskmanager.data.change.DataChange;
-//import com.ruegnerlukas.taskmanager.data.change.MapChange;
-//import com.ruegnerlukas.taskmanager.data.change.NestedChange;
-//import com.ruegnerlukas.taskmanager.data.change.ValueChange;
-//import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-//import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
-//import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.*;
-//import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.BoolValue;
-//import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.NumberValue;
-//import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedList;
-//
-//import java.util.Map;
-//
-//@SuppressWarnings ("Duplicates")
-//public class DataTest {
-//
-//
-//	public static void main(String[] args) {
-//		testNested();
-////		testLists();
-////		testMaps();
-////		testEvents();
-//	}
-//
-//
-//
+package com.ruegnerlukas.taskmanager.data;
+
+@SuppressWarnings ("Duplicates")
+public class DataTest {
+
+
+	public static void main(String[] args) {
+	}
+
+
+
+
+
+
+
+
 //
 //	static void testEvents() {
 //
@@ -165,6 +153,6 @@
 //		System.out.println("name after 1 = " + attribute1.name.get());
 //		System.out.println("type after 1 = " + attribute1.type.get());
 //	}
-//
-//
-//}
+
+
+}

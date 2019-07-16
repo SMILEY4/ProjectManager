@@ -117,10 +117,10 @@ public class DateAttributeLogic implements AttributeLogicModule {
 
 	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
 
-		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
+		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute);
 		List<Object> filterValues = criteria.values;
 
-		switch (criteria.operation.get()) {
+		switch (criteria.operation) {
 
 			case HAS_VALUE: {
 				if (filterValues.size() == 1 && filterValues.get(0) instanceof Boolean) {

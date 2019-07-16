@@ -67,10 +67,10 @@ public class DependencyAttributeLogic implements AttributeLogicModule {
 
 	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
 
-		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute.get());
+		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute);
 		List<Object> filterValues = criteria.values;
 
-		switch (criteria.operation.get()) {
+		switch (criteria.operation) {
 
 			case DEPENDENT_ON: {
 				if (filterValues.size() == 1 && filterValues.get(0) instanceof Task) {
@@ -89,7 +89,7 @@ public class DependencyAttributeLogic implements AttributeLogicModule {
 			case PREREQUISITE_OF: {
 				if (filterValues.size() == 1 && filterValues.get(0) instanceof Task) {
 					Task tasksFilter = (Task) filterValues.get(0);
-					TaskValue<?> valueFilter = TaskLogic.getValueOrDefault(tasksFilter, criteria.attribute.get());
+					TaskValue<?> valueFilter = TaskLogic.getValueOrDefault(tasksFilter, criteria.attribute);
 					if (valueFilter.getAttType() != null) {
 						List<Task> list = Arrays.asList(((DependencyValue) valueFilter).getValue());
 						if (list.contains(task)) {

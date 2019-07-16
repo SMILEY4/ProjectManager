@@ -93,8 +93,8 @@ public class CommandHandler {
 		commands.add(CommandTasksRemove.create());
 		commands.add(CommandTasksCreate.create());
 
-		commands.add(CommandDataSimExternalValueChange.create());
-		commands.add(CommandDataIdentifiers.create());
+//		commands.add(CommandDataSimExternalValueChange.create());
+//		commands.add(CommandDataIdentifiers.create());
 
 		commands.add(CommandHelp.create());
 

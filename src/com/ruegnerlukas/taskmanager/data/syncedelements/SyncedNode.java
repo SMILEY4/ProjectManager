@@ -9,6 +9,7 @@ import java.util.List;
 
 public class SyncedNode {
 
+	private DataHandler dataHandler;
 
 	public final String identifier;
 	public final SyncedNode parent;
@@ -18,11 +19,12 @@ public class SyncedNode {
 
 
 
-	public SyncedNode(String identifier, SyncedNode parent) {
+	public SyncedNode(String identifier, SyncedNode parent, DataHandler dataHandler) {
 		this.identifier = identifier;
 		this.parent = parent;
+		this.dataHandler = dataHandler;
 		if (parent == null) {
-			DataHandler.registerSyncedNode(this);
+			dataHandler.registerSyncedNode(this);
 		}
 	}
 
@@ -31,7 +33,7 @@ public class SyncedNode {
 
 	protected void onManagedElementChanged(DataChange change) {
 		if (parent == null) {
-			DataHandler.onLocalChange(change);
+			dataHandler.onLocalChange(change);
 		} else {
 			List<SyncedNode> path = new ArrayList<>();
 			SyncedNode p = this;
@@ -39,7 +41,7 @@ public class SyncedNode {
 				path.add(0, p);
 				p = p.parent;
 			}
-			DataHandler.onLocalChange(createChangeFromPath(path, change));
+			dataHandler.onLocalChange(createChangeFromPath(path, change));
 		}
 	}
 
@@ -72,7 +74,7 @@ public class SyncedNode {
 
 
 	public void dispose() {
-		DataHandler.deregisterSyncedNode(this);
+		dataHandler.deregisterSyncedNode(this);
 	}
 
 

@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.data.syncedelements;
 
+import com.ruegnerlukas.taskmanager.data.DataHandler;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.MapChange;
 import com.ruegnerlukas.taskmanager.data.change.NestedChange;
@@ -19,10 +20,10 @@ public class SyncedMap<K, V> extends ObservableMapWrapper<K, V> implements Synce
 
 
 
-	public SyncedMap(String identifier, SyncedNode parent) {
+	public SyncedMap(String identifier, SyncedNode parent, DataHandler handler) {
 		super(new HashMap<>());
 
-		this.node = new SyncedNode(identifier, parent);
+		this.node = new SyncedNode(identifier, parent, handler);
 		this.node.setManagedElement(this);
 
 		this.listener = new FXMapChangeListener<K, V>(this) {
@@ -57,18 +58,19 @@ public class SyncedMap<K, V> extends ObservableMapWrapper<K, V> implements Synce
 		if (change instanceof NestedChange) {
 			NestedChange nestedChange = (NestedChange) change;
 			DataChange nextChange = nestedChange.getNext();
+
 			for (Entry<K, V> entry : this.entrySet()) {
 
-				// select by key
 				if (entry.getValue() instanceof SyncedElement) {
 					SyncedElement managedElement = (SyncedElement) entry.getValue();
-					if (entry.getKey().toString().equalsIgnoreCase(nextChange.getIdentifier())) {
+					if (managedElement.getNode().identifier.equalsIgnoreCase(nextChange.getIdentifier())) {
 						managedElement.applyChange(nextChange);
 						break;
 					}
 				}
 
 			}
+
 		}
 
 		if (change instanceof MapChange) {

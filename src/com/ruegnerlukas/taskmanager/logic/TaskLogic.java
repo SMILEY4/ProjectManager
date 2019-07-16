@@ -51,11 +51,12 @@ public class TaskLogic {
 								if (newProject.data.filterData.get() != null) {
 									FilterCriteria criteria = newProject.data.filterData.get();
 									if (criteria.type == FilterCriteria.CriteriaType.TERMINAL
-											&& ((TerminalFilterCriteria) criteria).attribute.get() == attribute) {
+											&& ((TerminalFilterCriteria) criteria).attribute == attribute) {
 										setFilter(newProject, null, null);
 									} else {
-										int nRemoved = removeAttributeFromFilterCriteria(criteria, attribute);
-										if (nRemoved > 0) {
+										FilterCriteria newCriteria = removeAttributeFromFilterCriteria(criteria, attribute);
+										if (newCriteria != criteria) {
+											setFilter(newProject, newCriteria, null);
 											newProject.temporaryData.lastGroupsValid.set(false);
 										}
 									}
@@ -73,11 +74,16 @@ public class TaskLogic {
 									for (int i = 0; i < newProject.data.sortData.get().sortElements.size(); i++) {
 										SortElement element = newProject.data.sortData.get().sortElements.get(i);
 										if (element.attribute.get() == attribute) {
-											newProject.data.sortData.get().sortElements.remove(element);
-											newProject.temporaryData.lastGroupsValid.set(false);
-											if (newProject.data.sortData.get().sortElements.isEmpty()) {
+											List<SortElement> newList = new ArrayList<>();
+											newList.addAll(newProject.data.sortData.get().sortElements);
+											newList.remove(element);
+											SortData newData = new SortData(newList);
+											if (newData.sortElements.isEmpty()) {
 												setSortData(newProject, null, null);
+											} else {
+												newProject.data.sortData.set(newData);
 											}
+											newProject.temporaryData.lastGroupsValid.set(false);
 											break;
 										}
 									}
@@ -94,41 +100,91 @@ public class TaskLogic {
 
 
 
-	@SuppressWarnings ("Duplicates")
-	private static int removeAttributeFromFilterCriteria(FilterCriteria criteria, TaskAttribute attribute) {
-		int nRemoved = 0;
+	public static FilterCriteria removeAttributeFromFilterCriteria(FilterCriteria criteria, TaskAttribute attribute) {
+
+
 		if (criteria.type == FilterCriteria.CriteriaType.AND) {
 			AndFilterCriteria andCriteria = (AndFilterCriteria) criteria;
-			List<FilterCriteria> toRemove = new ArrayList<>();
-			for (int i = 0; i < andCriteria.subCriteria.size(); i++) {
-				FilterCriteria child = andCriteria.subCriteria.get(i);
-				if (child.type == FilterCriteria.CriteriaType.TERMINAL && ((TerminalFilterCriteria) child).attribute.get() == attribute) {
-					toRemove.add(child);
-				} else if (child.type != FilterCriteria.CriteriaType.TERMINAL) {
-					nRemoved += removeAttributeFromFilterCriteria(child, attribute);
+			List<FilterCriteria> list = new ArrayList<>();
+			for (FilterCriteria c : andCriteria.subCriteria) {
+				FilterCriteria child = removeAttributeFromFilterCriteria(c, attribute);
+				if (child != null) {
+					list.add(child);
 				}
 			}
-			andCriteria.subCriteria.removeAll(toRemove);
-			nRemoved += toRemove.size();
+			if (list.size() != andCriteria.subCriteria.size()) {
+				return new AndFilterCriteria(list);
+			} else {
+				return criteria;
+			}
 		}
+
+
 		if (criteria.type == FilterCriteria.CriteriaType.OR) {
 			OrFilterCriteria orCriteria = (OrFilterCriteria) criteria;
-			List<FilterCriteria> toRemove = new ArrayList<>();
-			for (int i = 0; i < orCriteria.subCriteria.size(); i++) {
-				FilterCriteria child = orCriteria.subCriteria.get(i);
-				if (child.type == FilterCriteria.CriteriaType.TERMINAL && ((TerminalFilterCriteria) child).attribute.get() == attribute) {
-					toRemove.add(child);
-				} else if (child.type != FilterCriteria.CriteriaType.TERMINAL) {
-					nRemoved += removeAttributeFromFilterCriteria(child, attribute);
+			List<FilterCriteria> list = new ArrayList<>();
+			for (FilterCriteria c : orCriteria.subCriteria) {
+				FilterCriteria child = removeAttributeFromFilterCriteria(c, attribute);
+				if (child != null) {
+					list.add(child);
 				}
 			}
-			orCriteria.subCriteria.removeAll(toRemove);
-			nRemoved += toRemove.size();
+			if (list.size() != orCriteria.subCriteria.size()) {
+				return new OrFilterCriteria(list);
+			} else {
+				return criteria;
+			}
 		}
-		return nRemoved;
+
+
+		if (criteria.type == FilterCriteria.CriteriaType.TERMINAL) {
+			TerminalFilterCriteria terminal = (TerminalFilterCriteria) criteria;
+			if (terminal.attribute == attribute) {
+				return null;
+			} else {
+				return criteria;
+			}
+		}
+
+		return null;
 	}
 
 
+
+
+	@SuppressWarnings ("Duplicates")
+//	private static int removeAttributeFromFilterCriteria(FilterCriteria criteria, TaskAttribute attribute) {
+//		int nRemoved = 0;
+//		if (criteria.type == FilterCriteria.CriteriaType.AND) {
+//			AndFilterCriteria andCriteria = (AndFilterCriteria) criteria;
+//			List<FilterCriteria> toRemove = new ArrayList<>();
+//			for (int i = 0; i < andCriteria.subCriteria.size(); i++) {
+//				FilterCriteria child = andCriteria.subCriteria.get(i);
+//				if (child.type == FilterCriteria.CriteriaType.TERMINAL && ((TerminalFilterCriteria) child).attribute == attribute) {
+//					toRemove.add(child);
+//				} else if (child.type != FilterCriteria.CriteriaType.TERMINAL) {
+//					nRemoved += removeAttributeFromFilterCriteria(child, attribute);
+//				}
+//			}
+//			andCriteria.subCriteria.removeAll(toRemove);
+//			nRemoved += toRemove.size();
+//		}
+//		if (criteria.type == FilterCriteria.CriteriaType.OR) {
+//			OrFilterCriteria orCriteria = (OrFilterCriteria) criteria;
+//			List<FilterCriteria> toRemove = new ArrayList<>();
+//			for (int i = 0; i < orCriteria.subCriteria.size(); i++) {
+//				FilterCriteria child = orCriteria.subCriteria.get(i);
+//				if (child.type == FilterCriteria.CriteriaType.TERMINAL && ((TerminalFilterCriteria) child).attribute == attribute) {
+//					toRemove.add(child);
+//				} else if (child.type != FilterCriteria.CriteriaType.TERMINAL) {
+//					nRemoved += removeAttributeFromFilterCriteria(child, attribute);
+//				}
+//			}
+//			orCriteria.subCriteria.removeAll(toRemove);
+//			nRemoved += toRemove.size();
+//		}
+//		return nRemoved;
+//	}
 
 
 	private static void removeFromDependencies(Project project, Task task) {
@@ -172,7 +228,7 @@ public class TaskLogic {
 		LocalDateTime time = LocalDateTime.now();
 
 		// create task
-		Task task = new Task(id, project);
+		Task task = new Task(id, project, Project.DATA_HANDLER);
 
 		// set date created
 		TaskAttribute createdAttribute = AttributeLogic.findAttribute(project, AttributeType.CREATED);
@@ -226,7 +282,7 @@ public class TaskLogic {
 	public static boolean setValue(Project project, Task task, TaskAttribute attribute, TaskValue<?> value) {
 
 		// validate value
-		if(!AttributeLogic.LOGIC_MODULES.get(attribute.type.get()).isValidTaskValue(attribute, value == null ? new NoValue() : value)) {
+		if (!AttributeLogic.LOGIC_MODULES.get(attribute.type.get()).isValidTaskValue(attribute, value == null ? new NoValue() : value)) {
 			Logger.get().debug("Failed to set task value: " + attribute.name.get() + " - invalid value: " + value + (value != null ? "." + value.getValue() : ""));
 			return false;
 		}
@@ -329,7 +385,7 @@ public class TaskLogic {
 
 	private static void getUsedFilterAttributes(FilterCriteria criteria, List<TaskAttribute> attributes) {
 		if (criteria.type == FilterCriteria.CriteriaType.TERMINAL) {
-			attributes.add(((TerminalFilterCriteria) criteria).attribute.get());
+			attributes.add(((TerminalFilterCriteria) criteria).attribute);
 		}
 		if (criteria.type == FilterCriteria.CriteriaType.AND) {
 			for (FilterCriteria child : ((AndFilterCriteria) criteria).subCriteria) {
@@ -355,7 +411,7 @@ public class TaskLogic {
 
 
 	public static void setGroupData(Project project, TaskGroupData groupData, String preset) {
-		if (preset == null && groupData != null && groupData.attributes.isEmpty() && groupData.customHeaderString.get() == null) {
+		if (preset == null && groupData != null && groupData.attributes.isEmpty() && groupData.customHeaderString == null) {
 			project.data.groupData.set(null);
 			project.data.presetSelectedGroup.set(null);
 		} else {
@@ -400,7 +456,12 @@ public class TaskLogic {
 						attributes.add(e.attribute.get());
 					}
 				}
-				sortData.sortElements.removeAll(toRemove);
+				if (!toRemove.isEmpty()) {
+					List<SortElement> newList = new ArrayList<>();
+					newList.addAll(sortData.sortElements);
+					newList.removeAll(toRemove);
+					sortData = new SortData(newList);
+				}
 			}
 
 			project.data.sortData.set(sortData);

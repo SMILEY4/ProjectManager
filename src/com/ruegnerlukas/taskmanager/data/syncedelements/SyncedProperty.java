@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.data.syncedelements;
 
+import com.ruegnerlukas.taskmanager.data.DataHandler;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.ValueChange;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
@@ -15,8 +16,8 @@ public class SyncedProperty<T> extends CustomProperty<T> implements SyncedElemen
 
 
 
-	public SyncedProperty(String identifier, SyncedNode parent) {
-		this.node = new SyncedNode(identifier, parent);
+	public SyncedProperty(String identifier, SyncedNode parent, DataHandler handler) {
+		this.node = new SyncedNode(identifier, parent, handler);
 		this.node.setManagedElement(this);
 		this.listener = new FXChangeListener<T>(this) {
 			@Override

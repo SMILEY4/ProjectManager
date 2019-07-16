@@ -21,7 +21,7 @@ public abstract class DataChange {
 	public static DataChange createListChangeAdd(String identifierPath, Object addedObject) {
 		String[] tokens = identifierPath.split("/");
 		if (tokens.length == 1) {
-			return new ListChange(identifierPath, true, null, addedObject);
+			return new ListChange(identifierPath, true, addedObject);
 		} else {
 			String[] tokensRemaining = new String[tokens.length - 1];
 			System.arraycopy(tokens, 1, tokensRemaining, 0, tokens.length - 1);
@@ -36,12 +36,25 @@ public abstract class DataChange {
 	public static DataChange createListChangeRemove(String identifierPath, String removedIdentifier) {
 		String[] tokens = identifierPath.split("/");
 		if (tokens.length == 1) {
-			return new ListChange(identifierPath, false, removedIdentifier, null);
+			return new ListChange(identifierPath, false, null, removedIdentifier);
 		} else {
 			String[] tokensRemaining = new String[tokens.length - 1];
 			System.arraycopy(tokens, 1, tokensRemaining, 0, tokens.length - 1);
 			String strRemaining = String.join("/", tokensRemaining);
 			return new NestedChange(tokens[0], createListChangeRemove(strRemaining, removedIdentifier));
+		}
+	}
+
+
+	public static DataChange createListChangeRemove(String identifierPath, Object removedElement) {
+		String[] tokens = identifierPath.split("/");
+		if (tokens.length == 1) {
+			return new ListChange(identifierPath, false, removedElement);
+		} else {
+			String[] tokensRemaining = new String[tokens.length - 1];
+			System.arraycopy(tokens, 1, tokensRemaining, 0, tokens.length - 1);
+			String strRemaining = String.join("/", tokensRemaining);
+			return new NestedChange(tokens[0], createListChangeRemove(strRemaining, removedElement));
 		}
 	}
 
@@ -66,7 +79,7 @@ public abstract class DataChange {
 	public static DataChange createMapChangeAdd(String identifierPath, Object key, Object value) {
 		String[] tokens = identifierPath.split("/");
 		if (tokens.length == 1) {
-			return new MapChange(identifierPath, false, key, value);
+			return new MapChange(identifierPath, true, key, value);
 		} else {
 			String[] tokensRemaining = new String[tokens.length - 1];
 			System.arraycopy(tokens, 1, tokensRemaining, 0, tokens.length - 1);

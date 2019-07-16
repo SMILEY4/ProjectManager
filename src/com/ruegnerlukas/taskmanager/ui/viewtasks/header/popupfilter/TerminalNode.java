@@ -62,7 +62,7 @@ public class TerminalNode extends CriteriaNode {
 		boxAttribute.setMinHeight(32);
 		boxAttribute.setMaxHeight(32);
 		boxAttribute.getItems().addAll(Data.projectProperty.get().data.attributes);
-		boxAttribute.getSelectionModel().select(terminalCriteria.attribute.get());
+		boxAttribute.getSelectionModel().select(terminalCriteria.attribute);
 		boxAttribute.setOnAction(event -> onSelectAttribute(boxAttribute.getValue()));
 		box.getChildren().add(boxAttribute);
 
@@ -75,8 +75,8 @@ public class TerminalNode extends CriteriaNode {
 		boxOperation.setPrefWidth(150);
 		boxOperation.setMinHeight(32);
 		boxOperation.setMaxHeight(32);
-		boxOperation.getItems().addAll(AttributeLogic.LOGIC_MODULES.get(terminalCriteria.attribute.get().type.get()).getFilterData().keySet());
-		boxOperation.getSelectionModel().select(terminalCriteria.operation.get());
+		boxOperation.getItems().addAll(AttributeLogic.LOGIC_MODULES.get(terminalCriteria.attribute.type.get()).getFilterData().keySet());
+		boxOperation.getSelectionModel().select(terminalCriteria.operation);
 		boxOperation.setOnAction(event -> onSelectFilterOperation(boxOperation.getValue()));
 		box.getChildren().add(boxOperation);
 
@@ -86,8 +86,8 @@ public class TerminalNode extends CriteriaNode {
 		boxValues.setSpacing(5);
 		box.getChildren().add(boxValues);
 
-		Class<?>[] dataTypes = AttributeLogic.LOGIC_MODULES.get(terminalCriteria.attribute.get().type.get()).getFilterData()
-				.get(terminalCriteria.operation.get());
+		Class<?>[] dataTypes = AttributeLogic.LOGIC_MODULES.get(terminalCriteria.attribute.type.get()).getFilterData()
+				.get(terminalCriteria.operation);
 		createValueInputFields(dataTypes, terminalCriteria.values.toArray());
 
 

@@ -61,7 +61,7 @@ public class AttributeLogic {
 
 
 	public static TaskAttribute createTaskAttribute(AttributeType type, String name, Project project) {
-		TaskAttribute attribute = new TaskAttribute(name, type, project);
+		TaskAttribute attribute = new TaskAttribute(name, type, project, Project.DATA_HANDLER);
 		initTaskAttribute(attribute);
 		return attribute;
 	}
@@ -246,15 +246,15 @@ public class AttributeLogic {
 
 
 	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
-		Map<FilterOperation, Class<?>[]> FILTER_DATA = LOGIC_MODULES.get(criteria.attribute.get().type.get()).getFilterData();
+		Map<FilterOperation, Class<?>[]> FILTER_DATA = LOGIC_MODULES.get(criteria.attribute.type.get()).getFilterData();
 
 		// is invalid operation
-		if (!FILTER_DATA.containsKey(criteria.operation.get())) {
+		if (!FILTER_DATA.containsKey(criteria.operation)) {
 			return false;
 		}
 
 		// has invalid amount of values
-		Class<?>[] dataTypes = FILTER_DATA.get(criteria.operation.get());
+		Class<?>[] dataTypes = FILTER_DATA.get(criteria.operation);
 		if (dataTypes.length != criteria.values.size()) {
 			return false;
 		}

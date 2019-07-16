@@ -11,33 +11,36 @@ import java.util.Set;
 public class DataHandler {
 
 
-	private static Map<String, SyncedNode> syncedNodes = new HashMap<>();
+	private Map<String, SyncedNode> syncedNodes = new HashMap<>();
 
 
 
 
-	public static void registerSyncedNode(SyncedNode node) {
+	public void registerSyncedNode(SyncedNode node) {
 		syncedNodes.put(node.identifier, node);
 	}
 
 
 
 
-	public static void deregisterSyncedNode(SyncedNode node) {
+	public void deregisterSyncedNode(SyncedNode node) {
 		syncedNodes.remove(node.identifier);
 	}
 
 
-	public static Set<String> getHandledIdentifiers() {
+
+
+	public Set<String> getHandledIdentifiers() {
 		return syncedNodes.keySet();
 	}
 
 
 
-	public static void onExternalChange(DataChange change) {
+
+	public void onExternalChange(DataChange change) {
 		System.out.println("EXTERNAL CHANGE: " + change.toString());
 		SyncedNode node = syncedNodes.get(change.getIdentifier());
-		if(node != null) {
+		if (node != null) {
 			SyncedElement element = node.getManagedElement();
 			if (element != null) {
 				element.applyChange(change);
@@ -46,10 +49,11 @@ public class DataHandler {
 	}
 
 
-	public static void onLocalChange(DataChange change) {
+
+
+	public void onLocalChange(DataChange change) {
 		System.out.println("LOCAL CHANGE: " + change.toString());
 	}
-
 
 
 }

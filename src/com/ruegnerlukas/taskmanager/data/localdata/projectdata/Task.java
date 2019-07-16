@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.data.localdata.projectdata;
 
+import com.ruegnerlukas.taskmanager.data.DataHandler;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.NestedChange;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
@@ -36,20 +37,20 @@ public class Task implements SyncedElement {
 
 
 
-	public Task(int id, Project project) {
+	public Task(int id, Project project, DataHandler handler) {
 
-		this.node = new SyncedNode(Integer.toString(id), project.data.tasks.getNode());
+		this.node = new SyncedNode(Integer.toString(id), project.data.tasks.getNode(), handler);
 		this.node.setManagedElement(this);
 
-		this.values = new SyncedMap<>("values", node);
+		this.values = new SyncedMap<>("values", node, handler);
 		TaskAttribute idAttribute = AttributeLogic.findAttribute(project, AttributeType.ID);
 		values.put(idAttribute, new IDValue(id));
 
 		values.addListener((MapChangeListener<TaskAttribute, TaskValue<?>>) c -> {
 			List<EventHandler<ActionEvent>> list = listeners.get(c.getKey());
 			if (list != null) {
-				for (EventHandler<ActionEvent> handler : list) {
-					handler.handle(new ActionEvent());
+				for (EventHandler<ActionEvent> eventHandler : list) {
+					eventHandler.handle(new ActionEvent());
 				}
 			}
 		});

@@ -25,6 +25,8 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PopupGroup extends PopupBase {
 
@@ -232,12 +234,12 @@ public class PopupGroup extends PopupBase {
 		for (TaskAttribute attribute : data.attributes) {
 			onAddAttribute(attribute);
 		}
-		if (data.customHeaderString.get() == null) {
+		if (data.customHeaderString == null) {
 			cbUseHeaderString.setSelected(false);
 			fieldHeaderText.setText("");
 		} else {
 			cbUseHeaderString.setSelected(true);
-			fieldHeaderText.setText(data.customHeaderString.get());
+			fieldHeaderText.setText(data.customHeaderString);
 		}
 	}
 
@@ -321,12 +323,11 @@ public class PopupGroup extends PopupBase {
 
 
 	private TaskGroupData buildGroupData() {
-		TaskGroupData data = new TaskGroupData();
-		data.customHeaderString.set((cbUseHeaderString.isSelected()) ? fieldHeaderText.getText() : null);
+		List<TaskAttribute> attributes = new ArrayList<>();
 		for (Node node : boxAttributes.getChildren()) {
-			data.attributes.add(((AttributeNode) node).getAttribute());
+			attributes.add(((AttributeNode) node).getAttribute());
 		}
-		return data;
+		return new TaskGroupData((cbUseHeaderString.isSelected()) ? fieldHeaderText.getText() : null, attributes);
 	}
 
 

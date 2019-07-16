@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.data.localdata.projectdata;
 
+import com.ruegnerlukas.taskmanager.data.DataHandler;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.NestedChange;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
@@ -23,24 +24,24 @@ public class TaskAttribute implements SyncedElement {
 
 
 
-	public TaskAttribute(String name, AttributeType type, Project project) {
-		this(name, type, project.data.attributes.getNode());
+	public TaskAttribute(String name, AttributeType type, Project project, DataHandler handler) {
+		this(name, type, project.data.attributes.getNode(), handler);
 	}
 
 
 
 
-	private TaskAttribute(String name, AttributeType type, SyncedNode parent) {
-		this.node = new SyncedNode(name, parent);
+	private TaskAttribute(String name, AttributeType type, SyncedNode parent, DataHandler handler) {
+		this.node = new SyncedNode(name, parent, handler);
 		this.node.setManagedElement(this);
 
-		this.name = new SyncedProperty<>("name", node);
+		this.name = new SyncedProperty<>("name", node, handler);
 		this.name.set(name);
 
-		this.type = new SyncedProperty<>("type", node);
+		this.type = new SyncedProperty<>("type", node, handler);
 		this.type.set(type);
 
-		this.values = new SyncedMap<>("values", node);
+		this.values = new SyncedMap<>("values", node, handler);
 	}
 
 

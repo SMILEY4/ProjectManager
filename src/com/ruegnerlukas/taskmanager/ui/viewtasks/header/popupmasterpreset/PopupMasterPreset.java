@@ -344,20 +344,20 @@ public class PopupMasterPreset extends PopupBase {
 
 
 	private void onSetAllData(MasterPreset preset) {
-		if (preset.filterPreset.get() == null) {
+		if (preset.filterPreset == null) {
 			onClearFilterData();
 		} else {
-			onSetFilterData(preset.filterPreset.get());
+			onSetFilterData(preset.filterPreset);
 		}
-		if (preset.groupPreset.get() == null) {
+		if (preset.groupPreset == null) {
 			onClearGroupData();
 		} else {
-			onSetGroupData(preset.groupPreset.get());
+			onSetGroupData(preset.groupPreset);
 		}
-		if (preset.sortPreset.get() == null) {
+		if (preset.sortPreset == null) {
 			onClearSortData();
 		} else {
-			onSetSortData(preset.sortPreset.get());
+			onSetSortData(preset.sortPreset);
 		}
 	}
 
@@ -386,11 +386,11 @@ public class PopupMasterPreset extends PopupBase {
 
 
 	private MasterPreset buildMasterPreset() {
-		MasterPreset preset = new MasterPreset();
-		preset.filterPreset.set(selectFilter.getValue());
-		preset.groupPreset.set(selectTaskGroup.getValue());
-		preset.sortPreset.set(selectSort.getValue());
-		return preset;
+		return new MasterPreset(
+				selectFilter.getValue(),
+				selectTaskGroup.getValue(),
+				selectSort.getValue()
+		);
 	}
 
 
