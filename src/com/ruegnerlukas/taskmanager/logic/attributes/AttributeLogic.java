@@ -61,7 +61,7 @@ public class AttributeLogic {
 
 
 	public static TaskAttribute createTaskAttribute(AttributeType type, String name, Project project) {
-		TaskAttribute attribute = new TaskAttribute(name, type, project, Project.DATA_HANDLER);
+		TaskAttribute attribute = new TaskAttribute(name, type, project, project.dataHandler);
 		initTaskAttribute(attribute);
 		return attribute;
 	}

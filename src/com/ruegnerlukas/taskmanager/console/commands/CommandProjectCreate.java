@@ -29,7 +29,7 @@ public class CommandProjectCreate {
 		final String name = result.getValueOrDefault("name", "New Project");
 		final boolean useLogic = result.hasValue("use-logic");
 
-		Project project = ProjectLogic.createNewProject(name);
+		Project project = ProjectLogic.createNewLocalProject(name);
 		if(useLogic) {
 			ProjectLogic.setCurrentProject(project);
 		} else {

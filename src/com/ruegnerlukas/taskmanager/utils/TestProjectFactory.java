@@ -20,7 +20,7 @@ public class TestProjectFactory {
 
 	public static Project build(String name, AttributeType[] attTypes, String[] attNames, int nTasks, boolean randomValues, long timeBetweenTasks) {
 
-		Project project = ProjectLogic.createNewProject(name);
+		Project project = ProjectLogic.createNewLocalProject(name);
 
 		// values
 		for (int i = 0; i < attTypes.length; i++) {

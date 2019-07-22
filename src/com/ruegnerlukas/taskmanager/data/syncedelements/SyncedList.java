@@ -67,7 +67,7 @@ public class SyncedList<E> extends ObservableListWrapper<E> implements SyncedEle
 				this.add((E) listChange.getAdded());
 			}
 			if (listChange.wasRemoved()) {
-				if(listChange.removeByIdentifier()) {
+				if (listChange.removeByIdentifier()) {
 					for (E e : this) {
 						if (e instanceof SyncedElement) {
 							SyncedElement managedElement = (SyncedElement) e;
@@ -111,5 +111,6 @@ public class SyncedList<E> extends ObservableListWrapper<E> implements SyncedEle
 	public FXListChangeListener<E> getListener() {
 		return this.listener;
 	}
+
 
 }

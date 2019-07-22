@@ -1,21 +1,27 @@
 package com.ruegnerlukas.taskmanager.data.localdata;
 
 
+import com.ruegnerlukas.taskmanager.data.Identifiers;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedProperty;
 
 public class ProjectSettings {
 
-
-	public final SyncedProperty<String> name = new SyncedProperty<>("project.settings.project_name", null, Project.DATA_HANDLER);
-	public final SyncedProperty<Boolean> attributesLocked = new SyncedProperty<>("project.settings.attributes_locked", null, Project.DATA_HANDLER);
-	public final SyncedProperty<Integer> idCounter = new SyncedProperty<>("project.settings.id_counter", null, Project.DATA_HANDLER);
-
+	public final SyncedProperty<String> name;
+	public final SyncedProperty<Boolean> attributesLocked;
+	public final SyncedProperty<Integer> idCounter;
 
 
 
-	public ProjectSettings() {
+
+	ProjectSettings(Project project) {
+
+		name = new SyncedProperty<>(Identifiers.SETTINGS_PROJECT_NAME, null, project.dataHandler);
+		attributesLocked = new SyncedProperty<>(Identifiers.SETTINGS_ATTRIBUTES_LOCKED, null, project.dataHandler);
+		idCounter = new SyncedProperty<>(Identifiers.SETTINGS_IDCOUNTER, null, project.dataHandler);
+
 		attributesLocked.set(false);
 		idCounter.set(0);
+
 	}
 
 

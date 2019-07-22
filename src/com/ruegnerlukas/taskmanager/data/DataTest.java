@@ -1,10 +1,23 @@
 package com.ruegnerlukas.taskmanager.data;
 
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.utils.TestProjectFactory;
+
 @SuppressWarnings ("Duplicates")
 public class DataTest {
 
 
 	public static void main(String[] args) {
+		Project project = TestProjectFactory.build(
+				"Test Project",
+				new AttributeType[]{AttributeType.BOOLEAN, AttributeType.TEXT},
+				new String[]{"Attribute Boolean", "Attribute Text"},
+				5,
+				true,
+				100
+		);
+		System.out.println(project);
 	}
 
 

@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.data;
 
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
+import com.ruegnerlukas.taskmanager.data.externaldata.ExternalDataHandler;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedElement;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedNode;
 
@@ -12,6 +13,31 @@ public class DataHandler {
 
 
 	private Map<String, SyncedNode> syncedNodes = new HashMap<>();
+	private ExternalDataHandler externalDataHandler;
+
+
+
+
+	public DataHandler() {
+		this(null);
+	}
+
+
+
+
+	public DataHandler(ExternalDataHandler externalDataHandler) {
+		this.externalDataHandler = externalDataHandler;
+		if (this.externalDataHandler != null) {
+			this.externalDataHandler.addChangeListener(this::onExternalChange);
+		}
+	}
+
+
+
+
+	public ExternalDataHandler getExternalDataHandler() {
+		return externalDataHandler;
+	}
 
 
 
@@ -38,7 +64,6 @@ public class DataHandler {
 
 
 	public void onExternalChange(DataChange change) {
-		System.out.println("EXTERNAL CHANGE: " + change.toString());
 		SyncedNode node = syncedNodes.get(change.getIdentifier());
 		if (node != null) {
 			SyncedElement element = node.getManagedElement();
@@ -52,7 +77,9 @@ public class DataHandler {
 
 
 	public void onLocalChange(DataChange change) {
-		System.out.println("LOCAL CHANGE: " + change.toString());
+		if (getExternalDataHandler() != null && change != null) {
+			getExternalDataHandler().applyChange(change);
+		}
 	}
 
 

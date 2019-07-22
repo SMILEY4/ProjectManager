@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.logic;
 
+import com.ruegnerlukas.taskmanager.data.externaldata.files.ExternalFileHandler;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
@@ -39,15 +40,15 @@ public class ProjectLogic {
 
 
 
-	public static Project createNewProject() {
-		return createNewProject("New Project");
+	public static Project createNewLocalProject() {
+		return createNewLocalProject("New Project");
 	}
 
 
 
 
-	public static Project createNewProject(String name) {
-		Project project = new Project();
+	public static Project createNewLocalProject(String name) {
+		Project project = new Project(new ExternalFileHandler()); // TODO set root directory
 		project.settings.name.set(name);
 		for (AttributeType type : AttributeType.getFixedTypes()) {
 			project.data.attributes.add(AttributeLogic.createTaskAttribute(type, type.display + " Attribute", project));

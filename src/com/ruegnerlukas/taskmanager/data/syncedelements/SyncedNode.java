@@ -9,6 +9,7 @@ import java.util.List;
 
 public class SyncedNode {
 
+
 	private DataHandler dataHandler;
 
 	public final String identifier;

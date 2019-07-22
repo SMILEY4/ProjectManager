@@ -3,6 +3,7 @@ package com.ruegnerlukas.taskmanager.data.localdata.projectdata;
 import com.ruegnerlukas.taskmanager.data.DataHandler;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.NestedChange;
+import com.ruegnerlukas.taskmanager.data.Identifiers;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
@@ -35,13 +36,13 @@ public class TaskAttribute implements SyncedElement {
 		this.node = new SyncedNode(name, parent, handler);
 		this.node.setManagedElement(this);
 
-		this.name = new SyncedProperty<>("name", node, handler);
+		this.name = new SyncedProperty<>(Identifiers.ATTRIBUTE_NAME, node, handler);
 		this.name.set(name);
 
-		this.type = new SyncedProperty<>("type", node, handler);
+		this.type = new SyncedProperty<>(Identifiers.ATTRIBUTE_TYPE, node, handler);
 		this.type.set(type);
 
-		this.values = new SyncedMap<>("values", node, handler);
+		this.values = new SyncedMap<>(Identifiers.ATTRIBUTE_VALUES, node, handler);
 	}
 
 
@@ -97,5 +98,6 @@ public class TaskAttribute implements SyncedElement {
 	public CustomListener<?> getListener() {
 		return null;
 	}
+
 
 }

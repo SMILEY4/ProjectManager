@@ -108,15 +108,15 @@ public class MainView extends AnchorPane {
 	private void create() {
 
 		// Create new empty Project
-		functionNewProject = new MenuFunction("File", "New Project") {
+		functionNewProject = new MenuFunction("File", "New Local Project") {
 			@Override
 			public void onAction() {
 				if (Data.projectProperty.get() != null) {
 					if (handleOpenProject()) {
-						ProjectLogic.setCurrentProject(ProjectLogic.createNewProject());
+						ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject());
 					}
 				} else {
-					ProjectLogic.setCurrentProject(ProjectLogic.createNewProject());
+					ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject());
 				}
 			}
 		}.addToMenuBar(menuBar);
