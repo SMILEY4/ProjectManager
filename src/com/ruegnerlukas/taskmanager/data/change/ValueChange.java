@@ -9,7 +9,7 @@ public class ValueChange extends DataChange {
 
 
 	public ValueChange(String identifier, Object newValue) {
-		super(identifier);
+		super(ChangeType.VALUE, identifier);
 		this.newValue = newValue;
 	}
 

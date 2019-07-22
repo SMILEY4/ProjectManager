@@ -9,7 +9,7 @@ public class NestedChange extends DataChange {
 
 
 	public NestedChange(String identifier, DataChange next) {
-		super(identifier);
+		super(ChangeType.NESTED, identifier);
 		this.next = next;
 	}
 

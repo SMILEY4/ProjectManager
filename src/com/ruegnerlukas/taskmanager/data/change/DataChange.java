@@ -3,6 +3,13 @@ package com.ruegnerlukas.taskmanager.data.change;
 public abstract class DataChange {
 
 
+	public enum ChangeType {
+		VALUE, LIST, MAP, NESTED;
+	}
+
+
+
+
 	public static DataChange createValueChange(String identifierPath, Object newObject) {
 		String[] tokens = identifierPath.split("/");
 		if (tokens.length == 1) {
@@ -44,6 +51,8 @@ public abstract class DataChange {
 			return new NestedChange(tokens[0], createListChangeRemove(strRemaining, removedIdentifier));
 		}
 	}
+
+
 
 
 	public static DataChange createListChangeRemove(String identifierPath, Object removedElement) {
@@ -91,13 +100,22 @@ public abstract class DataChange {
 
 
 
+	private final ChangeType type;
 	private final String identifier;
 
 
 
 
-	public DataChange(String identifier) {
+	public DataChange(ChangeType type, String identifier) {
+		this.type = type;
 		this.identifier = identifier;
+	}
+
+
+
+
+	public ChangeType getType() {
+		return type;
 	}
 
 
@@ -106,7 +124,6 @@ public abstract class DataChange {
 	public String getIdentifier() {
 		return identifier;
 	}
-
 
 
 }

@@ -11,7 +11,7 @@ public class MapChange extends DataChange {
 
 
 	public MapChange(String identifier, boolean wasAdded, Object key, Object value) {
-		super(identifier);
+		super(ChangeType.MAP, identifier);
 		this.wasAdded = wasAdded;
 		this.key = key;
 		this.value = value;

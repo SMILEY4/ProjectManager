@@ -20,7 +20,7 @@ public class ListChange extends DataChange {
 
 
 	public ListChange(String identifier, boolean wasAdded, Object element, String identifierRemoved) {
-		super(identifier);
+		super(ChangeType.LIST, identifier);
 		this.element = element;
 		this.wasAdded = wasAdded;
 		this.identifierRemoved = identifierRemoved;
