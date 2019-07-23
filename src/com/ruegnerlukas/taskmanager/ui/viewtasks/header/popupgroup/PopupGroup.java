@@ -257,7 +257,7 @@ public class PopupGroup extends PopupBase {
 
 
 	private void onAddAttribute() {
-		TaskAttribute attribute = AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID);
+		TaskAttribute attribute = AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID);
 		onAddAttribute(attribute);
 		onModified();
 	}

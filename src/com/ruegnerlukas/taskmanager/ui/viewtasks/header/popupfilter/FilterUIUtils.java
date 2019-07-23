@@ -32,7 +32,7 @@ public class FilterUIUtils {
 
 
 	private static TerminalFilterCriteria createDefaultTerminalCriteria() {
-		final TaskAttribute attribute = AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID);
+		final TaskAttribute attribute = AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID);
 		final FilterOperation operation = FilterOperation.EQUALS;
 		final Object[] values = new Object[]{0};
 		return new TerminalFilterCriteria(attribute, operation, values);

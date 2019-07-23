@@ -101,7 +101,7 @@ public class BreadcrumbBar extends AnchorPane {
 		for (int i = 0; i < queue.size(); i++) {
 			Task task = queue.get(i);
 
-			IDValue valueID = (IDValue) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID));
+			IDValue valueID = (IDValue) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID));
 
 			// label
 			Label label = new Label();

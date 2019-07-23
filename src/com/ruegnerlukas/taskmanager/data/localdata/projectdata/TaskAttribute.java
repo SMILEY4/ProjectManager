@@ -18,6 +18,7 @@ public class TaskAttribute implements SyncedElement {
 
 	private final SyncedNode node;
 
+	public final int id;
 	public final SyncedProperty<String> name;
 	public final SyncedProperty<AttributeType> type;
 	public final SyncedMap<AttributeValueType, AttributeValue<?>> values;
@@ -25,19 +26,20 @@ public class TaskAttribute implements SyncedElement {
 
 
 
-	public TaskAttribute(String name, AttributeType type, Project project, DataHandler handler) {
-		this(name, type, project.data.attributes.getNode(), handler);
+	public TaskAttribute(int id, AttributeType type, Project project, DataHandler handler) {
+		this(id, type, project.data.attributes.getNode(), handler);
 	}
 
 
 
 
-	private TaskAttribute(String name, AttributeType type, SyncedNode parent, DataHandler handler) {
-		this.node = new SyncedNode(name, parent, handler);
+	private TaskAttribute(int id, AttributeType type, SyncedNode parent, DataHandler handler) {
+		this.id = id;
+
+		this.node = new SyncedNode("Attribute-"+id, parent, handler);
 		this.node.setManagedElement(this);
 
 		this.name = new SyncedProperty<>(Identifiers.ATTRIBUTE_NAME, node, handler);
-		this.name.set(name);
 
 		this.type = new SyncedProperty<>(Identifiers.ATTRIBUTE_TYPE, node, handler);
 		this.type.set(type);

@@ -58,7 +58,7 @@ public class CommandTaskSetValue {
 
 			Task task = null;
 
-			TaskAttribute attributeID = AttributeLogic.findAttribute(project, AttributeType.ID);
+			TaskAttribute attributeID = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 			for (Task t : project.data.tasks) {
 				IDValue valueID = (IDValue) TaskLogic.getValueOrDefault(t, attributeID);
 				if (valueID.getValue() == id) {
@@ -72,7 +72,7 @@ public class CommandTaskSetValue {
 
 			} else {
 
-				TaskAttribute attribute = AttributeLogic.findAttribute(project, strAttribute);
+				TaskAttribute attribute = AttributeLogic.findAttributeByName(project, strAttribute);
 				if (attribute == null) {
 					ConsoleWindowHandler.print(Color.RED, "Could not set task value: Attribute \"" + strAttribute + "\" not found.");
 					return;

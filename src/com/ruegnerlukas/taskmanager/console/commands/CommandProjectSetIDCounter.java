@@ -33,7 +33,7 @@ public class CommandProjectSetIDCounter {
 		if(project == null) {
 			ConsoleWindowHandler.print(Color.RED, "Could not set id-counter: No project opened.");
 		} else {
-			project.settings.idCounter.set(value);
+			project.settings.taskIDCounter.set(value);
 		}
 
 	}

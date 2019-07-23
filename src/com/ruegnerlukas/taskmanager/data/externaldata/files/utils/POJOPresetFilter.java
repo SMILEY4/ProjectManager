@@ -106,7 +106,7 @@ public class POJOPresetFilter {
 
 
 		public FilterCriteria.CriteriaType type = FilterCriteria.CriteriaType.TERMINAL;
-		public String attribute;
+		public int attribute;
 		public FilterOperation operation;
 		public List<String> values;
 
@@ -114,7 +114,7 @@ public class POJOPresetFilter {
 
 
 		public POJOTerminal(TerminalFilterCriteria criteria) {
-			this.attribute = criteria.attribute.name.get();
+			this.attribute = criteria.attribute.id;
 			this.operation = criteria.operation;
 			this.values = new ArrayList<>();
 			for (Object value : criteria.values) {

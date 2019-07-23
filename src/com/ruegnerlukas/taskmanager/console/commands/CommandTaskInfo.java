@@ -41,7 +41,7 @@ public class CommandTaskInfo {
 			ConsoleWindowHandler.print(Color.RED, "Could not find information: No project opened.");
 		} else {
 
-			TaskAttribute attributeID = AttributeLogic.findAttribute(project, AttributeType.ID);
+			TaskAttribute attributeID = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 
 			Task task = null;
 			for (Task t : project.data.tasks) {

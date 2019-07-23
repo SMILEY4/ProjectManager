@@ -12,7 +12,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.Project;
 
 import java.io.*;
 
-public class ActionSettingsIDCounter extends FileAction {
+public class ActionSettingsTaskIDCounter extends FileAction {
 
 
 
@@ -48,7 +48,7 @@ public class ActionSettingsIDCounter extends FileAction {
 			}
 
 			// modify
-			data.idCounter = (Integer) valueChange.getNewValue();
+			data.taskIDCounter = (Integer) valueChange.getNewValue();
 
 			// write back
 			Writer writer = new FileWriter(file);

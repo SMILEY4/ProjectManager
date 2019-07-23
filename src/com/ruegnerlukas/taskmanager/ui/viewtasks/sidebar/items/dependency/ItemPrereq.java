@@ -35,7 +35,7 @@ public class ItemPrereq extends HBox {
 		Label label0 = new Label("-");
 		this.getChildren().add(label0);
 
-		final IDValue valueID = (IDValue) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID));
+		final IDValue valueID = (IDValue) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID));
 		Label labelTask = new Label("T-" + valueID.getValue());
 		this.getChildren().add(labelTask);
 

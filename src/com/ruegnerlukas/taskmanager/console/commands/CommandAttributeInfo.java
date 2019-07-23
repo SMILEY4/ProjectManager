@@ -38,7 +38,7 @@ public class CommandAttributeInfo {
 			ConsoleWindowHandler.print(Color.RED, "Could not find information: No project opened.");
 		} else {
 
-			TaskAttribute attribute = AttributeLogic.findAttribute(project, name);
+			TaskAttribute attribute = AttributeLogic.findAttributeByName(project, name);
 			if(attribute == null) {
 				ConsoleWindowHandler.print(Color.RED, "Could not find attribute: No attribute with name \"" + name + "\" found.");
 

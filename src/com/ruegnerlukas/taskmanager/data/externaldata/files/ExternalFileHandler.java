@@ -35,7 +35,8 @@ public class ExternalFileHandler implements ExternalDataHandler {
 		handler = new FileHandler(directory);
 		fileActionMap.put(Identifiers.SETTINGS_PROJECT_NAME, new ActionSettingsName());
 		fileActionMap.put(Identifiers.SETTINGS_ATTRIBUTES_LOCKED, new ActionSettingsAttribsLock());
-		fileActionMap.put(Identifiers.SETTINGS_IDCOUNTER, new ActionSettingsIDCounter());
+		fileActionMap.put(Identifiers.SETTINGS_TASK_IDCOUNTER, new ActionSettingsTaskIDCounter());
+		fileActionMap.put(Identifiers.SETTINGS_ATTRIBUTE_IDCOUNTER, new ActionSettingsAttributeIDCounter());
 		fileActionMap.put(Identifiers.DATA_ATTRIBUTE_LIST, new ActionListAttributes());
 		fileActionMap.put(Identifiers.DATA_TASK_LIST, new ActionListTasks());
 		fileActionMap.put(Identifiers.DATA_PRESETS_SORT, new ActionPresetsSort());

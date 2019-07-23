@@ -36,11 +36,11 @@ public class Task implements SyncedElement {
 
 	public Task(int id, Project project, DataHandler handler) {
 
-		this.node = new SyncedNode(Integer.toString(id), project.data.tasks.getNode(), handler);
+		this.node = new SyncedNode("Task-" + id, project.data.tasks.getNode(), handler);
 		this.node.setManagedElement(this);
 
 		this.values = new SyncedMap<>(Identifiers.TASK_VALUES, node, handler);
-		TaskAttribute idAttribute = AttributeLogic.findAttribute(project, AttributeType.ID);
+		TaskAttribute idAttribute = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 		values.put(idAttribute, new IDValue(id));
 
 		values.addListener((MapChangeListener<TaskAttribute, TaskValue<?>>) c -> {

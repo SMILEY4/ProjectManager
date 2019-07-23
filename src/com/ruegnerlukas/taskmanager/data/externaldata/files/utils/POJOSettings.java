@@ -5,6 +5,7 @@ public class POJOSettings {
 
 	public String projectName;
 	public boolean attributesLocked;
-	public int idCounter;
+	public int taskIDCounter;
+	public int attributeIDCounter;
 
 }

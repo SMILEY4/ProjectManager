@@ -58,7 +58,7 @@ public class ListChange extends DataChange {
 
 
 	public Object getRemoved() {
-		return wasRemoved() && identifierRemoved == null ? element : null;
+		return wasRemoved() ? element : null;
 	}
 
 

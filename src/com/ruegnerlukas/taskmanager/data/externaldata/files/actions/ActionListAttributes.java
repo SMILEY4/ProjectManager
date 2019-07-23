@@ -28,9 +28,10 @@ public class ActionListAttributes extends FileAction {
 
 			DataChange attribChange = ((NestedChange) change).getNext();
 			if (attribChange.getType() == DataChange.ChangeType.NESTED) {
-				String attribName = attribChange.getIdentifier();
+				String attribID = attribChange.getIdentifier().split("-")[1];
 
-				final File file = fileHandler.getAttributeFile(attribName, false);
+
+				final File file = fileHandler.getAttributeFile(attribID, false);
 				if (file == null) {
 					return;
 				}
@@ -38,7 +39,7 @@ public class ActionListAttributes extends FileAction {
 				// ignore real change (value/map-change) here, since we will write the whole attribute to the file
 
 				// get attribute
-				TaskAttribute attribute = AttributeLogic.findAttribute(project, attribName);
+				TaskAttribute attribute = AttributeLogic.findAttributeByID(project, Integer.parseInt(attribID));
 				if (attribute == null) {
 					return;
 				}
@@ -77,7 +78,7 @@ public class ActionListAttributes extends FileAction {
 
 				try {
 
-					File file = fileHandler.getAttributeFile(attribute.name.get(), true);
+					File file = fileHandler.getAttributeFile(Integer.toString(attribute.id), true);
 
 					// write
 					Gson gson = JsonUtils.buildGson();
@@ -99,8 +100,8 @@ public class ActionListAttributes extends FileAction {
 				if (!(listChange.getRemoved() instanceof TaskAttribute)) {
 					return;
 				}
-				TaskAttribute attribute = (TaskAttribute) listChange.getAdded();
-				File file = fileHandler.getAttributeFile(attribute.name.get(), false);
+				TaskAttribute attribute = (TaskAttribute) listChange.getRemoved();
+				File file = fileHandler.getAttributeFile(Integer.toString(attribute.id), false);
 				if (file != null) {
 					file.delete();
 				}

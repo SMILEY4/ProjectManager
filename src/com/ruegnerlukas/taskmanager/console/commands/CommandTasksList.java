@@ -39,8 +39,8 @@ public class CommandTasksList {
 
 			ConsoleWindowHandler.print("Tasks:");
 
-			TaskAttribute attributeID = AttributeLogic.findAttribute(project, AttributeType.ID);
-			TaskAttribute attributeDescr = AttributeLogic.findAttribute(project, AttributeType.DESCRIPTION);
+			TaskAttribute attributeID = AttributeLogic.findAttributeByType(project, AttributeType.ID);
+			TaskAttribute attributeDescr = AttributeLogic.findAttributeByType(project, AttributeType.DESCRIPTION);
 
 			for(Task task : project.data.tasks) {
 

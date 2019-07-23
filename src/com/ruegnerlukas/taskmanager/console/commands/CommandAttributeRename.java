@@ -42,7 +42,7 @@ public class CommandAttributeRename {
 			ConsoleWindowHandler.print(Color.RED, "Could not rename attribute: No project opened.");
 		} else {
 
-			TaskAttribute attribute = AttributeLogic.findAttribute(project, name);
+			TaskAttribute attribute = AttributeLogic.findAttributeByName(project, name);
 
 			if(attribute == null) {
 				ConsoleWindowHandler.print(Color.RED, "Could not rename attribute: No attribute with name \"" + name + "\" found.");
@@ -53,7 +53,7 @@ public class CommandAttributeRename {
 
 				} else {
 					if(useLogic) {
-						AttributeLogic.renameTaskAttribute(project, attribute, newName);
+						AttributeLogic.renameTaskAttribute(attribute, newName);
 					} else {
 						attribute.name.set(newName);
 					}

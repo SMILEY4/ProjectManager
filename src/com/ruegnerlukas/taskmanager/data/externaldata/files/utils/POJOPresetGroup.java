@@ -11,7 +11,7 @@ public class POJOPresetGroup {
 
 	public String presetName;
 	public String customHeader;
-	public List<String> attributes;
+	public List<Integer> attributes;
 
 
 
@@ -21,7 +21,7 @@ public class POJOPresetGroup {
 		this.customHeader = data.customHeaderString;
 		this.attributes = new ArrayList<>();
 		for (TaskAttribute attribute : data.attributes) {
-			this.attributes.add(attribute.name.get());
+			this.attributes.add(attribute.id);
 		}
 
 

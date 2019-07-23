@@ -29,7 +29,7 @@ public class POJOPresetSort {
 	class POJOSortElement {
 
 
-		public String attribte;
+		public int attribute;
 		public SortElement.SortDir dir;
 
 
@@ -37,7 +37,7 @@ public class POJOPresetSort {
 
 		public POJOSortElement(SortElement element) {
 			this.dir = element.dir.get();
-			this.attribte = element.attribute.get().name.get();
+			this.attribute = element.attribute.get().id;
 		}
 
 	}

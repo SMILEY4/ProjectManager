@@ -189,7 +189,7 @@ public class TaskLogic {
 
 	private static void removeFromDependencies(Project project, Task task) {
 		// remove from dependencies
-		List<TaskAttribute> dependencyAttributes = AttributeLogic.findAttributes(project, AttributeType.DEPENDENCY);
+		List<TaskAttribute> dependencyAttributes = AttributeLogic.findAttributesByType(project, AttributeType.DEPENDENCY);
 		for (int i = 0, n = project.data.tasks.size(); i < n; i++) {
 			Task t = project.data.tasks.get(i);
 			for (TaskAttribute attribute : dependencyAttributes) {
@@ -221,8 +221,8 @@ public class TaskLogic {
 	public static Task createTask(Project project) {
 
 		// get id
-		final int id = project.settings.idCounter.get();
-		project.settings.idCounter.set(id + 1);
+		final int id = project.settings.taskIDCounter.get();
+		project.settings.taskIDCounter.set(id + 1);
 
 		// get time
 		LocalDateTime time = LocalDateTime.now();
@@ -231,11 +231,11 @@ public class TaskLogic {
 		Task task = new Task(id, project, project.dataHandler);
 
 		// set date created
-		TaskAttribute createdAttribute = AttributeLogic.findAttribute(project, AttributeType.CREATED);
+		TaskAttribute createdAttribute = AttributeLogic.findAttributeByType(project, AttributeType.CREATED);
 		setValue(project, task, createdAttribute, new CreatedValue(time));
 
 		// set last updated
-		TaskAttribute updatedAttribute = AttributeLogic.findAttribute(project, AttributeType.LAST_UPDATED);
+		TaskAttribute updatedAttribute = AttributeLogic.findAttributeByType(project, AttributeType.LAST_UPDATED);
 		setValue(project, task, updatedAttribute, new LastUpdatedValue(time));
 
 		return task;
@@ -252,7 +252,7 @@ public class TaskLogic {
 
 
 	public static Task findTaskByID(Project project, int id) {
-		TaskAttribute idAttribute = AttributeLogic.findAttribute(project, AttributeType.ID);
+		TaskAttribute idAttribute = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 		if (idAttribute == null) {
 			return null;
 		}
@@ -383,7 +383,7 @@ public class TaskLogic {
 		// update "last_changed"
 		if (attribute.type.get() != AttributeType.LAST_UPDATED && newValue != prevValue) {
 			if (prevValue != null && prevValue.compare(newValue) != 0) {
-				setValue(project, task, AttributeLogic.findAttribute(project, AttributeType.LAST_UPDATED), new LastUpdatedValue(LocalDateTime.now()));
+				setValue(project, task, AttributeLogic.findAttributeByType(project, AttributeType.LAST_UPDATED), new LastUpdatedValue(LocalDateTime.now()));
 			}
 		}
 	}

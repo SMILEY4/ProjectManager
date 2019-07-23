@@ -42,7 +42,7 @@ public class CommandAttributesRemove {
 			ConsoleWindowHandler.print(Color.RED, "Could not remove attribute: No project opened.");
 
 		} else {
-			TaskAttribute attribute = AttributeLogic.findAttribute(project, name);
+			TaskAttribute attribute = AttributeLogic.findAttributeByName(project, name);
 			if(attribute == null) {
 				ConsoleWindowHandler.print(Color.RED, "Could not remove attribute: No attribute with name \"" + name + "\" found.");
 

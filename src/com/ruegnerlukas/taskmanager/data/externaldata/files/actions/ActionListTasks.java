@@ -32,7 +32,7 @@ public class ActionListTasks extends FileAction {
 
 			DataChange taskChange = ((NestedChange) change).getNext();
 			if (taskChange.getType() == DataChange.ChangeType.NESTED) {
-				String taskID = taskChange.getIdentifier();
+				String taskID = taskChange.getIdentifier().split("-")[1];
 
 				final File file = fileHandler.getTaskFile(taskID, false);
 				if (file == null) {
@@ -81,7 +81,7 @@ public class ActionListTasks extends FileAction {
 
 				try {
 
-					TaskAttribute idAttrib = AttributeLogic.findAttribute(project, AttributeType.ID);
+					TaskAttribute idAttrib = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 					IDValue idValue = (IDValue) TaskLogic.getTaskValue(task, idAttrib);
 					File file = fileHandler.getTaskFile(idValue.getValue().toString(), true);
 
@@ -106,7 +106,7 @@ public class ActionListTasks extends FileAction {
 					return;
 				}
 				Task task = (Task) listChange.getAdded();
-				TaskAttribute idAttrib = AttributeLogic.findAttribute(project, AttributeType.ID);
+				TaskAttribute idAttrib = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 				IDValue idValue = (IDValue) TaskLogic.getTaskValue(task, idAttrib);
 
 				File file = fileHandler.getTaskFile(idValue.getValue().toString(), false);

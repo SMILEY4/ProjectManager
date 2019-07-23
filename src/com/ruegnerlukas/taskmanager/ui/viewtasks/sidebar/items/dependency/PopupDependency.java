@@ -160,8 +160,8 @@ class TaskItem extends HBox {
 		labelDescr.setMaxSize(100000, 22);
 		this.getChildren().add(labelDescr);
 
-		IDValue valueID = (IDValue) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID));
-		DescriptionValue valueDescr = (DescriptionValue) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION));
+		IDValue valueID = (IDValue) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID));
+		DescriptionValue valueDescr = (DescriptionValue) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.DESCRIPTION));
 
 		labelTask.setText("T-" + valueID.getValue());
 		labelDescr.setText(valueDescr.getValue());

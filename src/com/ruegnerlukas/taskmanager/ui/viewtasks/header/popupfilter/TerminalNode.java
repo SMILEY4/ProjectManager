@@ -210,7 +210,7 @@ public class TerminalNode extends CriteriaNode {
 				node.setButtonCell(ComboboxUtils.createListCellFlag());
 				node.setCellFactory(param -> ComboboxUtils.createListCellFlag());
 				node.getItems().addAll(AttributeLogic.FLAG_LOGIC.getFlagList(
-						AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG)));
+						AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.FLAG)));
 				node.setPrefWidth(200);
 				node.setMinHeight(32);
 				node.setMaxHeight(32);

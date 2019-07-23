@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class POJOTask {
 
 
-	public HashMap<String, TaskValue<?>> values;
+	public HashMap<Integer, TaskValue<?>> values;
 
 
 
@@ -17,7 +17,7 @@ public class POJOTask {
 	public POJOTask(Task task) {
 		this.values = new HashMap<>();
 		for (TaskAttribute key : task.values.keySet()) {
-			this.values.put(key.name.get(), task.values.get(key));
+			this.values.put(key.id, task.values.get(key));
 		}
 	}
 

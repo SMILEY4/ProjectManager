@@ -51,7 +51,8 @@ public class ProjectLogic {
 		Project project = new Project(new ExternalFileHandler()); // TODO set root directory
 		project.settings.name.set(name);
 		project.settings.attributesLocked.set(false);
-		project.settings.idCounter.set(0);
+		project.settings.taskIDCounter.set(0);
+		project.settings.attIDCounter.set(0);
 		for (AttributeType type : AttributeType.getFixedTypes()) {
 			project.data.attributes.add(AttributeLogic.createTaskAttribute(type, type.display + " Attribute", project));
 		}
@@ -93,9 +94,9 @@ public class ProjectLogic {
 
 	public static boolean addAttributeToProject(Project project, TaskAttribute attribute) {
 
-		// check name
+		// check id
 		for (TaskAttribute att : project.data.attributes) {
-			if (att.name.get().equals(attribute.name.get())) {
+			if (att.id == attribute.id) {
 				return false;
 			}
 		}
@@ -119,6 +120,11 @@ public class ProjectLogic {
 
 		if (!project.data.attributes.remove(attribute)) {
 			return false;
+		}
+
+		// check tasks
+		for(Task task : project.data.tasks) {
+			task.values.remove(attribute);
 		}
 
 		// check filter data
@@ -157,10 +163,10 @@ public class ProjectLogic {
 
 
 	public static boolean addTaskToProject(Project project, Task task) {
-		TaskAttribute attribute = AttributeLogic.findAttribute(project, AttributeType.ID);
+		TaskAttribute attribute = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 		if (TaskLogic.getTaskValue(task, attribute).getAttType() == null) {
-			final int id = project.settings.idCounter.get();
-			project.settings.idCounter.set(id + 1);
+			final int id = project.settings.taskIDCounter.get();
+			project.settings.taskIDCounter.set(id + 1);
 			TaskLogic.setValue(project, task, attribute, new IDValue(id));
 		}
 		project.data.tasks.add(task);

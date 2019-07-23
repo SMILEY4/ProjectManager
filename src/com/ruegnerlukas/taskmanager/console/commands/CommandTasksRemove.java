@@ -45,7 +45,7 @@ public class CommandTasksRemove {
 
 			Task task = null;
 
-			TaskAttribute attributeID = AttributeLogic.findAttribute(project, AttributeType.ID);
+			TaskAttribute attributeID = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 			for (Task t : project.data.tasks) {
 				IDValue valueID = (IDValue) TaskLogic.getValueOrDefault(t, attributeID);
 				if (valueID.getValue() == id) {

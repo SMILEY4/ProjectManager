@@ -135,11 +135,11 @@ public class TasksSidebar {
 			Project project = Data.projectProperty.get();
 
 			// add fixed values
-			addAttribute(AttributeLogic.findAttribute(project, AttributeType.DESCRIPTION), task);
-			addAttribute(AttributeLogic.findAttribute(project, AttributeType.ID), task);
-			addAttribute(AttributeLogic.findAttribute(project, AttributeType.CREATED), task);
-			addAttribute(AttributeLogic.findAttribute(project, AttributeType.LAST_UPDATED), task);
-			addAttribute(AttributeLogic.findAttribute(project, AttributeType.FLAG), task);
+			addAttribute(AttributeLogic.findAttributeByType(project, AttributeType.DESCRIPTION), task);
+			addAttribute(AttributeLogic.findAttributeByType(project, AttributeType.ID), task);
+			addAttribute(AttributeLogic.findAttributeByType(project, AttributeType.CREATED), task);
+			addAttribute(AttributeLogic.findAttributeByType(project, AttributeType.LAST_UPDATED), task);
+			addAttribute(AttributeLogic.findAttributeByType(project, AttributeType.FLAG), task);
 
 			// add separator
 			boxAttributes.getChildren().add(new Separator());

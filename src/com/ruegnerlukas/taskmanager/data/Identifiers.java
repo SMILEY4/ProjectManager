@@ -6,7 +6,8 @@ public class Identifiers {
 	// settings
 	public static final String SETTINGS_PROJECT_NAME = "settings_projectname";
 	public static final String SETTINGS_ATTRIBUTES_LOCKED = "settings_attribslocked";
-	public static final String SETTINGS_IDCOUNTER = "settings_idcounter";
+	public static final String SETTINGS_TASK_IDCOUNTER = "settings_taskIDCounter";
+	public static final String SETTINGS_ATTRIBUTE_IDCOUNTER = "settings_attributeIDCounter";
 
 	// data
 	public static final String DATA_ATTRIBUTE_LIST = "data_attribute_list";

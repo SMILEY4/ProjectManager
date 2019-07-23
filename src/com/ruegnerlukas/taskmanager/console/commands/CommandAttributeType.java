@@ -47,7 +47,7 @@ public class CommandAttributeType {
 			ConsoleWindowHandler.print(Color.RED, "Could not change type: No project opened.");
 		} else {
 
-			TaskAttribute attribute = AttributeLogic.findAttribute(project, name);
+			TaskAttribute attribute = AttributeLogic.findAttributeByName(project, name);
 			if(attribute == null) {
 				ConsoleWindowHandler.print(Color.RED, "Could change type: No attribute with name \"" + name + "\" found.");
 

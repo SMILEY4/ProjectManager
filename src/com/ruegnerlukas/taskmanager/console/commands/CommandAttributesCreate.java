@@ -99,7 +99,7 @@ public class CommandAttributesCreate {
 			}
 
 			if(!force) {
-				if(AttributeLogic.findAttribute(project, name) != null) {
+				if(AttributeLogic.findAttributeByName(project, name) != null) {
 					ConsoleWindowHandler.print(Color.RED, "Could not create attribute: Attribute with name \"" + name + "\" already exists.");
 					return;
 				}

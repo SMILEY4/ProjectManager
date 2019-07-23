@@ -61,8 +61,11 @@ public class AttributeLogic {
 
 
 	public static TaskAttribute createTaskAttribute(AttributeType type, String name, Project project) {
-		TaskAttribute attribute = new TaskAttribute(name, type, project, project.dataHandler);
+		final int id = project.settings.attIDCounter.get();
+		project.settings.attIDCounter.set(id + 1);
+		TaskAttribute attribute = new TaskAttribute(id, type, project, project.dataHandler);
 		initTaskAttribute(attribute);
+		attribute.name.set(name);
 		return attribute;
 	}
 
@@ -76,15 +79,7 @@ public class AttributeLogic {
 
 
 
-	public static String renameTaskAttribute(Project project, TaskAttribute attribute, String newName) {
-		for (TaskAttribute attrib : project.data.attributes) {
-			if (attrib == attribute) {
-				continue;
-			}
-			if (attrib.name.get().equalsIgnoreCase(newName)) {
-				return attribute.name.get();
-			}
-		}
+	public static String renameTaskAttribute(TaskAttribute attribute, String newName) {
 		attribute.name.set(newName);
 		return attribute.name.get();
 	}
@@ -162,7 +157,19 @@ public class AttributeLogic {
 
 
 
-	public static TaskAttribute findAttribute(Project project, String name) {
+	public static TaskAttribute findAttributeByID(Project project, int id) {
+		for (TaskAttribute attribute : project.data.attributes) {
+			if (attribute.id == id) {
+				return attribute;
+			}
+		}
+		return null;
+	}
+
+
+
+
+	public static TaskAttribute findAttributeByName(Project project, String name) {
 		for (TaskAttribute attribute : project.data.attributes) {
 			if (attribute.name.get().equals(name)) {
 				return attribute;
@@ -174,7 +181,20 @@ public class AttributeLogic {
 
 
 
-	public static TaskAttribute findAttribute(Project project, AttributeType type) {
+	public static List<TaskAttribute> findAttributesByName(Project project, String name) {
+		List<TaskAttribute> list = new ArrayList<>();
+		for (TaskAttribute attribute : project.data.attributes) {
+			if (attribute.name.get().equals(name)) {
+				list.add(attribute);
+			}
+		}
+		return list;
+	}
+
+
+
+
+	public static TaskAttribute findAttributeByType(Project project, AttributeType type) {
 		for (TaskAttribute attribute : project.data.attributes) {
 			if (attribute.type.get() == type) {
 				return attribute;
@@ -186,7 +206,7 @@ public class AttributeLogic {
 
 
 
-	public static List<TaskAttribute> findAttributes(Project project, AttributeType type) {
+	public static List<TaskAttribute> findAttributesByType(Project project, AttributeType type) {
 		List<TaskAttribute> list = new ArrayList<>();
 		for (TaskAttribute attribute : project.data.attributes) {
 			if (attribute.type.get() == type) {

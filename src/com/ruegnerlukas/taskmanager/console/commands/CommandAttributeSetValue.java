@@ -61,7 +61,7 @@ public class CommandAttributeSetValue {
 			ConsoleWindowHandler.print(Color.RED, "Could set attribute value: No project opened.");
 		} else {
 
-			TaskAttribute attribute = AttributeLogic.findAttribute(project, attribName);
+			TaskAttribute attribute = AttributeLogic.findAttributeByName(project, attribName);
 
 			if (attribute == null) {
 				ConsoleWindowHandler.print(Color.RED, "Could set attribute value: No attribute with name \"" + attribName + "\" found.");

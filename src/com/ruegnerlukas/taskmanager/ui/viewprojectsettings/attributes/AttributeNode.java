@@ -219,7 +219,7 @@ public class AttributeNode extends AnchorPane {
 
 	private void onRename(String oldValue, String newValue) {
 		if (!oldValue.equals(newValue)) {
-			AttributeLogic.renameTaskAttribute(Data.projectProperty.get(), getAttribute(), newValue);
+			AttributeLogic.renameTaskAttribute(getAttribute(), newValue);
 		}
 	}
 

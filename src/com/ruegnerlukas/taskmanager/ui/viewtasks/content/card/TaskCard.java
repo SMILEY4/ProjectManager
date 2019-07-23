@@ -77,12 +77,12 @@ public class TaskCard extends AnchorPane {
 
 		handlerChangedFlag = e -> onFlagChanged();
 		handlerChangedDescription = e -> onDescriptionChanged();
-		task.addOnChange(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG), handlerChangedFlag);
-		task.addOnChange(AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION), handlerChangedDescription);
+		task.addOnChange(AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.FLAG), handlerChangedFlag);
+		task.addOnChange(AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.DESCRIPTION), handlerChangedDescription);
 
-		final TaskValue<?> valueID = TaskLogic.getValueOrDefault(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID));
-		final TaskValue<?> valueFlag = TaskLogic.getValueOrDefault(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG));
-		final TaskValue<?> valueDescr = TaskLogic.getValueOrDefault(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION));
+		final TaskValue<?> valueID = TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID));
+		final TaskValue<?> valueFlag = TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.FLAG));
+		final TaskValue<?> valueDescr = TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.DESCRIPTION));
 
 		labelID.setText("T-" + valueID.getValue());
 		labelDesc.setText((String) valueDescr.getValue());
@@ -158,7 +158,7 @@ public class TaskCard extends AnchorPane {
 
 
 	private void onFlagChanged() {
-		final TaskFlag newFlag = (TaskFlag) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.FLAG)).getValue();
+		final TaskFlag newFlag = (TaskFlag) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.FLAG)).getValue();
 		paneFlag.setStyle("-fx-background-color: " + newFlag.color.get().asHex());
 	}
 
@@ -166,7 +166,7 @@ public class TaskCard extends AnchorPane {
 
 
 	private void onDescriptionChanged() {
-		final String newDescr = (String) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.DESCRIPTION)).getValue();
+		final String newDescr = (String) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.DESCRIPTION)).getValue();
 		labelDesc.setText(newDescr);
 	}
 

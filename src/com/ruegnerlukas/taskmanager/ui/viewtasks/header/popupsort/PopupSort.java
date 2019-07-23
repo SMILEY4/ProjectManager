@@ -235,7 +235,7 @@ public class PopupSort extends PopupBase {
 
 
 	private void onAddSortElement() {
-		TaskAttribute attribute = AttributeLogic.findAttribute(Data.projectProperty.get(), AttributeType.ID);
+		TaskAttribute attribute = AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID);
 		SortElement element = new SortElement(attribute, SortElement.SortDir.ASC);
 		onAddSortElement(element);
 		onModified();
