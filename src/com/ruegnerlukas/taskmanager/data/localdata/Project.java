@@ -16,7 +16,7 @@ public class Project {
 
 
 	public Project(ExternalDataHandler externalDataHandler) {
-		this.dataHandler = new DataHandler(externalDataHandler);
+		this.dataHandler = new DataHandler(this, externalDataHandler);
 		this.settings = new ProjectSettings(this);
 		this.data = new ProjectData(this);
 		this.temporaryData = new ProjectDataTemporary(this);

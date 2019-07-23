@@ -1,28 +1,26 @@
 package com.ruegnerlukas.taskmanager.data.externaldata.files.actions;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.ValueChange;
 import com.ruegnerlukas.taskmanager.data.externaldata.files.FileHandler;
+import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.JsonUtils;
 import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.POJOSettings;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 
 import java.io.*;
 
 public class ActionSettingsAttribsLock extends FileAction {
 
 
-	public ActionSettingsAttribsLock(FileHandler fileHandler) {
-		super(fileHandler);
-	}
 
 
 
 
 	@Override
-	public void onChange(DataChange change) {
+	public void onChange(DataChange change, Project project, FileHandler fileHandler) {
 
 		// check change type
 		if (change.getType() != DataChange.ChangeType.VALUE) {
@@ -38,11 +36,9 @@ public class ActionSettingsAttribsLock extends FileAction {
 		// modify json
 		try {
 
-			File file = fileHandler.getSettingsFile();
+			File file = fileHandler.getSettingsFile(true);
 
-			Gson gson = new GsonBuilder()
-					.setPrettyPrinting()
-					.create();
+			Gson gson = JsonUtils.buildGson();
 
 			// parse
 			JsonReader reader = new JsonReader(new FileReader(file));

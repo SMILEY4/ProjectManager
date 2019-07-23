@@ -3,12 +3,9 @@ package com.ruegnerlukas.taskmanager.data.externaldata.files;
 import com.ruegnerlukas.taskmanager.data.Identifiers;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.DataChangeListener;
-import com.ruegnerlukas.taskmanager.data.change.NestedChange;
 import com.ruegnerlukas.taskmanager.data.externaldata.ExternalDataHandler;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.actions.ActionSettingsAttribsLock;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.actions.ActionSettingsIDCounter;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.actions.ActionSettingsName;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.actions.FileAction;
+import com.ruegnerlukas.taskmanager.data.externaldata.files.actions.*;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,9 +33,16 @@ public class ExternalFileHandler implements ExternalDataHandler {
 
 	public ExternalFileHandler(String directory) {
 		handler = new FileHandler(directory);
-		fileActionMap.put(Identifiers.SETTINGS_PROJECT_NAME, new ActionSettingsName(handler));
-		fileActionMap.put(Identifiers.SETTINGS_ATTRIBUTES_LOCKED, new ActionSettingsAttribsLock(handler));
-		fileActionMap.put(Identifiers.SETTINGS_IDCOUNTER, new ActionSettingsIDCounter(handler));
+		fileActionMap.put(Identifiers.SETTINGS_PROJECT_NAME, new ActionSettingsName());
+		fileActionMap.put(Identifiers.SETTINGS_ATTRIBUTES_LOCKED, new ActionSettingsAttribsLock());
+		fileActionMap.put(Identifiers.SETTINGS_IDCOUNTER, new ActionSettingsIDCounter());
+		fileActionMap.put(Identifiers.DATA_ATTRIBUTE_LIST, new ActionListAttributes());
+		fileActionMap.put(Identifiers.DATA_TASK_LIST, new ActionListTasks());
+		fileActionMap.put(Identifiers.DATA_PRESETS_SORT, new ActionPresetsSort());
+		fileActionMap.put(Identifiers.DATA_PRESETS_GROUP, new ActionPresetsGroup());
+		fileActionMap.put(Identifiers.DATA_PRESETS_MASTER, new ActionPresetsMaster());
+		fileActionMap.put(Identifiers.DATA_PRESETS_FILTER, new ActionPresetsFilter());
+
 	}
 
 
@@ -54,20 +58,13 @@ public class ExternalFileHandler implements ExternalDataHandler {
 
 
 	@Override
-	public void applyChange(DataChange change) {
+	public void applyChange(DataChange change, Project project) {
 		System.out.println("local change: " + change);
 		// TODO write change to file (without triggering event from directory observer)
 
-
-		if (change.getType() != DataChange.ChangeType.NESTED) {
-			FileAction action = fileActionMap.get(change.getIdentifier());
-			if (action != null) {
-				action.onChange(change);
-			}
-
-		} else {
-			NestedChange nestedChange = (NestedChange) change;
-			// todo ...
+		FileAction action = fileActionMap.get(change.getIdentifier());
+		if (action != null) {
+			action.onChange(change, project, handler);
 		}
 
 	}

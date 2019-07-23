@@ -251,6 +251,23 @@ public class TaskLogic {
 
 
 
+	public static Task findTaskByID(Project project, int id) {
+		TaskAttribute idAttribute = AttributeLogic.findAttribute(project, AttributeType.ID);
+		if (idAttribute == null) {
+			return null;
+		}
+		for (Task task : project.data.tasks) {
+			final int idTask = ((IDValue) getTaskValue(task, idAttribute)).getValue();
+			if (idTask == id) {
+				return task;
+			}
+		}
+		return null;
+	}
+
+
+
+
 	public static TaskValue getValueOrDefault(Task task, TaskAttribute attribute) {
 		TaskValue<?> trueValue = getTaskValue(task, attribute);
 		if (trueValue.getAttType() != attribute.type.get()) {

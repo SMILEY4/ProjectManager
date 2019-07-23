@@ -3,8 +3,8 @@ package com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues;
 public abstract class AttributeValue<T> {
 
 
-	private final T value;
-	private final AttributeValueType type;
+	private T value;
+	private AttributeValueType type;
 
 
 

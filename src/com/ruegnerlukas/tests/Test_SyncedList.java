@@ -19,7 +19,7 @@ public class Test_SyncedList {
 	void simpleLocalChangePrimitiveElements() {
 
 		List<DataChange> changes = new ArrayList<>();
-		DataHandler handler = new DataHandler() {
+		DataHandler handler = new DataHandler(null) {
 			@Override
 			public void onLocalChange(DataChange change) {
 				changes.add(change);
@@ -65,7 +65,7 @@ public class Test_SyncedList {
 	void simpleLocalChangeSyncedElements() {
 
 		List<DataChange> changes = new ArrayList<>();
-		DataHandler handler = new DataHandler() {
+		DataHandler handler = new DataHandler(null) {
 			@Override
 			public void onLocalChange(DataChange change) {
 				changes.add(change);
@@ -114,7 +114,7 @@ public class Test_SyncedList {
 	void nestedLocalChange() {
 
 		List<DataChange> changes = new ArrayList<>();
-		DataHandler handler = new DataHandler() {
+		DataHandler handler = new DataHandler(null) {
 			@Override
 			public void onLocalChange(DataChange change) {
 				changes.add(change);
@@ -168,7 +168,7 @@ public class Test_SyncedList {
 	@Test
 	void simpleExternalChangePrimitiveElements() {
 
-		DataHandler handler = new DataHandler();
+		DataHandler handler = new DataHandler(null);
 
 		SyncedList<String> list = new SyncedList<>("test.list", null, handler);
 
@@ -193,7 +193,7 @@ public class Test_SyncedList {
 	@Test
 	void simpleExternalChangeSyncedElements() {
 
-		DataHandler handler = new DataHandler();
+		DataHandler handler = new DataHandler(null);
 
 		SyncedList<SyncedProperty<String>> list = new SyncedList<>("test.list", null, handler);
 		SyncedProperty<String> property1 = new SyncedProperty<>("property1", list.getNode(), handler);
@@ -219,7 +219,7 @@ public class Test_SyncedList {
 	@Test
 	void nestedExternalChange() {
 
-		DataHandler handler = new DataHandler();
+		DataHandler handler = new DataHandler(null);
 
 		SyncedList<SyncedProperty<String>> list = new SyncedList<>("test.list", null, handler);
 		SyncedProperty<String> property1 = new SyncedProperty<>("property1", list.getNode(), handler);

@@ -24,4 +24,5 @@ public class SortData {
 		this.sortElements = Collections.unmodifiableList(new ArrayList<>(sortElements));
 	}
 
+
 }

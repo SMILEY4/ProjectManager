@@ -3,6 +3,9 @@ package com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues;
 public class UseDefaultValue extends AttributeValue<Boolean> {
 
 
+
+
+
 	public UseDefaultValue(boolean useDefault) {
 		super(useDefault, AttributeValueType.USE_DEFAULT);
 	}

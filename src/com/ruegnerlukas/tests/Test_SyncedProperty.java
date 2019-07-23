@@ -18,7 +18,7 @@ public class Test_SyncedProperty {
 	void simpleLocalChange() {
 
 		List<DataChange> changes = new ArrayList<>();
-		DataHandler handler = new DataHandler() {
+		DataHandler handler = new DataHandler(null) {
 			@Override
 			public void onLocalChange(DataChange change) {
 				changes.add(change);
@@ -57,7 +57,7 @@ public class Test_SyncedProperty {
 	void nestedLocalChange() {
 
 		List<DataChange> changes = new ArrayList<>();
-		DataHandler handler = new DataHandler() {
+		DataHandler handler = new DataHandler(null) {
 			@Override
 			public void onLocalChange(DataChange change) {
 				changes.add(change);
@@ -97,7 +97,7 @@ public class Test_SyncedProperty {
 	@Test
 	void simpleExternalChange() {
 
-		DataHandler handler = new DataHandler();
+		DataHandler handler = new DataHandler(null);
 
 		SyncedProperty<String> property = new SyncedProperty<>("test.property", null, handler);
 

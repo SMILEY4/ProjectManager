@@ -1,5 +1,7 @@
 package com.ruegnerlukas.taskmanager.data.change;
 
+import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedElement;
+
 public class MapChange extends DataChange {
 
 
@@ -15,6 +17,55 @@ public class MapChange extends DataChange {
 		this.wasAdded = wasAdded;
 		this.key = key;
 		this.value = value;
+	}
+
+
+
+
+	public boolean wasAdded() {
+		return wasAdded;
+	}
+
+
+
+
+	public boolean wasRemoved() {
+		return !wasAdded;
+	}
+
+
+
+
+	public Object getAddedKey() {
+		return wasAdded() ? key : null;
+	}
+
+
+
+
+	public Object getAddedValue() {
+		return wasAdded() ? value : null;
+	}
+
+
+
+
+	public String getAddedIdentifier() {
+		return wasAdded() && value instanceof SyncedElement ? ((SyncedElement) value).getNode().identifier : null;
+	}
+
+
+
+
+	public Object getRemovedKey() {
+		return wasRemoved() ? key : null;
+	}
+
+
+
+
+	public Object getRemovedValue() {
+		return wasRemoved() ? key : null;
 	}
 
 

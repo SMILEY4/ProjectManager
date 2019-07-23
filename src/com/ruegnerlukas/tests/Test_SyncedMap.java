@@ -19,7 +19,7 @@ public class Test_SyncedMap {
 	void simpleLocalChangePrimitiveElements() {
 
 		List<DataChange> changes = new ArrayList<>();
-		DataHandler handler = new DataHandler() {
+		DataHandler handler = new DataHandler(null) {
 			@Override
 			public void onLocalChange(DataChange change) {
 				changes.add(change);
@@ -65,7 +65,7 @@ public class Test_SyncedMap {
 	void simpleLocalChangeSyncedElements() {
 
 		List<DataChange> changes = new ArrayList<>();
-		DataHandler handler = new DataHandler() {
+		DataHandler handler = new DataHandler(null) {
 			@Override
 			public void onLocalChange(DataChange change) {
 				changes.add(change);
@@ -114,7 +114,7 @@ public class Test_SyncedMap {
 	void nestedLocalChange() {
 
 		List<DataChange> changes = new ArrayList<>();
-		DataHandler handler = new DataHandler() {
+		DataHandler handler = new DataHandler(null) {
 			@Override
 			public void onLocalChange(DataChange change) {
 				changes.add(change);
@@ -166,7 +166,7 @@ public class Test_SyncedMap {
 	@Test
 	void simpleExternalChangePrimitiveElements() {
 
-		DataHandler handler = new DataHandler();
+		DataHandler handler = new DataHandler(null);
 
 		SyncedMap<String, Integer> map = new SyncedMap<>("test.map", null, handler);
 
@@ -191,7 +191,7 @@ public class Test_SyncedMap {
 	@Test
 	void simpleExternalChangeSyncedElements() {
 
-		DataHandler handler = new DataHandler();
+		DataHandler handler = new DataHandler(null);
 
 		SyncedMap<String, SyncedProperty<String>> map = new SyncedMap<>("test.map", null, handler);
 		SyncedProperty<String> property1 = new SyncedProperty<>("property1", map.getNode(), handler);
@@ -217,7 +217,7 @@ public class Test_SyncedMap {
 	@Test
 	void nestedExternalChangeByIdentifier() {
 
-		DataHandler handler = new DataHandler();
+		DataHandler handler = new DataHandler(null);
 
 		SyncedMap<String, SyncedProperty<String>> map = new SyncedMap<>("test.map", null, handler);
 		SyncedProperty<String> property1 = new SyncedProperty<>("property1", map.getNode(), handler);

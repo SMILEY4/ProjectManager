@@ -14,14 +14,9 @@ public class ProjectSettings {
 
 
 	ProjectSettings(Project project) {
-
 		name = new SyncedProperty<>(Identifiers.SETTINGS_PROJECT_NAME, null, project.dataHandler);
 		attributesLocked = new SyncedProperty<>(Identifiers.SETTINGS_ATTRIBUTES_LOCKED, null, project.dataHandler);
 		idCounter = new SyncedProperty<>(Identifiers.SETTINGS_IDCOUNTER, null, project.dataHandler);
-
-		attributesLocked.set(false);
-		idCounter.set(0);
-
 	}
 
 

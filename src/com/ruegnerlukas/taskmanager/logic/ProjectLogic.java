@@ -50,6 +50,8 @@ public class ProjectLogic {
 	public static Project createNewLocalProject(String name) {
 		Project project = new Project(new ExternalFileHandler()); // TODO set root directory
 		project.settings.name.set(name);
+		project.settings.attributesLocked.set(false);
+		project.settings.idCounter.set(0);
 		for (AttributeType type : AttributeType.getFixedTypes()) {
 			project.data.attributes.add(AttributeLogic.createTaskAttribute(type, type.display + " Attribute", project));
 		}
