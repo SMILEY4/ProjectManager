@@ -16,6 +16,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OrNode extends CriteriaNode {
 
 
@@ -113,12 +116,11 @@ public class OrNode extends CriteriaNode {
 
 	@Override
 	public FilterCriteria buildCriteriaTree() {
-		OrFilterCriteria criteria = new OrFilterCriteria();
-		criteria.subCriteria.clear();
+		List<FilterCriteria> list = new ArrayList<>();
 		for (CriteriaNode childNode : children) {
-			criteria.subCriteria.add(childNode.buildCriteriaTree());
+			list.add(childNode.buildCriteriaTree());
 		}
-		return criteria;
+		return new OrFilterCriteria(list);
 	}
 
 }

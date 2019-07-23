@@ -16,6 +16,9 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AndNode extends CriteriaNode {
 
 
@@ -113,12 +116,11 @@ public class AndNode extends CriteriaNode {
 
 	@Override
 	public FilterCriteria buildCriteriaTree() {
-		AndFilterCriteria criteria = new AndFilterCriteria();
-		criteria.subCriteria.clear();
+		List<FilterCriteria> list = new ArrayList<>();
 		for (CriteriaNode childNode : children) {
-			criteria.subCriteria.add(childNode.buildCriteriaTree());
+			list.add(childNode.buildCriteriaTree());
 		}
-		return criteria;
+		return new AndFilterCriteria(list);
 	}
 
 
