@@ -22,8 +22,11 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * Closes the currently active {@link Project}
+	 */
 	public static void closeCurrentProject() {
-		if(Data.projectProperty.get() != null) {
+		if (Data.projectProperty.get() != null) {
 			Data.projectProperty.get().dispose();
 			setCurrentProject(null);
 		}
@@ -32,6 +35,9 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * Cloeses the active {@link Project} and sets the given {@link Project} to the new active {@link Project}.
+	 */
 	public static void setCurrentProject(Project project) {
 		closeCurrentProject();
 		Data.projectProperty.set(project);
@@ -40,6 +46,9 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * @return a new {@link Project} with a generic name and an {@link ExternalFileHandler}
+	 */
 	public static Project createNewLocalProject() {
 		return createNewLocalProject("New Project");
 	}
@@ -47,6 +56,9 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * @return a new {@link Project} with the given name and an {@link ExternalFileHandler}.
+	 */
 	public static Project createNewLocalProject(String name) {
 		Project project = new Project(new ExternalFileHandler()); // TODO set root directory
 		project.settings.name.set(name);
@@ -62,6 +74,9 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * TODO
+	 */
 	public static void saveProject(Project project) {
 		System.out.println("TODO: save current project."); // TODO
 	}
@@ -69,6 +84,9 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * sets the name of the given {@link Project} to the given name.
+	 */
 	public static void renameProject(Project project, String newName) {
 		project.settings.name.set(newName);
 	}
@@ -76,6 +94,9 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * locks/unlocks the {@link TaskAttribute}s of the given {@link Project} if they are currently unlocked/locked.
+	 */
 	public static void lockSwitchTaskAttributes(Project project) {
 		lockTaskAttributes(project, !project.settings.attributesLocked.get());
 	}
@@ -83,6 +104,9 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * lock/unlock the {@link TaskAttribute}s of the given {@link Project}
+	 */
 	public static void lockTaskAttributes(Project project, boolean locked) {
 		if (project.settings.attributesLocked.get() != locked) {
 			project.settings.attributesLocked.set(locked);
@@ -92,6 +116,11 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * Adds the given {@link TaskAttribute} to the given {@link Project}.
+	 *
+	 * @return true, if the attribute is valid and was added
+	 */
 	public static boolean addAttributeToProject(Project project, TaskAttribute attribute) {
 
 		// check id
@@ -116,6 +145,12 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * Removes the given {@link TaskAttribute} from the given {@link Project}. <br>
+	 * Also removes the attribute from all {@link Task}s and updates the active filter-,group- and sort-data.
+	 *
+	 * @return true, if the attribute was successfully removed
+	 */
 	public static boolean removeAttributeFromProject(Project project, TaskAttribute attribute) {
 
 		if (!project.data.attributes.remove(attribute)) {
@@ -123,7 +158,7 @@ public class ProjectLogic {
 		}
 
 		// check tasks
-		for(Task task : project.data.tasks) {
+		for (Task task : project.data.tasks) {
 			task.values.remove(attribute);
 		}
 
@@ -162,6 +197,9 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * Adds the given {@link Task} to the given {@link Project} and gives the task a new valid id (if missing).
+	 */
 	public static boolean addTaskToProject(Project project, Task task) {
 		TaskAttribute attribute = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 		if (TaskLogic.getTaskValue(task, attribute).getAttType() == null) {
@@ -176,6 +214,11 @@ public class ProjectLogic {
 
 
 
+	/**
+	 * Removes the given {@link Task} from the given {@link Project}.
+	 *
+	 * @return true, if the task was successfully removed
+	 */
 	public static boolean removeTaskFromProject(Project project, Task task) {
 		return project.data.tasks.remove(task);
 	}

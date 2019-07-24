@@ -6,7 +6,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
@@ -109,7 +109,7 @@ public class TasksSidebar {
 
 		btnDeleteTask.setOnAction(e -> {
 			if (currentTask != null) {
-				TaskLogic.deleteTask(Data.projectProperty.get(), currentTask);
+				ProjectLogic.removeTaskFromProject(Data.projectProperty.get(), currentTask);
 			}
 		});
 	}

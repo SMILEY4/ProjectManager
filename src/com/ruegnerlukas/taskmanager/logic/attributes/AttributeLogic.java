@@ -7,6 +7,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
@@ -53,6 +54,11 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Creates a new valid {@link AttributeType} with the given {@link AttributeType} for the given {@link Project}. The new {@link AttributeType} will not be added to the given {@link Project}.
+	 *
+	 * @return the created {@link AttributeType}
+	 */
 	public static TaskAttribute createTaskAttribute(AttributeType type, Project project) {
 		return createTaskAttribute(type, "Attribute " + Integer.toHexString(("Attribute" + System.currentTimeMillis()).hashCode()), project);
 	}
@@ -60,6 +66,11 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Creates a new valid {@link AttributeType}  with the given name and {@link AttributeType} for the given {@link Project}. The new {@link AttributeType} will not be added to the given {@link Project}.
+	 *
+	 * @return the created {@link AttributeType}
+	 */
 	public static TaskAttribute createTaskAttribute(AttributeType type, String name, Project project) {
 		final int id = project.settings.attIDCounter.get();
 		project.settings.attIDCounter.set(id + 1);
@@ -72,6 +83,9 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Initializes the given {@link TaskAttribute}. This will completely reset the attribute to its default state.
+	 */
 	public static void initTaskAttribute(TaskAttribute attribute) {
 		LOGIC_MODULES.get(attribute.type.get()).initAttribute(attribute);
 	}
@@ -79,6 +93,11 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Changes the name of the given {@link TaskAttribute} to the given name.
+	 *
+	 * @return the new name of the given {@link TaskAttribute}
+	 */
 	public static String renameTaskAttribute(TaskAttribute attribute, String newName) {
 		attribute.name.set(newName);
 		return attribute.name.get();
@@ -87,6 +106,10 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Changes the type of the given {@link TaskAttribute} to the given {@link AttributeType}. <br>
+	 * This will completely reset the given attribute and remove the attribute from all {@link Task}s in the given {@link Project}
+	 */
 	public static void setTaskAttributeType(Project project, TaskAttribute attribute, AttributeType newType) {
 		LOGIC_MODULES.get(newType).initAttribute(attribute);
 		attribute.type.set(newType);
@@ -101,6 +124,13 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Set the {@link AttributeValue} of the given {@link TaskAttribute} to the given new value. <br>
+	 * This will fire an {@link AttributeValueChangeEvent}. It will also check all {@link Task}s in the given {@link Project}
+	 * and set their {@link TaskValue}s to valid values or to {@link NoValue} (depending on "preferNoValueTask" and the behaviour of the type of attribute)
+	 *
+	 * @return true, if the value was successfully set
+	 */
 	public static boolean setAttributeValue(Project project, TaskAttribute attribute, AttributeValue<?> value, boolean preferNoValueTask) {
 
 		// validate value
@@ -133,6 +163,9 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Add the given {@link EventHandler} to listen to changes of {@link AttributeValue}s of any {@link TaskAttribute}.
+	 */
 	public static void addOnAttributeValueChanged(EventHandler<AttributeValueChangeEvent> handler) {
 		valueChangedHandlers.add(handler);
 	}
@@ -140,6 +173,9 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Remove the given {@link EventHandler}.
+	 */
 	public static void removeOnAttributeValueChanged(EventHandler<AttributeValueChangeEvent> handler) {
 		valueChangedHandlers.remove(handler);
 	}
@@ -147,6 +183,9 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Sends a {@link AttributeValueChangeEvent} to all listening {@link EventHandler}s
+	 */
 	private static void onAttributeValueChanged(TaskAttribute attribute, AttributeValueType type, AttributeValue<?> prevValue, AttributeValue<?> newValue) {
 		AttributeValueChangeEvent event = new AttributeValueChangeEvent(attribute, type, prevValue, newValue);
 		for (EventHandler<AttributeValueChangeEvent> handler : valueChangedHandlers) {
@@ -157,6 +196,11 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Searches the given {@link Project} for a {@link TaskAttribute} with the given id
+	 *
+	 * @return the found {@link TaskAttribute} or null
+	 */
 	public static TaskAttribute findAttributeByID(Project project, int id) {
 		for (TaskAttribute attribute : project.data.attributes) {
 			if (attribute.id == id) {
@@ -169,6 +213,11 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Searches the given {@link Project} for a {@link TaskAttribute}s with the given name
+	 *
+	 * @return the FIRST found {@link TaskAttribute} or null
+	 */
 	public static TaskAttribute findAttributeByName(Project project, String name) {
 		for (TaskAttribute attribute : project.data.attributes) {
 			if (attribute.name.get().equals(name)) {
@@ -181,6 +230,11 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Searches the given {@link Project} for any {@link TaskAttribute}s with the given name
+	 *
+	 * @return a list with all {@link TaskAttribute} with the given name
+	 */
 	public static List<TaskAttribute> findAttributesByName(Project project, String name) {
 		List<TaskAttribute> list = new ArrayList<>();
 		for (TaskAttribute attribute : project.data.attributes) {
@@ -194,6 +248,11 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Searches the given {@link Project} for a {@link TaskAttribute}s with the given {@link AttributeType}
+	 *
+	 * @return the FIRST found {@link TaskAttribute} or null
+	 */
 	public static TaskAttribute findAttributeByType(Project project, AttributeType type) {
 		for (TaskAttribute attribute : project.data.attributes) {
 			if (attribute.type.get() == type) {
@@ -206,6 +265,11 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Searches the given {@link Project} for any {@link TaskAttribute}s with the given {@link AttributeType}
+	 *
+	 * @return a list with all {@link TaskAttribute} with the given {@link AttributeType}
+	 */
 	public static List<TaskAttribute> findAttributesByType(Project project, AttributeType type) {
 		List<TaskAttribute> list = new ArrayList<>();
 		for (TaskAttribute attribute : project.data.attributes) {
@@ -219,6 +283,9 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * @return true, of the given {@link TaskAttribute} is using a default value.
+	 */
 	public static boolean getUsesDefault(TaskAttribute attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
 		if (value != null) {
@@ -231,6 +298,9 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * @return the {@link DefaultValue} of the given {@link TaskAttribute} or null if the attribute is not using a default value.
+	 */
 	public static TaskValue<?> getDefaultValue(TaskAttribute attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
 		if (value == null) {
@@ -243,6 +313,9 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * Specify if the given {@link TaskAttribute} should be shown on the task-cards or not
+	 */
 	public static void setShowOnTaskCard(TaskAttribute attribute, boolean showOnCard) {
 		CardDisplayTypeValue prev = (CardDisplayTypeValue) attribute.values.get(AttributeValueType.CARD_DISPLAY_TYPE);
 		CardDisplayTypeValue value = new CardDisplayTypeValue(showOnCard);
@@ -253,6 +326,9 @@ public class AttributeLogic {
 
 
 
+	/**
+	 * @return true, if the given {@link TaskAttribute} shuld be shown on the task-cards.
+	 */
 	public static boolean getShowOnTaskCard(TaskAttribute attribute) {
 		CardDisplayTypeValue value = (CardDisplayTypeValue) attribute.values.get(AttributeValueType.CARD_DISPLAY_TYPE);
 		if (value == null) {
@@ -265,7 +341,12 @@ public class AttributeLogic {
 
 
 
-	public static boolean isValidFilterOperation(Task task, TerminalFilterCriteria criteria) {
+	/**
+	 * Checks whether the given {@link TerminalFilterCriteria} is a valid criteria
+	 *
+	 * @return false, if the operation is invalid / has the wrong amount of values or any invalid datatypes
+	 */
+	public static boolean isValidFilterOperation(TerminalFilterCriteria criteria) {
 		Map<FilterOperation, Class<?>[]> FILTER_DATA = LOGIC_MODULES.get(criteria.attribute.type.get()).getFilterData();
 
 		// is invalid operation

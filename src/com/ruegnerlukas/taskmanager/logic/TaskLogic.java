@@ -100,6 +100,12 @@ public class TaskLogic {
 
 
 
+	/**
+	 * Removes the given {@link TaskAttribute} from the given {@link FilterCriteria} and its children
+	 *
+	 * @return a new {@link FilterCriteria} if the criteria or its children have changed. <br>
+	 * Returns the original criteria if nothing was changed.
+	 */
 	public static FilterCriteria removeAttributeFromFilterCriteria(FilterCriteria criteria, TaskAttribute attribute) {
 
 
@@ -150,9 +156,7 @@ public class TaskLogic {
 	}
 
 
-
-
-	@SuppressWarnings ("Duplicates")
+//	@SuppressWarnings ("Duplicates")
 //	private static int removeAttributeFromFilterCriteria(FilterCriteria criteria, TaskAttribute attribute) {
 //		int nRemoved = 0;
 //		if (criteria.type == FilterCriteria.CriteriaType.AND) {
@@ -187,16 +191,30 @@ public class TaskLogic {
 //	}
 
 
+
+
+	/***
+	 * Removes the given {@link Task} from all dependencies of all other tasks of the given {@link Project}
+	 * */
 	private static void removeFromDependencies(Project project, Task task) {
-		// remove from dependencies
+
+		// get all dependency-attributes from project
 		List<TaskAttribute> dependencyAttributes = AttributeLogic.findAttributesByType(project, AttributeType.DEPENDENCY);
+
+		// for each task in project
 		for (int i = 0, n = project.data.tasks.size(); i < n; i++) {
 			Task t = project.data.tasks.get(i);
+
+			// for each dependency attribute
 			for (TaskAttribute attribute : dependencyAttributes) {
+
+				// get dependencies of current task
 				TaskValue<?> taskValue = TaskLogic.getValueOrDefault(t, attribute);
 				if (taskValue.getAttType() == AttributeType.DEPENDENCY) {
 					DependencyValue value = (DependencyValue) taskValue;
 					Set<Task> dependencies = new HashSet<>(Arrays.asList(value.getValue()));
+
+					// removes the given task from the dependencies of the current task
 					if (dependencies.contains(task)) {
 						if (dependencies.size() == 1) {
 							TaskLogic.setValue(project, t, attribute, new NoValue());
@@ -218,6 +236,11 @@ public class TaskLogic {
 
 
 
+	/**
+	 * Creates a new valid {@link Task} for the given {@link Project}. The new {@link Task} will not be added to the given {@link Project}.
+	 *
+	 * @return the created {@link Task}
+	 */
 	public static Task createTask(Project project) {
 
 		// get id
@@ -244,13 +267,9 @@ public class TaskLogic {
 
 
 
-	public static void deleteTask(Project project, Task task) {
-		project.data.tasks.remove(task);
-	}
-
-
-
-
+	/**
+	 * @return the {@link Task} in the given {@link Project} with the given id (or null if not found)
+	 */
 	public static Task findTaskByID(Project project, int id) {
 		TaskAttribute idAttribute = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 		if (idAttribute == null) {
@@ -268,6 +287,11 @@ public class TaskLogic {
 
 
 
+	/**
+	 * @return the {@link TaskValue} of the given {@link Task} for the given {@link TaskAttribute}. <br>
+	 * If the given {@link Task} does not have a value set for the given attribute, it will return the default {@link TaskValue}
+	 * of the {@link TaskAttribute} (if the attribute uses a default value) or {@link NoValue}.
+	 */
 	public static TaskValue getValueOrDefault(Task task, TaskAttribute attribute) {
 		TaskValue<?> trueValue = getTaskValue(task, attribute);
 		if (trueValue.getAttType() != attribute.type.get()) {
@@ -284,6 +308,10 @@ public class TaskLogic {
 
 
 
+	/**
+	 * @return the {@link TaskValue} of the given {@link Task} for the given {@link TaskAttribute}.
+	 * If the given {@link Task} does not have a value set for the given attribute, it will return {@link NoValue}.
+	 */
 	public static TaskValue<?> getTaskValue(Task task, TaskAttribute attribute) {
 		TaskValue<?> value = task.values.get(attribute);
 		if (value == null) {
@@ -296,6 +324,12 @@ public class TaskLogic {
 
 
 
+	/**
+	 * Sets the value of the given {@link Task} in the given {@link Project} to the given {@link TaskValue} for the given {@link TaskAttribute} (if valid). <br>
+	 * This fires a new {@link TaskValueChangeEvent} (if successful) and calls the {@code onTaskModified(...)}-method of {@link TaskDisplayLogic} (if necessary)
+	 *
+	 * @return false, if the new {@link TaskValue} is invalid
+	 */
 	public static boolean setValue(Project project, Task task, TaskAttribute attribute, TaskValue<?> value) {
 
 		// validate value
@@ -358,6 +392,9 @@ public class TaskLogic {
 
 
 
+	/**
+	 * Add the given {@link EventHandler} to listen to changes of {@link TaskValue}s of any {@link Task}.
+	 */
 	public static void addOnTaskValueChanged(EventHandler<TaskValueChangeEvent> handler) {
 		valueChangedHandlers.add(handler);
 	}
@@ -365,6 +402,9 @@ public class TaskLogic {
 
 
 
+	/**
+	 * Removes the given {@link EventHandler}.
+	 */
 	public static void removeOnTaskValueChanged(EventHandler<TaskValueChangeEvent> handler) {
 		valueChangedHandlers.remove(handler);
 	}
@@ -372,13 +412,16 @@ public class TaskLogic {
 
 
 
+	/**
+	 * updates the "last changed"-value of the given {@link} Task and sends a {@link TaskValueChangeEvent} to all listening {@link EventHandler}s
+	 *
+	 * @param project   the {@link Project} the {@link Task} belongs to
+	 * @param task      the changed {@link Task}
+	 * @param attribute the {@link TaskAttribute} that was changed
+	 * @param prevValue the previous {@link TaskValue}
+	 * @param newValue  the new {@link TaskValue}
+	 */
 	private static void onTaskValueChanged(Project project, Task task, TaskAttribute attribute, TaskValue<?> prevValue, TaskValue<?> newValue) {
-
-		// fire event
-		TaskValueChangeEvent event = new TaskValueChangeEvent(task, attribute, prevValue, newValue);
-		for (EventHandler<TaskValueChangeEvent> handler : valueChangedHandlers) {
-			handler.handle(event);
-		}
 
 		// update "last_changed"
 		if (attribute.type.get() != AttributeType.LAST_UPDATED && newValue != prevValue) {
@@ -386,11 +429,22 @@ public class TaskLogic {
 				setValue(project, task, AttributeLogic.findAttributeByType(project, AttributeType.LAST_UPDATED), new LastUpdatedValue(LocalDateTime.now()));
 			}
 		}
+
+		// fire event
+		TaskValueChangeEvent event = new TaskValueChangeEvent(task, attribute, prevValue, newValue);
+		for (EventHandler<TaskValueChangeEvent> handler : valueChangedHandlers) {
+			handler.handle(event);
+		}
 	}
 
 
 
 
+	/**
+	 * Finds all {@link TaskAttribute}s that are used by the given {@link FilterCriteria} and its children.
+	 *
+	 * @return the list of all found {@link TaskAttribute}s
+	 */
 	protected static List<TaskAttribute> getUsedFilterAttributes(FilterCriteria criteria) {
 		List<TaskAttribute> attributes = new ArrayList<>();
 		getUsedFilterAttributes(criteria, attributes);
@@ -400,6 +454,9 @@ public class TaskLogic {
 
 
 
+	/**
+	 * Finds all {@link TaskAttribute}s that are used by the given {@link FilterCriteria} and its children and adds the to the given list.
+	 */
 	private static void getUsedFilterAttributes(FilterCriteria criteria, List<TaskAttribute> attributes) {
 		if (criteria.type == FilterCriteria.CriteriaType.TERMINAL) {
 			attributes.add(((TerminalFilterCriteria) criteria).attribute);
@@ -419,6 +476,10 @@ public class TaskLogic {
 
 
 
+	/**
+	 * sets the active {@link FilterCriteria} for the given {@link Project} (can be cleared by leaving the criteria as null). <br>
+	 * If the criteria has a preset name, it can also be specified. If not, the "preset"-parameter can be set to null
+	 */
 	public static void setFilter(Project project, FilterCriteria criteria, String preset) {
 		project.data.filterData.set(criteria);
 		project.data.presetSelectedFilter.set(preset);
@@ -427,6 +488,11 @@ public class TaskLogic {
 
 
 
+	/**
+	 * sets the active {@link TaskGroupData} for the given {@link Project} (can be cleared by leaving the group-data as null). <br>
+	 * This method will also make sure that the group-data does not contain duplicate {@link TaskAttribute}s and will remove any duplicates if necessary (without touching the original). <br>
+	 * If the group-data has a preset name, it can also be specified. If not, the "preset"-parameter can be set to null
+	 */
 	public static void setGroupData(Project project, TaskGroupData groupData, String preset) {
 		if (preset == null && groupData != null && groupData.attributes.isEmpty() && groupData.customHeaderString == null) {
 			project.data.groupData.set(null);
@@ -434,20 +500,24 @@ public class TaskLogic {
 		} else {
 
 			// remove duplicates
+			TaskGroupData data = groupData;
+
 			if (groupData != null) {
-				Set<TaskAttribute> attributes = new HashSet<>();
-				Iterator<TaskAttribute> iter = groupData.attributes.iterator();
-				while (iter.hasNext()) {
-					TaskAttribute a = iter.next();
-					if (attributes.contains(a)) {
-						iter.remove();
-					} else {
-						attributes.add(a);
+				List<TaskAttribute> attributes = new ArrayList<>();
+				for (TaskAttribute attrib : groupData.attributes) {
+					if (!attributes.contains(attrib)) {
+						attributes.add(attrib);
 					}
 				}
+
+				if (attributes.size() != groupData.attributes.size()) {
+					data = new TaskGroupData(groupData.customHeaderString, attributes);
+				}
+
 			}
 
-			project.data.groupData.set(groupData);
+
+			project.data.groupData.set(data);
 			project.data.presetSelectedGroup.set(preset);
 		}
 
@@ -456,6 +526,11 @@ public class TaskLogic {
 
 
 
+	/**
+	 * sets the active {@link SortData} for the given {@link Project} (can be cleared by leaving the sort-data as null). <br>
+	 * This method will also make sure that the sort-data does not contain duplicate {@link TaskAttribute}s and will remove any duplicates if necessary (without touching the original). <br>
+	 * If the sort-data has a preset name, it can also be specified. If not, the "preset"-parameter can be set to null
+	 */
 	public static void setSortData(Project project, SortData sortData, String preset) {
 		if (preset == null && sortData != null && sortData.sortElements.isEmpty()) {
 			project.data.sortData.set(null);

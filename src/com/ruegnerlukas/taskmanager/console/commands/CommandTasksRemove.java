@@ -10,6 +10,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.IDValue;
+import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import javafx.scene.paint.Color;
@@ -59,7 +60,7 @@ public class CommandTasksRemove {
 
 			} else {
 				if (useLogic) {
-					TaskLogic.deleteTask(project, task);
+					ProjectLogic.removeTaskFromProject(project, task);
 				} else {
 					project.data.tasks.remove(task);
 				}
