@@ -16,6 +16,9 @@ public abstract class FXEventHandler<T extends Event> {
 
 
 
+	/**
+	 * Adds this listener to the given property.
+	 */
 	public FXEventHandler addTo(ObjectProperty<EventHandler<T>> property) {
 		property.set(handler);
 		properties.add(property);
@@ -25,6 +28,9 @@ public abstract class FXEventHandler<T extends Event> {
 
 
 
+	/**
+	 * Removes this listener to the given property.
+	 */
 	public FXEventHandler removeFrom(ObjectProperty<EventHandler<T>> property) {
 		if (property.get() == handler) {
 			property.set(null);
@@ -36,6 +42,9 @@ public abstract class FXEventHandler<T extends Event> {
 
 
 
+	/**
+	 * Removes this listener from all registered properties
+	 */
 	public FXEventHandler removeFromAll() {
 		for (ObjectProperty<EventHandler<T>> property : properties) {
 			if (property.get() == handler) {
@@ -49,6 +58,9 @@ public abstract class FXEventHandler<T extends Event> {
 
 
 
+	/**
+	 * @return the {@link EventHandler} used by this handler.
+	 */
 	public EventHandler<T> getHandler() {
 		return this.handler;
 	}
@@ -56,6 +68,9 @@ public abstract class FXEventHandler<T extends Event> {
 
 
 
+	/**
+	 * This method is called when an event is fired by an registered property.
+	 */
 	public abstract void handle(T event);
 
 

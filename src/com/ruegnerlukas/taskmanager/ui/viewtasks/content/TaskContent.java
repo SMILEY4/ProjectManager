@@ -115,6 +115,12 @@ public class TaskContent {
 
 
 
+	/**
+	 * Selects and jumpts to the given {@link Task}. The type of selection can be specified. <br>
+	 * 0 = SELECTION_TASKCARD: usually by clicking on a {@link TaskCard}; Replaces the tasks in the breadcrumb-bar with the selected task.
+	 * 1 = SELECTION_BREADCRUMB: usually by clicking on a link to the task in the breadcrumb-bar. this will not add the selected task to the breadcrumb-bar.
+	 * 2 = SELECTION_LINK: usually by clicking on a link to a the task. This will add the selected task to the end of the breadcrumb--bar.
+	 */
 	public void selectTask(Task task, int selectionType) {
 
 		// deselect last card
@@ -153,6 +159,9 @@ public class TaskContent {
 
 
 
+	/**
+	 * Deselects the previously selected {@link Task} and selects the given {@link Task}.
+	 */
 	private void setSelectedTask(Task task) {
 		if (task != null) {
 			TaskCard card = findCard(task);
@@ -161,7 +170,7 @@ public class TaskContent {
 			}
 			selectedTask.set(task);
 		}
-		if(taskView.getSidebar() != null) {
+		if (taskView.getSidebar() != null) {
 			taskView.getSidebar().setTask(task);
 		}
 	}
@@ -169,9 +178,12 @@ public class TaskContent {
 
 
 
+	/**
+	 * Refreshes the selection and jumps to the selected task.
+	 */
 	public void reselectTask() {
 		setSelectedTask(selectedTask.get());
-		if(selectedTask.get() != null) {
+		if (selectedTask.get() != null) {
 			Platform.runLater(() -> jumpToTask(selectedTask.get()));
 		}
 	}
@@ -179,6 +191,9 @@ public class TaskContent {
 
 
 
+	/**
+	 * Tries to center the {@link TaskCard} of the given {@link Task} in the content-area.
+	 */
 	public void jumpToTask(Task task) {
 		TaskList list = findList(task);
 		if (list != null) {
@@ -190,6 +205,9 @@ public class TaskContent {
 
 
 
+	/**
+	 * Removes all {@link TaskCard}s and {@link TaskList}s, creates new {@link TaskGroup}s and adds them to the content area
+	 */
 	private void rebuildTaskLists() {
 		removeAllLists();
 		List<TaskGroup> taskGroups = TaskDisplayLogic.createTaskGroups(Data.projectProperty.get());
@@ -203,6 +221,9 @@ public class TaskContent {
 
 
 
+	/**
+	 * Adds the given {@link TaskGroup} as a new {@link TaskList}.
+	 */
 	private void addTaskList(TaskGroup group) {
 		TaskList list = new TaskList(group, this);
 		boxTasks.getChildren().add(list);
@@ -211,6 +232,9 @@ public class TaskContent {
 
 
 
+	/**
+	 * Removes all {@link TaskList}s.
+	 */
 	private void removeAllLists() {
 		for (Node node : boxTasks.getChildren()) {
 			if (!(node instanceof TaskList)) {
@@ -224,6 +248,9 @@ public class TaskContent {
 
 
 
+	/**
+	 * Removes the given {@link TaskList}.
+	 */
 	private void removeTaskList(TaskList list) {
 		list.dispose();
 		boxTasks.getChildren().remove(list);
@@ -232,6 +259,9 @@ public class TaskContent {
 
 
 
+	/**
+	 * Removes the {@link TaskList} for the given {@link TaskGroup}.
+	 */
 	private void removeTaskList(TaskGroup group) {
 		TaskList list = findList(group);
 		if (list != null) {
@@ -242,6 +272,9 @@ public class TaskContent {
 
 
 
+	/**
+	 * @return the {@link TaskList} responsible for the given {@link TaskList} or null.
+	 */
 	private TaskList findList(TaskGroup group) {
 		for (Node node : boxTasks.getChildren()) {
 			if (!(node instanceof TaskList)) {
@@ -258,6 +291,9 @@ public class TaskContent {
 
 
 
+	/**
+	 * @return the {@link TaskList} containing the given {@link Task} or null.
+	 */
 	private TaskList findList(Task task) {
 		for (Node node : boxTasks.getChildren()) {
 			if (!(node instanceof TaskList)) {
@@ -274,6 +310,9 @@ public class TaskContent {
 
 
 
+	/**
+	 * @return the {@link TaskCard} responsible for the given {@link Task} or null.
+	 */
 	private TaskCard findCard(Task task) {
 		TaskList list = findList(task);
 		if (list != null) {
@@ -293,6 +332,9 @@ public class TaskContent {
 
 
 
+	/**
+	 * @return the "button" to show/hide the sidebar-area
+	 */
 	public Label getSidebarControlArea() {
 		return labelHideSidebar;
 	}

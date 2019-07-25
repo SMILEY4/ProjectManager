@@ -66,7 +66,7 @@ public class TaskView extends AnchorPane implements MainViewModule {
 
 		// show / hide sidebar
 		content.getSidebarControlArea().setOnMouseClicked(e -> {
-			if (!isShowSidebar()) {
+			if (!isSidebarShown()) {
 				splitContent.setDividerPositions(0.8);
 			} else {
 				splitContent.setDividerPositions(1.0);
@@ -83,8 +83,11 @@ public class TaskView extends AnchorPane implements MainViewModule {
 
 
 
+	/**
+	 * Called when the divider of the {@link SplitPane} changes. Changes the icon of the show/hide button.
+	 */
 	private void onSidebarDivider() {
-		if (isShowSidebar()) {
+		if (isSidebarShown()) {
 			content.getSidebarControlArea().setText(">");
 		} else {
 			content.getSidebarControlArea().setText("<");
@@ -94,7 +97,10 @@ public class TaskView extends AnchorPane implements MainViewModule {
 
 
 
-	private boolean isShowSidebar() {
+	/**
+	 * @return true, if the sidebar is shown.
+	 */
+	private boolean isSidebarShown() {
 		return splitContent.getDividerPositions()[0] < 0.99;
 	}
 

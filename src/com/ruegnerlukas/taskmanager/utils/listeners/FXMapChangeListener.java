@@ -58,7 +58,7 @@ public abstract class FXMapChangeListener<K, V> implements CustomListener<Observ
 
 
 	@Override
-	public void setSilenced(boolean silenced) {
+	public void setMuted(boolean silenced) {
 		this.isSilenced = silenced;
 	}
 
@@ -66,13 +66,16 @@ public abstract class FXMapChangeListener<K, V> implements CustomListener<Observ
 
 
 	@Override
-	public boolean isSilenced() {
+	public boolean isMuted() {
 		return this.isSilenced;
 	}
 
 
 
 
+	/**
+	 * @return the {@link MapChangeListener} used by this listener.
+	 */
 	public MapChangeListener<K, V> getListener() {
 		return this.listener;
 	}
@@ -81,7 +84,7 @@ public abstract class FXMapChangeListener<K, V> implements CustomListener<Observ
 
 
 	protected void onMapChanged(MapChangeListener.Change<? extends K, ? extends V> c) {
-		if (!isSilenced()) {
+		if (!isMuted()) {
 			onChanged(c);
 		}
 	}
@@ -89,11 +92,17 @@ public abstract class FXMapChangeListener<K, V> implements CustomListener<Observ
 
 
 
+	/**
+	 * This method is called if the elements of an registered {@link ObservableMap} change and this listener is not muted.
+	 */
 	public abstract void onChanged(MapChangeListener.Change<? extends K, ? extends V> c);
 
 
 
 
+	/**
+	 * @return true, if the element of the given change was added.
+	 */
 	public boolean wasAdded(MapChangeListener.Change<? extends K, ? extends V> c) {
 		return c.wasAdded() && !c.wasRemoved();
 	}
@@ -101,6 +110,9 @@ public abstract class FXMapChangeListener<K, V> implements CustomListener<Observ
 
 
 
+	/**
+	 * @return true, if the element of the given change was removed.
+	 */
 	public boolean wasRemoved(MapChangeListener.Change<? extends K, ? extends V> c) {
 		return !c.wasAdded() && c.wasRemoved();
 	}
@@ -108,6 +120,9 @@ public abstract class FXMapChangeListener<K, V> implements CustomListener<Observ
 
 
 
+	/**
+	 * @return true, if the element of the given change was changed.
+	 */
 	public boolean wasChanged(MapChangeListener.Change<? extends K, ? extends V> c) {
 		return c.wasAdded() && c.wasRemoved();
 	}

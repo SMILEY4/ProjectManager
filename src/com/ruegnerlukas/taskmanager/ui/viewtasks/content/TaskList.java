@@ -70,11 +70,6 @@ public class TaskList extends AnchorPane {
 				}
 				for (ListChangeListener.Change<? extends Task> permutation : getAllPermutations(c)) {
 					applyPermutation(boxCards.getChildren(), permutation);
-//					int[] p = new int[permuation.getTo() - permuation.getFrom()];
-//					for (int i = 0; i < p.length; i++) {
-//						p[i] = permuation.getPermutation(i + permuation.getFrom());
-//					}
-//					ArrayUtils.applyPermutation(boxCards.getChildren(), p, permuation.getFrom());
 				}
 			}
 		};
@@ -99,6 +94,9 @@ public class TaskList extends AnchorPane {
 
 
 
+	/**
+	 * Tries to center the {@link TaskCard} of the given {@link Task} in this list.
+	 */
 	public void jumpToTask(Task task) {
 		TaskCard card = findCard(task);
 		if (card != null) {
@@ -109,6 +107,9 @@ public class TaskList extends AnchorPane {
 
 
 
+	/**
+	 * Adds the given {@link Task} as a new {@link TaskCard} to this list.
+	 */
 	private void addTaskCard(Task task) {
 		TaskCard card = new TaskCard(task, this);
 		boxCards.getChildren().add(taskGroup.tasks.indexOf(task), card);
@@ -117,6 +118,9 @@ public class TaskList extends AnchorPane {
 
 
 
+	/**
+	 * Removes the {@link TaskCard} of the given {@link Task} from this list.
+	 */
 	private void removeTaskCard(Task task) {
 		TaskCard card = findCard(task);
 		if (card != null) {
@@ -128,6 +132,9 @@ public class TaskList extends AnchorPane {
 
 
 
+	/**
+	 * @return the {@link TaskCard} responsible for the given {@link Task} or null.
+	 */
 	public TaskCard findCard(Task task) {
 		for (Node node : boxCards.getChildren()) {
 			if (!(node instanceof TaskCard)) {
@@ -144,6 +151,9 @@ public class TaskList extends AnchorPane {
 
 
 
+	/**
+	 * @return the {@link TaskGroup} handled by this list.
+	 */
 	public TaskGroup getTaskGroup() {
 		return this.taskGroup;
 	}

@@ -52,6 +52,9 @@ public class DefaultChoiceItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Adds the given values to the {@link ComboBox}. Removes the previous values.
+	 * */
 	public void setChoiceList(String... values) {
 		String str = getValue();
 		choice.getItems().setAll(values);
@@ -65,6 +68,9 @@ public class DefaultChoiceItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged list of values of the {@link TaskAttribute}
+	 */
 	private String[] getMasterValueList() {
 		return AttributeLogic.CHOICE_LOGIC.getValueList(attribute);
 	}
@@ -72,6 +78,9 @@ public class DefaultChoiceItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged (default) value of the {@link TaskAttribute}
+	 */
 	private String getMasterValue() {
 		return AttributeLogic.CHOICE_LOGIC.getDefaultValue(attribute).getValue();
 	}
@@ -79,6 +88,9 @@ public class DefaultChoiceItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Checks whether this value was changed / is different from the value of the {@link TaskAttribute} and sets the changed-property.
+	 */
 	public void checkChanged() {
 		if (handlerModified != null) {
 			handlerModified.handle(new ActionEvent());
@@ -110,6 +122,9 @@ public class DefaultChoiceItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the current value of this item.
+	 */
 	public String getValue() {
 		return choice.getSelectionModel().getSelectedItem();
 	}

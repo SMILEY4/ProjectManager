@@ -25,6 +25,13 @@ public class DirectoryObserver {
 
 
 
+	/**
+	 * Start observing the given directory. Restarts if it was already running.
+	 *
+	 * @param directory the directory to observe
+	 * @param pause     the time in  milliseconds between checking for events
+	 * @param deep      whether to observe files in sub-directories
+	 */
 	public void start(File directory, long pause, boolean deep) {
 		if (running) {
 			stop();
@@ -39,6 +46,9 @@ public class DirectoryObserver {
 
 
 
+	/**
+	 * Stop observing all directories
+	 */
 	public void stop() {
 		for (ObserverProcess process : processMap.values()) {
 			process.stop();
@@ -51,15 +61,22 @@ public class DirectoryObserver {
 
 
 
-	private void watchDirectory(File directory, long pause, boolean recursive) {
+	/**
+	 * start watching the given directory
+	 *
+	 * @param directory the directory to observe
+	 * @param pause     the time in  milliseconds between checking for events
+	 * @param deep      whether to observe files in sub-directories
+	 */
+	private void watchDirectory(File directory, long pause, boolean deep) {
 		if (directory.exists() && directory.isDirectory()) {
 			ObserverProcess process = new ObserverProcess(this, directory, pause);
 			processMap.put(directory.getAbsolutePath(), process);
 			executor.submit(process);
-			if (recursive) {
+			if (deep) {
 				for (File file : directory.listFiles()) {
 					if (file.isDirectory()) {
-						watchDirectory(file, pause, recursive);
+						watchDirectory(file, pause, deep);
 					}
 				}
 			}
@@ -83,6 +100,9 @@ public class DirectoryObserver {
 
 
 
+	/**
+	 * Called when a file (given as a {@link Path}) was modified, added or removed
+	 */
 	private void onEvent(WatchEvent.Kind<?> kind, Path path) {
 		File file = path.toFile();
 		if (file.isDirectory()) {
@@ -103,6 +123,9 @@ public class DirectoryObserver {
 
 
 
+	/**
+	 * notify all registered listeners of any changes to the given file
+	 */
 	private void notifyListeners(WatchEvent.Kind<?> kind, File file) {
 		for (DirectoryListener listener : listeners) {
 			if (listener.onEvent(kind, file)) {

@@ -54,7 +54,7 @@ public class AttributeNode extends HBox {
 
 		// button up
 		Button btnUp = new Button();
-		ButtonUtils.makeIconButton(btnUp, SVGIcons.LONG_ARROW_UP, 0.7f, "black");
+		ButtonUtils.makeIconButton(btnUp, SVGIcons.LONG_ARROW_UP, 0.7f);
 		btnUp.setMinSize(32, 32);
 		btnUp.setPrefSize(32, 32);
 		btnUp.setMaxSize(32, 32);
@@ -66,7 +66,7 @@ public class AttributeNode extends HBox {
 
 		// button down
 		Button btnDown = new Button();
-		ButtonUtils.makeIconButton(btnDown, SVGIcons.LONG_ARROW_DOWN, 0.7f, "black");
+		ButtonUtils.makeIconButton(btnDown, SVGIcons.LONG_ARROW_DOWN, 0.7f);
 		btnDown.setMinSize(32, 32);
 		btnDown.setPrefSize(32, 32);
 		btnDown.setMaxSize(32, 32);
@@ -80,7 +80,7 @@ public class AttributeNode extends HBox {
 		btnRemove.setMinSize(32, 32);
 		btnRemove.setPrefSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
-		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.65f, "black");
+		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.65f);
 		btnRemove.setOnAction(event -> {
 			onRemoveThis();
 		});
@@ -90,6 +90,9 @@ public class AttributeNode extends HBox {
 
 
 
+	/**
+	 * @return the {@link TaskAttribute} handled by this node.
+	 */
 	public TaskAttribute getAttribute() {
 		return boxAttribute.getValue();
 	}
@@ -125,6 +128,9 @@ public class AttributeNode extends HBox {
 
 
 
+	/**
+	 * Notifies the listener when a {@link TaskAttribute} was selected.
+	 */
 	private void onSelectAttribute(TaskAttribute attribute) {
 		if (handlerModified != null) {
 			handlerModified.handle(new ActionEvent());
@@ -134,6 +140,9 @@ public class AttributeNode extends HBox {
 
 
 
+	/**
+	 * Notifies the listener when this node wants to move one up.
+	 */
 	private void onMoveUp() {
 		if (handlerMoveUp != null) {
 			handlerMoveUp.handle(new ActionEvent());
@@ -143,6 +152,9 @@ public class AttributeNode extends HBox {
 
 
 
+	/**
+	 * Notifies the listener when this node wants to move one down.
+	 */
 	private void onMoveDown() {
 		if (handlerMoveDown != null) {
 			handlerMoveDown.handle(new ActionEvent());
@@ -152,6 +164,9 @@ public class AttributeNode extends HBox {
 
 
 
+	/**
+	 * Notifies the listener when this node wants to be removed.
+	 */
 	private void onRemoveThis() {
 		if (handlerOnRemove != null) {
 			handlerOnRemove.handle(new ActionEvent());

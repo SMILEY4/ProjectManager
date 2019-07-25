@@ -106,6 +106,9 @@ public class ConsoleView extends ConsoleCanvas {
 
 
 
+	/**
+	 * Sets the text at the start of each line to the given string. This string is not editable in the console.
+	 * */
 	public void setStartText(String text) {
 		int nPrev = startText.length();
 		this.startText = text;
@@ -125,6 +128,9 @@ public class ConsoleView extends ConsoleCanvas {
 
 
 
+	/**
+	 * Prints the given line in the given {@link Color} to the console.
+	 * */
 	public void printLine(Color color, String str) {
 		String currLine = getLine(getCursorRow());
 
@@ -137,7 +143,9 @@ public class ConsoleView extends ConsoleCanvas {
 
 
 
-
+	/**
+	 * Prints the given line in the default {@link Color} to the console.
+	 * */
 	public void printLine(String str) {
 		String currLine = getLine(getCursorRow());
 

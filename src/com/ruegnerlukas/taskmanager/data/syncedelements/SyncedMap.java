@@ -75,13 +75,13 @@ public class SyncedMap<K, V> extends ObservableMapWrapper<K, V> implements Synce
 
 		if (change instanceof MapChange) {
 			MapChange mapChange = (MapChange) change;
-			this.listener.setSilenced(true);
+			this.listener.setMuted(true);
 			if (mapChange.wasAdded) {
 				this.put((K) mapChange.key, (V) mapChange.value);
 			} else {
 				this.remove((K) mapChange.key);
 			}
-			this.listener.setSilenced(false);
+			this.listener.setMuted(false);
 		}
 
 	}

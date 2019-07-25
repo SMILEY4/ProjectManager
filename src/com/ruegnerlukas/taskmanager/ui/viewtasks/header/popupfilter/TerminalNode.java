@@ -102,7 +102,7 @@ public class TerminalNode extends CriteriaNode {
 		btnRemove.setMinSize(22, 22);
 		btnRemove.setPrefSize(22, 22);
 		btnRemove.setMaxSize(22, 22);
-		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7, "black");
+		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7);
 		btnRemove.setOnAction(event -> {
 			removeThisCriteria();
 			onModified();
@@ -113,6 +113,9 @@ public class TerminalNode extends CriteriaNode {
 
 
 
+	/**
+	 * Called when the given {@link TaskAttribute} was selected.
+	 */
 	private void onSelectAttribute(TaskAttribute attribute) {
 		boxOperation.getItems().clear();
 		boxOperation.getItems().addAll(AttributeLogic.LOGIC_MODULES.get(attribute.type.get()).getFilterData().keySet());
@@ -123,6 +126,9 @@ public class TerminalNode extends CriteriaNode {
 
 
 
+	/**
+	 * Called when the given {@link FilterOperation} was selected.
+	 */
 	private void onSelectFilterOperation(FilterOperation operation) {
 		Class<?>[] dataTypes = AttributeLogic.LOGIC_MODULES.get(boxAttribute.getValue().type.get()).getFilterData().get(operation);
 		createValueInputFields(dataTypes, null);
@@ -132,6 +138,10 @@ public class TerminalNode extends CriteriaNode {
 
 
 
+	/**
+	 * Removes the previous input fields for values and adds new fields with the given types and initial values. <br>
+	 * Valid types are {@link Boolean}, {@link Integer}, {@link Double}, {@link String}, {@link TaskFlag}, {@link LocalDate}, {@link LocalDateTime} and {@link Task}.
+	 */
 	private void createValueInputFields(Class<?>[] dataTypes, Object[] values) {
 		if (dataTypes == null) {
 			return;
@@ -277,6 +287,9 @@ public class TerminalNode extends CriteriaNode {
 
 
 
+	/**
+	 * @return the selected {@link TaskAttribute}
+	 */
 	public TaskAttribute getAttribute() {
 		return boxAttribute.getValue();
 	}
@@ -284,6 +297,9 @@ public class TerminalNode extends CriteriaNode {
 
 
 
+	/**
+	 * @return the selected {@link FilterOperation}
+	 */
 	public FilterOperation getFilterOperation() {
 		return boxOperation.getValue();
 	}
@@ -291,6 +307,9 @@ public class TerminalNode extends CriteriaNode {
 
 
 
+	/**
+	 * @return the selected values.
+	 */
 	@SuppressWarnings ("unchecked")
 	public Object[] getValues() {
 

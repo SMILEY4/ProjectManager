@@ -6,7 +6,7 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
 
-public class FXEvents {
+public class FXNodeSilencer {
 
 
 	public static final EventHandler MUTE_FILTER = Event::consume;
@@ -14,6 +14,9 @@ public class FXEvents {
 
 
 
+	/**
+	 * Prevents given {@link Node}s from firing events.
+	 */
 	public static void muteNodes(Node... nodes) {
 		for (Node node : nodes) {
 			muteNode(node);
@@ -23,14 +26,19 @@ public class FXEvents {
 
 
 
+	/**
+	 * Prevents given {@link Node} from firing events.
+	 */
 	public static void muteNode(Node node) {
-		System.out.println("MUTE " + node.getClass().getSimpleName() + "@" + Integer.toHexString(node.hashCode()));
 		node.addEventFilter(ActionEvent.ACTION, MUTE_FILTER);
 	}
 
 
 
 
+	/**
+	 * Allows given {@link Node}s to fire events.
+	 */
 	public static void unmuteNodes(Node... nodes) {
 		for (Node node : nodes) {
 			unmuteNode(node);
@@ -40,8 +48,10 @@ public class FXEvents {
 
 
 
+	/**
+	 * Allows given {@link Node} to fire events.
+	 */
 	public static void unmuteNode(Node node) {
-		System.out.println("UNMUTE " + node.getClass().getSimpleName() + "@" + Integer.toHexString(node.hashCode()));
 		node.removeEventFilter(ActionEvent.ACTION, MUTE_FILTER);
 	}
 

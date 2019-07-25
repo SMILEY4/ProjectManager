@@ -41,7 +41,7 @@ public class ItemDep extends HBox {
 		Button btnRemove = new Button("x");
 		btnRemove.setMinSize(22, 22);
 		btnRemove.setMaxSize(22, 22);
-		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.5, "black");
+		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.5);
 		this.getChildren().add(btnRemove);
 
 		btnRemove.setOnAction(event -> parent.removeDependency(this));

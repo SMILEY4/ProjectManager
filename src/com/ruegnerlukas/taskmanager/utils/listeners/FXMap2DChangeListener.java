@@ -58,7 +58,7 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 	@Override
-	public void setSilenced(boolean silenced) {
+	public void setMuted(boolean silenced) {
 		this.isSilenced = silenced;
 	}
 
@@ -66,13 +66,16 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 	@Override
-	public boolean isSilenced() {
+	public boolean isMuted() {
 		return this.isSilenced;
 	}
 
 
 
 
+	/**
+	 * @return the {@link Map2DChangeListener} used by this listener.
+	 */
 	public Map2DChangeListener<R, C, V> getListener() {
 		return this.listener;
 	}
@@ -81,7 +84,7 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 	protected void onMapChanged(Map2DChangeListener.Change<R, C, V> c) {
-		if(!isSilenced()) {
+		if (!isMuted()) {
 			onChanged(c);
 		}
 	}
@@ -89,11 +92,17 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 
+	/**
+	 * This method is called if the elements of an registered {@link ObservableMap2D} change and this listener is not muted.
+	 */
 	public abstract void onChanged(Map2DChangeListener.Change<R, C, V> c);
 
 
 
 
+	/**
+	 * @return true, if the value of the given change was added.
+	 */
 	public boolean wasValueAdded(Map2DChangeListener.Change<R, C, V> c) {
 		return c.wasAdded() && !c.wasRemoved();
 	}
@@ -101,6 +110,9 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 
+	/**
+	 * @return true, if the value of the given change was removed.
+	 */
 	public boolean wasValueRemoved(Map2DChangeListener.Change<R, C, V> c) {
 		return !c.wasAdded() && c.wasRemoved();
 	}
@@ -108,6 +120,9 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 
+	/**
+	 * @return true, if the value of the given change was changed.
+	 */
 	public boolean wasValueChanged(Map2DChangeListener.Change<R, C, V> c) {
 		return c.wasAdded() && c.wasRemoved();
 	}
@@ -115,6 +130,9 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 
+	/**
+	 * @return true, if the row of the given change was added.
+	 */
 	public boolean wasRowAdded(Map2DChangeListener.Change<R, C, V> c) {
 		return c.wasRowAdded() && !c.wasRowRemoved();
 	}
@@ -122,6 +140,9 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 
+	/**
+	 * @return true, if the row of the given change was removed.
+	 */
 	public boolean wasRowRemoved(Map2DChangeListener.Change<R, C, V> c) {
 		return !c.wasRowAdded() && c.wasRowRemoved();
 	}
@@ -129,6 +150,9 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 
+	/**
+	 * @return true, if the row of the given change was changed.
+	 */
 	public boolean wasRowChanged(Map2DChangeListener.Change<R, C, V> c) {
 		return c.wasRowAdded() && c.wasRowRemoved();
 	}
@@ -136,6 +160,9 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 
+	/**
+	 * @return true, if the column of the given change was added.
+	 */
 	public boolean wasColumnAdded(Map2DChangeListener.Change<R, C, V> c) {
 		return c.wasColumnAdded() && !c.wasColumnRemoved();
 	}
@@ -143,6 +170,9 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 
+	/**
+	 * @return true, if the column of the given change was removed.
+	 */
 	public boolean wasColumnRemoved(Map2DChangeListener.Change<R, C, V> c) {
 		return !c.wasColumnAdded() && c.wasColumnRemoved();
 	}
@@ -150,6 +180,9 @@ public abstract class FXMap2DChangeListener<R, C, V> implements CustomListener<O
 
 
 
+	/**
+	 * @return true, if the column of the given change was changed.
+	 */
 	public boolean wasColumnChanged(Map2DChangeListener.Change<R, C, V> c) {
 		return c.wasColumnAdded() && c.wasColumnRemoved();
 	}

@@ -58,7 +58,7 @@ public abstract class FXGenericChangeListener implements CustomListener<Observab
 
 
 	@Override
-	public void setSilenced(boolean silenced) {
+	public void setMuted(boolean silenced) {
 		this.isSilenced = silenced;
 	}
 
@@ -66,13 +66,16 @@ public abstract class FXGenericChangeListener implements CustomListener<Observab
 
 
 	@Override
-	public boolean isSilenced() {
+	public boolean isMuted() {
 		return this.isSilenced;
 	}
 
 
 
 
+	/**
+	 * @return the {@link ChangeListener} used by this listener.
+	 */
 	public ChangeListener getListener() {
 		return this.listener;
 	}
@@ -89,6 +92,9 @@ public abstract class FXGenericChangeListener implements CustomListener<Observab
 
 
 
+	/**
+	 * This method is called if the value of an registered {@link ObservableValue} changes and this listener is not muted.
+	 */
 	public abstract void changed(ObservableValue observable, Object oldValue, Object newValue);
 
 

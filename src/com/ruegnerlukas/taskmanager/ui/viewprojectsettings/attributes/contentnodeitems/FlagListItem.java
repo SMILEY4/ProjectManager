@@ -338,7 +338,7 @@ class FlagItem extends HBox {
 		btnRemove = new Button();
 		btnRemove.setMinSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
-		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f, "black");
+		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f);
 		btnRemove.setOnAction(event -> {
 			onRemove();
 		});
@@ -372,7 +372,7 @@ class FlagItem extends HBox {
 
 		// button up
 		Button btnUp = new Button();
-		ButtonUtils.makeIconButton(btnUp, SVGIcons.LONG_ARROW_UP, 0.7f, "black");
+		ButtonUtils.makeIconButton(btnUp, SVGIcons.LONG_ARROW_UP, 0.7f);
 		btnUp.setMinSize(32, 32);
 		btnUp.setPrefSize(32, 32);
 		btnUp.setMaxSize(32, 32);
@@ -384,7 +384,7 @@ class FlagItem extends HBox {
 
 		// button down
 		Button btnDown = new Button();
-		ButtonUtils.makeIconButton(btnDown, SVGIcons.LONG_ARROW_DOWN, 0.7f, "black");
+		ButtonUtils.makeIconButton(btnDown, SVGIcons.LONG_ARROW_DOWN, 0.7f);
 		btnDown.setMinSize(32, 32);
 		btnDown.setPrefSize(32, 32);
 		btnDown.setMaxSize(32, 32);

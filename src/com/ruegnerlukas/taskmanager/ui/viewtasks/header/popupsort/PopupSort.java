@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupsort;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortData;
@@ -143,6 +144,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Resets the list to the original state.
+	 */
 	private void onReset() {
 		if (sortData.get() == null) {
 			onClearSortData();
@@ -156,6 +160,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Loads the preset with the given name and selects it. This replaces the previous elements.
+	 */
 	private void onLoadPreset(String name) {
 		SortData preset = PresetLogic.getSortPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
@@ -169,6 +176,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Deletes the preset with the given name and deselects it.
+	 */
 	private void onDeletePreset(String name) {
 		boolean deleted = PresetLogic.deleteSortPreset(Data.projectProperty.get(), name);
 		if (deleted) {
@@ -182,6 +192,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Save the current list of {@link SortElementNode} as a new preset with the given name and selects it.
+	 */
 	private void onSavePreset(String name) {
 		String strName = name.trim();
 		boolean saved = PresetLogic.saveSortPreset(Data.projectProperty.get(), strName, buildSortData());
@@ -197,6 +210,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Called when a preset was deselected. Enables/Disables the buttons and clears the name field.
+	 */
 	private void onPresetSelected() {
 		btnDeletePreset.setDisable(false);
 		fieldPresetName.setDisable(true);
@@ -207,6 +223,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Called when a preset was deselected. Enables/Disables the buttons.
+	 */
 	private void onPresetDeselected() {
 		btnDeletePreset.setDisable(true);
 		fieldPresetName.setDisable(false);
@@ -216,6 +235,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Adds all {@link SortElement}s from the given {@link SortData} to the list (Removes the previous elements).
+	 */
 	private void onSetSortData(SortData data) {
 		boxElements.getChildren().clear();
 		for (SortElement element : data.sortElements) {
@@ -226,6 +248,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Removes all {@link SortElementNode} from the list.
+	 */
 	private void onClearSortData() {
 		boxElements.getChildren().clear();
 		onModified();
@@ -234,6 +259,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Adds a new {@link SortElement} as a {@link SortElementNode} to the bottom of the list.
+	 */
 	private void onAddSortElement() {
 		TaskAttribute attribute = AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID);
 		SortElement element = new SortElement(attribute, SortElement.SortDir.ASC);
@@ -244,6 +272,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Adds the given {@link SortElement} as a {@link SortElementNode} to the bottom of the list.
+	 */
 	private void onAddSortElement(SortElement element) {
 		SortElementNode node = new SortElementNode(element);
 		node.setOnModified(event -> onModified());
@@ -256,6 +287,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Moves the given {@link SortElementNode} one up in the list (if possible).
+	 */
 	private void onMoveUpSortNode(SortElementNode sortNode) {
 		int index = boxElements.getChildren().indexOf(sortNode);
 		if (index > 0) {
@@ -267,6 +301,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Moves the given {@link SortElementNode} one down in the list (if possible).
+	 */
 	private void onMoveDownSortNode(SortElementNode sortNode) {
 		final int index = boxElements.getChildren().indexOf(sortNode);
 		if (index < boxElements.getChildren().size() - 1) {
@@ -278,6 +315,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Removes the given {@link SortElementNode} from the list.
+	 */
 	private void onRemoveSortElement(SortElementNode node) {
 		boxElements.getChildren().remove(node);
 		onModified();
@@ -286,6 +326,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * @return a created {@link SortData} from the list of {@link SortElementNode}.
+	 */
 	private SortData buildSortData() {
 		List<SortElement> sortElements = new ArrayList<>();
 		for (Node node : boxElements.getChildren()) {
@@ -297,6 +340,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Called when the list or an item changed. Clears the currently selected preset.
+	 */
 	private void onModified() {
 		Platform.runLater(() -> choicePreset.getSelectionModel().clearSelection());
 		onPresetDeselected();
@@ -305,6 +351,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Closes this preset without saving.
+	 */
 	private void onCancel() {
 		this.getStage().close();
 	}
@@ -312,6 +361,9 @@ public class PopupSort extends PopupBase {
 
 
 
+	/**
+	 * Set the sort data of the {@link Project} and closes this popup.
+	 */
 	private void onAccept() {
 		TaskLogic.setSortData(Data.projectProperty.get(), buildSortData(), choicePreset.getValue());
 		this.getStage().close();

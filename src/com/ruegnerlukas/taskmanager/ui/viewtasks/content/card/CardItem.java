@@ -72,6 +72,9 @@ public class CardItem extends HBox {
 
 
 
+	/**
+	 * Updates the value of this item.
+	 */
 	private void updateValue() {
 		final TaskValue<?> value = TaskLogic.getValueOrDefault(card.getTask(), attribute);
 		if (value.getAttType() == null) {

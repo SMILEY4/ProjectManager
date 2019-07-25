@@ -83,6 +83,9 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 
 
+	/**
+	 * Creates and adds the controls and logic for the project name.
+	 */
 	private void createProjectName() {
 
 		Project project = Data.projectProperty.get();
@@ -103,6 +106,9 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 
 
+	/**
+	 * called when the name of the {@link Project} changed. Changes the text of the project-name label.
+	 */
 	private void onProjectNameChanged(String newName) {
 		labelName.setText(newName);
 	}
@@ -110,6 +116,9 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 
 
+	/**
+	 * Renames the {@link Project}.
+	 */
 	private void onRenameProject(String name) {
 		ProjectLogic.renameProject(Data.projectProperty.get(), name);
 	}
@@ -122,12 +131,15 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 
 
+	/**
+	 * Creates and adds the controls and logic for locking all {@link TaskAttribute}.
+	 */
 	private void createLockAttributes() {
 
 		Project project = Data.projectProperty.get();
 
 		final boolean isLocked = project.settings.attributesLocked.get();
-		ButtonUtils.makeIconButton(btnLockAttributes, isLocked ? SVGIcons.LOCK_CLOSED : SVGIcons.LOCK_OPEN, 1, "black");
+		ButtonUtils.makeIconButton(btnLockAttributes, isLocked ? SVGIcons.LOCK_CLOSED : SVGIcons.LOCK_OPEN, 1);
 		btnLockAttributes.setOnAction(event -> {
 			onLockAttributes();
 		});
@@ -143,17 +155,23 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 
 
-	private void onLockAttributes() {
-		ProjectLogic.lockSwitchTaskAttributes(Data.projectProperty.get());
+	/**
+	 * Called when the lock of the {@link TaskAttribute}s changed. Locks/Unlocks all {@link TaskAttribute}s in the list of attributes.
+	 */
+	private void onAttributeLockChanged(boolean newLock) {
+		ButtonUtils.makeIconButton(btnLockAttributes, newLock ? SVGIcons.LOCK_CLOSED : SVGIcons.LOCK_OPEN, 0.7);
+		boxTaskAttribs.setDisable(newLock);
+		btnAddAttribute.setDisable(newLock);
 	}
 
 
 
 
-	private void onAttributeLockChanged(boolean newLock) {
-		ButtonUtils.makeIconButton(btnLockAttributes, newLock ? SVGIcons.LOCK_CLOSED : SVGIcons.LOCK_OPEN, 0.7, "black");
-		boxTaskAttribs.setDisable(newLock);
-		btnAddAttribute.setDisable(newLock);
+	/**
+	 * Switches the lock of all {@link TaskAttribute}.
+	 */
+	private void onLockAttributes() {
+		ProjectLogic.lockSwitchTaskAttributes(Data.projectProperty.get());
 	}
 
 
@@ -164,13 +182,14 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 
 
+	/**
+	 * Creates and adds the controls and logic for the list of {@link TaskAttribute}s.
+	 */
 	private void createAttributeList() {
 
 		Project project = Data.projectProperty.get();
 
-		btnAddAttribute.setOnAction(event -> {
-			onAddAttribute();
-		});
+		btnAddAttribute.setOnAction(event -> onAddAttribute());
 
 		for (TaskAttribute attribute : project.data.attributes) {
 			AttributeNode node = new AttributeNode(attribute);
@@ -193,14 +212,10 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 
 
-	private void onAddAttribute() {
-		Project project = Data.projectProperty.get();
-		ProjectLogic.addAttributeToProject(project, AttributeLogic.createTaskAttribute(AttributeType.getFreeTypes()[0], project));
-	}
-
-
-
-
+	/**
+	 * Called when a new {@link TaskAttribute} was added to the {@link Project}.
+	 * Adds the given {@link TaskAttribute} to the list of attributes.
+	 */
 	private void onAttributeAdded(TaskAttribute attribute) {
 		AttributeNode node = new AttributeNode(attribute);
 		boxTaskAttribs.getChildren().add(node);
@@ -209,6 +224,21 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 
 
+	/**
+	 * Adds a new {@link TaskAttribute} to the {@link Project}.
+	 */
+	private void onAddAttribute() {
+		Project project = Data.projectProperty.get();
+		ProjectLogic.addAttributeToProject(project, AttributeLogic.createTaskAttribute(AttributeType.getFreeTypes()[0], project));
+	}
+
+
+
+
+	/**
+	 * Called when a {@link TaskAttribute} was removed from the {@link Project}.
+	 * Removes the given {@link TaskAttribute} from the list of attributes.
+	 */
 	private void onAttributeRemoved(TaskAttribute attribute) {
 		AttributeNode removed = null;
 		for (AttributeNode node : getAttributeNodeList()) {
@@ -232,6 +262,9 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 
 
+	/**
+	 * @return a list of all {@link AttributeNode}s in the list.
+	 */
 	private List<AttributeNode> getAttributeNodeList() {
 		List<AttributeNode> list = new ArrayList<>();
 		for (Node node : boxTaskAttribs.getChildren()) {

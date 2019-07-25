@@ -73,6 +73,9 @@ public class ItemDescription extends SidebarItem {
 
 
 
+	/**
+	 * Updates the displayed {@link TaskValue}.
+	 */
 	private void refresh() {
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {

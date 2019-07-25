@@ -58,7 +58,7 @@ public abstract class FXChangeListener<T> implements CustomListener<ObservableVa
 
 
 	@Override
-	public void setSilenced(boolean silenced) {
+	public void setMuted(boolean silenced) {
 		this.isSilenced = silenced;
 	}
 
@@ -66,13 +66,16 @@ public abstract class FXChangeListener<T> implements CustomListener<ObservableVa
 
 
 	@Override
-	public boolean isSilenced() {
+	public boolean isMuted() {
 		return this.isSilenced;
 	}
 
 
 
 
+	/**
+	 * @return the {@link ChangeListener} used by this listener.
+	 */
 	public ChangeListener<T> getListener() {
 		return this.listener;
 	}
@@ -81,7 +84,7 @@ public abstract class FXChangeListener<T> implements CustomListener<ObservableVa
 
 
 	private void onValueChanged(ObservableValue<? extends T> observable, T oldValue, T newValue) {
-		if (!isSilenced()) {
+		if (!isMuted()) {
 			changed(observable, oldValue, newValue);
 		}
 	}
@@ -89,6 +92,9 @@ public abstract class FXChangeListener<T> implements CustomListener<ObservableVa
 
 
 
+	/**
+	 * This method is called if the value of an registered {@link ObservableValue} changes and this listener is not muted.
+	 */
 	public abstract void changed(ObservableValue<? extends T> observable, T oldValue, T newValue);
 
 

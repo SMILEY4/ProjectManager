@@ -133,6 +133,9 @@ public class TaskCard extends AnchorPane {
 
 
 
+	/**
+	 * Adds the values of this task and the given {@link TaskAttribute} to this card as a new Key-Value-Pair.
+	 */
 	private void addAttributeAsKVPair(TaskAttribute attribute) {
 		CardItem item = new CardItem(this, attribute);
 		boxAttribs.getChildren().add(item);
@@ -141,6 +144,9 @@ public class TaskCard extends AnchorPane {
 
 
 
+	/**
+	 * Marks this card as selected.
+	 */
 	public void select() {
 		this.isSelected = true;
 		this.borderProperty().set(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
@@ -149,6 +155,9 @@ public class TaskCard extends AnchorPane {
 
 
 
+	/**
+	 * Marks this card as deselected.
+	 */
 	public void deselect() {
 		this.isSelected = false;
 		this.borderProperty().set(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0))));
@@ -157,6 +166,9 @@ public class TaskCard extends AnchorPane {
 
 
 
+	/**
+	 * Updates the color of the Flag-Area of this card.
+	 */
 	private void onFlagChanged() {
 		final TaskFlag newFlag = (TaskFlag) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.FLAG)).getValue();
 		paneFlag.setStyle("-fx-background-color: " + newFlag.color.get().asHex());
@@ -165,6 +177,9 @@ public class TaskCard extends AnchorPane {
 
 
 
+	/**
+	 * Updates the description text of this card.
+	 */
 	private void onDescriptionChanged() {
 		final String newDescr = (String) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.DESCRIPTION)).getValue();
 		labelDesc.setText(newDescr);
@@ -173,6 +188,9 @@ public class TaskCard extends AnchorPane {
 
 
 
+	/**
+	 * @return the {@link Task} handled by this card.
+	 */
 	public Task getTask() {
 		return this.task;
 	}

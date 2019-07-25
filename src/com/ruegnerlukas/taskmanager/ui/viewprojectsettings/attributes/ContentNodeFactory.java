@@ -7,6 +7,9 @@ import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnod
 public class ContentNodeFactory {
 
 
+	/**
+	 * Creates a new {@link AttributeContentNode} for the given {@link TaskAttribute}.
+	 */
 	public static AttributeContentNode create(TaskAttribute attribute) {
 		switch (attribute.type.get()) {
 			case FLAG:
@@ -32,6 +35,9 @@ public class ContentNodeFactory {
 
 
 
+	/**
+	 * @return true, if the content of the given {@link TaskAttribute} can not be changed.
+	 */
 	public static boolean isUnchangable(TaskAttribute attribute) {
 		AttributeType type = attribute.type.get();
 		return type != AttributeType.BOOLEAN &&

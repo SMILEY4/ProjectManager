@@ -1,6 +1,6 @@
 package com.ruegnerlukas.taskmanager.utils.uielements.customelements;
 
-import com.ruegnerlukas.taskmanager.utils.FXEvents;
+import com.ruegnerlukas.taskmanager.utils.FXNodeSilencer;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.control.TextArea;
@@ -8,6 +8,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 
+/**
+ * A text field that can be behave like a {@link TextArea} or a {@link TextField}
+ */
 public class MultiTextField extends AnchorPane {
 
 
@@ -55,13 +58,18 @@ public class MultiTextField extends AnchorPane {
 	}
 
 
+
+
+	/**
+	 * Set the text of this field withour triggering actions.
+	 */
 	public void setTextSilent(String value) {
-		FXEvents.muteNode(area);
-		FXEvents.muteNode(field);
+		FXNodeSilencer.muteNode(area);
+		FXNodeSilencer.muteNode(field);
 		area.setText(value);
 		field.setText(value);
-		FXEvents.unmuteNode(area);
-		FXEvents.unmuteNode(field);
+		FXNodeSilencer.unmuteNode(area);
+		FXNodeSilencer.unmuteNode(field);
 	}
 
 
@@ -75,6 +83,9 @@ public class MultiTextField extends AnchorPane {
 
 
 
+	/**
+	 * whether this field should behave like a {@link TextField} (multiline = false) or a {@link TextArea} (multiline = true)
+	 */
 	public void setMultiline(boolean multiline) {
 		String text = getText();
 		this.multiline = multiline;
@@ -105,6 +116,9 @@ public class MultiTextField extends AnchorPane {
 
 
 
+	/**
+	 * @return true if this field behaves like a {@link TextArea} (false for {@link TextField}
+	 */
 	public boolean isMultiline() {
 		return this.multiline;
 	}

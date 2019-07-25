@@ -12,6 +12,9 @@ import javafx.scene.layout.VBox;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * For {@link TaskAttribute}s that have special values that can be changed.
+ */
 public abstract class ChangeableContentNode extends AttributeContentNode {
 
 
@@ -41,14 +44,17 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 		btnSave = buttons[1];
 		btnSave.setOnAction(event -> onSave());
 
-		onChange();
+		checkForChange();
 	}
 
 
 
 
-	protected void addItem(ContentNodeItem item) {
-		item.changedProperty.addListener((observable -> onChange()));
+	/**
+	 * Adds the given {@link ContentNodeItem} to this node.
+	 */
+	void addItem(ContentNodeItem item) {
+		item.changedProperty.addListener((observable -> checkForChange()));
 		items.add(item);
 		vbox.getChildren().add(vbox.getChildren().size() - 1, item);
 	}
@@ -56,7 +62,10 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 
 
 
-	protected void onChange() {
+	/**
+	 * Checks for a change of any {@link ContentNodeItem} of this node and enables/disables the "Save" and "Discard" buttons.
+	 */
+	private void checkForChange() {
 
 		boolean changed = false;
 		for (ContentNodeItem item : items) {
@@ -74,21 +83,27 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 
 
 
+	/**
+	 * Notifies all {@link ContentNodeItem} to write their changes to the {@link TaskAttribute}.
+	 */
 	private void onSave() {
 		for (ContentNodeItem item : items) {
 			item.save();
 		}
-		onChange();
+		checkForChange();
 	}
 
 
 
 
+	/**
+	 * Notifies all {@link ContentNodeItem} to discard their changes.
+	 */
 	private void onDiscard() {
 		for (ContentNodeItem item : items) {
 			item.reset();
 		}
-		onChange();
+		checkForChange();
 	}
 
 

@@ -36,9 +36,9 @@ public class SyncedProperty<T> extends CustomProperty<T> implements SyncedElemen
 		if (change instanceof ValueChange) {
 			ValueChange valueChange = (ValueChange) change;
 			if (get().getClass().isAssignableFrom(valueChange.getNewValue().getClass())) {
-				this.listener.setSilenced(true);
+				this.listener.setMuted(true);
 				this.set((T) valueChange.getNewValue());
-				this.listener.setSilenced(false);
+				this.listener.setMuted(false);
 			}
 		}
 	}

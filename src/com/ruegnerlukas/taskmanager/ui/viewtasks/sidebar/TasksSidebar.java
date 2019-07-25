@@ -117,9 +117,10 @@ public class TasksSidebar {
 
 
 
+	/**
+	 * Shows the content of the given {@link Task} in the sidebar.
+	 */
 	public void setTask(Task task) {
-
-
 		this.currentTask = task;
 
 		// remove prev. items
@@ -158,6 +159,9 @@ public class TasksSidebar {
 
 
 
+	/**
+	 * Removes item of the given {@link TaskAttribute} from the sidebar
+	 */
 	private void removeAttribute(TaskAttribute attribute) {
 		SidebarItem item = findItem(attribute);
 		if (item != null) {
@@ -169,6 +173,9 @@ public class TasksSidebar {
 
 
 
+	/**
+	 * Adds a new item for the given {@link TaskAttribute} and {@link Task} to the sidebar
+	 */
 	private void addAttribute(TaskAttribute attribute, Task task) {
 		addAttribute(boxAttributes.getChildren().size(), attribute, task);
 	}
@@ -176,6 +183,9 @@ public class TasksSidebar {
 
 
 
+	/**
+	 * Adds a new item for the given {@link TaskAttribute} and {@link Task} at the given index to the sidebar
+	 */
 	private void addAttribute(int index, TaskAttribute attribute, Task task) {
 		if (attribute != null) {
 			SidebarItem item = SidebarItem.createItem(this, attribute, task);
@@ -189,6 +199,9 @@ public class TasksSidebar {
 
 
 
+	/**
+	 * Changes/Updates the {@link AttributeType} of the given {@link SidebarItem} by removing it and adding a new {@link SidebarItem} with the new {@link AttributeType}.
+	 */
 	private void onAttributeTypeChanged(SidebarItem item) {
 		final int index = boxAttributes.getChildren().indexOf(item);
 		item.dispose();
@@ -199,6 +212,9 @@ public class TasksSidebar {
 
 
 
+	/**
+	 * @return the {@link SidebarItem} responsible for the given {@link TaskAttribute} or null.
+	 */
 	private SidebarItem findItem(TaskAttribute attribute) {
 		for (Node node : boxAttributes.getChildren()) {
 			if (node instanceof SidebarItem) {

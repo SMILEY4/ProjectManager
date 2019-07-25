@@ -22,6 +22,9 @@ import javafx.scene.paint.Color;
 import java.util.Random;
 
 
+/**
+ * Represents a single {@link TaskFlag}
+ */
 @SuppressWarnings ("ALL")
 public class FlagNode extends HBox {
 
@@ -64,7 +67,7 @@ public class FlagNode extends HBox {
 		btnRemove = new Button();
 		btnRemove.setMinSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
-		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f, "black");
+		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f);
 		btnRemove.setOnAction(event -> {
 			onRemove();
 		});
@@ -98,7 +101,7 @@ public class FlagNode extends HBox {
 
 		// button up
 		Button btnUp = new Button();
-		ButtonUtils.makeIconButton(btnUp, SVGIcons.LONG_ARROW_UP, 0.7f, "black");
+		ButtonUtils.makeIconButton(btnUp, SVGIcons.LONG_ARROW_UP, 0.7f);
 		btnUp.setMinSize(32, 32);
 		btnUp.setPrefSize(32, 32);
 		btnUp.setMaxSize(32, 32);
@@ -110,7 +113,7 @@ public class FlagNode extends HBox {
 
 		// button down
 		Button btnDown = new Button();
-		ButtonUtils.makeIconButton(btnDown, SVGIcons.LONG_ARROW_DOWN, 0.7f, "black");
+		ButtonUtils.makeIconButton(btnDown, SVGIcons.LONG_ARROW_DOWN, 0.7f);
 		btnDown.setMinSize(32, 32);
 		btnDown.setPrefSize(32, 32);
 		btnDown.setMaxSize(32, 32);
@@ -124,6 +127,9 @@ public class FlagNode extends HBox {
 
 
 
+	/**
+	 * Show a menu to select the color of the {@link TaskFlag} handled by this node.
+	 */
 	private void showColorSelectMenu(Node node) {
 		ContextMenu menu = new ContextMenu();
 		for (int i = 0; i < TaskFlag.FlagColor.values().length; i++) {
@@ -150,6 +156,9 @@ public class FlagNode extends HBox {
 
 
 
+	/**
+	 * Writes the new color and name to the {@link TaskFlag}.
+	 */
 	public void commitValues() {
 		this.flag.color.set(this.colorProperty.get());
 		this.flag.name.set(this.nameProperty.get());
@@ -158,6 +167,9 @@ public class FlagNode extends HBox {
 
 
 
+	/**
+	 * Notifies the {@link EventHandler} that the {@link Button} to remove this node has been pressed.
+	 */
 	private void onRemove() {
 		if (handlerRemove != null) {
 			handlerRemove.handle(new ActionEvent());
@@ -167,6 +179,9 @@ public class FlagNode extends HBox {
 
 
 
+	/**
+	 * Notifies the {@link EventHandler} that the {@link Button} to move this node up in the list has been pressed.
+	 */
 	private void onMoveUp() {
 		if (handlerMoveUp != null) {
 			handlerMoveUp.handle(new ActionEvent());
@@ -176,6 +191,9 @@ public class FlagNode extends HBox {
 
 
 
+	/**
+	 * Notifies the {@link EventHandler} that the {@link Button} to move this node down in the list has been pressed.
+	 */
 	private void onMoveDown() {
 		if (handlerMoveDown != null) {
 			handlerMoveDown.handle(new ActionEvent());
@@ -227,6 +245,9 @@ public class FlagNode extends HBox {
 
 
 
+	/**
+	 * Whether this node / flag can be removed.
+	 */
 	public void enableRemove(boolean enable) {
 		btnRemove.setDisable(!enable);
 	}

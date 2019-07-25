@@ -13,6 +13,10 @@ public abstract class PopupBase extends AnchorPane {
 
 
 
+	/**
+	 * @param width  the initial width of the popup-window
+	 * @param height the initial height of the popup-window
+	 */
 	public PopupBase(int width, int height) {
 		this.width = width;
 		this.height = height;
@@ -21,11 +25,17 @@ public abstract class PopupBase extends AnchorPane {
 
 
 
+	/**
+	 * Use this method to setup and create all content and logic of this popup.
+	 */
 	public abstract void create();
 
 
 
 
+	/**
+	 * @return the specified initial width of this popup
+	 */
 	public int getPopupWidth() {
 		return this.width;
 	}
@@ -33,6 +43,9 @@ public abstract class PopupBase extends AnchorPane {
 
 
 
+	/**
+	 * @return the specified initial height of this popup
+	 */
 	public int getPopupHeight() {
 		return this.height;
 	}
@@ -40,6 +53,9 @@ public abstract class PopupBase extends AnchorPane {
 
 
 
+	/**
+	 * sets the stage of this popup
+	 */
 	public void setStage(Stage stage) {
 		this.stage = stage;
 	}
@@ -47,6 +63,9 @@ public abstract class PopupBase extends AnchorPane {
 
 
 
+	/**
+	 * @return the stage of this popup
+	 */
 	public Stage getStage() {
 		return this.stage;
 	}

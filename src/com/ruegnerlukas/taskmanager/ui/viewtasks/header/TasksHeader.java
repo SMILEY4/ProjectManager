@@ -39,6 +39,7 @@ import java.io.IOException;
 
 public class TasksHeader {
 
+
 	private TaskView taskView;
 
 	@FXML private AnchorPane rootHeader;
@@ -147,7 +148,7 @@ public class TasksHeader {
 
 
 		// TODO actions hamburger
-		ButtonUtils.makeIconButton(btnActions, SVGIcons.HAMBURGER, 0.7f, "white");
+		ButtonUtils.makeIconButton(btnActions, SVGIcons.HAMBURGER, 0.7f);
 		btnActions.setOnAction(event -> {
 			ContextMenu popup = new ContextMenu();
 			MenuFunction funcCreateTask = new MenuFunction("Create Task") {
@@ -166,6 +167,9 @@ public class TasksHeader {
 
 
 
+	/**
+	 * shows/hides the given badge.
+	 */
 	private void showBadge(Label badge, boolean show) {
 		badge.setVisible(show);
 	}
@@ -173,6 +177,11 @@ public class TasksHeader {
 
 
 
+	/**
+	 * Creates a new badge/{@link Label} in the given {@link AnchorPane} for the give {@link Button}.
+	 *
+	 * @return the creates badge/{@link Label}
+	 */
 	private Label createBadge(AnchorPane pane, Button button) {
 
 		Label badge = new Label("!");
@@ -195,6 +204,9 @@ public class TasksHeader {
 
 
 
+	/**
+	 * Opens the given {@link PopupBase} in a new window.
+	 */
 	private void openPopup(PopupBase popup) {
 		Stage stage = new Stage();
 		popup.setStage(stage);
@@ -204,7 +216,7 @@ public class TasksHeader {
 		Scene scene = new Scene(popup, popup.getPopupWidth(), popup.getPopupHeight());
 		scene.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
 			if (ke.getCode() == KeyCode.R) {
-				UIDataHandler.reloadAll();
+				UIDataHandler.styleReloadAll();
 				ke.consume();
 			}
 		});
@@ -215,6 +227,9 @@ public class TasksHeader {
 
 
 
+	/**
+	 * Called when the amount of displayed tasks changes.
+	 */
 	public void onNumDisplayedTasksChanged() {
 		final int nTotal = Data.projectProperty.get().data.tasks.size();
 		final int nDisplayed = TaskDisplayLogic.countDisplayedTasks(Data.projectProperty.get());

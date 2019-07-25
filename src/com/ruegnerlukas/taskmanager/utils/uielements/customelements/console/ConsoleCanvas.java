@@ -41,6 +41,10 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * @param maxLines the max amount of lines
+	 * @param maxChars the max amount of characters per line
+	 */
 	public ConsoleCanvas(int maxLines, int maxChars) {
 
 		// canvas
@@ -78,6 +82,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Selects an area specified by the given {@link Selection}
+	 */
 	public void setSelection(Selection selection) {
 		this.selection = selection;
 	}
@@ -85,6 +92,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * @return the selected area as a {@link Selection} or null
+	 */
 	public Selection getSelection() {
 		return selection;
 	}
@@ -92,6 +102,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * moves the cursor to the end of its current line.
+	 */
 	public void moveCursorToEndOfLine() {
 		String line = getLine(getCursorRow());
 		setCursorPos(line.length(), getCursorRow());
@@ -100,6 +113,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Sets the position of the cursor
+	 */
 	public void setCursorPos(int col, int row) {
 		int lastCol = cursorColumn;
 		int lastRow = cursorRow;
@@ -166,6 +182,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * @return the specified row as a string
+	 */
 	public String getLine(int row) {
 		if (0 <= row && row < cells.length) {
 			StringBuilder builder = new StringBuilder();
@@ -186,6 +205,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * @return a list of all lines selected by the given {@link Selection}.
+	 */
 	public List<String> getSelectedTextAsList(Selection selection) {
 
 		List<String> lines = new ArrayList<>();
@@ -226,6 +248,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * @return all lines selected by the given {@link Selection} as a single string with linebreaks.
+	 */
 	public String getSelectedText(Selection selection) {
 		List<String> list = getSelectedTextAsList(selection);
 		StringBuilder builder = new StringBuilder();
@@ -238,6 +263,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Sets the text of the console to the given lines
+	 */
 	public void setText(List<String> lines) {
 		for (int i = 0; i < Math.min(lines.size(), cells.length); i++) {
 			final String line = lines.get(i);
@@ -250,6 +278,10 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Sets the line specified by the row parameter to the given string and color.
+	 * If the repaint parameter is set to false, the console will not imminently repaint the line.
+	 */
 	public void setLine(int row, String str, Color color, boolean repaint) {
 		if (0 <= row && row < cells.length) {
 			rowColors[row] = color;
@@ -269,6 +301,10 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Sets the line specified by the row parameter to the given string.
+	 * If the repaint parameter is set to false, the console will not imminently repaint the line.
+	 */
 	public void setLine(int row, String str, boolean repaint) {
 		setLine(row, str, COLOR_TEXT, repaint);
 	}
@@ -276,6 +312,10 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Sets the character at the given row and column.
+	 * If the repaint parameter is set to false, the console will not imminently repaint the cell.
+	 */
 	public void setCell(int col, int row, char c, boolean repaint) {
 		if (0 <= row && row < cells.length) {
 			if (0 <= col && col < cells[row].length) {
@@ -290,6 +330,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Set the font of this console
+	 */
 	public void setFont(String family, double size) {
 		this.font = Font.font(family, size);
 		Text text = new Text(" ");
@@ -323,6 +366,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * @return the column-index at the given x-coordinate
+	 */
 	public int getColumn(double x) {
 		return (int) (x / cellWidth);
 	}
@@ -330,6 +376,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * @return the row-index at the given x-coordinate
+	 */
 	public int getRow(double y) {
 		return (int) (y / (cellHeight * lineSpacing) + scrollBar.getValue());
 	}
@@ -337,6 +386,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Repaint the whole console.
+	 */
 	public void repaintAll() {
 		GraphicsContext g = canvas.getGraphicsContext2D();
 		repaintAll(g);
@@ -345,6 +397,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Repaint the whole console.
+	 */
 	private void repaintAll(GraphicsContext g) {
 		g.setFill(Color.BLACK);
 		g.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -361,6 +416,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Repaint the given line.
+	 */
 	public void repaintLine(int row) {
 		GraphicsContext g = canvas.getGraphicsContext2D();
 		repaintLine(row, g);
@@ -369,6 +427,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Repaint the given line
+	 */
 	public void repaintLine(int row, GraphicsContext g) {
 		final int nCells = (int) (canvas.getWidth() / cellWidth) + 1;
 		for (int i = 0; i <= Math.min(cells[row].length - 1, nCells); i++) {
@@ -379,6 +440,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Repaint the currently selected area.
+	 */
 	public void repaintSelection() {
 		GraphicsContext g = canvas.getGraphicsContext2D();
 		repaintSelection(g);
@@ -387,6 +451,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Repaint the currently selected area.
+	 */
 	public void repaintSelection(GraphicsContext g) {
 		if (selection != null) {
 			if (selection.getRowStart() == selection.getRowEnd()) {
@@ -409,6 +476,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Repaint the given cell
+	 */
 	public void repaintCell(int col, int row) {
 		GraphicsContext g = canvas.getGraphicsContext2D();
 		repaintCell(col, row, g);
@@ -417,6 +487,9 @@ public class ConsoleCanvas extends AnchorPane {
 
 
 
+	/**
+	 * Repaint the given cell
+	 */
 	public void repaintCell(int col, int row, GraphicsContext g) {
 
 		final double cellX = col * cellWidth;

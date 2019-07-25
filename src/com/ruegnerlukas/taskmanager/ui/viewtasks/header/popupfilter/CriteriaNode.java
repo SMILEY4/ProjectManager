@@ -26,11 +26,17 @@ public abstract class CriteriaNode extends AnchorPane {
 
 
 
+	/**
+	 * Adds the children of the {@link FilterCriteria} handled by this node as new {@link CriteriaNode}s to the list of children of this node.
+	 */
 	public abstract void expandTree();
 
 
 
 
+	/**
+	 * Notifies the listener that this node was modified in some way.
+	 */
 	public void onModified() {
 		if (handlerModified != null) {
 			handlerModified.handle(new ActionEvent());
@@ -54,6 +60,9 @@ public abstract class CriteriaNode extends AnchorPane {
 
 
 
+	/**
+	 * Notifies the listener that this node wants to be removed.
+	 */
 	protected void removeThisCriteria() {
 		if (handlerOnRemove != null) {
 			handlerOnRemove.handle(new ActionEvent());
@@ -63,6 +72,9 @@ public abstract class CriteriaNode extends AnchorPane {
 
 
 
+	/**
+	 * @return the {@link FilterCriteria} handled by this node.
+	 */
 	public FilterCriteria getCriteria() {
 		return this.criteria;
 	}
@@ -70,9 +82,9 @@ public abstract class CriteriaNode extends AnchorPane {
 
 
 
-
-
-
+	/**
+	 * @return a tree of {@link FilterCriteria} with a new {@link FilterCriteria} of this {@link CriteriaNode} as its root.
+	 */
 	public abstract FilterCriteria buildCriteriaTree();
 
 

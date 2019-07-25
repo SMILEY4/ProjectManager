@@ -59,7 +59,7 @@ public abstract class FXListChangeListener<E> implements CustomListener<Observab
 
 
 	@Override
-	public void setSilenced(boolean silenced) {
+	public void setMuted(boolean silenced) {
 		this.isSilenced = silenced;
 	}
 
@@ -67,13 +67,16 @@ public abstract class FXListChangeListener<E> implements CustomListener<Observab
 
 
 	@Override
-	public boolean isSilenced() {
+	public boolean isMuted() {
 		return this.isSilenced;
 	}
 
 
 
 
+	/**
+	 * @return the {@link ListChangeListener} used by this listener.
+	 */
 	public ListChangeListener<E> getListener() {
 		return this.listener;
 	}
@@ -90,7 +93,7 @@ public abstract class FXListChangeListener<E> implements CustomListener<Observab
 
 
 	private void onListChanged(ListChangeListener.Change<? extends E> c) {
-		if (!isSilenced()) {
+		if (!isMuted()) {
 			valid = false;
 			onChanged(c);
 		}
@@ -99,6 +102,9 @@ public abstract class FXListChangeListener<E> implements CustomListener<Observab
 
 
 
+	/**
+	 * This method is called if the elements of an registered {@link ObservableList} change and this listener is not muted.
+	 */
 	public abstract void onChanged(ListChangeListener.Change<? extends E> c);
 
 
@@ -128,6 +134,9 @@ public abstract class FXListChangeListener<E> implements CustomListener<Observab
 
 
 
+	/**
+	 * @return all elements added by the given {@link ListChangeListener.Change}.
+	 */
 	public List<E> getAllAdded(ListChangeListener.Change<? extends E> c) {
 		if (!valid) {
 			processChange(c);
@@ -138,6 +147,9 @@ public abstract class FXListChangeListener<E> implements CustomListener<Observab
 
 
 
+	/**
+	 * @return all elements removed by the given {@link ListChangeListener.Change}.
+	 */
 	public List<E> getAllRemoved(ListChangeListener.Change<? extends E> c) {
 		if (!valid) {
 			processChange(c);
@@ -148,6 +160,9 @@ public abstract class FXListChangeListener<E> implements CustomListener<Observab
 
 
 
+	/**
+	 * @return all permutations by the given {@link ListChangeListener.Change}.
+	 */
 	public List<ListChangeListener.Change<? extends E>> getAllPermutations(ListChangeListener.Change<? extends E> c) {
 		if (!valid) {
 			processChange(c);
@@ -158,6 +173,9 @@ public abstract class FXListChangeListener<E> implements CustomListener<Observab
 
 
 
+	/**
+	 * Apply the given permutations to the given list.
+	 */
 	public void applyPermutation(List list, ListChangeListener.Change<? extends E> permutation) {
 		int[] p = new int[permutation.getTo() - permutation.getFrom()];
 		for (int i = 0; i < p.length; i++) {

@@ -7,6 +7,10 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
 
+/**
+ * Represents a single changable value of a given {@link TaskAttribute}.
+ * Consists of a {@link Label} with the name of this value and a {@link Node} to change the value.
+ */
 public abstract class SimpleContentNodeItem extends ContentNodeItem {
 
 
@@ -17,6 +21,9 @@ public abstract class SimpleContentNodeItem extends ContentNodeItem {
 
 
 
+	/**
+	 * Creates a new item for the given {@link TaskAttribute} with the given name and {@link Node}.
+	 */
 	public SimpleContentNodeItem(TaskAttribute attribute, String name, Node node) {
 		this(attribute, name);
 		setNode(node);
@@ -25,6 +32,9 @@ public abstract class SimpleContentNodeItem extends ContentNodeItem {
 
 
 
+	/**
+	 * Creates a new item for the given {@link TaskAttribute} with the given name and node node (yet!).
+	 */
 	public SimpleContentNodeItem(TaskAttribute attribute, String name) {
 		super(attribute);
 		this.name = name;
@@ -52,13 +62,20 @@ public abstract class SimpleContentNodeItem extends ContentNodeItem {
 
 
 
+	/**
+	 * Sets the node of this item to the given {@link Node}.
+	 */
 	public void setNode(Node node) {
+		this.node = node;
 		boxNode.getChildren().setAll(node);
 	}
 
 
 
 
+	/**
+	 * @return the name of this item.
+	 */
 	public String getName() {
 		return name;
 	}
@@ -66,10 +83,12 @@ public abstract class SimpleContentNodeItem extends ContentNodeItem {
 
 
 
+	/**
+	 * @return the {@link Node} if this item.
+	 */
 	public Node getNode() {
 		return node;
 	}
-
 
 
 }

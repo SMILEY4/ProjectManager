@@ -6,28 +6,22 @@ import javafx.scene.input.MouseEvent;
 
 public class LabelUtils {
 
+
+	/**
+	 * Adds button-functionality to the given {@link Label}
+	 *
+	 * @param label        the label
+	 * @param styleDefault the default css-style of the label
+	 * @param styleHover   the css-style when a mouse is over the given label
+	 * @param eventHandler notified when the label was clicked
+	 */
 	public static void makeAsButton(Label label, String styleDefault, String styleHover, EventHandler<MouseEvent> eventHandler) {
-	
-		// make clickable
 		label.setOnMouseClicked(eventHandler);
-
-		// set styles
 		label.setStyle(styleDefault);
+		label.setOnMouseEntered(event -> label.setStyle(styleHover));
+		label.setOnMouseExited(event -> label.setStyle(styleDefault));
 
-		label.setOnMouseEntered(new EventHandler<MouseEvent>() {
-			@Override public void handle(MouseEvent event) {
-				label.setStyle(styleHover);
-			}
-		});
-		
-		label.setOnMouseExited(new EventHandler<MouseEvent>() {
-			@Override public void handle(MouseEvent event) {
-				label.setStyle(styleDefault);
-			}
-		});
-		
 	}
-	
-	
-	
+
+
 }

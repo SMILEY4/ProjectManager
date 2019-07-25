@@ -10,6 +10,7 @@ public abstract class ResizableCanvas extends Canvas {
 
 
 
+
 	public ResizableCanvas(AnchorPane parent, int borderRight, int borderBottom) {
 		this.parent = parent;
 		if (parent != null) {
@@ -23,11 +24,12 @@ public abstract class ResizableCanvas extends Canvas {
 
 
 
-
-	
+	/**
+	 * This method is called when the size of this canvas changed.
+	 */
 	public abstract void onResize();
-	
-	
+
+
 
 
 	@Override
@@ -50,4 +52,5 @@ public abstract class ResizableCanvas extends Canvas {
 	public double prefHeight(double width) {
 		return getHeight();
 	}
+
 }

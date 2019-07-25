@@ -18,6 +18,9 @@ import javafx.scene.layout.AnchorPane;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * A text field that can be in edit or display mode. Double-click to enter edit-mode and click outside to exit the mode again.
+ */
 public class EditableLabel extends AnchorPane {
 
 
@@ -31,7 +34,7 @@ public class EditableLabel extends AnchorPane {
 	private Button icon;
 	private boolean showEditIcon;
 
-	private List<ChangeListener<String>> listener = new ArrayList<ChangeListener<String>>();
+	private List<ChangeListener<String>> listener = new ArrayList<>();
 
 
 
@@ -43,6 +46,9 @@ public class EditableLabel extends AnchorPane {
 
 
 
+	/**
+	 * @param text the initial content text of this field
+	 */
 	public EditableLabel(String text) {
 		this(text, true);
 	}
@@ -50,13 +56,20 @@ public class EditableLabel extends AnchorPane {
 
 
 
+	/**
+	 * @param showEditIcon whether to show an edit-icon on the left side of the text
+	 */
 	public EditableLabel(boolean showEditIcon) {
-		this("", true);
+		this("", showEditIcon);
 	}
 
 
 
 
+	/**
+	 * @param text         the initial content text of this field
+	 * @param showEditIcon whether to show an edit-icon on the left side of the text
+	 */
 	public EditableLabel(String text, boolean showEditIcon) {
 		super();
 
@@ -77,7 +90,7 @@ public class EditableLabel extends AnchorPane {
 
 			icon = new Button();
 			icon.setMouseTransparent(true);
-			ButtonUtils.makeIconButton(icon, SVGIcons.EDIT, 0.5f, "black");
+			ButtonUtils.makeIconButton(icon, SVGIcons.EDIT, 0.5f);
 			icon.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
 			this.getChildren().add(icon);
 
@@ -134,6 +147,9 @@ public class EditableLabel extends AnchorPane {
 
 
 
+	/**
+	 * whether the content of this field should be editable.
+	 */
 	public EditableLabel setEditable(boolean editable) {
 		this.editable = editable;
 		return this;
@@ -142,6 +158,9 @@ public class EditableLabel extends AnchorPane {
 
 
 
+	/**
+	 * whether the content should be selected when entering edit-mode
+	 */
 	public EditableLabel setSelectOnEdit(boolean selectOnEdit) {
 		this.selectOnEdit = selectOnEdit;
 		return this;
@@ -204,6 +223,9 @@ public class EditableLabel extends AnchorPane {
 
 
 
+	/**
+	 * @return the used {@link Label}
+	 */
 	public Label getLabel() {
 		return this.label;
 	}
@@ -211,6 +233,9 @@ public class EditableLabel extends AnchorPane {
 
 
 
+	/**
+	 * @return the used {@link TextField}
+	 */
 	public TextField getTextField() {
 		return this.field;
 	}
@@ -218,6 +243,9 @@ public class EditableLabel extends AnchorPane {
 
 
 
+	/**
+	 * @return true, if this field is currently is edit-mode
+	 */
 	public boolean inEditMode() {
 		return this.editMode;
 	}
@@ -225,6 +253,9 @@ public class EditableLabel extends AnchorPane {
 
 
 
+	/**
+	 * Sets the content text of this field
+	 */
 	public void setText(String text) {
 		if (inEditMode()) {
 			field.setText(text);
@@ -236,6 +267,9 @@ public class EditableLabel extends AnchorPane {
 
 
 
+	/**
+	 * @return the content text of this field
+	 */
 	public String getText() {
 		if (inEditMode()) {
 			return field.getText();

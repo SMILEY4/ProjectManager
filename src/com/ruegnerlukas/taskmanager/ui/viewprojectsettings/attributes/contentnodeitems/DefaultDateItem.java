@@ -50,6 +50,9 @@ public class DefaultDateItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged value of the {@link TaskAttribute}
+	 */
 	private LocalDate getMasterValue() {
 		return AttributeLogic.DATE_LOGIC.getDefaultValue(attribute).getValue();
 	}
@@ -57,6 +60,9 @@ public class DefaultDateItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Checks whether this value was changed / is different from the value of the {@link TaskAttribute} and sets the changed-property.
+	 */
 	public void checkChanged() {
 		changedProperty.set(!getMasterValue().equals(getValue()));
 	}
@@ -84,6 +90,9 @@ public class DefaultDateItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the current value of this item.
+	 */
 	public LocalDate getValue() {
 		return datePicker.getValue();
 	}

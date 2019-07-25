@@ -98,7 +98,7 @@ public class ItemDependency extends SidebarItem {
 			Scene scene = new Scene(popup, popup.getPopupWidth(), popup.getPopupHeight());
 			scene.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
 				if (ke.getCode() == KeyCode.R) {
-					UIDataHandler.reloadAll();
+					UIDataHandler.styleReloadAll();
 					ke.consume();
 				}
 			});
@@ -123,7 +123,7 @@ public class ItemDependency extends SidebarItem {
 		});
 
 		listenerDependency = e -> {
-			if(e.getAttribute() == getAttribute()) {
+			if (e.getAttribute() == getAttribute()) {
 				if (e.getTask() == getTask()) {
 					setDependencyValue(e.getNewValue());
 				} else {
@@ -137,6 +137,9 @@ public class ItemDependency extends SidebarItem {
 
 
 
+	/**
+	 * Updates the displayed {@link TaskValue}.
+	 */
 	private void refresh() {
 		TaskValue<?> taskValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		setDependencyValue(taskValue);
@@ -146,9 +149,9 @@ public class ItemDependency extends SidebarItem {
 
 
 
-
-
-
+	/**
+	 * Sets the displayed tasks that this task depends on to the given {@link TaskValue}.
+	 */
 	private void setDependencyValue(TaskValue<?> taskValue) {
 		boxDep.getChildren().clear();
 		if (taskValue != null && taskValue.getAttType() == AttributeType.DEPENDENCY) {
@@ -162,6 +165,9 @@ public class ItemDependency extends SidebarItem {
 
 
 
+	/**
+	 * Updates the list of tasks that depend on this task.
+	 */
 	private void updatePrerequisites() {
 
 		List<Task> prerequisites = new ArrayList<>();
@@ -190,8 +196,11 @@ public class ItemDependency extends SidebarItem {
 
 
 
+	/**
+	 * Handles the change of the {@link DependencyValue} of another task (which can influence this task).
+	 */
 	private void onOtherTaskChanged(Task otherTask, TaskValue<?> newValue) {
-		if(newValue == null) {
+		if (newValue == null) {
 			return;
 		}
 
@@ -220,6 +229,9 @@ public class ItemDependency extends SidebarItem {
 
 
 
+	/**
+	 * Removes the given item from the list of dependencies.
+	 */
 	public void removeDependency(ItemDep item) {
 		TaskValue<?> taskValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (taskValue.getAttType() != null) {
@@ -241,6 +253,9 @@ public class ItemDependency extends SidebarItem {
 
 
 
+	/**
+	 * Adds the given {@link Task} as a new dependency.
+	 */
 	private void addDependencyItem(Task task) {
 		ItemDep item = new ItemDep(this, task);
 		boxDep.getChildren().add(item);
@@ -249,6 +264,9 @@ public class ItemDependency extends SidebarItem {
 
 
 
+	/**
+	 * Removes the given {@link Task} from the list of dependencies.
+	 */
 	private void removeDependencyItem(Task task) {
 		ItemDep item = findItemDep(task);
 		if (item != null) {
@@ -259,6 +277,9 @@ public class ItemDependency extends SidebarItem {
 
 
 
+	/**
+	 * Adds the given {@link Task} as a new prerequisite.
+	 */
 	private void addPrerequisiteItem(Task task) {
 		ItemPrereq item = new ItemPrereq(this, task);
 		boxPrereq.getChildren().add(item);
@@ -267,6 +288,9 @@ public class ItemDependency extends SidebarItem {
 
 
 
+	/**
+	 * Removes the given {@link Task} from the list of prerequisites.
+	 */
 	private void removePrerequisiteItem(Task task) {
 		ItemPrereq item = findItemPrereq(task);
 		if (item != null) {
@@ -277,6 +301,9 @@ public class ItemDependency extends SidebarItem {
 
 
 
+	/**
+	 * @return the {@link ItemDep} representing the given {@link Task} or null.
+	 */
 	private ItemDep findItemDep(Task task) {
 		for (int i = 0; i < boxDep.getChildren().size(); i++) {
 			Node node = boxDep.getChildren().get(i);
@@ -293,6 +320,9 @@ public class ItemDependency extends SidebarItem {
 
 
 
+	/**
+	 * @return the {@link ItemPrereq} representing the given {@link Task} or null.
+	 */
 	private ItemPrereq findItemPrereq(Task task) {
 		for (int i = 0; i < boxPrereq.getChildren().size(); i++) {
 			Node node = boxPrereq.getChildren().get(i);

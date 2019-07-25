@@ -73,7 +73,9 @@ public class ItemText extends SidebarItem {
 
 
 
-
+	/**
+	 * Updates the displayed {@link TaskValue}.
+	 */
 	private void refresh() {
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 		if (objValue != null && objValue.getAttType() != null) {
@@ -95,6 +97,9 @@ public class ItemText extends SidebarItem {
 
 
 
+	/**
+	 * Sets the required height of this item / the text area.
+	 * */
 	private void setValueHeight() {
 		final double height = AttributeLogic.TEXT_LOGIC.getMultiline(getAttribute()) ? MultiTextField.calculateOptimalHeight(5) : 32;
 		area.setMinSize(60, height);

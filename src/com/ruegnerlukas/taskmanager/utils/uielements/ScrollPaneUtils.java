@@ -6,6 +6,9 @@ import javafx.scene.control.ScrollPane;
 public class ScrollPaneUtils {
 
 
+	/**
+	 * Centers the given {@link ScrollPane} on the given {@link Node}. The node should be a child of the scrollpane.
+	 */
 	public static void centerContent(ScrollPane pane, Node node) {
 
 		double contentHeight = pane.getContent().getBoundsInLocal().getHeight();

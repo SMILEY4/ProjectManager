@@ -26,6 +26,9 @@ public abstract class FXEventAdapter {
 
 
 
+	/**
+	 * Adds this listener to the given {@link ObservableValue}.
+	 */
 	public FXEventAdapter addTo(ObservableValue observable) {
 		observable.addListener(changeListener);
 		observableValues.add(observable);
@@ -35,6 +38,9 @@ public abstract class FXEventAdapter {
 
 
 
+	/**
+	 * Adds this listener to the given {@link ObservableList}.
+	 */
 	public FXEventAdapter addTo(ObservableList list) {
 		list.addListener(listChangeListener);
 		observableLists.add(list);
@@ -44,6 +50,9 @@ public abstract class FXEventAdapter {
 
 
 
+	/**
+	 * Adds this listener to the given {@link ObjectProperty}.
+	 */
 	public FXEventAdapter addTo(ObjectProperty<EventHandler> property) {
 		property.set(eventHandler);
 		properties.add(property);
@@ -53,6 +62,9 @@ public abstract class FXEventAdapter {
 
 
 
+	/**
+	 * Removes this listener from the given {@link ObservableValue}.
+	 */
 	public FXEventAdapter removeFrom(ObservableValue observable) {
 		observable.removeListener(changeListener);
 		observableValues.remove(observable);
@@ -62,6 +74,9 @@ public abstract class FXEventAdapter {
 
 
 
+	/**
+	 * Removes this listener from the given {@link ObservableList}.
+	 */
 	public FXEventAdapter removeFrom(ObservableList list) {
 		list.removeListener(listChangeListener);
 		observableLists.remove(list);
@@ -71,6 +86,9 @@ public abstract class FXEventAdapter {
 
 
 
+	/**
+	 * Removes this listener from the given {@link ObjectProperty}.
+	 */
 	public FXEventAdapter removeFrom(ObjectProperty<EventHandler> property) {
 		if (property.get() == eventHandler) {
 			property.set(null);
@@ -82,6 +100,9 @@ public abstract class FXEventAdapter {
 
 
 
+	/**
+	 * Removes this listener from all registered objects.
+	 */
 	public FXEventAdapter removeFromAll() {
 		for (ObservableValue observable : observableValues) {
 			observable.removeListener(changeListener);
@@ -103,6 +124,9 @@ public abstract class FXEventAdapter {
 
 
 
+	/**
+	 * @return the {@link ChangeListener} used by this listener.
+	 */
 	public ChangeListener getChangeListener() {
 		return this.changeListener;
 	}
@@ -110,6 +134,9 @@ public abstract class FXEventAdapter {
 
 
 
+	/**
+	 * @return the {@link ListChangeListener} used by this listener.
+	 */
 	public ListChangeListener getListChangeListener() {
 		return this.listChangeListener;
 	}
@@ -117,6 +144,9 @@ public abstract class FXEventAdapter {
 
 
 
+	/**
+	 * @return the {@link EventHandler} used by this listener.
+	 */
 	public EventHandler getEventHandler() {
 		return eventHandler;
 	}
@@ -145,6 +175,9 @@ public abstract class FXEventAdapter {
 
 
 
+	/**
+	 * This method is called when an event is fired by a registered object or when a registered object changed.
+	 */
 	public abstract void handle(ActionEvent event);
 
 }

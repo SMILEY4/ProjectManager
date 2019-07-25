@@ -42,7 +42,7 @@ public class AndNode extends CriteriaNode {
 		btnRemove.setMinSize(22, 22);
 		btnRemove.setPrefSize(22, 22);
 		btnRemove.setMaxSize(22, 22);
-		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7, "black");
+		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.);
 		AnchorUtils.setAnchors(btnRemove, 0, 0, null, null);
 		this.getChildren().add(btnRemove);
 
@@ -102,6 +102,9 @@ public class AndNode extends CriteriaNode {
 
 
 
+	/**
+	 * Creates a new {@link CriteriaNode} with the given type and adds it as a child to this node.
+	 */
 	private void onCreateNew(FilterCriteria.CriteriaType type) {
 		if (type == null) {
 			return;

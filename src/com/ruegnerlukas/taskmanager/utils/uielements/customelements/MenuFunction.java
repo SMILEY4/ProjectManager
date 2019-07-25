@@ -1,331 +1,303 @@
 package com.ruegnerlukas.taskmanager.utils.uielements.customelements;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.*;
 
-import java.util.HashMap;
-import java.util.Map;
 
+/**
+ * A simple function for JavaFX menues. Contains only text.
+ * */
+@SuppressWarnings ("Duplicates")
 public abstract class MenuFunction {
 
 
 	protected String[] path;
 	protected String text;
-	
+
 	protected MenuItem item;
-	
-	private Map<String,Object> map = new HashMap<>();
-	
-	
-	
-	
+
+
+
+
+	/**
+	 * @param path the path to this function. The last entry is the name of this function
+	 */
 	public MenuFunction(String... path) {
-		if(path.length == 0) {
+		if (path.length == 0) {
 			throw new IllegalArgumentException("Path must contain at least one element (the name)");
-		} 
-		if(path.length == 1) {
+		}
+		if (path.length == 1) {
 			this.path = null;
 			this.text = path[0];
 		}
-		if(path.length > 1) {
-			this.text = path[path.length-1];
-			this.path = new String[path.length-1];
-			for(int i=0; i<this.path.length; i++) {
+		if (path.length > 1) {
+			this.text = path[path.length - 1];
+			this.path = new String[path.length - 1];
+			for (int i = 0; i < this.path.length; i++) {
 				this.path[i] = path[i];
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
-	public MenuFunction setValue(String key, Object value) {
-		map.put(key, value);
-		return this;
-	}
-	
-	
-	
-	
-	public Object getValue(String key) {
-		return map.get(key);
-	}
 
-	
-	
-	
+
+
+
+	/**
+	 * enable/disable this function
+	 */
 	public MenuFunction setDisable(boolean value) {
-		if(this.item != null) {
+		if (this.item != null) {
 			this.item.setDisable(value);
 		}
 		return this;
 	}
-	
-	
-	
-	
+
+
+
+
+	/**
+	 * Set the css-style of this function
+	 */
 	public MenuFunction setStyle(String style) {
-		if(this.item != null) {
+		if (this.item != null) {
 			this.item.setStyle(style);
 		}
 		return this;
 	}
-	
-	
-	
-	
+
+
+
+
 	protected MenuItem createItem() {
 		return new MenuItem(text);
 	}
-	
-	
-	
-	
+
+
+
+
+	/**
+	 * Add this function to the given {@link MenuBar},
+	 *
+	 * @return this function for chaining
+	 */
 	public MenuFunction addToMenuBar(MenuBar menuBar) {
-		
-		if(path == null || path.length == 0) {
+
+		if (path == null || path.length == 0) {
 			Logger.get().warn("Path of MenuFunction must be not null and must contain at least one element: " + text);
 			return this;
 
-		// is submenu level =1
-		} else if(path.length == 1) {
+			// is submenu level =1
+		} else if (path.length == 1) {
 			Menu parent = null;
-			for(Menu m : menuBar.getMenus()) {
-				if(path[0].equals(m.getText())) {
+			for (Menu m : menuBar.getMenus()) {
+				if (path[0].equals(m.getText())) {
 					parent = m;
 					break;
 				}
 			}
-			if(parent == null) {
+			if (parent == null) {
 				parent = new Menu(path[0]);
 				menuBar.getMenus().add(parent);
 			}
 			this.item = createItem();
-			this.item.setOnAction(new EventHandler<ActionEvent>() {
-				@Override public void handle(ActionEvent event) {
-					onAction();
-				}
-			});
+			this.item.setOnAction(event -> onAction());
 			parent.getItems().add(this.item);
-			
-			
-		// is submenu level >1
+
+
+			// is submenu level >1
 		} else {
 
 			Menu parent = null;
-			for(Menu m : menuBar.getMenus()) {
-				if(path[0].equals(m.getText())) {
+			for (Menu m : menuBar.getMenus()) {
+				if (path[0].equals(m.getText())) {
 					parent = m;
 					break;
 				}
 			}
-			if(parent == null) {
+			if (parent == null) {
 				parent = new Menu(path[0]);
 				menuBar.getMenus().add(parent);
 			}
-			
-			for(int i=1; i<path.length; i++) {
+
+			for (int i = 1; i < path.length; i++) {
 				boolean foundMenu = false;
-				for(MenuItem item : parent.getItems()) {
-					if(path[i].equals(item.getText()) && item instanceof Menu) {
+				for (MenuItem item : parent.getItems()) {
+					if (path[i].equals(item.getText()) && item instanceof Menu) {
 						foundMenu = true;
-						parent = (Menu)item;
+						parent = (Menu) item;
 					}
 				}
-				if(!foundMenu) {
+				if (!foundMenu) {
 					Menu m = new Menu(path[i]);
 					parent.getItems().add(m);
 					parent = m;
 				}
 			}
-			
-			if(parent != null) {
-				this.item = createItem();
-				this.item.setOnAction(new EventHandler<ActionEvent>() {
-					@Override public void handle(ActionEvent event) {
-						onAction();
-					}
-				});
-				parent.getItems().add(this.item);
-			}
-			
+
+			this.item = createItem();
+			this.item.setOnAction(event -> onAction());
+			parent.getItems().add(this.item);
+
 		}
-		
+
 		return this;
 	}
-	
-	
-	
-	
+
+
+
+
+	/**
+	 * Add this function to the given {@link MenuButton},
+	 *
+	 * @return this function for chaining
+	 */
 	public MenuFunction addToMenuButton(MenuButton menuButton) {
-		
-		if(path == null || path.length == 0) {
+
+		if (path == null || path.length == 0) {
 			this.item = createItem();
-			this.item.setOnAction(new EventHandler<ActionEvent>() {
-				@Override public void handle(ActionEvent event) {
-					onAction();
-				}
-			});
+			this.item.setOnAction(event -> onAction());
 			menuButton.getItems().add(this.item);
 			return this;
 
-		// is submenu level =1
-		} else if(path.length == 1) {
-			
+			// is submenu level =1
+		} else if (path.length == 1) {
+
 			Menu parent = null;
-			for(MenuItem m : menuButton.getItems()) {
-				if(m instanceof Menu && path[0].equals(m.getText())) {
-					parent = (Menu)m;
+			for (MenuItem m : menuButton.getItems()) {
+				if (m instanceof Menu && path[0].equals(m.getText())) {
+					parent = (Menu) m;
 					break;
 				}
 			}
-			if(parent == null) {
+			if (parent == null) {
 				parent = new Menu(path[0]);
 				menuButton.getItems().add(parent);
 			}
 			this.item = createItem();
-			this.item.setOnAction(new EventHandler<ActionEvent>() {
-				@Override public void handle(ActionEvent event) {
-					onAction();
-				}
-			});
+			this.item.setOnAction(event -> onAction());
 			parent.getItems().add(this.item);
-			
-			
-		// is submenu level >1
+
+
+			// is submenu level >1
 		} else {
 
 			Menu parent = null;
-			for(MenuItem m : menuButton.getItems()) {
-				if(m instanceof Menu && path[0].equals(m.getText())) {
-					parent = (Menu)m;
+			for (MenuItem m : menuButton.getItems()) {
+				if (m instanceof Menu && path[0].equals(m.getText())) {
+					parent = (Menu) m;
 					break;
 				}
 			}
-			if(parent == null) {
+			if (parent == null) {
 				parent = new Menu(path[0]);
 				menuButton.getItems().add(parent);
 			}
-			
-			for(int i=1; i<path.length; i++) {
+
+			for (int i = 1; i < path.length; i++) {
 				boolean foundMenu = false;
-				for(MenuItem item : parent.getItems()) {
-					if(path[i].equals(item.getText()) && item instanceof Menu) {
+				for (MenuItem item : parent.getItems()) {
+					if (path[i].equals(item.getText()) && item instanceof Menu) {
 						foundMenu = true;
-						parent = (Menu)item;
+						parent = (Menu) item;
 					}
 				}
-				if(!foundMenu) {
+				if (!foundMenu) {
 					Menu m = new Menu(path[i]);
 					parent.getItems().add(m);
 					parent = m;
 				}
 			}
-			
-			if(parent != null) {
-				this.item = createItem();
-				this.item.setOnAction(new EventHandler<ActionEvent>() {
-					@Override public void handle(ActionEvent event) {
-						onAction();
-					}
-				});
-				parent.getItems().add(this.item);
-			}
-			
+
+			this.item = createItem();
+			this.item.setOnAction(event -> onAction());
+			parent.getItems().add(this.item);
+
 		}
-		
+
 		return this;
 	}
-	
-	
-	
+
+
+
+
+	/**
+	 * Add this function to the given {@link ContextMenu},
+	 *
+	 * @return this function for chaining
+	 */
 	public MenuFunction addToContextMenu(ContextMenu contextMenu) {
-		
-		if(path == null || path.length == 0) {
+
+		if (path == null || path.length == 0) {
 			this.item = createItem();
-			this.item.setOnAction(new EventHandler<ActionEvent>() {
-				@Override public void handle(ActionEvent event) {
-					onAction();
-				}
-			});
+			this.item.setOnAction(event -> onAction());
 			contextMenu.getItems().add(this.item);
 			return this;
 
-		// is submenu level =1
-		} else if(path.length == 1) {
-			
+			// is submenu level =1
+		} else if (path.length == 1) {
+
 			Menu parent = null;
-			for(MenuItem m : contextMenu.getItems()) {
-				if(m instanceof Menu && path[0].equals(m.getText())) {
-					parent = (Menu)m;
+			for (MenuItem m : contextMenu.getItems()) {
+				if (m instanceof Menu && path[0].equals(m.getText())) {
+					parent = (Menu) m;
 					break;
 				}
 			}
-			if(parent == null) {
+			if (parent == null) {
 				parent = new Menu(path[0]);
 				contextMenu.getItems().add(parent);
 			}
 			this.item = createItem();
-			this.item.setOnAction(new EventHandler<ActionEvent>() {
-				@Override public void handle(ActionEvent event) {
-					onAction();
-				}
-			});
+			this.item.setOnAction(event -> onAction());
 			parent.getItems().add(this.item);
-			
-			
-		// is submenu level >1
+
+
+			// is submenu level >1
 		} else {
 
 			Menu parent = null;
-			for(MenuItem m : contextMenu.getItems()) {
-				if(m instanceof Menu && path[0].equals(m.getText())) {
-					parent = (Menu)m;
+			for (MenuItem m : contextMenu.getItems()) {
+				if (m instanceof Menu && path[0].equals(m.getText())) {
+					parent = (Menu) m;
 					break;
 				}
 			}
-			if(parent == null) {
+			if (parent == null) {
 				parent = new Menu(path[0]);
 				contextMenu.getItems().add(parent);
 			}
-			
-			for(int i=1; i<path.length; i++) {
+
+			for (int i = 1; i < path.length; i++) {
 				boolean foundMenu = false;
-				for(MenuItem item : parent.getItems()) {
-					if(path[i].equals(item.getText()) && item instanceof Menu) {
+				for (MenuItem item : parent.getItems()) {
+					if (path[i].equals(item.getText()) && item instanceof Menu) {
 						foundMenu = true;
-						parent = (Menu)item;
+						parent = (Menu) item;
 					}
 				}
-				if(!foundMenu) {
+				if (!foundMenu) {
 					Menu m = new Menu(path[i]);
 					parent.getItems().add(m);
 					parent = m;
 				}
 			}
-			
-			if(parent != null) {
-				this.item = createItem();
-				this.item.setOnAction(new EventHandler<ActionEvent>() {
-					@Override public void handle(ActionEvent event) {
-						onAction();
-					}
-				});
-				parent.getItems().add(this.item);
-			}
-			
+
+			this.item = createItem();
+			this.item.setOnAction(event -> onAction());
+			parent.getItems().add(this.item);
+
 		}
-		
+
 		return this;
 	}
-	
-	
-	
+
+
+
+
+	/**
+	 * This method is called when the user selects this function.
+	 */
 	public abstract void onAction();
-	
-	
+
+
 }

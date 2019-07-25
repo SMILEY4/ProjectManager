@@ -34,6 +34,11 @@ public class AutocompletionTextField extends TextField {
 
 
 
+	/**
+	 * @param entries    a set of entries that can be completed
+	 * @param ignoreCase whether to ignore case when matching the input to possible entries
+	 * @param delimiter  the delimiter between words/entries in the input string
+	 */
 	public AutocompletionTextField(Set<String> entries, boolean ignoreCase, String delimiter) {
 		super();
 		this.entries = entries;
@@ -44,6 +49,14 @@ public class AutocompletionTextField extends TextField {
 	}
 
 
+
+
+	/**
+	 * @param entries    a set of entries that can be completed
+	 * @param ignoreCase whether to ignore case when matching the input to possible entries
+	 * @param delimiter  the delimiter between words/entries in the input string
+	 * @param text       the initial content text of this field
+	 */
 	public AutocompletionTextField(Set<String> entries, boolean ignoreCase, String delimiter, String text) {
 		super();
 		this.entries = entries;
@@ -57,6 +70,9 @@ public class AutocompletionTextField extends TextField {
 
 
 
+	/**
+	 * Set the max amount of possible entries shown.
+	 */
 	public void setMaxEntries(int n) {
 		this.maxEntries = n;
 	}
@@ -64,6 +80,9 @@ public class AutocompletionTextField extends TextField {
 
 
 
+	/**
+	 * @return the max amount of possible entries shown.
+	 */
 	public int getMaxEntries() {
 		return maxEntries;
 	}
@@ -71,6 +90,9 @@ public class AutocompletionTextField extends TextField {
 
 
 
+	/**
+	 * Sets the {@link Color} and {@link Font} of entries
+	 */
 	public void styleText(Color color, Font font) {
 		this.colorText = color;
 		this.fontText = font;
@@ -79,6 +101,9 @@ public class AutocompletionTextField extends TextField {
 
 
 
+	/**
+	 * @return the {@link Color} of entries
+	 */
 	public Color getColorText() {
 		return colorText;
 	}
@@ -86,6 +111,9 @@ public class AutocompletionTextField extends TextField {
 
 
 
+	/**
+	 * @return the {@link Font} of entries
+	 */
 	public Font getFontText() {
 		return fontText;
 	}
@@ -93,6 +121,9 @@ public class AutocompletionTextField extends TextField {
 
 
 
+	/**
+	 * Sets the {@link Color} and {@link Font} of matching entries (only the matching part)
+	 */
 	public void styleMatch(Color color, Font font) {
 		this.colorMatch = color;
 		this.fontMatch = font;
@@ -101,6 +132,9 @@ public class AutocompletionTextField extends TextField {
 
 
 
+	/**
+	 * @return the {@link Color} of matching entries (only the matching part)
+	 */
 	public Color getColorMatch() {
 		return colorText;
 	}
@@ -108,6 +142,9 @@ public class AutocompletionTextField extends TextField {
 
 
 
+	/**
+	 * @return the {@link Font} of matching entries (only the matching part)
+	 */
 	public Font getFontMatch() {
 		return fontText;
 	}
@@ -173,7 +210,7 @@ public class AutocompletionTextField extends TextField {
 			item.setOnAction(actionEvent -> {
 				String[] enteredWords = this.getText().split(delimiter);
 				String lastWord = enteredWords[enteredWords.length - 1];
-				this.setText(this.getText().replaceAll(lastWord+"$", entry));
+				this.setText(this.getText().replaceAll(lastWord + "$", entry));
 				this.positionCaret(this.getText().length());
 				popup.hide();
 			});

@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupgroup;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGroupData;
@@ -10,8 +11,8 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
-import com.ruegnerlukas.taskmanager.utils.PopupBase;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
+import com.ruegnerlukas.taskmanager.utils.PopupBase;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.VBoxOrder;
 import javafx.application.Platform;
@@ -156,6 +157,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Resets the list and the fields to the original state.
+	 */
 	private void onReset() {
 		if (groupData.get() == null) {
 			onClearGroupData();
@@ -169,6 +173,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Loads the preset with the given name and selects it. This replaces the previous elements.
+	 */
 	private void onLoadPreset(String name) {
 		TaskGroupData preset = PresetLogic.getTaskGroupPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
@@ -182,6 +189,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Deletes the preset with the given name and deselects it.
+	 */
 	private void onDeletePreset(String name) {
 		boolean deleted = PresetLogic.deleteTaskGroupPreset(Data.projectProperty.get(), name);
 		if (deleted) {
@@ -195,6 +205,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Save the current list of {@link AttributeNode} as a new preset with the given name and selects it.
+	 */
 	private void onSavePreset(String name) {
 		String strName = name.trim();
 		boolean saved = PresetLogic.saveTaskGroupPreset(Data.projectProperty.get(), strName, buildGroupData());
@@ -210,6 +223,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Called when a preset was selected. Enables/Disables the buttons.
+	 */
 	private void onPresetSelected() {
 		btnDeletePreset.setDisable(false);
 		fieldPresetName.setDisable(true);
@@ -220,6 +236,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Called when a preset was deselected. Enables/Disables the buttons.
+	 */
 	private void onPresetDeselected() {
 		btnDeletePreset.setDisable(true);
 		fieldPresetName.setDisable(false);
@@ -229,6 +248,10 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Adds all {@link TaskAttribute}s from the given {@link TaskGroupData} to the list (Removes the previous elements)
+	 * and copies the data for the header string from the {@link TaskGroupData} to the input fields.
+	 */
 	private void onSetGroupData(TaskGroupData data) {
 		boxAttributes.getChildren().clear();
 		for (TaskAttribute attribute : data.attributes) {
@@ -246,6 +269,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Removes all item from the list and resets the fields for the header string.
+	 */
 	private void onClearGroupData() {
 		boxAttributes.getChildren().clear();
 		cbUseHeaderString.setSelected(false);
@@ -256,6 +282,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Creates a new {@link TaskAttribute} and adds it as a {@link AttributeNode} to the list.
+	 */
 	private void onAddAttribute() {
 		TaskAttribute attribute = AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID);
 		onAddAttribute(attribute);
@@ -265,6 +294,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Adds a new {@link AttributeNode} with the given {@link TaskAttribute} to the list.
+	 */
 	private void onAddAttribute(TaskAttribute attribute) {
 		AttributeNode node = new AttributeNode(attribute);
 		node.setOnModified(event -> onModified());
@@ -277,6 +309,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Moves the given {@link AttributeNode} one up.
+	 */
 	private void onMoveUpAttributeNode(AttributeNode attribNode) {
 		int index = boxAttributes.getChildren().indexOf(attribNode);
 		if (index > 0) {
@@ -288,6 +323,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Moves the given {@link AttributeNode} one down.
+	 */
 	private void onMoveDownAttributeNode(AttributeNode attribNode) {
 		final int index = boxAttributes.getChildren().indexOf(attribNode);
 		if (index < boxAttributes.getChildren().size() - 1) {
@@ -299,6 +337,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Removes the given {@link AttributeNode} from the list of nodes
+	 */
 	private void onRemoveAttribute(AttributeNode node) {
 		boxAttributes.getChildren().remove(node);
 		onModified();
@@ -307,6 +348,10 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Called when the user enabled/disabled the custom header string.
+	 * This also enables/disables the text field for the header string.
+	 */
 	private void onUseHeaderString(boolean useHeaderString) {
 		fieldHeaderText.setDisable(!useHeaderString);
 		onModified();
@@ -315,6 +360,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Called when a text of the input field for the header string was changed.
+	 */
 	private void onSetHeaderString(String headerString) {
 		onModified();
 	}
@@ -322,6 +370,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * @return a created {@link TaskGroupData} from the list of {@link AttributeNode}.
+	 */
 	private TaskGroupData buildGroupData() {
 		List<TaskAttribute> attributes = new ArrayList<>();
 		for (Node node : boxAttributes.getChildren()) {
@@ -333,6 +384,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Called when the list or an item changed. Clears the currently selected preset.
+	 */
 	private void onModified() {
 		Platform.runLater(() -> choicePreset.getSelectionModel().clearSelection());
 		onPresetDeselected();
@@ -341,6 +395,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Closes this popup without saving.
+	 */
 	private void onCancel() {
 		this.getStage().close();
 	}
@@ -348,6 +405,9 @@ public class PopupGroup extends PopupBase {
 
 
 
+	/**
+	 * Set the group data of the {@link Project} and closes this popup.
+	 */
 	private void onAccept() {
 		TaskLogic.setGroupData(Data.projectProperty.get(), buildGroupData(), choicePreset.getValue());
 		this.getStage().close();

@@ -66,7 +66,7 @@ public class TaskManager extends Application {
 
 		scene.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
 			if (ke.getCode() == KeyCode.R) {
-				UIDataHandler.reloadAll();
+				UIDataHandler.styleReloadAll();
 				ke.consume();
 			}
 		});

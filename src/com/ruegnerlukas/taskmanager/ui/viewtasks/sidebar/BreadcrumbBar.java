@@ -32,11 +32,12 @@ public class BreadcrumbBar extends AnchorPane {
 
 
 
+
 	public BreadcrumbBar() {
 
 		// button
 		btnBack = new Button();
-		ButtonUtils.makeIconButton(btnBack, SVGIcons.ARROW_LEFT, 0.6, "black");
+		ButtonUtils.makeIconButton(btnBack, SVGIcons.ARROW_LEFT, 0.6);
 		btnBack.setMinSize(32, 32);
 		btnBack.setMaxSize(32, 32);
 		AnchorPane.setLeftAnchor(btnBack, 0.0);
@@ -63,16 +64,16 @@ public class BreadcrumbBar extends AnchorPane {
 			@Override
 			public void onChanged(ListChangeListener.Change<? extends Task> c) {
 				boolean needsRefresh = false;
-				for(Task task : this.getAllRemoved(c)) {
+				for (Task task : this.getAllRemoved(c)) {
 					if (queue.contains(task)) {
 						while (queue.contains(task)) {
-							if(queue.remove(task)) {
+							if (queue.remove(task)) {
 								needsRefresh = true;
 							}
 						}
 					}
 				}
-				if(needsRefresh) {
+				if (needsRefresh) {
 					refresh();
 				}
 			}
@@ -83,6 +84,9 @@ public class BreadcrumbBar extends AnchorPane {
 
 
 
+	/**
+	 * Refreshes the displayed list of links. Call this after changing the list.
+	 */
 	private void refresh() {
 
 		content.getChildren().clear();
@@ -149,6 +153,9 @@ public class BreadcrumbBar extends AnchorPane {
 
 
 
+	/**
+	 * Adds the given {@link Task} to the end (right-side).
+	 */
 	public void pushTask(Task task) {
 		if (task != null) {
 			queue.add(task);
@@ -159,6 +166,9 @@ public class BreadcrumbBar extends AnchorPane {
 
 
 
+	/**
+	 * @return the last/right {@link Task} in the list without removing it.
+	 */
 	public Task peekTask() {
 		if (queue.isEmpty()) {
 			return null;
@@ -170,6 +180,9 @@ public class BreadcrumbBar extends AnchorPane {
 
 
 
+	/**
+	 * @return the last/right {@link Task} in the list and removes it.
+	 */
 	public Task popTask() {
 		if (queue.isEmpty()) {
 			return null;
@@ -183,6 +196,9 @@ public class BreadcrumbBar extends AnchorPane {
 
 
 
+	/**
+	 * Removes all tasks from the list.
+	 */
 	public void clearTasks() {
 		queue.clear();
 		refresh();
@@ -191,15 +207,25 @@ public class BreadcrumbBar extends AnchorPane {
 
 
 
+	/**
+	 * Called when the user wants to step back one task.
+	 *
+	 * @return false, to cancel the action; true to allow it.
+	 */
 	public boolean onStepBack(Task task) {
-		return false; // return true to allow step
+		return false;
 	}
 
 
 
 
+	/**
+	 * Called when the user wants to step/jump back multiple tasks.
+	 *
+	 * @return false, to cancel the action; true to allow it.
+	 */
 	public boolean onJumpBack(Task task) {
-		return false; // return true to allow jump
+		return false;
 	}
 
 

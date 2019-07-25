@@ -2,13 +2,14 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.header.popupfilter;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.logic.PresetLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
-import com.ruegnerlukas.taskmanager.utils.PopupBase;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
+import com.ruegnerlukas.taskmanager.utils.PopupBase;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.fxml.FXML;
 import javafx.scene.Parent;
@@ -132,6 +133,9 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Resets the tree of {@link CriteriaNode}s to the original state.
+	 */
 	private void onReset() {
 		if (filterCriteria.get() == null) {
 			onClearRootCriteria();
@@ -145,6 +149,9 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Loads the preset with the given name and selects it. This replaces the previous elements.
+	 */
 	private void onLoadPreset(String name) {
 		FilterCriteria preset = PresetLogic.getFilterPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
@@ -158,6 +165,9 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Deletes the preset with the given name and deselects it.
+	 */
 	private void onDeletePreset(String name) {
 		boolean deleted = PresetLogic.deleteFilterPreset(Data.projectProperty.get(), name);
 		if (deleted) {
@@ -171,9 +181,12 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Save the current tree of {@link CriteriaNode}s as a new preset with the given name and selects it.
+	 */
 	private void onSavePreset(String name) {
 		String strName = name.trim();
-		boolean saved = PresetLogic.saveFilterPreset(Data.projectProperty.get(), strName,  criteriaNode.get() == null ? null : criteriaNode.get().buildCriteriaTree());
+		boolean saved = PresetLogic.saveFilterPreset(Data.projectProperty.get(), strName, criteriaNode.get() == null ? null : criteriaNode.get().buildCriteriaTree());
 		if (saved) {
 			fieldPresetName.setText("");
 			choicePreset.getItems().clear();
@@ -186,6 +199,9 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Called when a preset was selected. Enables/Disables the buttons.
+	 */
 	private void onPresetSelected() {
 		btnDeletePreset.setDisable(false);
 		fieldPresetName.setDisable(true);
@@ -196,6 +212,9 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Called when a preset was deselected. Enables/Disables the buttons.
+	 */
 	private void onPresetDeselected() {
 		btnDeletePreset.setDisable(true);
 		fieldPresetName.setDisable(false);
@@ -205,6 +224,9 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Sets the root {@link CriteriaNode} to a new default node with the given {@link FilterCriteria.CriteriaType}.
+	 */
 	private void onSetRootCriteria(FilterCriteria.CriteriaType type) {
 		onSetRootCriteria(FilterUIUtils.createFilterCriteria(type));
 	}
@@ -212,6 +234,9 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Sets the root {@link CriteriaNode} to a new node with the given {@link FilterCriteria}.
+	 */
 	private void onSetRootCriteria(FilterCriteria criteria) {
 		CriteriaNode node = FilterUIUtils.createFilterNode(criteria, event -> onNodeTreeModified());
 		node.setOnRemove(event -> onClearRootCriteria());
@@ -226,6 +251,9 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Removes the root {@link CriteriaNode} without replacing it.
+	 */
 	private void onClearRootCriteria() {
 		paneCriteria.getChildren().setAll(choiceAdd);
 		criteriaNode.set(null);
@@ -237,6 +265,9 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Called when the tree of {@link CriteriaNode}s changed. Clears the currently selected preset.
+	 */
 	private void onNodeTreeModified() {
 		choicePreset.getSelectionModel().clearSelection();
 		onPresetDeselected();
@@ -245,6 +276,9 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Closes this popup without saving.
+	 */
 	private void onCancel() {
 		this.getStage().close();
 	}
@@ -252,6 +286,9 @@ public class PopupFilter extends PopupBase {
 
 
 
+	/**
+	 * Set the filter data of the {@link Project} and closes this popup.
+	 */
 	private void onAccept() {
 		TaskLogic.setFilter(Data.projectProperty.get(), criteriaNode.get() == null ? null : criteriaNode.get().buildCriteriaTree(), choicePreset.getValue());
 		this.getStage().close();

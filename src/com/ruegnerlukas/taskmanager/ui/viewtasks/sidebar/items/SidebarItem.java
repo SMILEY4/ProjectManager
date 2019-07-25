@@ -17,6 +17,9 @@ import javafx.scene.layout.AnchorPane;
 public abstract class SidebarItem extends AnchorPane {
 
 
+	/**
+	 * @return a created {@link SidebarItem} for the given {@link TaskAttribute} and {@link Task}.
+	 */
 	public static SidebarItem createItem(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		switch (attribute.type.get()) {
 			case ID:
@@ -63,6 +66,7 @@ public abstract class SidebarItem extends AnchorPane {
 
 
 
+
 	public SidebarItem(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		this.sidebar = sidebar;
 		this.attribute = attribute;
@@ -98,11 +102,17 @@ public abstract class SidebarItem extends AnchorPane {
 
 
 
+	/**
+	 * Called when any value of the {@link TaskAttribute} changed.
+	 */
 	protected abstract void onAttChangedEvent();
 
 
 
 
+	/**
+	 * The given {@link EventHandler} will be notified when the name of the {@link TaskAttribute} was changed.
+	 */
 	public void setOnAttribNameChanged(EventHandler<ActionEvent> handler) {
 		handlerAttribNameChanged = handler;
 	}
@@ -110,6 +120,9 @@ public abstract class SidebarItem extends AnchorPane {
 
 
 
+	/**
+	 * The given {@link EventHandler} will be notified when the {@link AttributeType} of the {@link TaskAttribute} was changed.
+	 */
 	public void setOnAttribTypeChanged(EventHandler<ActionEvent> handler) {
 		handlerAttribTypeChanged = handler;
 	}
@@ -117,6 +130,9 @@ public abstract class SidebarItem extends AnchorPane {
 
 
 
+	/**
+	 * @return the {@link TaskAttribute} handled by this item.
+	 */
 	public TaskAttribute getAttribute() {
 		return attribute;
 	}
@@ -124,6 +140,9 @@ public abstract class SidebarItem extends AnchorPane {
 
 
 
+	/**
+	 * @return the {@link Task} handled by this item.
+	 */
 	public Task getTask() {
 		return task;
 	}

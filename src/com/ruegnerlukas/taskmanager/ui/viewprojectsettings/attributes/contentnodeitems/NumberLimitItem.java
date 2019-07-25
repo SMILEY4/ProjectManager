@@ -58,6 +58,9 @@ public class NumberLimitItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Initialises the {@link Spinner} with the given parameters and value.
+	 */
 	private void initSpinner(double value, int decPlaces, double min, double max) {
 		SpinnerUtils.initSpinner(
 				spinner,
@@ -72,6 +75,9 @@ public class NumberLimitItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Initialises the {@link Spinner} with the given parameters and the current value.
+	 */
 	public void setValues(int decPlaces, double min, double max) {
 		initSpinner(getValue(), decPlaces, min, max);
 	}
@@ -79,6 +85,9 @@ public class NumberLimitItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged number decimal places of the {@link TaskAttribute}
+	 */
 	private int getMasterDecPlaces() {
 		return AttributeLogic.NUMBER_LOGIC.getDecPlaces(attribute);
 	}
@@ -86,6 +95,9 @@ public class NumberLimitItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged min value of the {@link TaskAttribute}
+	 */
 	private double getMasterMinValue() {
 		return AttributeLogic.NUMBER_LOGIC.getMinValue(attribute).doubleValue();
 	}
@@ -93,6 +105,9 @@ public class NumberLimitItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged max value of the {@link TaskAttribute}
+	 */
 	private double getMasterMaxValue() {
 		return AttributeLogic.NUMBER_LOGIC.getMaxValue(attribute).doubleValue();
 	}
@@ -100,9 +115,11 @@ public class NumberLimitItem extends SimpleContentNodeItem {
 
 
 
-
+	/**
+	 * Checks whether this value was changed / is different from the value of the {@link TaskAttribute} and sets the changed-property.
+	 */
 	public void checkChanged() {
-		if(handlerModified != null) {
+		if (handlerModified != null) {
 			handlerModified.handle(new ActionEvent());
 		}
 		changedProperty.set(!MathUtils.isNearlyEqual(isMax ? getMasterMaxValue() : getMasterMinValue(), getValue()));
@@ -131,6 +148,9 @@ public class NumberLimitItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the current value of this item.
+	 */
 	public double getValue() {
 		return spinner.getValue();
 	}

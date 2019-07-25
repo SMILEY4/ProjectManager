@@ -28,9 +28,9 @@ public class ChoiceContentNode extends ChangeableContentNode {
 		itemUseDefault.changedProperty.addListener(((observable, oldValue, newValue) -> {
 			itemDefault.setDisable(!itemUseDefault.getValue());
 			if(itemUseDefault.getValue()) {
-				itemChoices.setDefault(itemDefault.getValue());
+				itemChoices.refreshStyleDefault(itemDefault.getValue());
 			} else {
-				itemChoices.setDefault(null);
+				itemChoices.refreshStyleDefault(null);
 			}
 		}));
 		itemDefault.setDisable(!itemUseDefault.getValue());
@@ -43,7 +43,7 @@ public class ChoiceContentNode extends ChangeableContentNode {
 		// update default of choice list
 		itemDefault.handlerModified = e -> {
 			if(itemUseDefault.getValue()) {
-				itemChoices.setDefault(itemDefault.getValue());
+				itemChoices.refreshStyleDefault(itemDefault.getValue());
 			}
 		};
 

@@ -61,8 +61,12 @@ public class UIDataHandler {
 
 
 
+	/**
+	 * Loads the given {@link UIModule} with the given Object as a controller.
+	 *
+	 * @return the root of the loaded module.
+	 */
 	public static Parent loadFXML(UIModule module, Object controller) throws IOException {
-//		System.out.println("load module fxml: " + module + "   " + controller);
 		javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getFXMLAsURL(module));
 		loader.setController(controller);
 		Parent root = loader.load();
@@ -74,6 +78,9 @@ public class UIDataHandler {
 
 
 
+	/**
+	 * Loads and sets the style of the given {@link UIModule} and root. (Used to reload style)
+	 */
 	public static void setStyle(Parent root, UIModule module) {
 //		System.out.println("set style: " + module);
 		root.getStylesheets().clear();
@@ -88,6 +95,9 @@ public class UIDataHandler {
 
 
 
+	/**
+	 * Adds the given root node to the given {@link UIModule}. The style of all registered roots of all modules can later be reloaded at once.
+	 */
 	public static void addRoot(Parent root, UIModule module) {
 		roots.put(root, module);
 	}
@@ -95,6 +105,9 @@ public class UIDataHandler {
 
 
 
+	/**
+	 * Removes the given root node.
+	 */
 	public static void removeRoot(Parent root) {
 		roots.remove(root);
 	}
@@ -102,8 +115,10 @@ public class UIDataHandler {
 
 
 
-	public static void reloadAll() {
-		System.out.println("Reloading Styles: All");
+	/**
+	 * Reloads the style of all registered root nodes.
+	 */
+	public static void styleReloadAll() {
 		for (Parent root : roots.keySet()) {
 			setStyle(root, roots.get(root));
 		}
@@ -112,28 +127,28 @@ public class UIDataHandler {
 
 
 
-	public static String getStylesheetAsPath(UIModule module) {
+	private static String getStylesheetAsPath(UIModule module) {
 		return stylesheetPaths.get(module);
 	}
 
 
 
 
-	public static URL getStylesheetAsURL(UIModule module) {
+	private static URL getStylesheetAsURL(UIModule module) {
 		return UIDataHandler.class.getResource(getStylesheetAsPath(module));
 	}
 
 
 
 
-	public static String getFXMLAsPath(UIModule module) {
+	private static String getFXMLAsPath(UIModule module) {
 		return fxmlPaths.get(module);
 	}
 
 
 
 
-	public static URL getFXMLAsURL(UIModule module) {
+	private static URL getFXMLAsURL(UIModule module) {
 		return UIDataHandler.class.getResource(getFXMLAsPath(module));
 	}
 

@@ -196,6 +196,9 @@ public class HashMap2D<R, C, V> implements Map2D<R, C, V> {
 
 
 
+/**
+ * Helper class for the {@link HashMap2D}. Represents a row in the 2d-map
+ */
 class Entry2D<C, V> extends HashMap<C, V> {
 
 

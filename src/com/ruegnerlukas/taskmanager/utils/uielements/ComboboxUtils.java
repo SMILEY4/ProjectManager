@@ -14,71 +14,9 @@ import javafx.scene.control.ListCell;
 public class ComboboxUtils {
 
 
-	//
-//	public static void initFlagColor(ComboBox<TaskFlag> combobox) {
-//		combobox.setButtonCell(new ListCell<TaskFlag>() {
-//			@Override
-//			protected void updateItem(TaskFlag item, boolean empty) {
-//				super.updateItem(item, empty);
-//				if (item == null || empty) {
-//					setText("");
-//					setGraphic(null);
-//				} else {
-//
-//					Color flagColor = item.color.color;
-//					String strColor = "rgba(" + (int) (255 * flagColor.getRed()) + "," + (int) (255 * flagColor.getGreen()) + "," + (int) (255 * flagColor.getBlue()) + ",255)";
-//
-//					Label label = new Label(item.name);
-//					label.setAlignment(Pos.CENTER);
-//					label.minWidthProperty().bind(super.widthProperty());
-//					label.maxWidthProperty().bind(super.widthProperty());
-//					label.setPadding(new Insets(2, 5, 2, 5));
-//					label.setStyle("-fx-background-radius: 9; -fx-background-color: " + strColor + ";");
-//
-//					setText("");
-//					setGraphic(label);
-//				}
-//			}
-//		});
-//		combobox.setCellFactory(new Callback<ListView<TaskFlag>, ListCell<TaskFlag>>() {
-//			@Override
-//			public ListCell<TaskFlag> call(ListView<TaskFlag> p) {
-//				return new ListCell<TaskFlag>() {
-//					@Override
-//					protected void updateItem(TaskFlag item, boolean empty) {
-//						super.updateItem(item, empty);
-//						if (item == null || empty) {
-//							setText("");
-//							setGraphic(null);
-//						} else {
-//
-//							Color flagColor = item.color.color;
-//							String strColor = "rgba(" + (int) (255 * flagColor.getRed()) + "," + (int) (255 * flagColor.getGreen()) + "," + (int) (255 * flagColor.getBlue()) + ",255)";
-//
-//							Label label = new Label(item.name);
-//							label.setAlignment(Pos.CENTER);
-//							label.minWidthProperty().bind(combobox.widthProperty().subtract(40));
-//							label.maxWidthProperty().bind(combobox.widthProperty().subtract(40));
-//							label.setPadding(new Insets(2, 5, 2, 5));
-//							label.setStyle("-fx-background-radius: 9; -fx-background-color: " + strColor + ";");
-//
-//							setText(null);
-//							setGraphic(label);
-//
-//						}
-//					}
-//				};
-//			}
-//		});
-//	}
-//
-//
-//
-//
-
-
-
-
+	/**
+	 * @return a {@link ListCell} for Boolean-values. Values will be displayed as "True" or "False".
+	 */
 	public static ListCell<Boolean> createListCellBoolean() {
 		return new ListCell<Boolean>() {
 			@Override
@@ -96,6 +34,9 @@ public class ComboboxUtils {
 
 
 
+	/**
+	 * @return a {@link ListCell} for {@link TaskFlag}s. Flags will be displayed as their name.
+	 */
 	public static ListCell<TaskFlag> createListCellFlag() {
 		return new ListCell<TaskFlag>() {
 			@Override
@@ -113,6 +54,9 @@ public class ComboboxUtils {
 
 
 
+	/**
+	 * @return a {@link ListCell} for {@link TaskAttribute}s. Attributes will be displayed as their name.
+	 */
 	public static ListCell<TaskAttribute> createListCellAttribute() {
 		return new ListCell<TaskAttribute>() {
 			@Override
@@ -130,6 +74,9 @@ public class ComboboxUtils {
 
 
 
+	/**
+	 * @return a {@link ListCell} for {@link AttributeType}s. Attributes will be displayed as their display-name.
+	 */
 	public static ListCell<AttributeType> createListCellAttributeType() {
 		return new ListCell<AttributeType>() {
 			@Override
@@ -147,6 +94,9 @@ public class ComboboxUtils {
 
 
 
+	/**
+	 * @return a {@link ListCell} for {@link FilterOperation}s. Operations will be displayed as their enum-name
+	 */
 	public static ListCell<FilterOperation> createListCellFilterOperation() {
 		return new ListCell<FilterOperation>() {
 			@Override
@@ -164,6 +114,9 @@ public class ComboboxUtils {
 
 
 
+	/**
+	 * @return a {@link ListCell} for {@link SortElement.SortDir}s. Values will be displayed as "Ascending" or "Descending"
+	 */
 	public static ListCell<SortElement.SortDir> createListCellSortDir() {
 		return new ListCell<SortElement.SortDir>() {
 			@Override
@@ -172,7 +125,7 @@ public class ComboboxUtils {
 				if (item == null || empty) {
 					setText("");
 				} else {
-					setText(item.toString());
+					setText(item == SortElement.SortDir.ASC ? "Ascending" : "Descending");
 				}
 			}
 		};
@@ -181,6 +134,9 @@ public class ComboboxUtils {
 
 
 
+	/**
+	 * @return a {@link ListCell} for {@link Task}s. Tasks will be displayed as "T-" and their id (e.g. T-17)
+	 */
 	public static ListCell<Task> createListCellTask() {
 		return new ListCell<Task>() {
 			@Override

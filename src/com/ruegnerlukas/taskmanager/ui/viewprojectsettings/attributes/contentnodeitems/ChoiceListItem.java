@@ -56,7 +56,10 @@ public class ChoiceListItem extends SimpleContentNodeItem {
 
 
 
-	public void setDefault(String value) {
+	/**
+	 * Removes the "default" style class from all tags and adds it to the current default value / tag.
+	 * */
+	public void refreshStyleDefault(String value) {
 		tagbar.removeCssStyleClass(null, "tag-default");
 		if (value != null && tagbar.getTags().contains(value)) {
 			tagbar.addCssStyleClass(value, "tag-default");
@@ -65,14 +68,18 @@ public class ChoiceListItem extends SimpleContentNodeItem {
 
 
 
-
+	/**
+	 * @return the unchanged list of values of the {@link TaskAttribute}
+	 */
 	private String[] getMasterValue() {
 		return AttributeLogic.CHOICE_LOGIC.getValueList(attribute);
 	}
 
 
 
-
+	/**
+	 * Checks whether this value was changed / is different from the value of the {@link TaskAttribute} and sets the changed-property.
+	 */
 	public void checkChanged() {
 		if (handlerModified != null) {
 			handlerModified.handle(new ActionEvent());
@@ -94,9 +101,9 @@ public class ChoiceListItem extends SimpleContentNodeItem {
 		tagbar.removeAll();
 		tagbar.addTags(getMasterValue());
 		if (AttributeLogic.CHOICE_LOGIC.getUseDefault(attribute) && getMasterValue().length > 0) {
-			setDefault(AttributeLogic.CHOICE_LOGIC.getDefaultValue(attribute).getValue());
+			refreshStyleDefault(AttributeLogic.CHOICE_LOGIC.getDefaultValue(attribute).getValue());
 		} else {
-			setDefault(null);
+			refreshStyleDefault(null);
 		}
 		changedProperty.set(false);
 	}
@@ -114,7 +121,9 @@ public class ChoiceListItem extends SimpleContentNodeItem {
 
 
 
-
+	/**
+	 * @return the current value of this item.
+	 */
 	public String[] getValue() {
 		return tagbar.getTagArray();
 	}

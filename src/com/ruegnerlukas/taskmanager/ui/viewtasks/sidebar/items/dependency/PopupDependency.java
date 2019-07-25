@@ -87,6 +87,9 @@ public class PopupDependency extends PopupBase {
 
 
 
+	/**
+	 * Close this popup without saving
+	 */
 	private void onCancel() {
 		this.getStage().close();
 	}
@@ -94,6 +97,9 @@ public class PopupDependency extends PopupBase {
 
 
 
+	/**
+	 * Save the selections and close this popup.
+	 */
 	private void onAccept() {
 
 		List<Task> listSelected = new ArrayList<>();
@@ -167,13 +173,13 @@ class TaskItem extends HBox {
 		labelDescr.setText(valueDescr.getValue());
 
 		this.setOnMouseClicked(e -> {
-			if(e.getButton() == MouseButton.PRIMARY) {
+			if (e.getButton() == MouseButton.PRIMARY) {
 				this.isSelected = !this.isSelected;
 				checkbox.setSelected(this.isSelected);
 			}
 		});
 
-		if(disable) {
+		if (disable) {
 			checkbox.setSelected(false);
 			this.setDisable(true);
 		}

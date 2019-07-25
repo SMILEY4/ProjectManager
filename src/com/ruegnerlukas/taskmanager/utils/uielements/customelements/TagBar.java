@@ -25,6 +25,9 @@ import java.util.List;
 import java.util.function.Predicate;
 
 
+/**
+ * A text field that will display entered words/entries as Tags. Tags can be removed by clicking the remove-button on each tag.
+ */
 public class TagBar extends HBox {
 
 
@@ -137,8 +140,13 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * Adds a css-styleClass to the specified tag.
+	 *
+	 * @param tag the string-representation of the tag. Leave as null to add the style class to all current tags.
+	 */
 	public void addCssStyleClass(String tag, String styleClass) {
-		for (Tag t : tag == null ? tags : findTags(tag)) {
+		for (Tag t : (tag == null ? tags : findTags(tag))) {
 			t.getStyleClass().add(styleClass);
 		}
 	}
@@ -146,8 +154,13 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * Removes the css-styleClass from the specified tag.
+	 *
+	 * @param tag the string-representation of the tag. Leave as null to remove the style class from all current tags.
+	 */
 	public void removeCssStyleClass(String tag, String styleClass) {
-		for (Tag t : tag == null ? tags : findTags(tag)) {
+		for (Tag t : (tag == null ? tags : findTags(tag))) {
 			t.getStyleClass().remove(styleClass);
 		}
 	}
@@ -155,6 +168,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * Set a filter for valid tags.
+	 */
 	public void setTagFilter(Predicate<String> predicate) {
 		this.predicate = predicate;
 	}
@@ -162,6 +178,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * Listen to changes to the content of existing tags.
+	 */
 	public void setOnTagChanged(ChangeListener<String> listener) {
 		handlerChangeTag = listener;
 	}
@@ -169,6 +188,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * Listen to added tags.
+	 */
 	public void setOnTagAdded(ChangeListener<String> listener) {
 		handlerAddTag = listener;
 	}
@@ -176,6 +198,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * Listen to removed tags.
+	 */
 	public void setOnTagRemoved(ChangeListener<String> listener) {
 		handlerRemoveTag = listener;
 	}
@@ -183,6 +208,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * Add the given tags to this TagBar.
+	 */
 	public boolean addTags(String... tags) {
 		boolean success = true;
 		for (String tag : tags) {
@@ -196,6 +224,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * Add the given tag this this TagBar.
+	 */
 	public boolean addTag(String tag) {
 		if ((tags.size() >= maxTags.get()) || (!allowDuplicates.get() && existsTag(tag))) {
 			return false;
@@ -227,6 +258,11 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * Remove the given tag from this TagBar
+	 *
+	 * @return true, if a tag was removed
+	 */
 	public boolean removeTag(String tag) {
 		Tag t = findTag(tag);
 		if (t == null) {
@@ -238,6 +274,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * Remove all tags from this TagBar.
+	 */
 	public void removeAll() {
 		tags.clear();
 	}
@@ -245,6 +284,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * @return all current tags as an array
+	 */
 	public String[] getTagArray() {
 		String[] array = new String[tags.size()];
 		for (int i = 0; i < array.length; i++) {
@@ -256,6 +298,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * @return all current tags as a list
+	 */
 	public List<String> getTags() {
 		List<String> list = new ArrayList<>();
 		for (Tag tag : tags) {
@@ -267,6 +312,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * @return true, if the given tag exists
+	 */
 	public boolean existsTag(String tag) {
 		return findTag(tag) != null;
 	}
@@ -274,6 +322,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * @return the tag with the given text or null
+	 */
 	private Tag findTag(String tag) {
 		String strTag = trimValue.get() ? tag.trim() : tag;
 		for (Tag t : tags) {
@@ -287,6 +338,9 @@ public class TagBar extends HBox {
 
 
 
+	/**
+	 * @return a list of all tags with the given text or an empty list
+	 */
 	private List<Tag> findTags(String tag) {
 		String strTag = trimValue.get() ? tag.trim() : tag;
 		List<Tag> list = new ArrayList<>();
@@ -339,7 +393,7 @@ class Tag extends HBox {
 			Text textNode = (Text) label.lookup(".text");
 			String actualString = textNode.getText();
 			boolean clipped = !actualString.isEmpty() && !originalString.equals(actualString);
-			if(clipped) {
+			if (clipped) {
 				label.setTooltip(new Tooltip(Tag.this.text.get()));
 			} else {
 				label.setTooltip(null);
@@ -348,7 +402,7 @@ class Tag extends HBox {
 
 		// button
 		btnRemove = new Button();
-		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CANCEL, 1.2, "black");
+		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CANCEL, 1.2);
 		this.getChildren().add(btnRemove);
 
 		// on remove

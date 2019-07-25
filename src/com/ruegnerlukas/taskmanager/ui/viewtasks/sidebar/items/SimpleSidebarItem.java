@@ -17,6 +17,9 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
+/**
+ * A Item with the name of the attribute and a node to change the value.
+ */
 public abstract class SimpleSidebarItem extends SidebarItem {
 
 
@@ -27,7 +30,8 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 	private boolean isEmpty;
 
-	private FXMapEntryChangeListener<TaskAttribute,TaskValue<?>> listenerTaskValue;
+	private FXMapEntryChangeListener<TaskAttribute, TaskValue<?>> listenerTaskValue;
+
 
 
 
@@ -62,7 +66,7 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 		// button - add / clear
 		button = new Button();
-		ButtonUtils.makeIconButton(button, SVGIcons.CROSS, 0.4, "black");
+		ButtonUtils.makeIconButton(button, SVGIcons.CROSS, 0.4);
 		button.setMinSize(34, 34);
 		button.setMaxSize(34, 34);
 		button.setOnAction(event -> onSetEmpty(!isEmpty));
@@ -104,19 +108,29 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 		create();
 		refresh();
-		checkEmpty();
+		refreshEmpty();
 	}
 
 
 
 
+	/**
+	 * Creates and sets the node, name and logic of this item.
+	 */
 	protected abstract void create();
 
+
+	/**
+	 * Updates the displayed {@link TaskValue}.
+	 */
 	protected abstract void refresh();
 
 
 
 
+	/**
+	 * Set the name of this item to the given text.
+	 */
 	public void setText(String text) {
 		label.setText(text);
 	}
@@ -124,6 +138,9 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 
+	/**
+	 * Set the node to change the value to the given node.
+	 */
 	public void setValueNode(Node node) {
 		boxValue.getChildren().setAll(node);
 	}
@@ -131,6 +148,9 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 
+	/**
+	 * Whether to show the button to remove the value.
+	 */
 	public void setShowButton(boolean showButton) {
 		button.setVisible(showButton);
 		button.setDisable(!showButton);
@@ -139,12 +159,18 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 
+	/**
+	 * When the button to remove the value was pressed.
+	 */
 	protected abstract void onSetEmpty(boolean empty);
 
 
 
 
-	private void checkEmpty() {
+	/**
+	 * Checks the {@link TaskValue} of this task and displays it as the value or as an empty value.
+	 */
+	private void refreshEmpty() {
 		final TaskValue<?> objValue = TaskLogic.getTaskValue(getTask(), getAttribute());
 		if (objValue == null || objValue.getAttType() == null) {
 			setEmpty(true);
@@ -156,6 +182,9 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 
+	/**
+	 * Whether to set this item to an empty item.
+	 */
 	public void setEmpty(boolean isEmpty) {
 		this.isEmpty = isEmpty;
 		if (this.isEmpty) {
@@ -173,6 +202,9 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 
+	/**
+	 * Set the text that is displayed then this item is set as empty
+	 */
 	private void setEmptyText() {
 		TaskValue<?> value = TaskLogic.getTaskValue(getTask(), getAttribute());
 		if (value.getAttType() == null) {
@@ -188,10 +220,13 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 
 
+	/**
+	 * Update this item when a value of the {@link TaskAttribute} was changed.
+	 */
 	public void onAttChangedEvent() {
 		setEmptyText();
 		refresh();
-		checkEmpty();
+		refreshEmpty();
 	}
 
 

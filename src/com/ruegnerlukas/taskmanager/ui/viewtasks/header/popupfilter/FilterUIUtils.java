@@ -15,6 +15,9 @@ import javafx.util.Callback;
 public class FilterUIUtils {
 
 
+	/**
+	 * @return a created empty {@link FilterCriteria} with the given {@link FilterCriteria.CriteriaType}.
+	 */
 	public static FilterCriteria createFilterCriteria(FilterCriteria.CriteriaType type) {
 		if (type == FilterCriteria.CriteriaType.AND) {
 			return new AndFilterCriteria();
@@ -31,6 +34,9 @@ public class FilterUIUtils {
 
 
 
+	/**
+	 * @return a created {@link TerminalFilterCriteria} in a neutral/default state.
+	 */
 	private static TerminalFilterCriteria createDefaultTerminalCriteria() {
 		final TaskAttribute attribute = AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID);
 		final FilterOperation operation = FilterOperation.EQUALS;
@@ -41,6 +47,10 @@ public class FilterUIUtils {
 
 
 
+	/**
+	 * @return a created {@link CriteriaNode} with the given {@link FilterCriteria}.
+	 * Adds the givne {@link EventHandler} to the created node.
+	 */
 	public static CriteriaNode createFilterNode(FilterCriteria criteria, EventHandler<ActionEvent> handerModified) {
 		if (criteria.type == FilterCriteria.CriteriaType.AND) {
 			return new AndNode(criteria, handerModified);
@@ -57,6 +67,9 @@ public class FilterUIUtils {
 
 
 
+	/**
+	 * Initializes the given {@link ComboBox} to display and select {@link FilterCriteria.CriteriaType}s.
+	 */
 	public static void initComboxCriteriaType(ComboBox<FilterCriteria.CriteriaType> combobox) {
 		combobox.setPromptText("Create Criteria");
 		combobox.setCellFactory(new Callback<ListView<FilterCriteria.CriteriaType>, ListCell<FilterCriteria.CriteriaType>>() {

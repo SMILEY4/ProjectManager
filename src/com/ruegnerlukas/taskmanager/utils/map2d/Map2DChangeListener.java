@@ -3,7 +3,7 @@ package com.ruegnerlukas.taskmanager.utils.map2d;
 public interface Map2DChangeListener<R, C, V> {
 
 
-	public static abstract class Change<R, C, V> {
+	abstract class Change<R, C, V> {
 
 
 		private final ObservableMap2D<R, C, V> map;

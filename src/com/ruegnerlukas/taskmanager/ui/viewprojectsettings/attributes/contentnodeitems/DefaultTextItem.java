@@ -49,6 +49,9 @@ public class DefaultTextItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Sets the height of the input field to the required height.
+	 */
 	private void setValueHeight() {
 		height = textField.isMultiline() ? MultiTextField.calculateOptimalHeight(5) : 32;
 		textField.setMinSize(60, height);
@@ -60,6 +63,9 @@ public class DefaultTextItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Sets whether the input-field should have multiple lines and then adjusts the height.
+	 */
 	public void setMultiline(boolean multiline) {
 		textField.setMultiline(multiline);
 		setValueHeight();
@@ -68,6 +74,9 @@ public class DefaultTextItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged multiline value of the {@link TaskAttribute}
+	 */
 	private boolean getMasterMultiline() {
 		return AttributeLogic.TEXT_LOGIC.getMultiline(attribute);
 	}
@@ -75,6 +84,9 @@ public class DefaultTextItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged value of the {@link TaskAttribute}
+	 */
 	private String getMasterValue() {
 		return AttributeLogic.TEXT_LOGIC.getDefaultValue(attribute).getValue();
 	}
@@ -82,6 +94,9 @@ public class DefaultTextItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Checks whether this value was changed / is different from the value of the {@link TaskAttribute} and sets the changed-property.
+	 */
 	public void checkChanged() {
 		changedProperty.set(!getMasterValue().equals(textField.getText()));
 		setValueHeight();
@@ -90,6 +105,9 @@ public class DefaultTextItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Sets the text of the input-field to the given text
+	 */
 	public void setText(String text) {
 		textField.setText(text);
 	}
@@ -119,6 +137,9 @@ public class DefaultTextItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the current value of this item.
+	 */
 	public String getValue() {
 		return textField.getText();
 	}

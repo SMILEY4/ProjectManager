@@ -69,7 +69,7 @@ public class SortElementNode extends HBox {
 
 		// button up
 		Button btnUp = new Button();
-		ButtonUtils.makeIconButton(btnUp, SVGIcons.LONG_ARROW_UP, 0.7f, "black");
+		ButtonUtils.makeIconButton(btnUp, SVGIcons.LONG_ARROW_UP, 0.7f);
 		btnUp.setMinSize(32, 32);
 		btnUp.setPrefSize(32, 32);
 		btnUp.setMaxSize(32, 32);
@@ -81,7 +81,7 @@ public class SortElementNode extends HBox {
 
 		// button down
 		Button btnDown = new Button();
-		ButtonUtils.makeIconButton(btnDown, SVGIcons.LONG_ARROW_DOWN, 0.7f, "black");
+		ButtonUtils.makeIconButton(btnDown, SVGIcons.LONG_ARROW_DOWN, 0.7f);
 		btnDown.setMinSize(32, 32);
 		btnDown.setPrefSize(32, 32);
 		btnDown.setMaxSize(32, 32);
@@ -95,7 +95,7 @@ public class SortElementNode extends HBox {
 		btnRemove.setMinSize(32, 32);
 		btnRemove.setPrefSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
-		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.65f, "black");
+		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.65f);
 		btnRemove.setOnAction(event -> {
 			onRemoveThis();
 		});
@@ -119,6 +119,9 @@ public class SortElementNode extends HBox {
 
 
 
+	/**
+	 * @return a new {@link SortElement} with the same {@link TaskAttribute} and {@link SortElement.SortDir}.
+	 */
 	public SortElement buildSortElement() {
 		return new SortElement(getAttribute(), getSortDir());
 	}
@@ -154,6 +157,9 @@ public class SortElementNode extends HBox {
 
 
 
+	/**
+	 * notifies the listener that a new {@link TaskAttribute} was selected
+	 */
 	private void onSelectAttribute(TaskAttribute attribute) {
 		if (handlerModified != null) {
 			handlerModified.handle(new ActionEvent());
@@ -163,6 +169,9 @@ public class SortElementNode extends HBox {
 
 
 
+	/**
+	 * notifies the listener that a new {@link SortElement.SortDir} was selected
+	 */
 	private void onSelectSortDir(SortElement.SortDir dir) {
 		if (handlerModified != null) {
 			handlerModified.handle(new ActionEvent());
@@ -172,6 +181,9 @@ public class SortElementNode extends HBox {
 
 
 
+	/**
+	 * notifies the listener that this node wants to move one space up in the list.
+	 */
 	private void onMoveUp() {
 		if (handlerMoveUp != null) {
 			handlerMoveUp.handle(new ActionEvent());
@@ -181,6 +193,9 @@ public class SortElementNode extends HBox {
 
 
 
+	/**
+	 * notifies the listener that this node wants to move one space down in the list.
+	 */
 	private void onMoveDown() {
 		if (handlerMoveDown != null) {
 			handlerMoveDown.handle(new ActionEvent());
@@ -190,6 +205,9 @@ public class SortElementNode extends HBox {
 
 
 
+	/**
+	 * notifies the listener that this node wants to be removed from the list.
+	 */
 	private void onRemoveThis() {
 		if (handlerOnRemove != null) {
 			handlerOnRemove.handle(new ActionEvent());

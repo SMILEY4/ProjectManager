@@ -22,6 +22,11 @@ public abstract class FXMap2DEntryChangeListener<R, C, V> extends FXMap2DChangeL
 
 
 
+	/**
+	 * @param maps   the {@link ObservableMap2D} this listener will listen to
+	 * @param row    the row this to listen to. Changes to in other rows will be ignored.
+	 * @param column the column this to listen to. Changes to in other rows will be ignored
+	 */
 	public FXMap2DEntryChangeListener(R row, C column, ObservableMap2D<R, C, V>... maps) {
 		for (ObservableMap2D<R, C, V> map : maps) {
 			addTo(map);
@@ -33,6 +38,11 @@ public abstract class FXMap2DEntryChangeListener<R, C, V> extends FXMap2DChangeL
 
 
 
+	/**
+	 * @param maps    the {@link ObservableMap2D} this listener will listen to
+	 * @param rows    the rows this to listen to. Changes to in other rows will be ignored.
+	 * @param columns the columns this to listen to. Changes to in other rows will be ignored
+	 */
 	public FXMap2DEntryChangeListener(ObservableMap2D<R, C, V>[] maps, R[] rows, C[] columns) {
 		for (ObservableMap2D<R, C, V> map : maps) {
 			addTo(map);
@@ -49,6 +59,9 @@ public abstract class FXMap2DEntryChangeListener<R, C, V> extends FXMap2DChangeL
 
 
 
+	/**
+	 * Adds the given row. Changes to other columns will be ignored.
+	 */
 	public FXMap2DEntryChangeListener<R, C, V> addRow(R row) {
 		rows.add(row);
 		return this;
@@ -57,6 +70,9 @@ public abstract class FXMap2DEntryChangeListener<R, C, V> extends FXMap2DChangeL
 
 
 
+	/**
+	 * Removes the given row. Future changes to this column will be ignored.
+	 */
 	public FXMap2DEntryChangeListener<R, C, V> removeRow(R row) {
 		rows.remove(row);
 		return this;
@@ -65,6 +81,9 @@ public abstract class FXMap2DEntryChangeListener<R, C, V> extends FXMap2DChangeL
 
 
 
+	/**
+	 * Adds the given column. Changes to other columns will be ignored.
+	 */
 	public FXMap2DEntryChangeListener<R, C, V> addColumn(C column) {
 		columns.add(column);
 		return this;
@@ -73,6 +92,9 @@ public abstract class FXMap2DEntryChangeListener<R, C, V> extends FXMap2DChangeL
 
 
 
+	/**
+	 * Removes the given column. Future changes to this column will be ignored.
+	 */
 	public FXMap2DEntryChangeListener<R, C, V> removeColumns(C column) {
 		columns.remove(column);
 		return this;
@@ -83,7 +105,7 @@ public abstract class FXMap2DEntryChangeListener<R, C, V> extends FXMap2DChangeL
 
 	@Override
 	protected void onMapChanged(Map2DChangeListener.Change<R, C, V> c) {
-		if (!isSilenced() && c.getRow() != null && rows.contains(c.getRow()) && c.getColumn() != null && columns.contains(c.getColumn())) {
+		if (!isMuted() && c.getRow() != null && rows.contains(c.getRow()) && c.getColumn() != null && columns.contains(c.getColumn())) {
 			onChanged(c);
 		}
 	}

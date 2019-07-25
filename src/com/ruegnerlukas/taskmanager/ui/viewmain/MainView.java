@@ -187,9 +187,8 @@ public class MainView extends AnchorPane {
 
 
 
-
 	/**
-	 * shows a dialog and asks user if he wants to save project before closing it.
+	 * shows a dialog and asks user if he wants to save the current project before closing it.
 	 *
 	 * @return true, if the project was closed (with or without saving it); false, if the user cancelled the action
 	 */
@@ -226,6 +225,9 @@ public class MainView extends AnchorPane {
 
 
 
+	/**
+	 * Called when the given {@link Tab} was selected. Deselects the previous {@link Tab}.
+	 */
 	private void onTabSelected(Tab prevTab, Tab currTab) {
 		if (prevTab != null && prevTab.getContent() instanceof MainViewModule) {
 			MainViewModule prevModule = (MainViewModule) prevTab.getContent();
@@ -240,6 +242,9 @@ public class MainView extends AnchorPane {
 
 
 
+	/**
+	 * Opens all {@link Tab} and creates their modules.
+	 */
 	private void openTabs() {
 
 		// project settings
@@ -267,6 +272,9 @@ public class MainView extends AnchorPane {
 
 
 
+	/**
+	 * Closes all tabs.
+	 */
 	private void closeTabs() {
 		if (moduleProjectSettings != null) {
 			moduleProjectSettings.onModuleClose();

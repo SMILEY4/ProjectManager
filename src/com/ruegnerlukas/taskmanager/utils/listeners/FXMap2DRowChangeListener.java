@@ -14,6 +14,10 @@ public abstract class FXMap2DRowChangeListener<R, C, V> extends FXMap2DChangeLis
 
 
 
+	/**
+	 * @param map  the {@link ObservableMap2D} this listener will listen to
+	 * @param rows the rows this to listen to. Changes to in other rows will be ignored
+	 */
 	public FXMap2DRowChangeListener(ObservableMap2D<R, C, V> map, R... rows) {
 		addTo(map);
 		for (R row : rows) {
@@ -24,6 +28,10 @@ public abstract class FXMap2DRowChangeListener<R, C, V> extends FXMap2DChangeLis
 
 
 
+	/**
+	 * @param maps the {@link ObservableMap2D}s this listener will listen to
+	 * @param row  the row this to listen to. Changes to in other rows will be ignored
+	 */
 	public FXMap2DRowChangeListener(R row, ObservableMap2D<R, C, V>... maps) {
 		for (ObservableMap2D<R, C, V> map : maps) {
 			addTo(map);
@@ -34,6 +42,10 @@ public abstract class FXMap2DRowChangeListener<R, C, V> extends FXMap2DChangeLis
 
 
 
+	/**
+	 * @param maps the {@link ObservableMap2D}s this listener will listen to
+	 * @param rows the rows this to listen to. Changes to in other rows will be ignored
+	 */
 	public FXMap2DRowChangeListener(ObservableMap2D<R, C, V>[] maps, R[] rows) {
 		for (ObservableMap2D<R, C, V> map : maps) {
 			addTo(map);
@@ -46,6 +58,9 @@ public abstract class FXMap2DRowChangeListener<R, C, V> extends FXMap2DChangeLis
 
 
 
+	/**
+	 * Adds the given row. Changes to other columns will be ignored.
+	 */
 	public FXMap2DRowChangeListener<R, C, V> addRow(R row) {
 		rows.add(row);
 		return this;
@@ -54,6 +69,9 @@ public abstract class FXMap2DRowChangeListener<R, C, V> extends FXMap2DChangeLis
 
 
 
+	/**
+	 * Removes the given row. Future changes to this column will be ignored.
+	 */
 	public FXMap2DRowChangeListener<R, C, V> removeRow(R row) {
 		rows.remove(row);
 		return this;
@@ -64,7 +82,7 @@ public abstract class FXMap2DRowChangeListener<R, C, V> extends FXMap2DChangeLis
 
 	@Override
 	protected void onMapChanged(Map2DChangeListener.Change<R, C, V> c) {
-		if (!isSilenced() && c.getRow() != null && rows.contains(c.getRow())) {
+		if (!isMuted() && c.getRow() != null && rows.contains(c.getRow())) {
 			onChanged(c);
 		}
 	}

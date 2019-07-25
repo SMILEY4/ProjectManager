@@ -53,7 +53,11 @@ public class DefaultFlagItem extends SimpleContentNodeItem {
 
 
 
-	public void setFlagList(TaskFlag[] flags) {
+	/**
+	 * Adds the given {@link TaskFlag}s to the list of flags and the {@link ComboBox} of default flags.
+	 * Removes the previous flags.
+	 */
+	public void setFlagList(TaskFlag... flags) {
 
 		TaskFlag flagSelected = getValue();
 
@@ -87,6 +91,9 @@ public class DefaultFlagItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged list of flags of the {@link TaskAttribute}
+	 */
 	private TaskFlag[] getMasterFlags() {
 		return AttributeLogic.FLAG_LOGIC.getFlagList(attribute);
 	}
@@ -94,6 +101,9 @@ public class DefaultFlagItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged default flag of the {@link TaskAttribute}
+	 */
 	private TaskFlag getMasterDefaultFlag() {
 		return AttributeLogic.FLAG_LOGIC.getDefaultValue(attribute).getValue();
 	}
@@ -101,6 +111,9 @@ public class DefaultFlagItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Checks whether this value was changed / is different from the value of the {@link TaskAttribute} and sets the changed-property.
+	 */
 	public void checkChanged() {
 		changedProperty.set(!getMasterDefaultFlag().compare(choice.getValue()));
 	}
@@ -129,6 +142,9 @@ public class DefaultFlagItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the current value of this item.
+	 */
 	public TaskFlag getValue() {
 		return choice.getValue();
 	}

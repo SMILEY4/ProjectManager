@@ -6,6 +6,9 @@ import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 
+/**
+ * For {@link TaskAttribute}s that have do not have any values that can be changed.
+ */
 public class UnchangeableContentNode extends AttributeContentNode {
 
 

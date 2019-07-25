@@ -7,6 +7,9 @@ import javafx.scene.control.ButtonType;
 public class Alerts {
 
 
+	/**
+	 * Shows an confirmation alert with the given header- and content-text and the buttons "Yes", "No" and "Cancel"
+	 */
 	public static ButtonType confirmation(String header, String content) {
 		Alert alert = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
 		alert.setHeaderText(header);
@@ -18,6 +21,11 @@ public class Alerts {
 
 
 
+	/**
+	 * Shows an confirmation alert with the given header-text and the buttons "Yes", "No" and "Cancel".
+	 *
+	 * @return the clicked {@code ButtonType}
+	 */
 	public static ButtonType confirmation(String text) {
 		Alert alert = new Alert(AlertType.CONFIRMATION, "", ButtonType.YES, ButtonType.NO, ButtonType.CANCEL);
 		alert.setHeaderText(null);
@@ -29,6 +37,11 @@ public class Alerts {
 
 
 
+	/**
+	 * Shows an confirmation alert with the given header- and content-text and the given buttons.
+	 *
+	 * @return the clicked {@code ButtonType}
+	 */
 	public static ButtonType confirmation(String header, String content, ButtonType... buttonTypes) {
 		Alert alert = new Alert(AlertType.CONFIRMATION, "", buttonTypes);
 		alert.setHeaderText(header);
@@ -40,6 +53,11 @@ public class Alerts {
 
 
 
+	/**
+	 * Shows an confirmation alert with the given header-text and the given buttons.
+	 *
+	 * @return the clicked {@code ButtonType}
+	 */
 	public static ButtonType confirmation(String text, ButtonType... buttonTypes) {
 		Alert alert = new Alert(AlertType.CONFIRMATION, "", buttonTypes);
 		alert.setHeaderText(null);
@@ -51,6 +69,9 @@ public class Alerts {
 
 
 
+	/**
+	 * Shows an error alert with the given header-text.
+	 */
 	public static void error(String header, String content) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setHeaderText(header);
@@ -61,6 +82,9 @@ public class Alerts {
 
 
 
+	/**
+	 * Shows an error alert with the given content-text.
+	 */
 	public static void error(String text) {
 		Alert alert = new Alert(AlertType.ERROR);
 		alert.setHeaderText(null);
@@ -71,6 +95,9 @@ public class Alerts {
 
 
 
+	/**
+	 * Shows an info alert with the given header- and content-text.
+	 */
 	public static void info(String header, String content) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setHeaderText(header);
@@ -81,6 +108,9 @@ public class Alerts {
 
 
 
+	/**
+	 * Shows an info alert with the given and content-text.
+	 */
 	public static void info(String text) {
 		Alert alert = new Alert(AlertType.INFORMATION);
 		alert.setHeaderText(null);

@@ -205,6 +205,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Resets the presets.
+	 */
 	private void onReset() {
 		onClearAllData();
 		choicePreset.getSelectionModel().clearSelection();
@@ -214,6 +217,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Loads the {@link MasterPreset} with the given name and selects it.
+	 */
 	private void onLoadMasterPreset(String name) {
 		MasterPreset preset = PresetLogic.getMasterPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
@@ -227,6 +233,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Deletes the {@link MasterPreset} with the given name and deselects it.
+	 */
 	private void onDeleteMasterPreset(String name) {
 		boolean deleted = PresetLogic.deleteMasterPreset(Data.projectProperty.get(), name);
 		if (deleted) {
@@ -240,6 +249,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Saves the current data as a {@link MasterPreset} with the given name and deselects it.
+	 */
 	private void onSaveMasterPreset(String name) {
 		String strName = name.trim();
 		boolean saved = PresetLogic.saveMasterPreset(Data.projectProperty.get(), strName, buildMasterPreset());
@@ -255,6 +267,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Called when a preset was selected and enables/disables the buttons.
+	 */
 	private void onMasterPresetSelected() {
 		btnDeletePreset.setDisable(false);
 		fieldPresetName.setDisable(true);
@@ -265,6 +280,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Called when a preset was deselected and enables/disables the buttons.
+	 */
 	private void onMasterPresetDeselected() {
 		btnDeletePreset.setDisable(true);
 		fieldPresetName.setDisable(false);
@@ -274,6 +292,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Loads a {@link FilterCriteria} with the given name and selects it.
+	 */
 	private void onLoadFilterPreset(String name) {
 		FilterCriteria preset = PresetLogic.getFilterPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
@@ -287,6 +308,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Loads a {@link TaskGroupData} with the given name and selects it.
+	 */
 	private void onLoadGroupPreset(String name) {
 		TaskGroupData preset = PresetLogic.getTaskGroupPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
@@ -300,6 +324,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Loads a {@link SortData} with the given name and selects it.
+	 */
 	private void onLoadSortPreset(String name) {
 		SortData preset = PresetLogic.getSortPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
@@ -313,6 +340,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Clears all presets.
+	 */
 	private void onClearAllData() {
 		onClearFilterData();
 		onClearGroupData();
@@ -343,6 +373,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Sets all presets to the presets of the given {@link MasterPreset}.
+	 */
 	private void onSetAllData(MasterPreset preset) {
 		if (preset.filterPreset == null) {
 			onClearFilterData();
@@ -385,6 +418,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * @return a new {@link MasterPreset} with the currently selected presets.
+	 */
 	private MasterPreset buildMasterPreset() {
 		return new MasterPreset(
 				selectFilter.getValue(),
@@ -396,6 +432,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * @return the currently selected {@link FilterCriteria} or null.
+	 */
 	private FilterCriteria getFilterData() {
 		if (selectFilter.getValue() == null) {
 			return null;
@@ -407,6 +446,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * @return the currently selected {@link TaskGroupData} or null.
+	 */
 	private TaskGroupData getTaskGroupData() {
 		if (selectTaskGroup.getValue() == null) {
 			return null;
@@ -418,6 +460,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * @return the currently selected {@link SortData} or null.
+	 */
 	private SortData getSortData() {
 		if (selectSort.getValue() == null) {
 			return null;
@@ -437,6 +482,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Closes this popup without saving.
+	 */
 	private void onCancel() {
 		this.getStage().close();
 	}
@@ -444,6 +492,9 @@ public class PopupMasterPreset extends PopupBase {
 
 
 
+	/**
+	 * Saves this data and closes this popup.
+	 */
 	private void onAccept() {
 		Data.projectProperty.get().data.presetSelectedMaster.set(choicePreset.getValue());
 		TaskLogic.setFilter(Data.projectProperty.get(), getFilterData(), selectFilter.getValue());

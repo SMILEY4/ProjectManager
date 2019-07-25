@@ -44,6 +44,9 @@ public class UseDefaultItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged value of the {@link TaskAttribute}
+	 */
 	private boolean getMasterValue() {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
 		return value.getValue();
@@ -52,6 +55,9 @@ public class UseDefaultItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Checks whether this value was changed / is different from the value of the {@link TaskAttribute} and sets the changed-property.
+	 */
 	public void checkChanged() {
 		changedProperty.set(getMasterValue() != checkBox.isSelected());
 	}
@@ -79,6 +85,9 @@ public class UseDefaultItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the current value of this item.
+	 */
 	public boolean getValue() {
 		return checkBox.isSelected();
 	}

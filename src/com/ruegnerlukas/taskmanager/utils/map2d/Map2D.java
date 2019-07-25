@@ -59,7 +59,7 @@ public interface Map2D<R, C, V> {
 
 
 	/**
-	 * maps a given row to an object with the given mapper
+	 * maps a given row to an object with the given {@link Map2DEntryMapper}
 	 */
 	<T> T map(R row, Map2DEntryMapper<R, C, V, T> mapper);
 

@@ -51,6 +51,9 @@ public class DefaultNumberItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Initialises the {@link Spinner} with the given parameters and value.
+	 */
 	private void initSpinner(double value, int decPlaces, double min, double max) {
 		SpinnerUtils.initSpinner(
 				spinner,
@@ -65,6 +68,9 @@ public class DefaultNumberItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Initialises the {@link Spinner} with the given parameters and the current value.
+	 */
 	public void setValues(int decPlaces, double min, double max) {
 		initSpinner(getValue(), decPlaces, min, max);
 	}
@@ -72,6 +78,9 @@ public class DefaultNumberItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged number decimal places of the {@link TaskAttribute}
+	 */
 	private int getMasterDecPlaces() {
 		return AttributeLogic.NUMBER_LOGIC.getDecPlaces(attribute);
 	}
@@ -79,6 +88,9 @@ public class DefaultNumberItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged min value of the {@link TaskAttribute}
+	 */
 	private double getMasterMinValue() {
 		return AttributeLogic.NUMBER_LOGIC.getMinValue(attribute).doubleValue();
 	}
@@ -86,6 +98,9 @@ public class DefaultNumberItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged max value of the {@link TaskAttribute}
+	 */
 	private double getMasterMaxValue() {
 		return AttributeLogic.NUMBER_LOGIC.getMaxValue(attribute).doubleValue();
 	}
@@ -93,6 +108,9 @@ public class DefaultNumberItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the unchanged value of the {@link TaskAttribute}
+	 */
 	private double getMasterValue() {
 		return AttributeLogic.NUMBER_LOGIC.getDefaultValue(attribute).getValue();
 	}
@@ -100,6 +118,9 @@ public class DefaultNumberItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * Checks whether this value was changed / is different from the value of the {@link TaskAttribute} and sets the changed-property.
+	 */
 	public void checkChanged() {
 		changedProperty.set(!MathUtils.isNearlyEqual(getMasterValue(), spinner.getValue()));
 	}
@@ -127,6 +148,9 @@ public class DefaultNumberItem extends SimpleContentNodeItem {
 
 
 
+	/**
+	 * @return the current value of this item.
+	 */
 	public double getValue() {
 		return spinner.getValue();
 	}

@@ -156,6 +156,9 @@ public class SpinnerUtils {
 
 
 
+	/**
+	 * converts the entered text of the given {@link Spinner} to a valid value and updates the value of the spinner.
+	 */
 	private static <T> void commitEditorText(Spinner<T> spinner) {
 		if (!spinner.isEditable()) return;
 		String text = spinner.getEditor().getText();
@@ -186,6 +189,19 @@ public class SpinnerUtils {
 
 
 
+	/**
+	 * Initializes the given {@link Spinner} as a numeric spinner with the given parameters.
+	 *
+	 * @param spinner          the spinner
+	 * @param defaultValue     the initial value of the spinner
+	 * @param min              the min value of the spinner
+	 * @param max              the max value of the spinner
+	 * @param step             the step size of the spinner
+	 * @param decPlaces        the number of decimal values of the spinner. If set to 0, the spinner will handle integers and doubles otherwise.
+	 * @param forceDouble      forces the spinner to handle doubles, even if the step size is set to 0
+	 * @param enableMouseWheel enables increasing/decreasing the value of the spinner with the mouse wheel (when hovering over the spinner). This does not work if it is a decedent of a {@link ScrollPane}.
+	 * @param listener         the change listener. Leave as null to not change the listener of the spinner.
+	 */
 	@SuppressWarnings ({"rawtypes", "unchecked"})
 	public static void initSpinner(Spinner<?> spinner, double defaultValue, double min, double max, double step, int decPlaces, boolean forceDouble, boolean enableMouseWheel, ChangeListener listener) {
 		if (decPlaces <= 0 && !forceDouble) {
@@ -235,6 +251,5 @@ public class SpinnerUtils {
 			spinner.valueProperty().addListener(listener);
 		}
 	}
-
 
 }

@@ -1,10 +1,12 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes;
 
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
+import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -21,6 +23,11 @@ import javafx.scene.control.Tooltip;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
+/**
+ * An entry in the list of Attributes in the {@link ProjectSettingsView}. <br>
+ * Consists of a header area with the {@link AttributeType}, the name and a few general functions;
+ * and a content-area containing a {@link AttributeContentNode}.
+ */
 public class AttributeNode extends AnchorPane {
 
 
@@ -90,7 +97,7 @@ public class AttributeNode extends AnchorPane {
 		btnRemove.setMinSize(32, 32);
 		btnRemove.setPrefSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
-		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f, "black");
+		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f);
 		btnRemove.setDisable(attribute.type.get().fixed);
 		headerBox.getChildren().add(btnRemove);
 		btnRemove.setOnAction(event -> onRemoveAttribute());
@@ -145,7 +152,7 @@ public class AttributeNode extends AnchorPane {
 		btnExpand.setMinSize(32, 32);
 		btnExpand.setPrefSize(32, 32);
 		btnExpand.setMaxSize(32, 32);
-		ButtonUtils.makeIconButton(btnExpand, SVGIcons.ARROW_DOWN, 0.75f, "black");
+		ButtonUtils.makeIconButton(btnExpand, SVGIcons.ARROW_DOWN, 0.75f);
 		headerBox.getChildren().add(btnExpand);
 		btnExpand.setOnAction(event -> {
 			if (isExpanded) {
@@ -180,6 +187,9 @@ public class AttributeNode extends AnchorPane {
 
 
 
+	/**
+	 * (Re-)Sets the content of this {@link AttributeNode} and resizes it to fit the new content.
+	 */
 	private void setAttributeContent() {
 
 		content = ContentNodeFactory.create(attribute);
@@ -197,6 +207,9 @@ public class AttributeNode extends AnchorPane {
 
 
 
+	/**
+	 * Removes the {@link TaskAttribute} handled by this node from the {@link Project}.
+	 */
 	private void onRemoveAttribute() {
 		ProjectLogic.removeAttributeFromProject(Data.projectProperty.get(), getAttribute());
 	}
@@ -204,9 +217,12 @@ public class AttributeNode extends AnchorPane {
 
 
 
+	/**
+	 * Changes the {@link AttributeType} of the {@link TaskAttribute} handled by this node to the new given type and resets the content of this node.
+	 */
 	private void onTypeSelected(AttributeType oldValue, AttributeType newValue) {
 		if (oldValue != newValue) {
-			if(content != null) {
+			if (content != null) {
 				content.dispose();
 			}
 			AttributeLogic.setTaskAttributeType(Data.projectProperty.get(), getAttribute(), newValue);
@@ -217,32 +233,45 @@ public class AttributeNode extends AnchorPane {
 
 
 
-	private void onRename(String oldValue, String newValue) {
-		if (!oldValue.equals(newValue)) {
-			AttributeLogic.renameTaskAttribute(getAttribute(), newValue);
+	/**
+	 * Renames the {@link TaskAttribute} handled by this node.
+	 */
+	private void onRename(String prevName, String newName) {
+		if (!prevName.equals(newName)) {
+			AttributeLogic.renameTaskAttribute(getAttribute(), newName);
 		}
 	}
 
 
 
 
+	/**
+	 * Expand this node to show its content/details.
+	 */
 	private void onExpand() {
 		isExpanded = true;
-		ButtonUtils.makeIconButton(btnExpand, SVGIcons.ARROW_UP, 0.75f, "black");
+		ButtonUtils.makeIconButton(btnExpand, SVGIcons.ARROW_UP, 0.75f);
 		resize();
 	}
 
 
 
 
+	/**
+	 * Collapse this node to hide its content/details.
+	 */
 	private void onCollapse() {
 		isExpanded = false;
-		ButtonUtils.makeIconButton(btnExpand, SVGIcons.ARROW_DOWN, 0.75f, "black");
+		ButtonUtils.makeIconButton(btnExpand, SVGIcons.ARROW_DOWN, 0.75f);
 		resize();
 	}
 
 
 
+
+	/**
+	 * Changes the height (of content area) of this node to fit its content.
+	 */
 	public void resize() {
 
 		if (isExpanded) {
@@ -269,6 +298,9 @@ public class AttributeNode extends AnchorPane {
 
 
 
+	/**
+	 * @return the {@link TaskAttribute} handled by this node.
+	 */
 	public TaskAttribute getAttribute() {
 		return attribute;
 	}

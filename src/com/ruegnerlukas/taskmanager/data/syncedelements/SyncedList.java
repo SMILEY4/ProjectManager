@@ -61,7 +61,7 @@ public class SyncedList<E> extends ObservableListWrapper<E> implements SyncedEle
 		}
 
 		if (change instanceof ListChange) {
-			this.listener.setSilenced(true);
+			this.listener.setMuted(true);
 			ListChange listChange = (ListChange) change;
 			if (listChange.wasAdded()) {
 				this.add((E) listChange.getAdded());
@@ -82,7 +82,7 @@ public class SyncedList<E> extends ObservableListWrapper<E> implements SyncedEle
 				}
 			}
 
-			this.listener.setSilenced(false);
+			this.listener.setMuted(false);
 		}
 
 	}
