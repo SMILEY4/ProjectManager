@@ -29,6 +29,9 @@ public class ListChange extends DataChange {
 
 
 
+	/**
+	 * @return true, of an element was added to the list.
+	 */
 	public boolean wasAdded() {
 		return wasAdded;
 	}
@@ -36,6 +39,9 @@ public class ListChange extends DataChange {
 
 
 
+	/**
+	 * @return true, of an element was removed from the list.
+	 */
 	public boolean wasRemoved() {
 		return !wasAdded;
 	}
@@ -43,6 +49,9 @@ public class ListChange extends DataChange {
 
 
 
+	/**
+	 * @return the added element or null (if element was removed)
+	 */
 	public Object getAdded() {
 		return wasAdded() ? element : null;
 	}
@@ -50,6 +59,9 @@ public class ListChange extends DataChange {
 
 
 
+	/**
+	 * @return the identifier of the added element or null (if element was removed or added element was removed by an identifier).
+	 */
 	public String getAddedIdentifier() {
 		return wasAdded() && element instanceof SyncedElement ? ((SyncedElement) element).getNode().identifier : null;
 	}
@@ -57,6 +69,9 @@ public class ListChange extends DataChange {
 
 
 
+	/**
+	 * @return the removed element or null (if element was added)
+	 */
 	public Object getRemoved() {
 		return wasRemoved() ? element : null;
 	}
@@ -64,6 +79,9 @@ public class ListChange extends DataChange {
 
 
 
+	/**
+	 * @return the identifier of the removed element or null (if element was added or removed element was not removed by an identifier).
+	 */
 	public String getRemovedIdentifier() {
 		return wasRemoved() && identifierRemoved != null ? identifierRemoved : null;
 	}
@@ -71,6 +89,9 @@ public class ListChange extends DataChange {
 
 
 
+	/**
+	 * @return true, if an element was removed by an identifier.
+	 */
 	public boolean removeByIdentifier() {
 		return wasRemoved() && identifierRemoved != null;
 	}

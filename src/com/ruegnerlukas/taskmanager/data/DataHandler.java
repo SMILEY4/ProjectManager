@@ -46,6 +46,9 @@ public class DataHandler {
 
 
 
+	/**
+	 * Registers the given {@link SyncedNode} as a root node .
+	 */
 	public void registerSyncedNode(SyncedNode node) {
 		syncedNodes.put(node.identifier, node);
 	}
@@ -53,6 +56,9 @@ public class DataHandler {
 
 
 
+	/**
+	 * Removes the given {@link SyncedNode} as a root node.
+	 */
 	public void deregisterSyncedNode(SyncedNode node) {
 		syncedNodes.remove(node.identifier);
 	}
@@ -60,6 +66,9 @@ public class DataHandler {
 
 
 
+	/**
+	 * @return the identifiers of all registered root nodes.
+	 */
 	public Set<String> getHandledIdentifiers() {
 		return syncedNodes.keySet();
 	}
@@ -67,6 +76,9 @@ public class DataHandler {
 
 
 
+	/**
+	 * Called on a {@link DataChange} in the external data-storage.
+	 */
 	public void onExternalChange(DataChange change) {
 		SyncedNode node = syncedNodes.get(change.getIdentifier());
 		if (node != null) {
@@ -80,6 +92,9 @@ public class DataHandler {
 
 
 
+	/**
+	 * Called on a {@link DataChange} in the local (in memory) data-storage.
+	 */
 	public void onLocalChange(DataChange change) {
 		if (getExternalDataHandler() != null && change != null) {
 			getExternalDataHandler().applyChange(change, project);

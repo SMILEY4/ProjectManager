@@ -16,6 +16,9 @@ public class NestedChange extends DataChange {
 
 
 
+	/**
+	 * @return the next {@link DataChange} in the chain.
+	 */
 	public DataChange getNext() {
 		return next;
 	}

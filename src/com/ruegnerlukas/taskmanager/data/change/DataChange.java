@@ -1,5 +1,7 @@
 package com.ruegnerlukas.taskmanager.data.change;
 
+import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedElement;
+
 public abstract class DataChange {
 
 
@@ -10,6 +12,9 @@ public abstract class DataChange {
 
 
 
+	/**
+	 * @return a new {@link DataChange} ({@link ValueChange or {@link NestedChange}}) with the given path (single identifiers separated by "/") and the new value as an {@link Object}.
+	 * */
 	public static DataChange createValueChange(String identifierPath, Object newObject) {
 		String[] tokens = identifierPath.split("/");
 		if (tokens.length == 1) {
@@ -24,7 +29,9 @@ public abstract class DataChange {
 
 
 
-
+	/**
+	 * @return a new {@link DataChange} ({@link ListChange or {@link NestedChange}}) with the given path (single identifiers separated by "/") and the added {@link Object}.
+	 * */
 	public static DataChange createListChangeAdd(String identifierPath, Object addedObject) {
 		String[] tokens = identifierPath.split("/");
 		if (tokens.length == 1) {
@@ -39,7 +46,9 @@ public abstract class DataChange {
 
 
 
-
+	/**
+	 * @return a new {@link DataChange} ({@link ListChange or {@link NestedChange}}) with the given path (single identifiers separated by "/") and the removed {@link SyncedElement} identified by the given identifier.
+	 * */
 	public static DataChange createListChangeRemove(String identifierPath, String removedIdentifier) {
 		String[] tokens = identifierPath.split("/");
 		if (tokens.length == 1) {
@@ -55,6 +64,9 @@ public abstract class DataChange {
 
 
 
+	/**
+	 * @return a new {@link DataChange} ({@link ListChange or {@link NestedChange}}) with the given path (single identifiers separated by "/") and the removed {@link Object}.
+	 * */
 	public static DataChange createListChangeRemove(String identifierPath, Object removedElement) {
 		String[] tokens = identifierPath.split("/");
 		if (tokens.length == 1) {
@@ -70,6 +82,9 @@ public abstract class DataChange {
 
 
 
+	/**
+	 * @return a new {@link DataChange} ({@link MapChange or {@link NestedChange}}) with the given path (single identifiers separated by "/") and the removed key.
+	 * */
 	public static DataChange createMapChangeRemove(String identifierPath, Object key) {
 		String[] tokens = identifierPath.split("/");
 		if (tokens.length == 1) {
@@ -84,7 +99,9 @@ public abstract class DataChange {
 
 
 
-
+	/**
+	 * @return a new {@link DataChange} ({@link MapChange or {@link NestedChange}}) with the given path (single identifiers separated by "/") and the added key and object.
+	 * */
 	public static DataChange createMapChangeAdd(String identifierPath, Object key, Object value) {
 		String[] tokens = identifierPath.split("/");
 		if (tokens.length == 1) {

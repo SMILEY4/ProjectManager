@@ -16,6 +16,9 @@ public class ValueChange extends DataChange {
 
 
 
+	/**
+	 * @return the new value of the element with the given identifier.
+	 */
 	public Object getNewValue() {
 		return newValue;
 	}

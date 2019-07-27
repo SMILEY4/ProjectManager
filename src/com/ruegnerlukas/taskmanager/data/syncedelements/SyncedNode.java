@@ -32,6 +32,9 @@ public class SyncedNode {
 
 
 
+	/**
+	 * Called when the {@link SyncedElement} connected to this node was changed.
+	 */
 	protected void onManagedElementChanged(DataChange change) {
 		if (parent == null) {
 			dataHandler.onLocalChange(change);
@@ -49,6 +52,9 @@ public class SyncedNode {
 
 
 
+	/**
+	 * @return a created {@link DataChange}. If the given list is not empty, a {@link NestedChange} will be created from the givne list and change.
+	 */
 	private DataChange createChangeFromPath(List<SyncedNode> path, DataChange change) {
 		if (path.size() == 1) {
 			return change;

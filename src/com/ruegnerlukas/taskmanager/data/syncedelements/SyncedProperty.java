@@ -55,6 +55,7 @@ public class SyncedProperty<T> extends CustomProperty<T> implements SyncedElemen
 
 
 
+	@Override
 	public SyncedNode getNode() {
 		return node;
 	}

@@ -22,6 +22,9 @@ public class MapChange extends DataChange {
 
 
 
+	/**
+	 * @return true, of an entry was added to the map.
+	 */
 	public boolean wasAdded() {
 		return wasAdded;
 	}
@@ -29,6 +32,9 @@ public class MapChange extends DataChange {
 
 
 
+	/**
+	 * @return true, of an entry was removed from the map.
+	 */
 	public boolean wasRemoved() {
 		return !wasAdded;
 	}
@@ -36,6 +42,9 @@ public class MapChange extends DataChange {
 
 
 
+	/**
+	 * @return the key of the added entry (or null if removed)
+	 */
 	public Object getAddedKey() {
 		return wasAdded() ? key : null;
 	}
@@ -43,6 +52,9 @@ public class MapChange extends DataChange {
 
 
 
+	/**
+	 * @return the value of the added entry (or null if removed)
+	 */
 	public Object getAddedValue() {
 		return wasAdded() ? value : null;
 	}
@@ -50,6 +62,9 @@ public class MapChange extends DataChange {
 
 
 
+	/**
+	 * @return the identifier of the added value (or not if element was removed or is not a {@link SyncedElement}).
+	 */
 	public String getAddedIdentifier() {
 		return wasAdded() && value instanceof SyncedElement ? ((SyncedElement) value).getNode().identifier : null;
 	}
@@ -57,6 +72,9 @@ public class MapChange extends DataChange {
 
 
 
+	/**
+	 * @return the key of the removed entry (or null if added)
+	 */
 	public Object getRemovedKey() {
 		return wasRemoved() ? key : null;
 	}
@@ -64,6 +82,9 @@ public class MapChange extends DataChange {
 
 
 
+	/**
+	 * @return the value of the removed entry (or null if added)
+	 */
 	public Object getRemovedValue() {
 		return wasRemoved() ? key : null;
 	}
