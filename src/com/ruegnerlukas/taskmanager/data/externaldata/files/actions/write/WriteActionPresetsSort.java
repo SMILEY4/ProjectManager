@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.data.externaldata.files.actions;
+package com.ruegnerlukas.taskmanager.data.externaldata.files.actions.write;
 
 import com.google.gson.Gson;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
@@ -15,7 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-public class ActionPresetsSort extends FileAction {
+public class WriteActionPresetsSort extends WriteFileAction {
 
 
 	@Override
@@ -38,7 +38,7 @@ public class ActionPresetsSort extends FileAction {
 					File file = fileHandler.getPresetSortFile(presetName, true);
 
 					// write
-					Gson gson = JsonUtils.buildGson();
+					Gson gson = JsonUtils.getGson(project);
 					POJOPresetSort data = new POJOPresetSort(presetName, sortData);
 					Writer writer = new FileWriter(file);
 					gson.toJson(data, writer);

@@ -325,6 +325,36 @@ public class TaskLogic {
 
 
 	/**
+	 * @return the id of the given task
+	 */
+	public static int getTaskID(Task task) {
+		IDValue value = getTaskIDValue(task);
+		if (value != null) {
+			return value.getValue();
+		} else {
+			return -1;
+		}
+	}
+
+
+
+
+	/**
+	 * @return the {@link IDValue} of the given task
+	 */
+	public static IDValue getTaskIDValue(Task task) {
+		for (TaskValue<?> value : task.values.values()) {
+			if (value.getAttType() == AttributeType.ID) {
+				return (IDValue) value;
+			}
+		}
+		return null;
+	}
+
+
+
+
+	/**
 	 * Sets the value of the given {@link Task} in the given {@link Project} to the given {@link TaskValue} for the given {@link TaskAttribute} (if valid). <br>
 	 * This fires a new {@link TaskValueChangeEvent} (if successful) and calls the {@code onTaskModified(...)}-method of {@link TaskDisplayLogic} (if necessary)
 	 *

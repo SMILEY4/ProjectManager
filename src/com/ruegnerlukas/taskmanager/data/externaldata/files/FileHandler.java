@@ -4,6 +4,9 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class FileHandler {
 
@@ -33,15 +36,24 @@ public class FileHandler {
 	}
 
 
-//	public List<File> getAttributeFiles() {
-//		List<File> files = new ArrayList<>();
-//		File dir = getFile(FILENAME_ATTRIBUTE_DIRECTORY);
-//		File[] arr = dir.listFiles();
-//		if (arr != null) {
-//			files.addAll(Arrays.asList(arr));
-//		}
-//		return files;
-//	}
+
+
+	public List<File> getAttributeFiles() {
+
+		List<File> files = new ArrayList<>();
+
+		File dir = getFile(FILENAME_ATTRIBUTE_DIRECTORY, false);
+		if (dir == null || !dir.exists()) {
+			return files;
+		}
+
+		File[] arr = dir.listFiles();
+		if (arr != null) {
+			files.addAll(Arrays.asList(arr));
+		}
+
+		return files;
+	}
 
 
 
@@ -55,6 +67,25 @@ public class FileHandler {
 
 	public File getTaskFile(String taskID, boolean createIfNeccessary) {
 		return getFile(FILENAME_TASK_DIRECTORY + "/" + taskID + ".json", createIfNeccessary);
+	}
+
+
+
+
+	public List<File> getTaskFiles() {
+		List<File> files = new ArrayList<>();
+
+		java.io.File dir = getFile(FILENAME_TASK_DIRECTORY, false);
+		if (dir == null || !dir.exists()) {
+			return files;
+		}
+
+		File[] arr = dir.listFiles();
+		if (arr != null) {
+			files.addAll(Arrays.asList(arr));
+		}
+
+		return files;
 	}
 
 

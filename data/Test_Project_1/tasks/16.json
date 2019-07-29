@@ -1,0 +1,24 @@
+{
+  "id": 16,
+  "values": {
+    "2": {
+      "value": "2019-07-29T16:09:42.099",
+      "type": "CREATED"
+    },
+    "3": {
+      "value": "2019-07-29T16:09:42.099",
+      "type": "LAST_UPDATED"
+    },
+    "4": {
+      "value": {
+        "color": "RED",
+        "name": "Bug"
+      },
+      "type": "FLAG"
+    },
+    "5": {
+      "value": "b",
+      "type": "CHOICE"
+    }
+  }
+}

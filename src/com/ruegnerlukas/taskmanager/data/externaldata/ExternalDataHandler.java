@@ -9,6 +9,12 @@ public interface ExternalDataHandler {
 
 
 	/**
+	 * @return a new {@link Project} created with the data handled by this {@link ExternalDataHandler}.
+	 */
+	Project createProject();
+
+
+	/**
 	 * Applies given {@link DataChange} change to the external data-storage.
 	 */
 	void applyChange(DataChange change, Project project);

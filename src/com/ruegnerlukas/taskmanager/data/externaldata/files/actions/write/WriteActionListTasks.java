@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.data.externaldata.files.actions;
+package com.ruegnerlukas.taskmanager.data.externaldata.files.actions.write;
 
 import com.google.gson.Gson;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
@@ -21,7 +21,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-public class ActionListTasks extends FileAction {
+public class WriteActionListTasks extends WriteFileAction {
 
 
 	@Override
@@ -51,7 +51,7 @@ public class ActionListTasks extends FileAction {
 				try {
 
 					// write attribute
-					Gson gson = JsonUtils.buildGson();
+					Gson gson = JsonUtils.getGson(project);
 
 					Writer writer = new FileWriter(file);
 					gson.toJson(data, writer);
@@ -86,7 +86,7 @@ public class ActionListTasks extends FileAction {
 					File file = fileHandler.getTaskFile(idValue.getValue().toString(), true);
 
 					// write
-					Gson gson = JsonUtils.buildGson();
+					Gson gson = JsonUtils.getGson(project);
 					POJOTask data = new POJOTask(task);
 					Writer writer = new FileWriter(file);
 					gson.toJson(data, writer);

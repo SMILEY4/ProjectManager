@@ -1,0 +1,26 @@
+{
+  "id": 5,
+  "name": "Attribute 6e3555b7",
+  "type": "CHOICE",
+  "values": {
+    "USE_DEFAULT": {
+      "value": true,
+      "type": "USE_DEFAULT"
+    },
+    "DEFAULT_VALUE": {
+      "value": {
+        "value": "b",
+        "type": "CHOICE"
+      },
+      "type": "DEFAULT_VALUE"
+    },
+    "CHOICE_VALUES": {
+      "value": [
+        "a",
+        "b",
+        "c"
+      ],
+      "type": "CHOICE_VALUES"
+    }
+  }
+}

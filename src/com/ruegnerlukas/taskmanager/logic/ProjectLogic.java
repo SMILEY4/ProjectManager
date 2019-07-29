@@ -46,6 +46,16 @@ public class ProjectLogic {
 
 
 
+	public static Project loadLocalProject() {
+		// TODO set root directory
+		final String pathRootDir = "D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\SimpleTaskManager\\data\\Test_Project_1";
+		ExternalFileHandler handler = new ExternalFileHandler(pathRootDir);
+		return handler.createProject();
+	}
+
+
+
+
 	/**
 	 * @return a new {@link Project} with a generic name and an {@link ExternalFileHandler}
 	 */
@@ -60,7 +70,8 @@ public class ProjectLogic {
 	 * @return a new {@link Project} with the given name and an {@link ExternalFileHandler}.
 	 */
 	public static Project createNewLocalProject(String name) {
-		Project project = new Project(new ExternalFileHandler()); // TODO set root directory
+		// TODO set root directory
+		Project project = new Project(new ExternalFileHandler("D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\SimpleTaskManager\\data\\Test_Project_1"));
 		project.settings.name.set(name);
 		project.settings.attributesLocked.set(false);
 		project.settings.taskIDCounter.set(0);

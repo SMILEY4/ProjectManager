@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.data.externaldata.files.actions;
+package com.ruegnerlukas.taskmanager.data.externaldata.files.actions.write;
 
 import com.google.gson.Gson;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
@@ -6,16 +6,16 @@ import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.MapChange;
 import com.ruegnerlukas.taskmanager.data.externaldata.files.FileHandler;
 import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.JsonUtils;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.POJOPresetGroup;
+import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.POJOPresetMaster;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGroupData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.MasterPreset;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
 
-public class ActionPresetsGroup extends FileAction {
+public class WriteActionPresetsMaster extends WriteFileAction {
 
 
 	@Override
@@ -27,19 +27,19 @@ public class ActionPresetsGroup extends FileAction {
 
 			// add
 			if (mapChange.wasAdded()) {
-				if (!(mapChange.getAddedValue() instanceof TaskGroupData)) {
+				if (!(mapChange.getAddedValue() instanceof MasterPreset)) {
 					return;
 				}
 				String presetName = (String) mapChange.getAddedKey();
-				TaskGroupData groupData = (TaskGroupData) mapChange.getAddedValue();
+				MasterPreset masterData = (MasterPreset) mapChange.getAddedValue();
 
 				try {
 
-					File file = fileHandler.getPresetGroupFile(presetName, true);
+					File file = fileHandler.getPresetMasterFile(presetName, true);
 
 					// write
-					Gson gson = JsonUtils.buildGson();
-					POJOPresetGroup data = new POJOPresetGroup(presetName, groupData);
+					Gson gson = JsonUtils.getGson(project);
+					POJOPresetMaster data = new POJOPresetMaster(presetName, masterData);
 					Writer writer = new FileWriter(file);
 					gson.toJson(data, writer);
 					writer.flush();
@@ -54,12 +54,12 @@ public class ActionPresetsGroup extends FileAction {
 
 			//remove
 			if (mapChange.wasRemoved()) {
-				if (!(mapChange.getRemovedValue() instanceof TaskGroupData)) {
+				if (!(mapChange.getRemovedValue() instanceof MasterPreset)) {
 					return;
 				}
 				String presetName = (String) mapChange.getRemovedKey();
 
-				File file = fileHandler.getPresetGroupFile(presetName, false);
+				File file = fileHandler.getPresetMasterFile(presetName, false);
 				if (file != null) {
 					file.delete();
 				}

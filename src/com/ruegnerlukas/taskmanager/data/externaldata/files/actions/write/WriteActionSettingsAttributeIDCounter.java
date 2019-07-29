@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.data.externaldata.files.actions;
+package com.ruegnerlukas.taskmanager.data.externaldata.files.actions.write;
 
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
@@ -12,7 +12,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.Project;
 
 import java.io.*;
 
-public class ActionSettingsTaskIDCounter extends FileAction {
+public class WriteActionSettingsAttributeIDCounter extends WriteFileAction {
 
 
 
@@ -38,7 +38,7 @@ public class ActionSettingsTaskIDCounter extends FileAction {
 
 			File file = fileHandler.getSettingsFile(true);
 
-			Gson gson = JsonUtils.buildGson();
+			Gson gson = JsonUtils.getGson(project);
 
 			// parse
 			JsonReader reader = new JsonReader(new FileReader(file));
@@ -48,7 +48,7 @@ public class ActionSettingsTaskIDCounter extends FileAction {
 			}
 
 			// modify
-			data.taskIDCounter = (Integer) valueChange.getNewValue();
+			data.attributeIDCounter = (Integer) valueChange.getNewValue();
 
 			// write back
 			Writer writer = new FileWriter(file);

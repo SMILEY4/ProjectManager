@@ -36,6 +36,7 @@ public class Task implements SyncedElement {
 
 	public Task(int id, Project project, DataHandler handler) {
 
+
 		this.node = new SyncedNode("Task-" + id, project.data.tasks.getNode(), handler);
 		this.node.setManagedElement(this);
 
@@ -51,6 +52,8 @@ public class Task implements SyncedElement {
 				}
 			}
 		});
+
+
 	}
 
 
