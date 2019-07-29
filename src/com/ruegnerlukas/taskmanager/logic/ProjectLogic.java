@@ -27,7 +27,6 @@ public class ProjectLogic {
 	 */
 	public static void closeCurrentProject() {
 		if (Data.projectProperty.get() != null) {
-			Data.projectProperty.get().dispose();
 			setCurrentProject(null);
 		}
 	}
@@ -36,10 +35,12 @@ public class ProjectLogic {
 
 
 	/**
-	 * Cloeses the active {@link Project} and sets the given {@link Project} to the new active {@link Project}.
+	 * Closes the active {@link Project} and sets the given {@link Project} to the new active {@link Project}.
 	 */
 	public static void setCurrentProject(Project project) {
-		closeCurrentProject();
+		if (Data.projectProperty.get() != null) {
+			Data.projectProperty.get().dispose();
+		}
 		Data.projectProperty.set(project);
 	}
 
