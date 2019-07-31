@@ -67,7 +67,9 @@ public class TaskFlag {
 
 	@Override
 	public int hashCode() {
-		return name.get().hashCode();
+		int result = color.get().hashCode();
+		result = 31 * result + name.get().hashCode();
+		return result;
 	}
 
 
