@@ -269,7 +269,7 @@ public class FlagListItem extends ContentNodeItem {
 	public TaskFlag[] getValue() {
 		TaskFlag[] flags = new TaskFlag[boxFlagNodes.getChildren().size()];
 		for (int i = 0; i < flags.length; i++) {
-			flags[i] = ((FlagItem) boxFlagNodes.getChildren().get(i)).getFlag(true);
+			flags[i] = ((FlagItem) boxFlagNodes.getChildren().get(i)).getFlag(true, true);
 		}
 		return flags;
 	}
@@ -501,12 +501,20 @@ class FlagItem extends HBox {
 
 
 
-	public TaskFlag getFlag(boolean applyModifications) {
-		if (applyModifications) {
-			this.flag.name.set(nameProperty.get());
-			this.flag.color.set(colorProperty.get());
+	public TaskFlag getFlag(boolean createNew, boolean applyModifications) {
+		if (createNew) {
+			if (applyModifications) {
+				return new TaskFlag(this.nameProperty.get(), this.colorProperty.get());
+			} else {
+				return new TaskFlag(this.flag.name.get(), this.flag.color.get());
+			}
+		} else {
+			if (applyModifications) {
+				this.flag.name.set(nameProperty.get());
+				this.flag.color.set(colorProperty.get());
+			}
+			return this.flag;
 		}
-		return this.flag;
 	}
 
 
