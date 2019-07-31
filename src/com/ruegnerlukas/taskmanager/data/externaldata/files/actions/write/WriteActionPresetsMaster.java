@@ -1,14 +1,13 @@
 package com.ruegnerlukas.taskmanager.data.externaldata.files.actions.write;
 
 import com.google.gson.Gson;
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.MapChange;
 import com.ruegnerlukas.taskmanager.data.externaldata.files.FileHandler;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.JsonUtils;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.POJOPresetMaster;
+import com.ruegnerlukas.taskmanager.data.externaldata.files.JsonUtils;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.MasterPreset;
+import com.ruegnerlukas.taskmanager.data.raw.RawPresetMaster;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,20 +32,19 @@ public class WriteActionPresetsMaster extends WriteFileAction {
 				String presetName = (String) mapChange.getAddedKey();
 				MasterPreset masterData = (MasterPreset) mapChange.getAddedValue();
 
+
+				File file = fileHandler.getPresetMasterFile(presetName, true);
+
+				// write
 				try {
-
-					File file = fileHandler.getPresetMasterFile(presetName, true);
-
-					// write
-					Gson gson = JsonUtils.getGson(project);
-					POJOPresetMaster data = new POJOPresetMaster(presetName, masterData);
+					RawPresetMaster data = RawPresetMaster.toRaw(presetName, masterData);
+					Gson gson = JsonUtils.getGson();
 					Writer writer = new FileWriter(file);
 					gson.toJson(data, writer);
 					writer.flush();
 					writer.close();
-
 				} catch (IOException e) {
-					Logger.get().error(e);
+					e.printStackTrace();
 				}
 
 

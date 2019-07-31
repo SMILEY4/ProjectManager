@@ -29,14 +29,17 @@ public abstract class AttributeValue<T> {
 	}
 
 
+
+
 	@Override
 	public boolean equals(Object other) {
-		if(other instanceof AttributeValue) {
-			return this.compare((AttributeValue<?>)other) == 0;
+		if (other instanceof AttributeValue) {
+			return this.compare((AttributeValue<?>) other) == 0;
 		} else {
 			return false;
 		}
 	}
+
 
 
 

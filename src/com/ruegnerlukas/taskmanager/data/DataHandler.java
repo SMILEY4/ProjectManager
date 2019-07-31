@@ -18,6 +18,8 @@ public class DataHandler {
 
 	private Project project;
 
+	private boolean muted = false;
+
 
 
 
@@ -80,6 +82,9 @@ public class DataHandler {
 	 * Called on a {@link DataChange} in the external data-storage.
 	 */
 	public void onExternalChange(DataChange change) {
+		if (muted) {
+			return;
+		}
 		SyncedNode node = syncedNodes.get(change.getIdentifier());
 		if (node != null) {
 			SyncedElement element = node.getManagedElement();
@@ -96,10 +101,24 @@ public class DataHandler {
 	 * Called on a {@link DataChange} in the local (in memory) data-storage.
 	 */
 	public void onLocalChange(DataChange change) {
+		if (muted) {
+			return;
+		}
 		if (getExternalDataHandler() != null && change != null) {
 			getExternalDataHandler().applyChange(change, project);
 		}
 	}
+
+
+
+
+	public void setMuted(boolean muted) {
+		this.muted = muted;
+	}
+
+
+
+
 
 
 }

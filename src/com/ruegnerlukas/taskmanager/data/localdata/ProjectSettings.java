@@ -17,10 +17,10 @@ public class ProjectSettings {
 
 
 	ProjectSettings(Project project) {
-		name = new SyncedProperty<>(Identifiers.SETTINGS_PROJECT_NAME, null, project.dataHandler);
-		attributesLocked = new SyncedProperty<>(Identifiers.SETTINGS_ATTRIBUTES_LOCKED, null, project.dataHandler);
-		attIDCounter = new SyncedProperty<>(Identifiers.SETTINGS_ATTRIBUTE_IDCOUNTER, null, project.dataHandler);
-		taskIDCounter = new SyncedProperty<>(Identifiers.SETTINGS_TASK_IDCOUNTER, null, project.dataHandler);
+		name = new SyncedProperty<>(Identifiers.SETTINGS_PROJECT_NAME, null, project.dataHandler, "");
+		attributesLocked = new SyncedProperty<>(Identifiers.SETTINGS_ATTRIBUTES_LOCKED, null, project.dataHandler, false);
+		attIDCounter = new SyncedProperty<>(Identifiers.SETTINGS_ATTRIBUTE_IDCOUNTER, null, project.dataHandler, 0);
+		taskIDCounter = new SyncedProperty<>(Identifiers.SETTINGS_TASK_IDCOUNTER, null, project.dataHandler, 0);
 	}
 
 

@@ -1,15 +1,14 @@
 package com.ruegnerlukas.taskmanager.data.externaldata.files.actions.write;
 
 import com.google.gson.Gson;
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.ListChange;
 import com.ruegnerlukas.taskmanager.data.change.NestedChange;
 import com.ruegnerlukas.taskmanager.data.externaldata.files.FileHandler;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.JsonUtils;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.POJOTaskAttribute;
+import com.ruegnerlukas.taskmanager.data.externaldata.files.JsonUtils;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.raw.RawTaskAttribute;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 import java.io.File;
@@ -43,18 +42,14 @@ public class WriteActionListAttributes extends WriteFileAction {
 				if (attribute == null) {
 					return;
 				}
-				POJOTaskAttribute data = new POJOTaskAttribute(attribute);
 
 				try {
-
-					// write attribute
-					Gson gson = JsonUtils.getGson(project);
-
+					RawTaskAttribute data = RawTaskAttribute.toRaw(attribute);
+					Gson gson = JsonUtils.getGson();
 					Writer writer = new FileWriter(file);
 					gson.toJson(data, writer);
 					writer.flush();
 					writer.close();
-
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -76,20 +71,19 @@ public class WriteActionListAttributes extends WriteFileAction {
 				}
 				TaskAttribute attribute = (TaskAttribute) listChange.getAdded();
 
+
+				File file = fileHandler.getAttributeFile(Integer.toString(attribute.id), true);
+
+				// write
 				try {
-
-					File file = fileHandler.getAttributeFile(Integer.toString(attribute.id), true);
-
-					// write
-					Gson gson = JsonUtils.getGson(project);
-					POJOTaskAttribute data = new POJOTaskAttribute(attribute);
+					RawTaskAttribute data = RawTaskAttribute.toRaw(attribute);
+					Gson gson = JsonUtils.getGson();
 					Writer writer = new FileWriter(file);
 					gson.toJson(data, writer);
 					writer.flush();
 					writer.close();
-
 				} catch (IOException e) {
-					Logger.get().error(e);
+					e.printStackTrace();
 				}
 
 

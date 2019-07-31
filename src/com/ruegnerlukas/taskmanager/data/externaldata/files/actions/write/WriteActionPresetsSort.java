@@ -1,14 +1,13 @@
 package com.ruegnerlukas.taskmanager.data.externaldata.files.actions.write;
 
 import com.google.gson.Gson;
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.MapChange;
 import com.ruegnerlukas.taskmanager.data.externaldata.files.FileHandler;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.JsonUtils;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.POJOPresetSort;
+import com.ruegnerlukas.taskmanager.data.externaldata.files.JsonUtils;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortData;
+import com.ruegnerlukas.taskmanager.data.raw.RawPresetSort;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -33,20 +32,19 @@ public class WriteActionPresetsSort extends WriteFileAction {
 				String presetName = (String) mapChange.getAddedKey();
 				SortData sortData = (SortData) mapChange.getAddedValue();
 
+
+				File file = fileHandler.getPresetSortFile(presetName, true);
+
+				// write
 				try {
-
-					File file = fileHandler.getPresetSortFile(presetName, true);
-
-					// write
-					Gson gson = JsonUtils.getGson(project);
-					POJOPresetSort data = new POJOPresetSort(presetName, sortData);
+					RawPresetSort data = RawPresetSort.toRaw(presetName, sortData);
+					Gson gson = JsonUtils.getGson();
 					Writer writer = new FileWriter(file);
 					gson.toJson(data, writer);
 					writer.flush();
 					writer.close();
-
 				} catch (IOException e) {
-					Logger.get().error(e);
+					e.printStackTrace();
 				}
 
 

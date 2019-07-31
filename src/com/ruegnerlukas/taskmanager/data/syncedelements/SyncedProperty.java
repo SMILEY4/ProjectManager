@@ -17,6 +17,14 @@ public class SyncedProperty<T> extends CustomProperty<T> implements SyncedElemen
 
 
 	public SyncedProperty(String identifier, SyncedNode parent, DataHandler handler) {
+		this(identifier, parent, handler, null);
+	}
+
+
+
+
+	public SyncedProperty(String identifier, SyncedNode parent, DataHandler handler, T initialValue) {
+		this.set(initialValue);
 		this.node = new SyncedNode(identifier, parent, handler);
 		this.node.setManagedElement(this);
 		this.listener = new FXChangeListener<T>(this) {

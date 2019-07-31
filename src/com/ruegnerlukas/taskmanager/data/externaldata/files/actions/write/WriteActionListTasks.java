@@ -1,18 +1,17 @@
 package com.ruegnerlukas.taskmanager.data.externaldata.files.actions.write;
 
 import com.google.gson.Gson;
-import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.ListChange;
 import com.ruegnerlukas.taskmanager.data.change.NestedChange;
 import com.ruegnerlukas.taskmanager.data.externaldata.files.FileHandler;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.JsonUtils;
-import com.ruegnerlukas.taskmanager.data.externaldata.files.utils.POJOTask;
+import com.ruegnerlukas.taskmanager.data.externaldata.files.JsonUtils;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.IDValue;
+import com.ruegnerlukas.taskmanager.data.raw.RawTask;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
@@ -46,18 +45,15 @@ public class WriteActionListTasks extends WriteFileAction {
 				if (task == null) {
 					return;
 				}
-				POJOTask data = new POJOTask(task);
 
+				// write
 				try {
-
-					// write attribute
-					Gson gson = JsonUtils.getGson(project);
-
+					RawTask data = RawTask.toRaw(task);
+					Gson gson = JsonUtils.getGson();
 					Writer writer = new FileWriter(file);
 					gson.toJson(data, writer);
 					writer.flush();
 					writer.close();
-
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -79,22 +75,19 @@ public class WriteActionListTasks extends WriteFileAction {
 				}
 				Task task = (Task) listChange.getAdded();
 
+
+				File file = fileHandler.getTaskFile(TaskLogic.getTaskID(task) + "", true);
+
+				// write
 				try {
-
-					TaskAttribute idAttrib = AttributeLogic.findAttributeByType(project, AttributeType.ID);
-					IDValue idValue = (IDValue) TaskLogic.getTaskValue(task, idAttrib);
-					File file = fileHandler.getTaskFile(idValue.getValue().toString(), true);
-
-					// write
-					Gson gson = JsonUtils.getGson(project);
-					POJOTask data = new POJOTask(task);
+					RawTask data = RawTask.toRaw(task);
+					Gson gson = JsonUtils.getGson();
 					Writer writer = new FileWriter(file);
 					gson.toJson(data, writer);
 					writer.flush();
 					writer.close();
-
 				} catch (IOException e) {
-					Logger.get().error(e);
+					e.printStackTrace();
 				}
 
 
