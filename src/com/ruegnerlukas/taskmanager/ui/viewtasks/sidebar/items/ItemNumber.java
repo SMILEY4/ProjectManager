@@ -11,13 +11,13 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.SpinnerUtils;
-import javafx.scene.control.Spinner;
+import com.ruegnerlukas.taskmanager.utils.uielements.mutableelements.MutableSpinner;
 
 
 public class ItemNumber extends SimpleSidebarItem {
 
 
-	private Spinner<Double> spinner;
+	private MutableSpinner<Double> spinner;
 
 
 
@@ -31,9 +31,9 @@ public class ItemNumber extends SimpleSidebarItem {
 
 	@Override
 	protected void create() {
-		spinner = new Spinner<>();
+		spinner = new MutableSpinner<>();
 		spinner.setEditable(true);
-		spinner.valueProperty().addListener(((observable, oldValue, newValue) -> {
+		spinner.addMutableValueListener(((observable, oldValue, newValue) -> {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NumberValue(newValue));
 		}));
 		this.setValueNode(spinner);
@@ -45,6 +45,8 @@ public class ItemNumber extends SimpleSidebarItem {
 
 	@Override
 	protected void refresh() {
+
+		spinner.setMuted(true);
 
 		final TaskValue<?> objValue = TaskLogic.getValueOrDefault(getTask(), getAttribute());
 
@@ -61,6 +63,9 @@ public class ItemNumber extends SimpleSidebarItem {
 		if (objValue != null && objValue.getAttType() != null) {
 			spinner.getValueFactory().setValue(((NumberValue) objValue).getValue());
 		}
+
+		spinner.setMuted(false);
+
 	}
 
 

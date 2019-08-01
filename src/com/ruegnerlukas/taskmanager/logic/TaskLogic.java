@@ -370,12 +370,13 @@ public class TaskLogic {
 
 		// set value
 		TaskValue<?> prevValue = task.values.get(attribute);
-		if (value == null) {
+		if (value == null || value instanceof NoValue) {
 			task.values.remove(attribute);
+			onTaskValueChanged(project, task, attribute, prevValue, null);
 		} else {
 			task.values.put(attribute, value);
+			onTaskValueChanged(project, task, attribute, prevValue, value);
 		}
-		onTaskValueChanged(project, task, attribute, prevValue, value);
 
 		// check/update displayed tasks
 		boolean modifiedDisplay = false;

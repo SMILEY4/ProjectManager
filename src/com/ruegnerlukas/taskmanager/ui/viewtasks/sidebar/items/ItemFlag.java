@@ -9,13 +9,13 @@ import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.utils.uielements.ComboboxUtils;
-import javafx.scene.control.ComboBox;
+import com.ruegnerlukas.taskmanager.utils.uielements.mutableelements.MutableCombobox;
 
 
 public class ItemFlag extends SimpleSidebarItem {
 
 
-	private ComboBox<TaskFlag> choiceFlag;
+	private MutableCombobox<TaskFlag> choiceFlag;
 
 
 
@@ -29,11 +29,11 @@ public class ItemFlag extends SimpleSidebarItem {
 
 	@Override
 	protected void create() {
-		choiceFlag = new ComboBox<>();
+		choiceFlag = new MutableCombobox<>();
 		choiceFlag.setButtonCell(ComboboxUtils.createListCellFlag());
 		choiceFlag.setCellFactory(param -> ComboboxUtils.createListCellFlag());
 		choiceFlag.getItems().addAll(AttributeLogic.FLAG_LOGIC.getFlagList(getAttribute()));
-		choiceFlag.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+		choiceFlag.addMutableSelectedItemListener((observable, oldValue, newValue) -> {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new FlagValue(newValue));
 		});
 		this.setValueNode(choiceFlag);
@@ -46,10 +46,12 @@ public class ItemFlag extends SimpleSidebarItem {
 
 	@Override
 	protected void refresh() {
+		choiceFlag.setMuted(true);
 		final TaskFlag[] flags = AttributeLogic.FLAG_LOGIC.getFlagList(getAttribute());
 		choiceFlag.getItems().setAll(flags);
 		final TaskFlag flag = ((FlagValue) TaskLogic.getValueOrDefault(getTask(), getAttribute())).getValue();
 		choiceFlag.getSelectionModel().select(flag);
+		choiceFlag.setMuted(false);
 	}
 
 

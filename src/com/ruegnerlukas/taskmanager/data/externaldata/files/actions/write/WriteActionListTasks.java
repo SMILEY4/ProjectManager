@@ -95,7 +95,7 @@ public class WriteActionListTasks extends WriteFileAction {
 				if (!(listChange.getRemoved() instanceof Task)) {
 					return;
 				}
-				Task task = (Task) listChange.getAdded();
+				Task task = (Task) listChange.getRemoved();
 				TaskAttribute idAttrib = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 				IDValue idValue = (IDValue) TaskLogic.getTaskValue(task, idAttrib);
 
