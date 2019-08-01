@@ -252,7 +252,6 @@ public class TasksHeader {
 		listenerBadgeSort.removeFromAll();
 		listenerBadgePresets.removeFromAll();
 		listenerNTasks.removeFromAll();
-		Data.projectProperty.get().temporaryData.listenersTaskGroupsChanged.remove(listenerNTasks.getEventHandler());
 	}
 
 }
