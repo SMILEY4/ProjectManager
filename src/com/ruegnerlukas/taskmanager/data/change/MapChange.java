@@ -86,7 +86,7 @@ public class MapChange extends DataChange {
 	 * @return the value of the removed entry (or null if added)
 	 */
 	public Object getRemovedValue() {
-		return wasRemoved() ? key : null;
+		return wasRemoved() ? value : null;
 	}
 
 
