@@ -22,10 +22,36 @@ public class JsonUtils {
 		builder.registerTypeAdapter(RawAttributeValue.class, new RawAttributeValueSerializer());
 		builder.registerTypeAdapter(RawTaskValue.class, new RawTaskValueDeserializer());
 		builder.registerTypeAdapter(RawTaskValue.class, new RawTaskValueSerializer());
+		builder.registerTypeAdapter(RawFilterCriteria.class, new RawFilterCriteriaSerializer());
 		builder.registerTypeAdapter(RawFilterCriteria.class, new RawFilterCriteriaDeserializer());
 		Converters.registerAll(builder);
 		return builder.create();
 	}
+
+
+
+
+	static class RawFilterCriteriaSerializer implements JsonSerializer<RawFilterCriteria> {
+
+
+		@Override
+		public JsonElement serialize(RawFilterCriteria rawCriteria, Type typeOfSrc, JsonSerializationContext context) {
+			Gson gson = getGson();
+			switch (rawCriteria.type) {
+				case TERMINAL:
+					return gson.toJsonTree(rawCriteria, RawFilterTerminal.class);
+				case AND:
+					return gson.toJsonTree(rawCriteria, RawFilterAnd.class);
+				case OR:
+					return gson.toJsonTree(rawCriteria, RawFilterOr.class);
+				default:
+					return null;
+			}
+		}
+
+	}
+
+
 
 
 
