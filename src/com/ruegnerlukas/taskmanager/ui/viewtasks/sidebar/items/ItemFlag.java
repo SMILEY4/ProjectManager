@@ -46,6 +46,8 @@ public class ItemFlag extends SimpleSidebarItem {
 
 	@Override
 	protected void refresh() {
+		final TaskFlag[] flags = AttributeLogic.FLAG_LOGIC.getFlagList(getAttribute());
+		choiceFlag.getItems().setAll(flags);
 		final TaskFlag flag = ((FlagValue) TaskLogic.getValueOrDefault(getTask(), getAttribute())).getValue();
 		choiceFlag.getSelectionModel().select(flag);
 	}
