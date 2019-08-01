@@ -18,4 +18,11 @@ public class RawTextValue extends RawTaskValue {
 		return raw;
 	}
 
+
+
+
+	public static TextValue fromRaw(RawTextValue rawValue) {
+		return new TextValue(rawValue.value);
+	}
+
 }

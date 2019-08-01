@@ -251,7 +251,7 @@ public class TaskLogic {
 		LocalDateTime time = LocalDateTime.now();
 
 		// create task
-		Task task = new Task(id, project, project.dataHandler);
+		Task task = new Task(id, project);
 
 		// set date created
 		TaskAttribute createdAttribute = AttributeLogic.findAttributeByType(project, AttributeType.CREATED);

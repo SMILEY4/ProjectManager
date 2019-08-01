@@ -18,4 +18,11 @@ public class RawFlag {
 		return raw;
 	}
 
+
+
+
+	public static TaskFlag fromRaw(RawFlag value) {
+		return new TaskFlag(value.name, value.color);
+	}
+
 }

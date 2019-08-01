@@ -38,28 +38,15 @@ public class FileHandler {
 
 
 
-	public List<File> getAttributeFiles() {
-
-		List<File> files = new ArrayList<>();
-
-		File dir = getFile(FILENAME_ATTRIBUTE_DIRECTORY, false);
-		if (dir == null || !dir.exists()) {
-			return files;
-		}
-
-		File[] arr = dir.listFiles();
-		if (arr != null) {
-			files.addAll(Arrays.asList(arr));
-		}
-
-		return files;
+	public File getAttributeFile(String attributeName, boolean createIfNeccessary) {
+		return getFile(FILENAME_ATTRIBUTE_DIRECTORY + "/" + attributeName + ".json", createIfNeccessary);
 	}
 
 
 
 
-	public File getAttributeFile(String attributeName, boolean createIfNeccessary) {
-		return getFile(FILENAME_ATTRIBUTE_DIRECTORY + "/" + attributeName + ".json", createIfNeccessary);
+	public List<File> getAttributeFiles() {
+		return getFiles(FILENAME_ATTRIBUTE_DIRECTORY);
 	}
 
 
@@ -73,10 +60,73 @@ public class FileHandler {
 
 
 	public List<File> getTaskFiles() {
+		return getFiles(FILENAME_TASK_DIRECTORY);
+	}
+
+
+
+
+	public File getPresetFilterFile(String name, boolean createIfNeccessary) {
+		return getFile(FILENAME_PRESETS_FILTER_DIRECTORY + "/" + name + ".json", createIfNeccessary);
+	}
+
+
+
+
+	public List<File> getPresetFilterFiles() {
+		return getFiles(FILENAME_PRESETS_FILTER_DIRECTORY);
+	}
+
+
+
+
+	public File getPresetGroupFile(String name, boolean createIfNeccessary) {
+		return getFile(FILENAME_PRESETS_GROUP_DIRECTORY + "/" + name + ".json", createIfNeccessary);
+	}
+
+
+
+
+	public List<File> getPresetGroupFiles() {
+		return getFiles(FILENAME_PRESETS_GROUP_DIRECTORY);
+	}
+
+
+
+
+	public File getPresetSortFile(String name, boolean createIfNeccessary) {
+		return getFile(FILENAME_PRESETS_SORT_DIRECTORY + "/" + name + ".json", createIfNeccessary);
+	}
+
+
+
+
+	public List<File> getPresetSortFiles() {
+		return getFiles(FILENAME_PRESETS_SORT_DIRECTORY);
+	}
+
+
+
+
+	public File getPresetMasterFile(String name, boolean createIfNeccessary) {
+		return getFile(FILENAME_PRESETS_MASTER_DIRECTORY + "/" + name + ".json", createIfNeccessary);
+	}
+
+
+
+
+	public List<File> getPresetMasterFiles() {
+		return getFiles(FILENAME_PRESETS_MASTER_DIRECTORY);
+	}
+
+
+
+
+	private List<File> getFiles(String pathDir) {
 		List<File> files = new ArrayList<>();
 
-		java.io.File dir = getFile(FILENAME_TASK_DIRECTORY, false);
-		if (dir == null || !dir.exists()) {
+		File dir = getFile(pathDir, false);
+		if (dir == null || !dir.exists() || !dir.isDirectory()) {
 			return files;
 		}
 
@@ -91,36 +141,8 @@ public class FileHandler {
 
 
 
-	public File getPresetSortFile(String name, boolean createIfNeccessary) {
-		return getFile(FILENAME_PRESETS_SORT_DIRECTORY + "/" + name + ".json", createIfNeccessary);
-	}
-
-
-
-
-	public File getPresetGroupFile(String name, boolean createIfNeccessary) {
-		return getFile(FILENAME_PRESETS_GROUP_DIRECTORY + "/" + name + ".json", createIfNeccessary);
-	}
-
-
-
-
-	public File getPresetMasterFile(String name, boolean createIfNeccessary) {
-		return getFile(FILENAME_PRESETS_MASTER_DIRECTORY + "/" + name + ".json", createIfNeccessary);
-	}
-
-
-
-
-	public File getPresetFilterFile(String name, boolean createIfNeccessary) {
-		return getFile(FILENAME_PRESETS_FILTER_DIRECTORY + "/" + name + ".json", createIfNeccessary);
-	}
-
-
-
-
-	private File getFile(String path, boolean createIfNeccessary) {
-		File file = new File(rootDirectory.getAbsolutePath() + "/" + path);
+	private File getFile(String pathFile, boolean createIfNeccessary) {
+		File file = new File(rootDirectory.getAbsolutePath() + "/" + pathFile);
 		if (!file.exists() && createIfNeccessary) {
 			try {
 				if (file.isDirectory()) {

@@ -74,7 +74,7 @@ public class AttributeLogic {
 	public static TaskAttribute createTaskAttribute(AttributeType type, String name, Project project) {
 		final int id = project.settings.attIDCounter.get();
 		project.settings.attIDCounter.set(id + 1);
-		TaskAttribute attribute = new TaskAttribute(id, type, project, project.dataHandler);
+		TaskAttribute attribute = new TaskAttribute(id, type, project);
 		initTaskAttribute(attribute);
 		attribute.name.set(name);
 		return attribute;

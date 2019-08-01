@@ -18,4 +18,11 @@ public class RawTextMultiline extends RawAttributeValue {
 		return raw;
 	}
 
+
+
+
+	public static TextMultilineValue fromRaw(RawTextMultiline rawValue) {
+		return new TextMultilineValue(rawValue.value);
+	}
+
 }

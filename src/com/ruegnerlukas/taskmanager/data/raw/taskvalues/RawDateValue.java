@@ -20,4 +20,11 @@ public class RawDateValue extends RawTaskValue {
 		return raw;
 	}
 
+
+
+
+	public static DateValue fromRaw(RawDateValue rawValue) {
+		return new DateValue(rawValue.value);
+	}
+
 }

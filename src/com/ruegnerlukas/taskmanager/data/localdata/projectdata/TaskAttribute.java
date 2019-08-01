@@ -26,8 +26,8 @@ public class TaskAttribute implements SyncedElement {
 
 
 
-	public TaskAttribute(int id, AttributeType type, Project project, DataHandler handler) {
-		this(id, type, project.data.attributes.getNode(), handler);
+	public TaskAttribute(int id, AttributeType type, Project project) {
+		this(id, type, project.data.attributes.getNode(), project.dataHandler);
 	}
 
 

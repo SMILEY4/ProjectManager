@@ -20,4 +20,11 @@ public class RawCreatedValue extends RawTaskValue {
 		return raw;
 	}
 
+
+
+
+	public static CreatedValue fromRaw(RawCreatedValue rawValue) {
+		return new CreatedValue(rawValue.value);
+	}
+
 }

@@ -18,4 +18,11 @@ public class RawNumberDecPlaces extends RawAttributeValue {
 		return raw;
 	}
 
+
+
+
+	public static NumberDecPlacesValue fromRaw(RawNumberDecPlaces rawValue) {
+		return new NumberDecPlacesValue(rawValue.value);
+	}
+
 }

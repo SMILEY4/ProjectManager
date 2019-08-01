@@ -18,4 +18,11 @@ public class RawDescriptionValue extends RawTaskValue {
 		return raw;
 	}
 
+
+
+
+	public static DescriptionValue fromRaw(RawDescriptionValue rawValue) {
+		return new DescriptionValue(rawValue.value);
+	}
+
 }

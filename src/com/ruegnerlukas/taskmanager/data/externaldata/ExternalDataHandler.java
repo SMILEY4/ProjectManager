@@ -11,7 +11,7 @@ public interface ExternalDataHandler {
 	/**
 	 * @return a new {@link Project} created with the data handled by this {@link ExternalDataHandler}.
 	 */
-	Project createProject();
+	Project loadProject();
 
 
 	/**

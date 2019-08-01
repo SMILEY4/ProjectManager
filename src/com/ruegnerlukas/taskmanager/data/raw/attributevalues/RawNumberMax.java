@@ -18,4 +18,11 @@ public class RawNumberMax extends RawAttributeValue {
 		return raw;
 	}
 
+
+
+
+	public static NumberMaxValue fromRaw(RawNumberMax rawValue) {
+		return new NumberMaxValue(rawValue.value);
+	}
+
 }

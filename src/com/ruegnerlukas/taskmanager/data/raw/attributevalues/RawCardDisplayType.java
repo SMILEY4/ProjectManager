@@ -18,4 +18,11 @@ public class RawCardDisplayType extends RawAttributeValue {
 		return raw;
 	}
 
+
+
+
+	public static CardDisplayTypeValue fromRaw(RawCardDisplayType rawValue) {
+		return new CardDisplayTypeValue(rawValue.value);
+	}
+
 }

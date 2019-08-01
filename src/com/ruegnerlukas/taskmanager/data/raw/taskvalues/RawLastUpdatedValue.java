@@ -20,4 +20,11 @@ public class RawLastUpdatedValue extends RawTaskValue {
 		return raw;
 	}
 
+
+
+
+	public static LastUpdatedValue fromRaw(RawLastUpdatedValue rawValue) {
+		return new LastUpdatedValue(rawValue.value);
+	}
+
 }

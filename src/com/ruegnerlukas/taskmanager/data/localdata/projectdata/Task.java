@@ -1,9 +1,8 @@
 package com.ruegnerlukas.taskmanager.data.localdata.projectdata;
 
-import com.ruegnerlukas.taskmanager.data.DataHandler;
+import com.ruegnerlukas.taskmanager.data.Identifiers;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.NestedChange;
-import com.ruegnerlukas.taskmanager.data.Identifiers;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.IDValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
@@ -34,13 +33,13 @@ public class Task implements SyncedElement {
 
 
 
-	public Task(int id, Project project, DataHandler handler) {
+	public Task(int id, Project project) {
 
 
-		this.node = new SyncedNode("Task-" + id, project.data.tasks.getNode(), handler);
+		this.node = new SyncedNode("Task-" + id, project.data.tasks.getNode(), project.dataHandler);
 		this.node.setManagedElement(this);
 
-		this.values = new SyncedMap<>(Identifiers.TASK_VALUES, node, handler);
+		this.values = new SyncedMap<>(Identifiers.TASK_VALUES, node, project.dataHandler);
 		TaskAttribute idAttribute = AttributeLogic.findAttributeByType(project, AttributeType.ID);
 		values.put(idAttribute, new IDValue(id));
 

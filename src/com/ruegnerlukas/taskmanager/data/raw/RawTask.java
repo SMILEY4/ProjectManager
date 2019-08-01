@@ -1,12 +1,15 @@
 package com.ruegnerlukas.taskmanager.data.raw;
 
+import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.raw.taskvalues.RawTaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class RawTask {
 
@@ -28,5 +31,25 @@ public class RawTask {
 		return raw;
 	}
 
+
+
+
+	public static Task fromRaw(RawTask rawTask, RawProject rawProject, Project project) {
+		Task task = new Task(rawTask.id, project);
+		fromRaw(task, rawTask, rawProject, project);
+		return task;
+	}
+
+
+
+
+	public static void fromRaw(Task task, RawTask rawTask, RawProject rawProject, Project project) {
+		for (Map.Entry<Integer, RawTaskValue> entry : rawTask.values.entrySet()) {
+			TaskAttribute attribute = AttributeLogic.findAttributeByID(project, entry.getKey());
+			if (attribute != null) {
+				task.values.put(attribute, RawTaskValue.fromRaw(entry.getValue(), rawProject, project));
+			}
+		}
+	}
 
 }

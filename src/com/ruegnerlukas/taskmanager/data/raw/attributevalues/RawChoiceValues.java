@@ -18,4 +18,11 @@ public class RawChoiceValues extends RawAttributeValue {
 		return raw;
 	}
 
+
+
+
+	public static ChoiceListValue fromRaw(RawChoiceValues rawValue) {
+		return new ChoiceListValue(rawValue.values);
+	}
+
 }

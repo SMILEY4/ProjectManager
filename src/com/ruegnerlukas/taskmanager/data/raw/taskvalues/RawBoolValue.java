@@ -18,4 +18,11 @@ public class RawBoolValue extends RawTaskValue {
 		return raw;
 	}
 
+
+
+
+	public static BoolValue fromRaw(RawBoolValue rawValue) {
+		return new BoolValue(rawValue.value);
+	}
+
 }

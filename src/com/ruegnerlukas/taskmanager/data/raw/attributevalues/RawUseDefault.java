@@ -18,4 +18,11 @@ public class RawUseDefault extends RawAttributeValue {
 		return raw;
 	}
 
+
+
+
+	public static UseDefaultValue fromRaw(RawUseDefault rawValue) {
+		return new UseDefaultValue(rawValue.value);
+	}
+
 }

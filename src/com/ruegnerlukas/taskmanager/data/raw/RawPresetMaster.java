@@ -23,4 +23,10 @@ public class RawPresetMaster {
 	}
 
 
+
+
+	public static MasterPreset fromRaw(RawPresetMaster rawPreset) {
+		return new MasterPreset(rawPreset.filterPreset, rawPreset.groupPreset, rawPreset.sortPreset);
+	}
+
 }

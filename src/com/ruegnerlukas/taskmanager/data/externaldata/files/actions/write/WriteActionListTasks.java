@@ -67,14 +67,12 @@ public class WriteActionListTasks extends WriteFileAction {
 		if (change.getType() == DataChange.ChangeType.LIST) {
 			ListChange listChange = (ListChange) change;
 
-
 			// add
 			if (listChange.wasAdded()) {
 				if (!(listChange.getAdded() instanceof Task)) {
 					return;
 				}
 				Task task = (Task) listChange.getAdded();
-
 
 				File file = fileHandler.getTaskFile(TaskLogic.getTaskID(task) + "", true);
 
@@ -89,7 +87,6 @@ public class WriteActionListTasks extends WriteFileAction {
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-
 
 			}
 

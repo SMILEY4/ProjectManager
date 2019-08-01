@@ -113,12 +113,12 @@ public class MainView extends AnchorPane {
 			public void onAction() {
 				if (Data.projectProperty.get() != null) {
 					if (handleOpenProject()) {
-						ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject()); // todo temp
-//						ProjectLogic.setCurrentProject(ProjectLogic.loadLocalProject()); // todo temp
+//						ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject()); // todo temp
+						ProjectLogic.setCurrentProject(ProjectLogic.loadLocalProject()); // todo temp
 					}
 				} else {
-					ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject()); // todo temp
-//					ProjectLogic.setCurrentProject(ProjectLogic.loadLocalProject()); // todo temp
+//					ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject()); // todo temp
+					ProjectLogic.setCurrentProject(ProjectLogic.loadLocalProject()); // todo temp
 				}
 			}
 		}.addToMenuBar(menuBar);

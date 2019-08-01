@@ -51,7 +51,7 @@ public class ProjectLogic {
 		// TODO set root directory
 		final String pathRootDir = "D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\SimpleTaskManager\\data\\Test_Project_1";
 		ExternalFileHandler handler = new ExternalFileHandler(pathRootDir);
-		return handler.createProject();
+		return handler.loadProject();
 	}
 
 

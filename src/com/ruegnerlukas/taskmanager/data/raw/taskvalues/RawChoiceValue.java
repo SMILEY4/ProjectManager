@@ -18,4 +18,11 @@ public class RawChoiceValue extends RawTaskValue {
 		return raw;
 	}
 
+
+
+
+	public static ChoiceValue fromRaw(RawChoiceValue rawValue) {
+		return new ChoiceValue(rawValue.value);
+	}
+
 }

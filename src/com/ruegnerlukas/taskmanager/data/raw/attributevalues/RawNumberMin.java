@@ -18,4 +18,11 @@ public class RawNumberMin extends RawAttributeValue {
 		return raw;
 	}
 
+
+
+
+	public static NumberMinValue fromRaw(RawNumberMin rawValue) {
+		return new NumberMinValue(rawValue.value);
+	}
+
 }
