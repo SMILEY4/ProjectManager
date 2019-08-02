@@ -58,15 +58,14 @@ public class ExternalFileHandler implements ExternalDataHandler {
 	@Override
 	public Project loadProject() {
 
+		handler.createBackup();
+
 		RawProject rawProject = loadRawProject();
 		if (rawProject == null) {
 			return null;
 		}
 
-		Project project = RawProject.fromRaw(rawProject, this);
-
-
-		return project; //TODO
+		return RawProject.fromRaw(rawProject, this);
 	}
 
 

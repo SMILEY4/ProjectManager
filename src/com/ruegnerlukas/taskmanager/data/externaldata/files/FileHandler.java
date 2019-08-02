@@ -3,10 +3,16 @@ package com.ruegnerlukas.taskmanager.data.externaldata.files;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 public class FileHandler {
 
@@ -18,6 +24,7 @@ public class FileHandler {
 	private static final String FILENAME_PRESETS_GROUP_DIRECTORY = "presets_group";
 	private static final String FILENAME_PRESETS_MASTER_DIRECTORY = "presets_master";
 	private static final String FILENAME_PRESETS_FILTER_DIRECTORY = "presets_filter";
+	private static final String FILENAME_BACKUP_DIRECTORY = "backup";
 
 	private final File rootDirectory;
 
@@ -26,6 +33,74 @@ public class FileHandler {
 
 	FileHandler(String pathRoot) {
 		this.rootDirectory = new File(pathRoot);
+	}
+
+
+
+
+	public void createBackup() {
+
+		try {
+
+			File dir = getDirectory(FILENAME_BACKUP_DIRECTORY, true);
+
+			File zipFile = new File(
+					dir.getAbsolutePath()
+							+ "/"
+							+ LocalDateTime.now().format(DateTimeFormatter.ofPattern("uuuu-MM-dd_HH-mm-ss"))
+							+ ".zip");
+
+			ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zipFile));
+
+			for (File file : rootDirectory.listFiles()) {
+				if (!file.getAbsolutePath().equals(dir.getAbsolutePath())) {
+					zipFile(file, file.getName(), out);
+				}
+			}
+
+			out.close();
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+
+
+	private static void zipFile(File file, String fileName, ZipOutputStream zipOut) throws IOException {
+		if (file.isHidden()) {
+			return;
+		}
+
+		if (file.isDirectory()) {
+
+			if (fileName.endsWith("/")) {
+				zipOut.putNextEntry(new ZipEntry(fileName));
+				zipOut.closeEntry();
+			} else {
+				zipOut.putNextEntry(new ZipEntry(fileName + "/"));
+				zipOut.closeEntry();
+			}
+
+			File[] children = file.listFiles();
+			for (File childFile : children) {
+				zipFile(childFile, fileName + "/" + childFile.getName(), zipOut);
+			}
+			return;
+		}
+
+		FileInputStream fis = new FileInputStream(file);
+		ZipEntry zipEntry = new ZipEntry(fileName);
+		zipOut.putNextEntry(zipEntry);
+
+		byte[] bytes = new byte[1024];
+		int length;
+		while ((length = fis.read(bytes)) >= 0) {
+			zipOut.write(bytes, 0, length);
+		}
+
+		fis.close();
 	}
 
 
@@ -125,7 +200,7 @@ public class FileHandler {
 	private List<File> getFiles(String pathDir) {
 		List<File> files = new ArrayList<>();
 
-		File dir = getFile(pathDir, false);
+		File dir = getDirectory(pathDir, false);
 		if (dir == null || !dir.exists() || !dir.isDirectory()) {
 			return files;
 		}
@@ -143,17 +218,30 @@ public class FileHandler {
 
 	private File getFile(String pathFile, boolean createIfNeccessary) {
 		File file = new File(rootDirectory.getAbsolutePath() + "/" + pathFile);
+
 		if (!file.exists() && createIfNeccessary) {
 			try {
-				if (file.isDirectory()) {
-					file.mkdirs();
-				} else {
-					file.getParentFile().mkdirs();
-					file.createNewFile();
-				}
+				file.getParentFile().mkdirs();
+				file.createNewFile();
 			} catch (IOException e) {
 				Logger.get().error(e);
 			}
+		}
+		if (!file.exists()) {
+			return null;
+		} else {
+			return file;
+		}
+	}
+
+
+
+
+	private File getDirectory(String pathDir, boolean createIfNeccessary) {
+		File file = new File(rootDirectory.getAbsolutePath() + "/" + pathDir);
+
+		if (!file.exists() && createIfNeccessary) {
+			file.mkdirs();
 		}
 		if (!file.exists()) {
 			return null;
