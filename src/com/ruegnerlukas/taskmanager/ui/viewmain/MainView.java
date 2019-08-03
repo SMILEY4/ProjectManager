@@ -87,6 +87,8 @@ public class MainView extends AnchorPane {
 	private MainViewModule moduleProjectSettings;
 	private MainViewModule moduleTabs;
 
+	private MenuFunction functionDebug;
+
 
 
 
@@ -183,6 +185,15 @@ public class MainView extends AnchorPane {
 				onTabSelected(oldValue, newValue);
 			}
 		};
+
+
+		// Used for various debug purposes
+		functionNewProject = new MenuFunction("Dev", "Debug") {
+			@Override
+			public void onAction() {
+				System.out.println("Debug");
+			}
+		}.addToMenuBar(menuBar);
 
 	}
 

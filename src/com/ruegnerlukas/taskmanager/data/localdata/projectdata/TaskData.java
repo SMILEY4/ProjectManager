@@ -25,10 +25,14 @@ public class TaskData implements ITask {
 	}
 
 
+
+
 	@Override
 	public TaskValue<?> getValue(TaskAttributeData attribute) {
 		return values.get(attribute);
 	}
+
+
 
 
 	@Override

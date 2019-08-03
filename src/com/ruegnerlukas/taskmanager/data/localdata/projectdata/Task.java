@@ -38,9 +38,9 @@ public class Task extends TaskData implements SyncedElement {
 		this.node = new SyncedNode("Task-" + id, project.data.tasks.getNode(), project.dataHandler);
 		this.node.setManagedElement(this);
 
-		this.values = new SyncedMap<>(Identifiers.TASK_VALUES, node, project.dataHandler, getValues());
+		this.values = new SyncedMap<>(Identifiers.TASK_VALUES, node, project.dataHandler, super.getValues());
 
-		values.addListener((MapChangeListener<TaskAttributeData, TaskValue<?>>) c -> {
+		this.values.addListener((MapChangeListener<TaskAttributeData, TaskValue<?>>) c -> {
 			List<EventHandler<ActionEvent>> list = listeners.get(c.getKey());
 			if (list != null) {
 				for (EventHandler<ActionEvent> eventHandler : list) {
@@ -55,6 +55,10 @@ public class Task extends TaskData implements SyncedElement {
 
 
 
+	@Override
+	public SyncedMap<TaskAttributeData, TaskValue<?>> getValues() {
+		return this.values;
+	}
 
 
 
