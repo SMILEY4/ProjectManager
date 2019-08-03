@@ -160,25 +160,69 @@ public class AttributeLogic {
 
 
 	/**
-	 * @return a list of all effects of the new {@link AttributeValue}. This will not actually set the value.
+	 * @return a list of all effected tasks and their changed values when setting the new {@link AttributeValue}. This will not actually set the value.
 	 */
-	public static List<SetAttributeValueEffect> getSetValueEffects(Project project, TaskAttribute attribute, AttributeValue<?> newAttValue, boolean preferNoValueTask) {
-
+	public static List<SetAttributeValueEffect> getSetValueEffects(Project project, TaskAttribute attribute, AttributeValue<?> nextAttValue, boolean preferNoValueTask) {
 		List<SetAttributeValueEffect> list = new ArrayList<>();
 
+		// copy attribute and set new value
 		TaskAttribute attributeCopy = copyAttribute(attribute);
-		attributeCopy.values.put(newAttValue.getType(), newAttValue);
+		attributeCopy.values.put(nextAttValue.getType(), nextAttValue);
 
-		AttributeValue<?> currAttValue = attribute.values.get(newAttValue.getType());
+		AttributeValue<?> prevAttValue = attribute.values.get(nextAttValue.getType());
 
+		// for each task
 		List<Task> tasks = project.data.tasks;
 		for (int i = 0, n = tasks.size(); i < n; i++) {
 			Task task = tasks.get(i);
-			TaskValue<?> currTaskValue = TaskLogic.getTaskValue(task, attribute);
-			if (!LOGIC_MODULES.get(attributeCopy.type.get()).isValidTaskValue(attributeCopy, currTaskValue)) {
-				TaskValue<?> newTaskValue = LOGIC_MODULES.get(attributeCopy.type.get()).generateValidTaskValue(currTaskValue, attributeCopy, preferNoValueTask);
-				list.add(new SetAttributeValueEffect(attributeCopy, currAttValue, newAttValue, task, currTaskValue, newTaskValue));
+
+			if(TaskLogic.getTaskValue(task, attribute) != null && !(TaskLogic.getTaskValue(task, attribute) instanceof NoValue) ) {
+				// case 1: task has own value -> check if value is still valid
+
+				TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
+				TaskValue<?> nextTaskValue = null;
+
+				if (!LOGIC_MODULES.get(attributeCopy.type.get()).isValidTaskValue(attributeCopy, prevTaskValue)) {
+					nextTaskValue = LOGIC_MODULES.get(attributeCopy.type.get()).generateValidTaskValue(prevTaskValue, attributeCopy, preferNoValueTask);
+					if (nextTaskValue == null || nextTaskValue instanceof NoValue) {
+						nextTaskValue = AttributeLogic.getDefaultValue(attributeCopy);
+					}
+
+				}
+
+				list.add(
+						new SetAttributeValueEffect(
+								attributeCopy,
+								prevAttValue,
+								nextAttValue,
+								task,
+								prevTaskValue,
+								nextTaskValue
+						)
+				);
+
+			} else {
+				// case 2: task is using default value (does not have own value) -> check if default changes
+
+				TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
+				TaskValue<?> nextTaskValue = TaskLogic.getValueOrDefault(task, attributeCopy);
+
+				if(prevTaskValue != null && nextTaskValue != null && prevTaskValue.compare(nextTaskValue) != 0) {
+					list.add(
+							new SetAttributeValueEffect(
+									attributeCopy,
+									prevAttValue,
+									nextAttValue,
+									task,
+									prevTaskValue,
+									nextTaskValue
+							)
+					);
+				}
+
 			}
+
+
 		}
 
 		return list;

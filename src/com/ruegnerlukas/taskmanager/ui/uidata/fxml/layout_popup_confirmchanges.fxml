@@ -27,20 +27,6 @@
                                  <padding>
                                     <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                                  </padding>
-                                 <children>
-                                    <AnchorPane maxHeight="32.0" maxWidth="10000.0" minHeight="32.0" minWidth="32.0" prefHeight="32.0" prefWidth="10000.0" style="-fx-border-color: #aaaaaa; -fx-border-radius: 5;">
-                                       <children>
-                                          <HBox alignment="CENTER_LEFT" maxHeight="10000.0" maxWidth="10000.0" minHeight="0.0" minWidth="0.0" prefHeight="10000.0" prefWidth="10000.0" spacing="5.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                             <padding>
-                                                <Insets left="5.0" right="5.0" />
-                                             </padding>
-                                             <children>
-                                                <Label maxWidth="350.0" minHeight="0.0" minWidth="0.0" prefHeight="21.0" prefWidth="350.0" text="T-16  -  Lorem Ipsum dolor ..." />
-                                             </children>
-                                          </HBox>
-                                       </children>
-                                    </AnchorPane>
-                                 </children>
                               </VBox>
                            </children>
                         </AnchorPane>

@@ -9,16 +9,17 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
-public class ChangeItem extends AnchorPane {
+public class ConfirmChangeItem extends AnchorPane {
 
 
-	public ChangeItem(SetAttributeValueEffect effect) {
+	public ConfirmChangeItem(SetAttributeValueEffect effect) {
 		this.setMinSize(32, 32);
 		this.setPrefSize(10000, 32);
 		this.setMaxSize(10000, 32);
 		this.setStyle("-fx-border-color: #aaaaaa; -fx-border-radius: 5;"); // todo tmp
 
 		HBox box = new HBox();
+		box.setAlignment(Pos.CENTER_LEFT);
 		box.setPadding(new Insets(0, 5, 0, 5));
 		box.setSpacing(5);
 		AnchorUtils.fitToParent(box);
