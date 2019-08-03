@@ -80,7 +80,7 @@ public class CardItem extends HBox {
 		if (value.getAttType() == null) {
 			labelValue.setText("");
 		} else {
-			labelValue.setText(value.getValue().toString());
+			labelValue.setText(TaskValue.valueToString(value));
 		}
 	}
 

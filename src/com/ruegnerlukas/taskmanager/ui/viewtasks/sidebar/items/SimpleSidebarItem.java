@@ -213,7 +213,7 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 			if (valueOD.getAttType() == null) {
 				labelEmpty.setText("no value");
 			} else {
-				labelEmpty.setText(valueOD.getValue().toString());
+				labelEmpty.setText(TaskValue.valueToString(valueOD));
 			}
 		}
 	}

@@ -46,15 +46,6 @@ public class ExternalFileHandler implements ExternalDataHandler {
 
 
 
-	private void onChange(File file) {
-		// TODO
-		// create DataChange
-		// send change to datahandler
-	}
-
-
-
-
 	@Override
 	public Project loadProject() {
 

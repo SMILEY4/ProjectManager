@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -210,6 +211,8 @@ public class FileHandler {
 			files.addAll(Arrays.asList(arr));
 		}
 
+
+		files.sort(new FileComparator());
 		return files;
 	}
 
@@ -250,5 +253,34 @@ public class FileHandler {
 		}
 	}
 
+
+
+	static class FileComparator implements Comparator<File> {
+
+
+		@Override
+		public int compare(File a, File b) {
+
+			final String nameA = a.getName().substring(0, a.getName().lastIndexOf("."));
+			final String nameB = b.getName().substring(0, b.getName().lastIndexOf("."));
+
+			boolean areNumbers = false;
+
+			try {
+				int ia = Integer.parseInt(nameA);
+				int ib = Integer.parseInt(nameB);
+				areNumbers = true;
+			}catch (Exception e) {
+				areNumbers = false;
+			}
+
+			if(areNumbers) {
+				return Integer.compare(Integer.parseInt(nameA), Integer.parseInt(nameB));
+			} else {
+				return nameA.compareTo(nameB);
+			}
+		}
+
+	}
 
 }
