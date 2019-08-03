@@ -36,7 +36,7 @@ public class ItemDate extends SimpleSidebarItem {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new DateValue(picker.getValue()));
 		});
 		this.setValueNode(picker);
-		this.setText(getAttribute().name.getName() + ":");
+		this.setText(getAttribute().name.get() + ":");
 		this.setShowButton(true);
 	}
 
