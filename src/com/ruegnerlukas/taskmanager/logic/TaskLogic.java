@@ -486,7 +486,7 @@ public class TaskLogic {
 
 		// update "last_changed"
 		if (attribute.type.get() != AttributeType.LAST_UPDATED && newValue != prevValue) {
-			if (prevValue != null && prevValue.compare(newValue) != 0) {
+			if ((prevValue != null && newValue == null) || (prevValue == null && newValue != null) || (prevValue.compare(newValue) != 0)) {
 				setValue(project, task, AttributeLogic.findAttributeByType(project, AttributeType.LAST_UPDATED), new LastUpdatedValue(LocalDateTime.now()));
 			}
 		}
