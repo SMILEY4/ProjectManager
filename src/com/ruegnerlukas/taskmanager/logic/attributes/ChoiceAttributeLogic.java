@@ -2,8 +2,8 @@ package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.simpleutils.arrays.ArrayUtils;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.ChoiceListValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.DefaultValue;
@@ -63,8 +63,9 @@ public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void initAttribute(TaskAttribute attribute) {
-		attribute.values.clear();
+	@Override
+	public void initAttribute(TaskAttributeData attribute) {
+		attribute.getValues().clear();
 		setValueList(attribute, new String[]{});
 		setUseDefault(attribute, false);
 		setDefaultValue(attribute, new ChoiceValue(""));
@@ -73,7 +74,7 @@ public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void addValueToList(TaskAttribute attribute, String value) {
+	public void addValueToList(TaskAttributeData attribute, String value) {
 		if (!containsValue(attribute, value)) {
 			String[] values = getValueList(attribute);
 			String[] newValues = Arrays.copyOf(values, values.length + 1);
@@ -85,7 +86,7 @@ public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void removeValueFromList(TaskAttribute attribute, String value) {
+	public void removeValueFromList(TaskAttributeData attribute, String value) {
 		if (containsValue(attribute, value)) {
 			String[] values = getValueList(attribute);
 			String[] newValues = new String[values.length - 1];
@@ -101,7 +102,7 @@ public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setValueList(TaskAttribute attribute, List<String> valueList) {
+	public void setValueList(TaskAttributeData attribute, List<String> valueList) {
 		String[] array = new String[valueList.size()];
 		for (int i = 0; i < valueList.size(); i++) {
 			array[i] = valueList.get(i);
@@ -112,14 +113,14 @@ public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setValueList(TaskAttribute attribute, String... valueList) {
-		attribute.values.put(AttributeValueType.CHOICE_VALUES, new ChoiceListValue(valueList));
+	public void setValueList(TaskAttributeData attribute, String... valueList) {
+		attribute.getValues().put(AttributeValueType.CHOICE_VALUES, new ChoiceListValue(valueList));
 	}
 
 
 
 
-	public String[] getValueList(TaskAttribute attribute) {
+	public String[] getValueList(TaskAttributeData attribute) {
 		ChoiceListValue value = (ChoiceListValue) attribute.getValue(AttributeValueType.CHOICE_VALUES);
 		if (value == null) {
 			return new String[]{};
@@ -131,7 +132,7 @@ public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean containsValue(TaskAttribute attribute, String value) {
+	public boolean containsValue(TaskAttributeData attribute, String value) {
 		String[] values = getValueList(attribute);
 		for (int i = 0; i < values.length; i++) {
 			if (values[i].equals(value)) {
@@ -144,14 +145,14 @@ public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
+	public void setUseDefault(TaskAttributeData attribute, boolean useDefault) {
+		attribute.getValues().put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
-	public boolean getUseDefault(TaskAttribute attribute) {
+	public boolean getUseDefault(TaskAttributeData attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
 		if (value == null) {
 			return false;
@@ -163,14 +164,14 @@ public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setDefaultValue(TaskAttribute attribute, ChoiceValue defaultValue) {
-		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
+	public void setDefaultValue(TaskAttributeData attribute, ChoiceValue defaultValue) {
+		attribute.getValues().put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
-	public ChoiceValue getDefaultValue(TaskAttribute attribute) {
+	public ChoiceValue getDefaultValue(TaskAttributeData attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
 		if (value == null) {
 			return null;
@@ -182,7 +183,8 @@ public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	@Override
+	public boolean matchesFilter(TaskData task, TerminalFilterCriteria criteria) {
 
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute);
 		List<Object> filterValues = criteria.values;
@@ -232,7 +234,8 @@ public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	@Override
+	public boolean isValidTaskValue(TaskAttributeData attribute, TaskValue<?> value) {
 		if (value.getAttType() == null) {
 			return true;
 		} else if (value.getAttType() == AttributeType.CHOICE) {
@@ -245,7 +248,8 @@ public class ChoiceAttributeLogic implements AttributeLogicModule {
 
 
 
-	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	@Override
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttributeData attribute, boolean preferNoValue) {
 		if (preferNoValue || getValueList(attribute).length == 0) {
 			return new NoValue();
 		} else {

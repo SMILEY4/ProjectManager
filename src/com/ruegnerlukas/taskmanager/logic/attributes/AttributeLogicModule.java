@@ -1,8 +1,6 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortElement;
@@ -46,29 +44,29 @@ public interface AttributeLogicModule {
 
 
 	/**
-	 * Initializes the given {@link TaskAttribute} as a attribute of the {@link AttributeType} of this LogicModule.
+	 * Initializes the given {@link TaskAttributeData} as a attribute of the {@link AttributeType} of this LogicModule.
 	 * This will completely reset the attribute to its default state.
 	 */
-	void initAttribute(TaskAttribute attribute);
+	void initAttribute(TaskAttributeData attribute);
 
 
 	/**
 	 * @return true, if the values of the given {@link Task} match the specified values of the given {@link TerminalFilterCriteria}.
 	 */
-	boolean matchesFilter(Task task, TerminalFilterCriteria criteria);
+	boolean matchesFilter(TaskData task, TerminalFilterCriteria criteria);
 
 
 	/**
-	 * @return true, if the given {@link TaskValue} is valid for the given {@link TaskAttribute}.
+	 * @return true, if the given {@link TaskValue} is valid for the given {@link TaskAttributeData}.
 	 */
-	boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value);
+	boolean isValidTaskValue(TaskAttributeData attribute, TaskValue<?> value);
 
 
 	/**
 	 * @return a new valid {@link TaskValue} similar to the given old value or {@link NoValue}
 	 * (depdending on the value of "preferNoValue", the {@link AttributeType} and the given attribute).
 	 */
-	TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue);
+	TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttributeData attribute, boolean preferNoValue);
 
 
 }

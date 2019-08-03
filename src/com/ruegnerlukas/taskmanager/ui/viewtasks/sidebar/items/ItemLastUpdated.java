@@ -2,6 +2,7 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.LastUpdatedValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
@@ -18,7 +19,7 @@ public class ItemLastUpdated extends SimpleSidebarItem {
 
 
 	private Label label;
-	private FXMapEntryChangeListener<TaskAttribute, TaskValue<?>> listener;
+	private FXMapEntryChangeListener<TaskAttributeData, TaskValue<?>> listener;
 
 
 
@@ -36,9 +37,9 @@ public class ItemLastUpdated extends SimpleSidebarItem {
 		this.setValueNode(label);
 		this.setEmpty(false);
 		this.setShowButton(false);
-		listener = new FXMapEntryChangeListener<TaskAttribute, TaskValue<?>>(getTask().values, getAttribute()) {
+		listener = new FXMapEntryChangeListener<TaskAttributeData, TaskValue<?>>(getTask().getValues(), getAttribute()) {
 			@Override
-			public void onChanged(MapChangeListener.Change<? extends TaskAttribute, ? extends TaskValue<?>> c) {
+			public void onChanged(MapChangeListener.Change<? extends TaskAttributeData, ? extends TaskValue<?>> c) {
 				refresh();
 			}
 		};

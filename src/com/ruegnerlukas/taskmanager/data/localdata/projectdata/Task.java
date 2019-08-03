@@ -4,12 +4,10 @@ import com.ruegnerlukas.taskmanager.data.Identifiers;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.NestedChange;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.IDValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedElement;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedMap;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedNode;
-import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.utils.listeners.CustomListener;
 import javafx.collections.MapChangeListener;
 import javafx.event.ActionEvent;
@@ -21,12 +19,12 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Task implements SyncedElement {
+public class Task extends TaskData implements SyncedElement {
 
 
 	private final SyncedNode node;
 
-	public SyncedMap<TaskAttribute, TaskValue<?>> values;
+	public SyncedMap<TaskAttributeData, TaskValue<?>> values;
 
 	private Map<TaskAttribute, List<EventHandler<ActionEvent>>> listeners = new HashMap<>();
 
@@ -34,16 +32,15 @@ public class Task implements SyncedElement {
 
 
 	public Task(int id, Project project) {
+		super(id, project);
 
 
 		this.node = new SyncedNode("Task-" + id, project.data.tasks.getNode(), project.dataHandler);
 		this.node.setManagedElement(this);
 
-		this.values = new SyncedMap<>(Identifiers.TASK_VALUES, node, project.dataHandler);
-		TaskAttribute idAttribute = AttributeLogic.findAttributeByType(project, AttributeType.ID);
-		values.put(idAttribute, new IDValue(id));
+		this.values = new SyncedMap<>(Identifiers.TASK_VALUES, node, project.dataHandler, getValues());
 
-		values.addListener((MapChangeListener<TaskAttribute, TaskValue<?>>) c -> {
+		values.addListener((MapChangeListener<TaskAttributeData, TaskValue<?>>) c -> {
 			List<EventHandler<ActionEvent>> list = listeners.get(c.getKey());
 			if (list != null) {
 				for (EventHandler<ActionEvent> eventHandler : list) {
@@ -58,9 +55,6 @@ public class Task implements SyncedElement {
 
 
 
-	public TaskValue<?> getValue(TaskAttribute attribute) {
-		return values.get(attribute);
-	}
 
 
 

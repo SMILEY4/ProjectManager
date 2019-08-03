@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.DefaultValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.UseDefaultValue;
@@ -68,8 +68,9 @@ public class DateAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void initAttribute(TaskAttribute attribute) {
-		attribute.values.clear();
+	@Override
+	public void initAttribute(TaskAttributeData attribute) {
+		attribute.getValues().clear();
 		setUseDefault(attribute, false);
 		setDefaultValue(attribute, new DateValue(LocalDate.now()));
 	}
@@ -77,14 +78,14 @@ public class DateAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
+	public void setUseDefault(TaskAttributeData attribute, boolean useDefault) {
+		attribute.getValues().put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
-	public boolean getUseDefault(TaskAttribute attribute) {
+	public boolean getUseDefault(TaskAttributeData attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
 		if (value == null) {
 			return false;
@@ -96,14 +97,14 @@ public class DateAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setDefaultValue(TaskAttribute attribute, DateValue defaultValue) {
-		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
+	public void setDefaultValue(TaskAttributeData attribute, DateValue defaultValue) {
+		attribute.getValues().put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
-	public DateValue getDefaultValue(TaskAttribute attribute) {
+	public DateValue getDefaultValue(TaskAttributeData attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
 		if (value == null) {
 			return null;
@@ -115,7 +116,8 @@ public class DateAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	@Override
+	public boolean matchesFilter(TaskData task, TerminalFilterCriteria criteria) {
 
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute);
 		List<Object> filterValues = criteria.values;
@@ -243,14 +245,16 @@ public class DateAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	@Override
+	public boolean isValidTaskValue(TaskAttributeData attribute, TaskValue<?> value) {
 		return value.getAttType() == AttributeType.DATE || value.getAttType() == null;
 	}
 
 
 
 
-	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	@Override
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttributeData attribute, boolean preferNoValue) {
 		return oldValue.getAttType() == AttributeType.DATE ? new DateValue((LocalDate) oldValue.getValue())
 				: (preferNoValue ? new NoValue() : new DateValue(LocalDate.now()));
 	}

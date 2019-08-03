@@ -4,6 +4,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.raw.taskvalues.RawTaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
@@ -23,8 +24,8 @@ public class RawTask {
 	public static RawTask toRaw(Task task) {
 		RawTask raw = new RawTask();
 		raw.id = TaskLogic.getTaskID(task);
-		for (TaskAttribute attribute : task.values.keySet()) {
-			if (attribute.type.get() != AttributeType.ID) {
+		for (TaskAttributeData attribute : task.getValues().keySet()) {
+			if (attribute.getType().get() != AttributeType.ID) {
 				raw.values.put(attribute.id, RawTaskValue.toRaw(task.values.get(attribute)));
 			}
 		}

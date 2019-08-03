@@ -1,8 +1,9 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.DefaultValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.TextMultilineValue;
@@ -65,8 +66,9 @@ public class TextAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void initAttribute(TaskAttribute attribute) {
-		attribute.values.clear();
+	@Override
+	public void initAttribute(TaskAttributeData attribute) {
+		attribute.getValues().clear();
 		setMultiline(attribute, false);
 		setUseDefault(attribute, false);
 		setDefaultValue(attribute, new TextValue(""));
@@ -75,14 +77,14 @@ public class TextAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setMultiline(TaskAttribute attribute, boolean multiline) {
-		attribute.values.put(AttributeValueType.TEXT_MULTILINE, new TextMultilineValue(multiline));
+	public void setMultiline(TaskAttributeData attribute, boolean multiline) {
+		attribute.getValues().put(AttributeValueType.TEXT_MULTILINE, new TextMultilineValue(multiline));
 	}
 
 
 
 
-	public boolean getMultiline(TaskAttribute attribute) {
+	public boolean getMultiline(TaskAttributeData attribute) {
 		TextMultilineValue value = (TextMultilineValue) attribute.getValue(AttributeValueType.TEXT_MULTILINE);
 		if (value == null) {
 			return false;
@@ -94,8 +96,8 @@ public class TextAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
+	public void setUseDefault(TaskAttributeData attribute, boolean useDefault) {
+		attribute.getValues().put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
@@ -113,14 +115,14 @@ public class TextAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setDefaultValue(TaskAttribute attribute, TextValue defaultValue) {
-		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
+	public void setDefaultValue(TaskAttributeData attribute, TextValue defaultValue) {
+		attribute.getValues().put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
-	public TextValue getDefaultValue(TaskAttribute attribute) {
+	public TextValue getDefaultValue(TaskAttributeData attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
 		if (value == null) {
 			return null;
@@ -132,7 +134,8 @@ public class TextAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	@Override
+	public boolean matchesFilter(TaskData task, TerminalFilterCriteria criteria) {
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute);
 		List<Object> filterValues = criteria.values;
 
@@ -216,7 +219,8 @@ public class TextAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	@Override
+	public boolean isValidTaskValue(TaskAttributeData attribute, TaskValue<?> value) {
 		if (value.getAttType() == AttributeType.TEXT) {
 			return true;
 		} else {
@@ -227,7 +231,8 @@ public class TextAttributeLogic implements AttributeLogicModule {
 
 
 
-	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	@Override
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttributeData attribute, boolean preferNoValue) {
 		if (preferNoValue) {
 			return new NoValue();
 		} else {

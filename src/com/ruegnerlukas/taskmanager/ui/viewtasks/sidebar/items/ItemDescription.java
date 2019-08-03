@@ -3,6 +3,7 @@ package com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.DescriptionValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
@@ -19,7 +20,7 @@ public class ItemDescription extends SidebarItem {
 
 
 	private TextArea area;
-	private FXMapEntryChangeListener<TaskAttribute, TaskValue<?>> listener;
+	private FXMapEntryChangeListener<TaskAttributeData, TaskValue<?>> listener;
 
 
 
@@ -62,9 +63,9 @@ public class ItemDescription extends SidebarItem {
 			label.setText(getAttribute().name.get() + ":");
 		});
 
-		listener = new FXMapEntryChangeListener<TaskAttribute, TaskValue<?>>(getTask().values, getAttribute()) {
+		listener = new FXMapEntryChangeListener<TaskAttributeData, TaskValue<?>>(getTask().getValues(), getAttribute()) {
 			@Override
-			public void onChanged(MapChangeListener.Change<? extends TaskAttribute, ? extends TaskValue<?>> c) {
+			public void onChanged(MapChangeListener.Change<? extends TaskAttributeData, ? extends TaskValue<?>> c) {
 				refresh();
 			}
 		};

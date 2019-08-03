@@ -3,9 +3,7 @@ package com.ruegnerlukas.taskmanager.logic;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.AndFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.OrFilterCriteria;
@@ -288,13 +286,13 @@ public class TaskLogic {
 
 
 	/**
-	 * @return the {@link TaskValue} of the given {@link Task} for the given {@link TaskAttribute}. <br>
+	 * @return the {@link TaskValue} of the given {@link TaskData} for the given {@link TaskAttributeData}. <br>
 	 * If the given {@link Task} does not have a value set for the given attribute, it will return the default {@link TaskValue}
-	 * of the {@link TaskAttribute} (if the attribute uses a default value) or {@link NoValue}.
+	 * of the {@link TaskAttributeData} (if the attribute uses a default value) or {@link NoValue}.
 	 */
-	public static TaskValue getValueOrDefault(Task task, TaskAttribute attribute) {
+	public static TaskValue getValueOrDefault(TaskData task, TaskAttributeData attribute) {
 		TaskValue<?> trueValue = getTaskValue(task, attribute);
-		if (trueValue.getAttType() != attribute.type.get()) {
+		if (trueValue.getAttType() != attribute.getType().get()) {
 			if (AttributeLogic.getUsesDefault(attribute)) {
 				return AttributeLogic.getDefaultValue(attribute);
 			} else {
@@ -309,11 +307,11 @@ public class TaskLogic {
 
 
 	/**
-	 * @return the {@link TaskValue} of the given {@link Task} for the given {@link TaskAttribute}.
+	 * @return the {@link TaskValue} of the given {@link TaskData} for the given {@link TaskAttributeData}.
 	 * If the given {@link Task} does not have a value set for the given attribute, it will return {@link NoValue}.
 	 */
-	public static TaskValue<?> getTaskValue(Task task, TaskAttribute attribute) {
-		TaskValue<?> value = task.values.get(attribute);
+	public static TaskValue<?> getTaskValue(TaskData task, TaskAttributeData attribute) {
+		TaskValue<?> value = task.getValues().get(attribute);
 		if (value == null) {
 			return new NoValue();
 		} else {
@@ -325,9 +323,9 @@ public class TaskLogic {
 
 
 	/**
-	 * @return the id of the given task
+	 * @return the id of the given {@link TaskData}
 	 */
-	public static int getTaskID(Task task) {
+	public static int getTaskID(TaskData task) {
 		IDValue value = getTaskIDValue(task);
 		if (value != null) {
 			return value.getValue();
@@ -340,10 +338,10 @@ public class TaskLogic {
 
 
 	/**
-	 * @return the {@link IDValue} of the given task
+	 * @return the {@link IDValue} of the given {@link TaskData}
 	 */
-	public static IDValue getTaskIDValue(Task task) {
-		for (TaskValue<?> value : task.values.values()) {
+	public static IDValue getTaskIDValue(TaskData task) {
+		for (TaskValue<?> value : task.getValues().values()) {
 			if (value.getAttType() == AttributeType.ID) {
 				return (IDValue) value;
 			}
@@ -355,9 +353,9 @@ public class TaskLogic {
 
 
 	/**
-	 * @return the description of the given task
+	 * @return the description of the given {@link TaskData}
 	 */
-	public static String getTaskDescription(Task task) {
+	public static String getTaskDescription(TaskData task) {
 		DescriptionValue value = getTaskDescriptionValue(task);
 		if (value != null && value.getAttType() != null) {
 			return value.getValue();
@@ -370,10 +368,10 @@ public class TaskLogic {
 
 
 	/**
-	 * @return the {@link DescriptionValue} of the given task
+	 * @return the {@link DescriptionValue} of the given {@link TaskData}
 	 */
-	public static DescriptionValue getTaskDescriptionValue(Task task) {
-		for (TaskValue<?> value : task.values.values()) {
+	public static DescriptionValue getTaskDescriptionValue(TaskData task) {
+		for (TaskValue<?> value : task.getValues().values()) {
 			if (value.getAttType() == AttributeType.DESCRIPTION) {
 				return (DescriptionValue) value;
 			}
@@ -385,26 +383,26 @@ public class TaskLogic {
 
 
 	/**
-	 * Sets the value of the given {@link Task} in the given {@link Project} to the given {@link TaskValue} for the given {@link TaskAttribute} (if valid). <br>
+	 * Sets the value of the given {@link TaskData} in the given {@link Project} to the given {@link TaskValue} for the given {@link TaskAttributeData} (if valid). <br>
 	 * This fires a new {@link TaskValueChangeEvent} (if successful) and calls the {@code onTaskModified(...)}-method of {@link TaskDisplayLogic} (if necessary)
 	 *
 	 * @return false, if the new {@link TaskValue} is invalid
 	 */
-	public static boolean setValue(Project project, Task task, TaskAttribute attribute, TaskValue<?> value) {
+	public static boolean setValue(Project project, TaskData task, TaskAttributeData attribute, TaskValue<?> value) {
 
 		// validate value
-		if (!AttributeLogic.LOGIC_MODULES.get(attribute.type.get()).isValidTaskValue(attribute, value == null ? new NoValue() : value)) {
-			Logger.get().debug("Failed to set task value: " + attribute.name.get() + " - invalid value: " + value + (value != null ? "." + value.getValue() : ""));
+		if (!AttributeLogic.LOGIC_MODULES.get(attribute.getType().get()).isValidTaskValue(attribute, value == null ? new NoValue() : value)) {
+			Logger.get().debug("Failed to set task value: " + attribute.getName().get() + " - invalid value: " + value + (value != null ? "." + value.getValue() : ""));
 			return false;
 		}
 
 		// set value
-		TaskValue<?> prevValue = task.values.get(attribute);
+		TaskValue<?> prevValue = task.getValues().get(attribute);
 		if (value == null || value instanceof NoValue) {
-			task.values.remove(attribute);
+			task.getValues().remove(attribute);
 			onTaskValueChanged(project, task, attribute, prevValue, null);
 		} else {
-			task.values.put(attribute, value);
+			task.getValues().put(attribute, value);
 			onTaskValueChanged(project, task, attribute, prevValue, value);
 		}
 
@@ -438,8 +436,8 @@ public class TaskLogic {
 			}
 		}
 
-		if (modifiedDisplay) {
-			TaskDisplayLogic.onTaskModified(project, task, attribute);
+		if (modifiedDisplay && task instanceof Task) {
+			TaskDisplayLogic.onTaskModified(project, (Task) task);
 		}
 
 		return true;
@@ -474,7 +472,7 @@ public class TaskLogic {
 
 
 	/**
-	 * updates the "last changed"-value of the given {@link} Task and sends a {@link TaskValueChangeEvent} to all listening {@link EventHandler}s
+	 * updates the "last changed"-value of the given {@link TaskData} and sends a {@link TaskValueChangeEvent} to all listening {@link EventHandler}s
 	 *
 	 * @param project   the {@link Project} the {@link Task} belongs to
 	 * @param task      the changed {@link Task}
@@ -482,19 +480,21 @@ public class TaskLogic {
 	 * @param prevValue the previous {@link TaskValue}
 	 * @param newValue  the new {@link TaskValue}
 	 */
-	private static void onTaskValueChanged(Project project, Task task, TaskAttribute attribute, TaskValue<?> prevValue, TaskValue<?> newValue) {
+	private static void onTaskValueChanged(Project project, TaskData task, TaskAttributeData attribute, TaskValue<?> prevValue, TaskValue<?> newValue) {
 
 		// update "last_changed"
-		if (attribute.type.get() != AttributeType.LAST_UPDATED && newValue != prevValue) {
+		if (attribute.getType().get() != AttributeType.LAST_UPDATED && newValue != prevValue) {
 			if ((prevValue != null && newValue == null) || (prevValue == null && newValue != null) || (prevValue.compare(newValue) != 0)) {
 				setValue(project, task, AttributeLogic.findAttributeByType(project, AttributeType.LAST_UPDATED), new LastUpdatedValue(LocalDateTime.now()));
 			}
 		}
 
 		// fire event
-		TaskValueChangeEvent event = new TaskValueChangeEvent(task, attribute, prevValue, newValue);
-		for (EventHandler<TaskValueChangeEvent> handler : valueChangedHandlers) {
-			handler.handle(event);
+		if (task instanceof Task && attribute instanceof TaskAttribute) {
+			TaskValueChangeEvent event = new TaskValueChangeEvent((Task) task, (TaskAttribute) attribute, prevValue, newValue);
+			for (EventHandler<TaskValueChangeEvent> handler : valueChangedHandlers) {
+				handler.handle(event);
+			}
 		}
 	}
 

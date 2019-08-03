@@ -1,8 +1,6 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.DependencyValue;
@@ -58,14 +56,16 @@ public class DependencyAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void initAttribute(TaskAttribute attribute) {
-		attribute.values.clear();
+	@Override
+	public void initAttribute(TaskAttributeData attribute) {
+		attribute.getValues().clear();
 	}
 
 
 
 
-	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	@Override
+	public boolean matchesFilter(TaskData task, TerminalFilterCriteria criteria) {
 
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute);
 		List<Object> filterValues = criteria.values;
@@ -127,14 +127,16 @@ public class DependencyAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	@Override
+	public boolean isValidTaskValue(TaskAttributeData attribute, TaskValue<?> value) {
 		return value.getAttType() == AttributeType.DEPENDENCY || value.getAttType() == null;
 	}
 
 
 
 
-	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	@Override
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttributeData attribute, boolean preferNoValue) {
 		return new NoValue();
 	}
 

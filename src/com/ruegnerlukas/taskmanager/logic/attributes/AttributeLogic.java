@@ -4,6 +4,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
@@ -85,10 +86,10 @@ public class AttributeLogic {
 
 
 	/**
-	 * Initializes the given {@link TaskAttribute}. This will completely reset the attribute to its default state.
+	 * Initializes the given {@link TaskAttributeData}. This will completely reset the attribute to its default state.
 	 */
-	public static void initTaskAttribute(TaskAttribute attribute) {
-		LOGIC_MODULES.get(attribute.type.get()).initAttribute(attribute);
+	public static void initTaskAttribute(TaskAttributeData attribute) {
+		LOGIC_MODULES.get(attribute.getType().get()).initAttribute(attribute);
 	}
 
 
@@ -99,9 +100,9 @@ public class AttributeLogic {
 	 *
 	 * @return the new name of the given {@link TaskAttribute}
 	 */
-	public static String renameTaskAttribute(TaskAttribute attribute, String newName) {
-		attribute.name.set(newName);
-		return attribute.name.get();
+	public static String renameTaskAttribute(TaskAttributeData attribute, String newName) {
+		attribute.getName().set(newName);
+		return attribute.getName().get();
 	}
 
 
@@ -176,51 +177,54 @@ public class AttributeLogic {
 		for (int i = 0, n = tasks.size(); i < n; i++) {
 			Task task = tasks.get(i);
 
-			if(TaskLogic.getTaskValue(task, attribute) != null && !(TaskLogic.getTaskValue(task, attribute) instanceof NoValue) ) {
-				// case 1: task has own value -> check if value is still valid
+			TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
 
-				TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
-				TaskValue<?> nextTaskValue = null;
 
-				if (!LOGIC_MODULES.get(attributeCopy.type.get()).isValidTaskValue(attributeCopy, prevTaskValue)) {
-					nextTaskValue = LOGIC_MODULES.get(attributeCopy.type.get()).generateValidTaskValue(prevTaskValue, attributeCopy, preferNoValueTask);
-					if (nextTaskValue == null || nextTaskValue instanceof NoValue) {
-						nextTaskValue = AttributeLogic.getDefaultValue(attributeCopy);
-					}
-
-				}
-
-				list.add(
-						new SetAttributeValueEffect(
-								attributeCopy,
-								prevAttValue,
-								nextAttValue,
-								task,
-								prevTaskValue,
-								nextTaskValue
-						)
-				);
-
-			} else {
-				// case 2: task is using default value (does not have own value) -> check if default changes
-
-				TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
-				TaskValue<?> nextTaskValue = TaskLogic.getValueOrDefault(task, attributeCopy);
-
-				if(prevTaskValue != null && nextTaskValue != null && prevTaskValue.compare(nextTaskValue) != 0) {
-					list.add(
-							new SetAttributeValueEffect(
-									attributeCopy,
-									prevAttValue,
-									nextAttValue,
-									task,
-									prevTaskValue,
-									nextTaskValue
-							)
-					);
-				}
-
-			}
+//			if(TaskLogic.getTaskValue(task, attribute) != null && !(TaskLogic.getTaskValue(task, attribute) instanceof NoValue) ) {
+//				// case 1: task has own value -> check if value is still valid
+//
+//				TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
+//				TaskValue<?> nextTaskValue = null;
+//
+//				if (!LOGIC_MODULES.get(attributeCopy.type.get()).isValidTaskValue(attributeCopy, prevTaskValue)) {
+//					nextTaskValue = LOGIC_MODULES.get(attributeCopy.type.get()).generateValidTaskValue(prevTaskValue, attributeCopy, preferNoValueTask);
+//					if (nextTaskValue == null || nextTaskValue instanceof NoValue) {
+//						nextTaskValue = AttributeLogic.getDefaultValue(attributeCopy);
+//					}
+//
+//				}
+//
+//				list.add(
+//						new SetAttributeValueEffect(
+//								attributeCopy,
+//								prevAttValue,
+//								nextAttValue,
+//								task,
+//								prevTaskValue,
+//								nextTaskValue
+//						)
+//				);
+//
+//			} else {
+//				// case 2: task is using default value (does not have own value) -> check if default changes
+//
+//				TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
+//				TaskValue<?> nextTaskValue = TaskLogic.getValueOrDefault(task, attributeCopy);
+//
+//				if(prevTaskValue != null && nextTaskValue != null && prevTaskValue.compare(nextTaskValue) != 0) {
+//					list.add(
+//							new SetAttributeValueEffect(
+//									attributeCopy,
+//									prevAttValue,
+//									nextAttValue,
+//									task,
+//									prevTaskValue,
+//									nextTaskValue
+//							)
+//					);
+//				}
+//
+//			}
 
 
 		}
@@ -366,9 +370,9 @@ public class AttributeLogic {
 
 
 	/**
-	 * @return true, of the given {@link TaskAttribute} is using a default value.
+	 * @return true, of the given {@link TaskAttributeData} is using a default value.
 	 */
-	public static boolean getUsesDefault(TaskAttribute attribute) {
+	public static boolean getUsesDefault(TaskAttributeData attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
 		if (value != null) {
 			return value.getValue();
@@ -381,9 +385,9 @@ public class AttributeLogic {
 
 
 	/**
-	 * @return the {@link DefaultValue} of the given {@link TaskAttribute} or null if the attribute is not using a default value.
+	 * @return the {@link DefaultValue} of the given {@link TaskAttributeData} or null if the attribute is not using a default value.
 	 */
-	public static TaskValue<?> getDefaultValue(TaskAttribute attribute) {
+	public static TaskValue<?> getDefaultValue(TaskAttributeData attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
 		if (value == null) {
 			return null;
@@ -396,23 +400,25 @@ public class AttributeLogic {
 
 
 	/**
-	 * Specify if the given {@link TaskAttribute} should be shown on the task-cards or not
+	 * Specify if the given {@link TaskAttributeData} should be shown on the task-cards or not
 	 */
-	public static void setShowOnTaskCard(TaskAttribute attribute, boolean showOnCard) {
-		CardDisplayTypeValue prev = (CardDisplayTypeValue) attribute.values.get(AttributeValueType.CARD_DISPLAY_TYPE);
+	public static void setShowOnTaskCard(TaskAttributeData attribute, boolean showOnCard) {
+		CardDisplayTypeValue prev = (CardDisplayTypeValue) attribute.getValues().get(AttributeValueType.CARD_DISPLAY_TYPE);
 		CardDisplayTypeValue value = new CardDisplayTypeValue(showOnCard);
-		attribute.values.put(AttributeValueType.CARD_DISPLAY_TYPE, value);
-		onAttributeValueChanged(attribute, AttributeValueType.CARD_DISPLAY_TYPE, prev, value);
+		attribute.getValues().put(AttributeValueType.CARD_DISPLAY_TYPE, value);
+		if (attribute instanceof TaskAttribute) {
+			onAttributeValueChanged((TaskAttribute) attribute, AttributeValueType.CARD_DISPLAY_TYPE, prev, value);
+		}
 	}
 
 
 
 
 	/**
-	 * @return true, if the given {@link TaskAttribute} shuld be shown on the task-cards.
+	 * @return true, if the given {@link TaskAttributeData} shuld be shown on the task-cards.
 	 */
-	public static boolean getShowOnTaskCard(TaskAttribute attribute) {
-		CardDisplayTypeValue value = (CardDisplayTypeValue) attribute.values.get(AttributeValueType.CARD_DISPLAY_TYPE);
+	public static boolean getShowOnTaskCard(TaskAttributeData attribute) {
+		CardDisplayTypeValue value = (CardDisplayTypeValue) attribute.getValues().get(AttributeValueType.CARD_DISPLAY_TYPE);
 		if (value == null) {
 			return false;
 		} else {

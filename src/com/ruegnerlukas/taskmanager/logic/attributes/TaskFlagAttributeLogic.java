@@ -1,10 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.simpleutils.arrays.ArrayUtils;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.DefaultValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.FlagListValue;
@@ -62,8 +59,9 @@ public class TaskFlagAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void initAttribute(TaskAttribute attribute) {
-		attribute.values.clear();
+	@Override
+	public void initAttribute(TaskAttributeData attribute) {
+		attribute.getValues().clear();
 		TaskFlag defaultFlag = new TaskFlag("Default", TaskFlag.FlagColor.GRAY);
 		setFlagList(attribute, new TaskFlag[]{defaultFlag});
 		setUseDefault(attribute, true);
@@ -73,7 +71,7 @@ public class TaskFlagAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void addFlagToList(TaskAttribute attribute, TaskFlag flag) {
+	public void addFlagToList(TaskAttributeData attribute, TaskFlag flag) {
 		if (!containsFlag(attribute, flag)) {
 			TaskFlag[] list = getFlagList(attribute);
 			TaskFlag[] newList = Arrays.copyOf(list, list.length + 1);
@@ -85,7 +83,7 @@ public class TaskFlagAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void removeFlagFromList(TaskAttribute attribute, TaskFlag flag) {
+	public void removeFlagFromList(TaskAttributeData attribute, TaskFlag flag) {
 		if (containsFlag(attribute, flag)) {
 			TaskFlag[] list = getFlagList(attribute);
 			TaskFlag[] newList = new TaskFlag[list.length - 1];
@@ -101,14 +99,14 @@ public class TaskFlagAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setFlagList(TaskAttribute attribute, TaskFlag[] list) {
-		attribute.values.put(AttributeValueType.FLAG_LIST, new FlagListValue(list));
+	public void setFlagList(TaskAttributeData attribute, TaskFlag[] list) {
+		attribute.getValues().put(AttributeValueType.FLAG_LIST, new FlagListValue(list));
 	}
 
 
 
 
-	public TaskFlag[] getFlagList(TaskAttribute attribute) {
+	public TaskFlag[] getFlagList(TaskAttributeData attribute) {
 		FlagListValue value = (FlagListValue) attribute.getValue(AttributeValueType.FLAG_LIST);
 		if (value == null) {
 			return new TaskFlag[]{};
@@ -120,7 +118,7 @@ public class TaskFlagAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean containsFlag(TaskAttribute attribute, TaskFlag flag) {
+	public boolean containsFlag(TaskAttributeData attribute, TaskFlag flag) {
 		TaskFlag[] list = getFlagList(attribute);
 		for (int i = 0; i < list.length; i++) {
 			if (list[i] == flag) {
@@ -133,14 +131,14 @@ public class TaskFlagAttributeLogic implements AttributeLogicModule {
 
 
 
-	private void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
+	private void setUseDefault(TaskAttributeData attribute, boolean useDefault) {
+		attribute.getValues().put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
-	public boolean getUseDefault(TaskAttribute attribute) {
+	public boolean getUseDefault(TaskAttributeData attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
 		if (value == null) {
 			return false;
@@ -152,14 +150,14 @@ public class TaskFlagAttributeLogic implements AttributeLogicModule {
 
 
 
-	private void setDefaultValue(TaskAttribute attribute, FlagValue defaultValue) {
-		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
+	private void setDefaultValue(TaskAttributeData attribute, FlagValue defaultValue) {
+		attribute.getValues().put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
-	public FlagValue getDefaultValue(TaskAttribute attribute) {
+	public FlagValue getDefaultValue(TaskAttributeData attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
 		if (value == null) {
 			return null;
@@ -171,7 +169,8 @@ public class TaskFlagAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	@Override
+	public boolean matchesFilter(TaskData task, TerminalFilterCriteria criteria) {
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute);
 		List<Object> filterValues = criteria.values;
 
@@ -211,7 +210,7 @@ public class TaskFlagAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	public boolean isValidTaskValue(TaskAttributeData attribute, TaskValue<?> value) {
 		if (value.getAttType() == AttributeType.FLAG) {
 			FlagValue valueFlag = (FlagValue) value;
 			return ArrayUtils.contains(getFlagList(attribute), valueFlag.getValue());
@@ -223,7 +222,8 @@ public class TaskFlagAttributeLogic implements AttributeLogicModule {
 
 
 
-	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	@Override
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttributeData attribute, boolean preferNoValue) {
 		TaskFlag[] flags = getFlagList(attribute);
 		if (flags.length == 0) {
 			return getDefaultValue(attribute);

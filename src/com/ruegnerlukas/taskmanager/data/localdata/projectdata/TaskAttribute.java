@@ -1,9 +1,9 @@
 package com.ruegnerlukas.taskmanager.data.localdata.projectdata;
 
 import com.ruegnerlukas.taskmanager.data.DataHandler;
+import com.ruegnerlukas.taskmanager.data.Identifiers;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.NestedChange;
-import com.ruegnerlukas.taskmanager.data.Identifiers;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
@@ -13,12 +13,11 @@ import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedNode;
 import com.ruegnerlukas.taskmanager.data.syncedelements.SyncedProperty;
 import com.ruegnerlukas.taskmanager.utils.listeners.CustomListener;
 
-public class TaskAttribute implements SyncedElement {
+public class TaskAttribute extends TaskAttributeData implements SyncedElement {
 
 
 	private final SyncedNode node;
 
-	public final int id;
 	public final SyncedProperty<String> name;
 	public final SyncedProperty<AttributeType> type;
 	public final SyncedMap<AttributeValueType, AttributeValue<?>> values;
@@ -34,9 +33,9 @@ public class TaskAttribute implements SyncedElement {
 
 
 	private TaskAttribute(int id, AttributeType type, SyncedNode parent, DataHandler handler) {
-		this.id = id;
+		super(id, type);
 
-		this.node = new SyncedNode("Attribute-"+id, parent, handler);
+		this.node = new SyncedNode("Attribute-" + id, parent, handler);
 		this.node.setManagedElement(this);
 
 		this.name = new SyncedProperty<>(Identifiers.ATTRIBUTE_NAME, node, handler);
@@ -44,14 +43,23 @@ public class TaskAttribute implements SyncedElement {
 		this.type = new SyncedProperty<>(Identifiers.ATTRIBUTE_TYPE, node, handler);
 		this.type.set(type);
 
-		this.values = new SyncedMap<>(Identifiers.ATTRIBUTE_VALUES, node, handler);
+		this.values = new SyncedMap<>(Identifiers.ATTRIBUTE_VALUES, node, handler, super.getValues());
 	}
 
 
 
 
-	public AttributeValue<?> getValue(AttributeValueType key) {
-		return values.get(key);
+	@Override
+	public SyncedProperty<String> getName() {
+		return this.name;
+	}
+
+
+
+
+	@Override
+	public SyncedProperty<AttributeType> getType() {
+		return this.type;
 	}
 
 

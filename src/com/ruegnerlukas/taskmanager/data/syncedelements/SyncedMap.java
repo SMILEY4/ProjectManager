@@ -9,6 +9,7 @@ import com.sun.javafx.collections.ObservableMapWrapper;
 import javafx.collections.MapChangeListener;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class SyncedMap<K, V> extends ObservableMapWrapper<K, V> implements SyncedElement {
 
@@ -21,7 +22,14 @@ public class SyncedMap<K, V> extends ObservableMapWrapper<K, V> implements Synce
 
 
 	public SyncedMap(String identifier, SyncedNode parent, DataHandler handler) {
-		super(new HashMap<>());
+		this(identifier, parent, handler, new HashMap<>());
+	}
+
+
+
+
+	public SyncedMap(String identifier, SyncedNode parent, DataHandler handler, Map<K, V> map) {
+		super(map);
 
 		this.node = new SyncedNode(identifier, parent, handler);
 		this.node.setManagedElement(this);

@@ -1,8 +1,8 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
@@ -65,8 +65,9 @@ public class NumberAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void initAttribute(TaskAttribute attribute) {
-		attribute.values.clear();
+	@Override
+	public void initAttribute(TaskAttributeData attribute) {
+		attribute.getValues().clear();
 		setDecPlaces(attribute, 1);
 		setMinValue(attribute, -10);
 		setMaxValue(attribute, +10);
@@ -77,14 +78,14 @@ public class NumberAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setDecPlaces(TaskAttribute attribute, int decPlaces) {
-		attribute.values.put(AttributeValueType.NUMBER_DEC_PLACES, new NumberDecPlacesValue(decPlaces));
+	public void setDecPlaces(TaskAttributeData attribute, int decPlaces) {
+		attribute.getValues().put(AttributeValueType.NUMBER_DEC_PLACES, new NumberDecPlacesValue(decPlaces));
 	}
 
 
 
 
-	public int getDecPlaces(TaskAttribute attribute) {
+	public int getDecPlaces(TaskAttributeData attribute) {
 		NumberDecPlacesValue value = (NumberDecPlacesValue) attribute.getValue(AttributeValueType.NUMBER_DEC_PLACES);
 		if (value == null) {
 			return 0;
@@ -97,21 +98,21 @@ public class NumberAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setMinValue(TaskAttribute attribute, int minValue) {
-		attribute.values.put(AttributeValueType.NUMBER_MIN, new NumberMinValue(minValue));
+	public void setMinValue(TaskAttributeData attribute, int minValue) {
+		attribute.getValues().put(AttributeValueType.NUMBER_MIN, new NumberMinValue(minValue));
 	}
 
 
 
 
-	public void setMinValue(TaskAttribute attribute, double minValue) {
-		attribute.values.put(AttributeValueType.NUMBER_MIN, new NumberMinValue(minValue));
+	public void setMinValue(TaskAttributeData attribute, double minValue) {
+		attribute.getValues().put(AttributeValueType.NUMBER_MIN, new NumberMinValue(minValue));
 	}
 
 
 
 
-	public Number getMinValue(TaskAttribute attribute) {
+	public Number getMinValue(TaskAttributeData attribute) {
 		NumberMinValue value = (NumberMinValue) attribute.getValue(AttributeValueType.NUMBER_MIN);
 		if (value == null) {
 			return (double) Integer.MIN_VALUE;
@@ -123,21 +124,21 @@ public class NumberAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setMaxValue(TaskAttribute attribute, int maxValue) {
-		attribute.values.put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(maxValue));
+	public void setMaxValue(TaskAttributeData attribute, int maxValue) {
+		attribute.getValues().put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(maxValue));
 	}
 
 
 
 
-	public void setMaxValue(TaskAttribute attribute, double maxValue) {
-		attribute.values.put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(maxValue));
+	public void setMaxValue(TaskAttributeData attribute, double maxValue) {
+		attribute.getValues().put(AttributeValueType.NUMBER_MAX, new NumberMaxValue(maxValue));
 	}
 
 
 
 
-	public Number getMaxValue(TaskAttribute attribute) {
+	public Number getMaxValue(TaskAttributeData attribute) {
 		NumberMaxValue value = (NumberMaxValue) attribute.getValue(AttributeValueType.NUMBER_MAX);
 		if (value == null) {
 			return (double) Integer.MAX_VALUE;
@@ -149,14 +150,14 @@ public class NumberAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setUseDefault(TaskAttribute attribute, boolean useDefault) {
-		attribute.values.put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
+	public void setUseDefault(TaskAttributeData attribute, boolean useDefault) {
+		attribute.getValues().put(AttributeValueType.USE_DEFAULT, new UseDefaultValue(useDefault));
 	}
 
 
 
 
-	public boolean getUseDefault(TaskAttribute attribute) {
+	public boolean getUseDefault(TaskAttributeData attribute) {
 		UseDefaultValue value = (UseDefaultValue) attribute.getValue(AttributeValueType.USE_DEFAULT);
 		if (value == null) {
 			return false;
@@ -168,14 +169,14 @@ public class NumberAttributeLogic implements AttributeLogicModule {
 
 
 
-	public void setDefaultValue(TaskAttribute attribute, NumberValue defaultValue) {
-		attribute.values.put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
+	public void setDefaultValue(TaskAttributeData attribute, NumberValue defaultValue) {
+		attribute.getValues().put(AttributeValueType.DEFAULT_VALUE, new DefaultValue(defaultValue));
 	}
 
 
 
 
-	public NumberValue getDefaultValue(TaskAttribute attribute) {
+	public NumberValue getDefaultValue(TaskAttributeData attribute) {
 		DefaultValue value = (DefaultValue) attribute.getValue(AttributeValueType.DEFAULT_VALUE);
 		if (value == null) {
 			return null;
@@ -187,7 +188,8 @@ public class NumberAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean matchesFilter(Task task, TerminalFilterCriteria criteria) {
+	@Override
+	public boolean matchesFilter(TaskData task, TerminalFilterCriteria criteria) {
 
 		TaskValue<?> valueTask = TaskLogic.getValueOrDefault(task, criteria.attribute);
 		List<Object> filterValues = criteria.values;
@@ -315,7 +317,8 @@ public class NumberAttributeLogic implements AttributeLogicModule {
 
 
 
-	public boolean isValidTaskValue(TaskAttribute attribute, TaskValue<?> value) {
+	@Override
+	public boolean isValidTaskValue(TaskAttributeData attribute, TaskValue<?> value) {
 		if (value.getAttType() == AttributeType.NUMBER) {
 			final double number = ((NumberValue) value).getValue();
 			final double min = getMinValue(attribute).doubleValue();
@@ -329,7 +332,8 @@ public class NumberAttributeLogic implements AttributeLogicModule {
 
 
 
-	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttribute attribute, boolean preferNoValue) {
+	@Override
+	public TaskValue<?> generateValidTaskValue(TaskValue<?> oldValue, TaskAttributeData attribute, boolean preferNoValue) {
 		if (preferNoValue) {
 			return new NoValue();
 		} else {

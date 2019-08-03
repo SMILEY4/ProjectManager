@@ -164,7 +164,7 @@ public class TaskDisplayLogic {
 	/**
 	 * Call method when a value of the given {@link Task} in the given {@link Project} was modified
 	 */
-	public static void onTaskModified(Project project, Task task, TaskAttribute attribute) {
+	public static void onTaskModified(Project project, Task task) {
 		// refresh by removing task from groups and adding it again
 		if (project.data.tasks.contains(task)) {
 			onTaskRemoved(project, task);

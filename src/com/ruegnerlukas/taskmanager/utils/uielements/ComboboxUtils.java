@@ -1,10 +1,7 @@
 package com.ruegnerlukas.taskmanager.utils.uielements;
 
 
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskFlag;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.IDValue;
@@ -146,8 +143,8 @@ public class ComboboxUtils {
 					setText("");
 				} else {
 					setText("T-?");
-					for (TaskAttribute attribute : item.values.keySet()) {
-						if (attribute.type.get() == AttributeType.ID) {
+					for (TaskAttributeData attribute : item.getValues().keySet()) {
+						if (attribute.getType().get() == AttributeType.ID) {
 							int id = -1;
 							TaskValue<?> valueID = item.getValue(attribute);
 							if (valueID != null && valueID.getAttType() != null) {
