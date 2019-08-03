@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.popupconfirmchange;
 
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.utils.SetAttributeValueEffect;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
@@ -57,9 +58,10 @@ public class ConfirmChangeItem extends AnchorPane {
 		String strDescr = TaskLogic.getTaskDescription(effect.task);
 
 		labelTask.setText(strID + (strDescr.isEmpty() ? "" : " - " + strDescr));
-		labelValuePrev.setText("" + effect.prevTaskValue.getValue());
-		labelValueNext.setText("" + effect.nextTaskValue.getValue());
+		labelValuePrev.setText(TaskValue.valueToString(effect.prevTaskValue));
+		labelValueNext.setText(TaskValue.valueToString(effect.nextTaskValue));
 
 	}
+
 
 }

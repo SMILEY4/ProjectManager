@@ -1,10 +1,7 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
@@ -167,8 +164,8 @@ public class AttributeLogic {
 		List<SetAttributeValueEffect> list = new ArrayList<>();
 
 		// copy attribute and set new value
-		TaskAttribute attributeCopy = copyAttribute(attribute);
-		attributeCopy.values.put(nextAttValue.getType(), nextAttValue);
+		TaskAttributeData attributeCopy = copyAttribute(attribute);
+		attributeCopy.getValues().put(nextAttValue.getType(), nextAttValue);
 
 		AttributeValue<?> prevAttValue = attribute.values.get(nextAttValue.getType());
 
@@ -176,56 +173,44 @@ public class AttributeLogic {
 		List<Task> tasks = project.data.tasks;
 		for (int i = 0, n = tasks.size(); i < n; i++) {
 			Task task = tasks.get(i);
+			TaskData taskCopy = TaskLogic.copyTask(task, project);
 
+			boolean isAffected = false;
 			TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
+			TaskValue<?> nextTaskValue = null;
+
+			if (TaskLogic.getTaskValue(task, attribute) instanceof NoValue) {
+				// does not have own value ( -> prob. uses default)
+				nextTaskValue = TaskLogic.getValueOrDefault(task, attributeCopy);
+				if (prevTaskValue.compare(nextTaskValue) != 0) {
+					isAffected = true;
+				}
+
+			} else {
+				// has own value
+
+				if (!LOGIC_MODULES.get(attributeCopy.getType().get()).isValidTaskValue(attributeCopy, prevTaskValue)) {
+					// value is invalid
+					TaskValue<?> validValue = LOGIC_MODULES.get(attributeCopy.getType().get()).generateValidTaskValue(prevTaskValue, attributeCopy, preferNoValueTask);
+					taskCopy.getValues().put(attributeCopy, validValue);
+					nextTaskValue = TaskLogic.getValueOrDefault(taskCopy, attributeCopy);
+					isAffected = true;
+				}
+			}
 
 
-//			if(TaskLogic.getTaskValue(task, attribute) != null && !(TaskLogic.getTaskValue(task, attribute) instanceof NoValue) ) {
-//				// case 1: task has own value -> check if value is still valid
-//
-//				TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
-//				TaskValue<?> nextTaskValue = null;
-//
-//				if (!LOGIC_MODULES.get(attributeCopy.type.get()).isValidTaskValue(attributeCopy, prevTaskValue)) {
-//					nextTaskValue = LOGIC_MODULES.get(attributeCopy.type.get()).generateValidTaskValue(prevTaskValue, attributeCopy, preferNoValueTask);
-//					if (nextTaskValue == null || nextTaskValue instanceof NoValue) {
-//						nextTaskValue = AttributeLogic.getDefaultValue(attributeCopy);
-//					}
-//
-//				}
-//
-//				list.add(
-//						new SetAttributeValueEffect(
-//								attributeCopy,
-//								prevAttValue,
-//								nextAttValue,
-//								task,
-//								prevTaskValue,
-//								nextTaskValue
-//						)
-//				);
-//
-//			} else {
-//				// case 2: task is using default value (does not have own value) -> check if default changes
-//
-//				TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
-//				TaskValue<?> nextTaskValue = TaskLogic.getValueOrDefault(task, attributeCopy);
-//
-//				if(prevTaskValue != null && nextTaskValue != null && prevTaskValue.compare(nextTaskValue) != 0) {
-//					list.add(
-//							new SetAttributeValueEffect(
-//									attributeCopy,
-//									prevAttValue,
-//									nextAttValue,
-//									task,
-//									prevTaskValue,
-//									nextTaskValue
-//							)
-//					);
-//				}
-//
-//			}
-
+			if (isAffected) {
+				list.add(
+						new SetAttributeValueEffect(
+								attribute,
+								prevAttValue,
+								nextAttValue,
+								task,
+								prevTaskValue,
+								nextTaskValue
+						)
+				);
+			}
 
 		}
 
@@ -235,9 +220,13 @@ public class AttributeLogic {
 
 
 
-	public static TaskAttribute copyAttribute(TaskAttribute attribute) {
-		TaskAttribute copy = new TaskAttribute(attribute.id, attribute.type.get(), null);
-		copy.values.putAll(attribute.values);
+	/**
+	 * @return a copy of the given {@link Task}.
+	 */
+	public static TaskAttributeData copyAttribute(TaskAttribute attribute) {
+		TaskAttributeData copy = new TaskAttributeData(attribute.id, attribute.type.get());
+		copy.getValues().clear();
+		copy.getValues().putAll(attribute.values);
 		return copy;
 	}
 

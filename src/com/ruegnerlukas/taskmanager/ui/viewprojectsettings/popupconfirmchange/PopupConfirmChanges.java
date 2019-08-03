@@ -64,7 +64,8 @@ public class PopupConfirmChanges extends PopupBase {
 
 		// add items
 		for (AttributeValueType type : effectsMap.keySet()) {
-			boxList.getChildren().add(new ConfirmChangeHeader(type));
+			SetAttributeValueEffect sampleEffect = effectsMap.get(type).get(0);
+			boxList.getChildren().add(new ConfirmChangeHeader(type, sampleEffect.prevAttValue, sampleEffect.nextAttValue));
 			for (SetAttributeValueEffect effect : effectsMap.get(type)) {
 				boxList.getChildren().add(new ConfirmChangeItem(effect));
 			}
