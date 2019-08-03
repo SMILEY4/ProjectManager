@@ -9,7 +9,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.Depend
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
-import com.ruegnerlukas.taskmanager.logic.events.TaskValueChangeEvent;
+import com.ruegnerlukas.taskmanager.logic.utils.TaskValueChangeEvent;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.TasksSidebar;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.sidebar.items.dependency.ItemDep;

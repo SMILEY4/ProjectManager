@@ -24,7 +24,7 @@ public class SyncedNode {
 		this.identifier = identifier;
 		this.parent = parent;
 		this.dataHandler = dataHandler;
-		if (parent == null) {
+		if (parent == null && dataHandler != null) {
 			dataHandler.registerSyncedNode(this);
 		}
 	}
@@ -36,6 +36,9 @@ public class SyncedNode {
 	 * Called when the {@link SyncedElement} connected to this node was changed.
 	 */
 	protected void onManagedElementChanged(DataChange change) {
+		if (dataHandler == null) {
+			return;
+		}
 		if (parent == null) {
 			dataHandler.onLocalChange(change);
 		} else {
@@ -81,7 +84,9 @@ public class SyncedNode {
 
 
 	public void dispose() {
-		dataHandler.deregisterSyncedNode(this);
+		if (dataHandler != null) {
+			dataHandler.deregisterSyncedNode(this);
+		}
 	}
 
 

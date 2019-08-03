@@ -95,21 +95,21 @@ public class DefaultTextItem extends SimpleContentNodeItem {
 
 
 	/**
-	 * Checks whether this value was changed / is different from the value of the {@link TaskAttribute} and sets the changed-property.
+	 * Sets the text of the input-field to the given text
 	 */
-	public void checkChanged() {
-		changedProperty.set(!getMasterValue().equals(textField.getText()));
-		setValueHeight();
+	public void setText(String text) {
+		textField.setText(text);
 	}
 
 
 
 
 	/**
-	 * Sets the text of the input-field to the given text
+	 * Checks whether this value was changed / is different from the value of the {@link TaskAttribute} and sets the changed-property.
 	 */
-	public void setText(String text) {
-		textField.setText(text);
+	public void checkChanged() {
+		changedProperty.set(!getMasterValue().equals(textField.getText()));
+		setValueHeight();
 	}
 
 

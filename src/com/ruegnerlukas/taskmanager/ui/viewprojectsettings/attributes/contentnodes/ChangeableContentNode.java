@@ -1,13 +1,22 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
+import com.ruegnerlukas.taskmanager.TaskManager;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.logic.utils.SetAttributeValueEffect;
+import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodeitems.ContentNodeItem;
+import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.popupconfirmchange.PopupConfirmChanges;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,10 +96,48 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 	 * Notifies all {@link ContentNodeItem} to write their changes to the {@link TaskAttribute}.
 	 */
 	private void onSave() {
-		for (ContentNodeItem item : items) {
-			item.save();
+
+		List<SetAttributeValueEffect> effects = new ArrayList<>();
+		for(ContentNodeItem item : items) {
+			effects.addAll(item.getSetAttributeValueEffects());
 		}
-		checkForChange();
+
+		boolean applyChanges = openConfirmationPopup(effects);
+
+		if (applyChanges) {
+			for (ContentNodeItem item : items) {
+				item.save();
+			}
+			checkForChange();
+		}
+	}
+
+
+
+
+	/**
+	 * Opens a popup ({@link PopupConfirmChanges}) showing the tasks affected by the change and asking the user to confirm the changes.
+	 */
+	private boolean openConfirmationPopup(List<SetAttributeValueEffect> effects) {
+		if(effects.isEmpty()) {
+			return true;
+		}
+		PopupConfirmChanges popup = new PopupConfirmChanges(effects);
+		Stage stage = new Stage();
+		popup.setStage(stage);
+		popup.create();
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(TaskManager.getPrimaryStage());
+		Scene scene = new Scene(popup, popup.getPopupWidth(), popup.getPopupHeight());
+		scene.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
+			if (ke.getCode() == KeyCode.R) {
+				UIDataHandler.styleReloadAll();
+				ke.consume();
+			}
+		});
+		stage.setScene(scene);
+		stage.showAndWait();
+		return popup.getResult();
 	}
 
 

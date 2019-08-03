@@ -15,7 +15,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortElement;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGroupData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.*;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.events.TaskValueChangeEvent;
+import com.ruegnerlukas.taskmanager.logic.utils.TaskValueChangeEvent;
 import javafx.collections.ListChangeListener;
 import javafx.event.EventHandler;
 
@@ -349,6 +349,36 @@ public class TaskLogic {
 			}
 		}
 		return null;
+	}
+
+
+
+
+	/**
+	 * @return the description of the given task
+	 */
+	public static String getTaskDescription(Task task) {
+		DescriptionValue value = getTaskDescriptionValue(task);
+		if (value != null && value.getAttType() != null) {
+			return value.getValue();
+		} else {
+			return "";
+		}
+	}
+
+
+
+
+	/**
+	 * @return the {@link DescriptionValue} of the given task
+	 */
+	public static DescriptionValue getTaskDescriptionValue(Task task) {
+		for (TaskValue<?> value : task.values.values()) {
+			if (value.getAttType() == AttributeType.DESCRIPTION) {
+				return (DescriptionValue) value;
+			}
+		}
+		return new DescriptionValue("");
 	}
 
 

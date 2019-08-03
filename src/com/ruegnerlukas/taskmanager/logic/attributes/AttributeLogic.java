@@ -10,7 +10,8 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFi
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.NoValue;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
-import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
+import com.ruegnerlukas.taskmanager.logic.utils.AttributeValueChangeEvent;
+import com.ruegnerlukas.taskmanager.logic.utils.SetAttributeValueEffect;
 import javafx.event.EventHandler;
 
 import java.util.*;
@@ -153,6 +154,43 @@ public class AttributeLogic {
 		}
 
 		return true;
+	}
+
+
+
+
+	/**
+	 * @return a list of all effects of the new {@link AttributeValue}. This will not actually set the value.
+	 */
+	public static List<SetAttributeValueEffect> getSetValueEffects(Project project, TaskAttribute attribute, AttributeValue<?> newAttValue, boolean preferNoValueTask) {
+
+		List<SetAttributeValueEffect> list = new ArrayList<>();
+
+		TaskAttribute attributeCopy = copyAttribute(attribute);
+		attributeCopy.values.put(newAttValue.getType(), newAttValue);
+
+		AttributeValue<?> currAttValue = attribute.values.get(newAttValue.getType());
+
+		List<Task> tasks = project.data.tasks;
+		for (int i = 0, n = tasks.size(); i < n; i++) {
+			Task task = tasks.get(i);
+			TaskValue<?> currTaskValue = TaskLogic.getTaskValue(task, attribute);
+			if (!LOGIC_MODULES.get(attributeCopy.type.get()).isValidTaskValue(attributeCopy, currTaskValue)) {
+				TaskValue<?> newTaskValue = LOGIC_MODULES.get(attributeCopy.type.get()).generateValidTaskValue(currTaskValue, attributeCopy, preferNoValueTask);
+				list.add(new SetAttributeValueEffect(attributeCopy, currAttValue, newAttValue, task, currTaskValue, newTaskValue));
+			}
+		}
+
+		return list;
+	}
+
+
+
+
+	public static TaskAttribute copyAttribute(TaskAttribute attribute) {
+		TaskAttribute copy = new TaskAttribute(attribute.id, attribute.type.get(), null);
+		copy.values.putAll(attribute.values);
+		return copy;
 	}
 
 
@@ -371,5 +409,6 @@ public class AttributeLogic {
 
 		return true;
 	}
+
 
 }

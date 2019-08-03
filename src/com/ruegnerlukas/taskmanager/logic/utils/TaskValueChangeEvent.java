@@ -1,4 +1,4 @@
-package com.ruegnerlukas.taskmanager.logic.events;
+package com.ruegnerlukas.taskmanager.logic.utils;
 
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;

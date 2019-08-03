@@ -15,7 +15,7 @@ public class FXNodeSilencer {
 
 
 	/**
-	 * Prevents given {@link Node}s from firing events.
+	 * Prevents given {@link Node}s from firing utils.
 	 */
 	public static void muteNodes(Node... nodes) {
 		for (Node node : nodes) {
@@ -27,7 +27,7 @@ public class FXNodeSilencer {
 
 
 	/**
-	 * Prevents given {@link Node} from firing events.
+	 * Prevents given {@link Node} from firing utils.
 	 */
 	public static void muteNode(Node node) {
 		node.addEventFilter(ActionEvent.ACTION, MUTE_FILTER);
@@ -37,7 +37,7 @@ public class FXNodeSilencer {
 
 
 	/**
-	 * Allows given {@link Node}s to fire events.
+	 * Allows given {@link Node}s to fire utils.
 	 */
 	public static void unmuteNodes(Node... nodes) {
 		for (Node node : nodes) {
@@ -49,7 +49,7 @@ public class FXNodeSilencer {
 
 
 	/**
-	 * Allows given {@link Node} to fire events.
+	 * Allows given {@link Node} to fire utils.
 	 */
 	public static void unmuteNode(Node node) {
 		node.removeEventFilter(ActionEvent.ACTION, MUTE_FILTER);

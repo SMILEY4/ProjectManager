@@ -10,7 +10,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.A
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.events.AttributeValueChangeEvent;
+import com.ruegnerlukas.taskmanager.logic.utils.AttributeValueChangeEvent;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.content.TaskContent;

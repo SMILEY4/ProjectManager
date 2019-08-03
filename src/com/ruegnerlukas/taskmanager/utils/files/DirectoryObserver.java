@@ -29,7 +29,7 @@ public class DirectoryObserver {
 	 * Start observing the given directory. Restarts if it was already running.
 	 *
 	 * @param directory the directory to observe
-	 * @param pause     the time in  milliseconds between checking for events
+	 * @param pause     the time in  milliseconds between checking for utils
 	 * @param deep      whether to observe files in sub-directories
 	 */
 	public void start(File directory, long pause, boolean deep) {
@@ -65,7 +65,7 @@ public class DirectoryObserver {
 	 * start watching the given directory
 	 *
 	 * @param directory the directory to observe
-	 * @param pause     the time in  milliseconds between checking for events
+	 * @param pause     the time in  milliseconds between checking for utils
 	 * @param deep      whether to observe files in sub-directories
 	 */
 	private void watchDirectory(File directory, long pause, boolean deep) {

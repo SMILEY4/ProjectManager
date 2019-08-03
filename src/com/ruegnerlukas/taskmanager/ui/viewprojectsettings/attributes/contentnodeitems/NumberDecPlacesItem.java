@@ -53,12 +53,14 @@ public class NumberDecPlacesItem extends SimpleContentNodeItem {
 
 
 
+
 	/**
 	 * @return the unchanged number of decimal places of the {@link TaskAttribute}
 	 */
 	private int getMasterDecPlaces() {
 		return AttributeLogic.NUMBER_LOGIC.getDecPlaces(attribute);
 	}
+
 
 
 
@@ -71,12 +73,14 @@ public class NumberDecPlacesItem extends SimpleContentNodeItem {
 
 
 
+
 	/**
 	 * @return the unchanged max value of the {@link TaskAttribute}
 	 */
 	private double getMasterMaxValue() {
 		return AttributeLogic.NUMBER_LOGIC.getMaxValue(attribute).doubleValue();
 	}
+
 
 
 
@@ -89,11 +93,12 @@ public class NumberDecPlacesItem extends SimpleContentNodeItem {
 
 
 
+
 	/**
 	 * Checks whether this value was changed / is different from the value of the {@link TaskAttribute} and sets the changed-property.
 	 */
 	public void checkChanged() {
-		if(handlerModified != null) {
+		if (handlerModified != null) {
 			handlerModified.handle(new ActionEvent());
 		}
 		changedProperty.set(getMasterDecPlaces() != getValue());
@@ -125,6 +130,7 @@ public class NumberDecPlacesItem extends SimpleContentNodeItem {
 			changedProperty.set(false);
 		}
 	}
+
 
 
 

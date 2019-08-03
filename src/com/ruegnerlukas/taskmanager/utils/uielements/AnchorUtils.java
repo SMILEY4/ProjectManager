@@ -7,6 +7,16 @@ public class AnchorUtils {
 
 
 	/**
+	 * Sets all anchors of the given {@link Node} to 0.
+	 */
+	public static void fitToParent(Node node) {
+		setAnchors(node, 0.0, 0.0, 0.0, 0.0);
+	}
+
+
+
+
+	/**
 	 * sets the anchors of the given {@link Node}
 	 */
 	public static void setAnchors(Node node, double top, double right, double bottom, double left) {

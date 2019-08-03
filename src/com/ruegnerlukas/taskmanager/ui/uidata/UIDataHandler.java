@@ -25,6 +25,7 @@ public class UIDataHandler {
 
 		stylesheetPaths.put(UIModule.VIEW_MAIN, "style/style_view_main.css");
 		stylesheetPaths.put(UIModule.VIEW_PROJECTSETTINGS, "style/style_view_projectsettings.css");
+		stylesheetPaths.put(UIModule.POPUP_CONFIRM_CHANGES, "style/style_popup_confirmchanges.css");
 		stylesheetPaths.put(UIModule.VIEW_TASKS, "style/style_view_tasks.css");
 		stylesheetPaths.put(UIModule.VIEW_TASKS_HEADER, "style/style_view_tasks_header.css");
 		stylesheetPaths.put(UIModule.VIEW_TASKS_CONTENT, "style/style_view_tasks_content.css");
@@ -40,9 +41,11 @@ public class UIDataHandler {
 		stylesheetPaths.put(UIModule.CONTROL_EDITABLE_LABEL, "style/style_control_editablelabel.css");
 		stylesheetPaths.put(UIModule.POPUP_DEPENDENCY, "style/style_popup_dependency.css");
 
+
 		// fxml-files
 		fxmlPaths.put(UIModule.VIEW_MAIN, "fxml/layout_view_main.fxml");
 		fxmlPaths.put(UIModule.VIEW_PROJECTSETTINGS, "fxml/layout_view_projectsettings.fxml");
+		fxmlPaths.put(UIModule.POPUP_CONFIRM_CHANGES, "fxml/layout_popup_confirmchanges.fxml");
 		fxmlPaths.put(UIModule.VIEW_TASKS, "fxml/layout_view_tasks.fxml");
 		fxmlPaths.put(UIModule.VIEW_TASKS_HEADER, "fxml/layout_view_tasks_header.fxml");
 		fxmlPaths.put(UIModule.VIEW_TASKS_CONTENT, "fxml/layout_view_tasks_content.fxml");
