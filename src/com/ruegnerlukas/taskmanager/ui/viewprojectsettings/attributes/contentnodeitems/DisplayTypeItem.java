@@ -5,13 +5,9 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.A
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.CardDisplayTypeValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.utils.SetAttributeValueEffect;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXMapEntryChangeListener;
 import javafx.collections.MapChangeListener;
 import javafx.scene.control.CheckBox;
-
-import java.util.Collections;
-import java.util.List;
 
 public class DisplayTypeItem extends SimpleContentNodeItem {
 
@@ -62,14 +58,6 @@ public class DisplayTypeItem extends SimpleContentNodeItem {
 	 */
 	public void checkChanged() {
 		changedProperty.set(getMasterValue() != checkBox.isSelected());
-	}
-
-
-
-
-	@Override
-	public List<SetAttributeValueEffect> getSetAttributeValueEffects() {
-		return Collections.emptyList();
 	}
 
 

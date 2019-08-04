@@ -1,7 +1,10 @@
 package com.ruegnerlukas.taskmanager.logic.attributes;
 
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.*;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttributeData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.*;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
@@ -9,7 +12,6 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.NoValu
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.utils.AttributeValueChangeEvent;
-import com.ruegnerlukas.taskmanager.logic.utils.SetAttributeValueEffect;
 import javafx.event.EventHandler;
 
 import java.util.*;
@@ -152,69 +154,6 @@ public class AttributeLogic {
 		}
 
 		return true;
-	}
-
-
-
-
-	/**
-	 * @return a list of all effected tasks and their changed values when setting the new {@link AttributeValue}. This will not actually set the value.
-	 */
-	public static List<SetAttributeValueEffect> getSetValueEffects(Project project, TaskAttribute attribute, AttributeValue<?> nextAttValue, boolean preferNoValueTask) {
-		List<SetAttributeValueEffect> list = new ArrayList<>();
-
-		// copy attribute and set new value
-		TaskAttributeData attributeCopy = copyAttribute(attribute);
-		attributeCopy.getValues().put(nextAttValue.getType(), nextAttValue);
-
-		AttributeValue<?> prevAttValue = attribute.values.get(nextAttValue.getType());
-
-		// for each task
-		List<Task> tasks = project.data.tasks;
-		for (int i = 0, n = tasks.size(); i < n; i++) {
-			Task task = tasks.get(i);
-			TaskData taskCopy = TaskLogic.copyTask(task, project);
-
-			boolean isAffected = false;
-			TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
-			TaskValue<?> nextTaskValue = null;
-
-			if (TaskLogic.getTaskValue(task, attribute) instanceof NoValue) {
-				// does not have own value ( -> prob. uses default)
-				nextTaskValue = TaskLogic.getValueOrDefault(task, attributeCopy);
-				if (prevTaskValue.compare(nextTaskValue) != 0) {
-					isAffected = true;
-				}
-
-			} else {
-				// has own value
-
-				if (!LOGIC_MODULES.get(attributeCopy.getType().get()).isValidTaskValue(attributeCopy, prevTaskValue)) {
-					// value is invalid
-					TaskValue<?> validValue = LOGIC_MODULES.get(attributeCopy.getType().get()).generateValidTaskValue(prevTaskValue, attributeCopy, preferNoValueTask);
-					taskCopy.getValues().put(attributeCopy, validValue);
-					nextTaskValue = TaskLogic.getValueOrDefault(taskCopy, attributeCopy);
-					isAffected = true;
-				}
-			}
-
-
-			if (isAffected) {
-				list.add(
-						new SetAttributeValueEffect(
-								attribute,
-								prevAttValue,
-								nextAttValue,
-								task,
-								prevTaskValue,
-								nextTaskValue
-						)
-				);
-			}
-
-		}
-
-		return list;
 	}
 
 

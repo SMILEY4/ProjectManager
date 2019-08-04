@@ -1,7 +1,16 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
 import com.ruegnerlukas.taskmanager.TaskManager;
+import com.ruegnerlukas.taskmanager.data.localdata.Data;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttributeData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskData;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.NoValue;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskValue;
+import com.ruegnerlukas.taskmanager.logic.TaskLogic;
+import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.utils.SetAttributeValueEffect;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
@@ -93,16 +102,11 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 
 
 	/**
-	 * Notifies all {@link ContentNodeItem} to write their changes to the {@link TaskAttribute}.
+	 * Notifies all {@link ContentNodeItem} to write their changes to the {@link TaskAttribute} after confirmation of the user.
 	 */
 	private void onSave() {
 
-		List<SetAttributeValueEffect> effects = new ArrayList<>();
-		for(ContentNodeItem item : items) {
-			effects.addAll(item.getSetAttributeValueEffects());
-		}
-
-		boolean applyChanges = openConfirmationPopup(effects);
+		boolean applyChanges = openConfirmationPopup(getValueEffects());
 
 		if (applyChanges) {
 			for (ContentNodeItem item : items) {
@@ -116,10 +120,80 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 
 
 	/**
+	 * @return a list of all effect resulting from saving the current changes
+	 */
+	private List<SetAttributeValueEffect> getValueEffects() {
+		List<SetAttributeValueEffect> effects = new ArrayList<>();
+
+		// apply all changes to attribute-copy
+		TaskAttributeData copyAttribute = AttributeLogic.copyAttribute(getAttribute());
+		for (ContentNodeItem item : items) {
+			AttributeValue<?> nextAttValue = item.getAttributeValue();
+			copyAttribute.getValues().put(nextAttValue.getType(), nextAttValue);
+		}
+
+		// find all affected tasks
+		for (Task task : Data.projectProperty.get().data.tasks) {
+			TaskData copyTask = TaskLogic.copyTask(task, Data.projectProperty.get());
+
+			boolean isAffected = false;
+			TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, getAttribute());
+			TaskValue<?> nextTaskValue = null;
+
+			boolean isPrevDefault = !task.getValues().containsKey(getAttribute()) && AttributeLogic.getUsesDefault(getAttribute());
+			boolean isNextDefault = false;
+
+
+			if (isPrevDefault) {
+				nextTaskValue = TaskLogic.getValueOrDefault(task, copyAttribute);
+				if (prevTaskValue.compare(nextTaskValue) != 0) {
+					isAffected = true;
+					isNextDefault = !task.getValues().containsKey(getAttribute()) && AttributeLogic.getUsesDefault(copyAttribute);
+				}
+
+			} else {
+				// has own value
+				if (!AttributeLogic.LOGIC_MODULES.get(copyAttribute.getType().get()).isValidTaskValue(copyAttribute, prevTaskValue)) {
+					// value is invalid -> get new valid value
+					TaskValue<?> validValue = AttributeLogic.LOGIC_MODULES.get(copyAttribute.getType().get()).generateValidTaskValue(prevTaskValue, copyAttribute, true);
+					if (validValue == null || validValue instanceof NoValue) {
+						copyTask.getValues().remove(copyAttribute);
+					} else {
+						copyTask.getValues().put(copyAttribute, validValue);
+					}
+					nextTaskValue = TaskLogic.getValueOrDefault(copyTask, copyAttribute);
+					isAffected = true;
+					isNextDefault = !copyTask.getValues().containsKey(copyAttribute) && AttributeLogic.getUsesDefault(copyAttribute);
+				}
+			}
+
+
+			if (isAffected) {
+				effects.add(
+						new SetAttributeValueEffect(
+								getAttribute(),
+								task,
+								isPrevDefault,
+								isNextDefault,
+								prevTaskValue,
+								nextTaskValue
+						)
+				);
+			}
+
+		}
+
+		return effects;
+	}
+
+
+
+
+	/**
 	 * Opens a popup ({@link PopupConfirmChanges}) showing the tasks affected by the change and asking the user to confirm the changes.
 	 */
 	private boolean openConfirmationPopup(List<SetAttributeValueEffect> effects) {
-		if(effects.isEmpty()) {
+		if (effects.isEmpty()) {
 			return true;
 		}
 		PopupConfirmChanges popup = new PopupConfirmChanges(effects);

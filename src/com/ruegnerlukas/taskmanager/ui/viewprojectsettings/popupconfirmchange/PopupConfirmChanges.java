@@ -1,7 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.popupconfirmchange;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.logic.utils.SetAttributeValueEffect;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
@@ -14,10 +13,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class PopupConfirmChanges extends PopupBase {
 
@@ -55,20 +51,9 @@ public class PopupConfirmChanges extends PopupBase {
 			Logger.get().error("Error loading PopupConfirmChanges-FXML: " + e);
 		}
 
-		// sort effects into buckets
-		Map<AttributeValueType, List<SetAttributeValueEffect>> effectsMap = new HashMap<>();
-		for (SetAttributeValueEffect effect : effects) {
-			List<SetAttributeValueEffect> list = effectsMap.computeIfAbsent(effect.prevAttValue.getType(), k -> new ArrayList<>());
-			list.add(effect);
-		}
-
 		// add items
-		for (AttributeValueType type : effectsMap.keySet()) {
-			SetAttributeValueEffect sampleEffect = effectsMap.get(type).get(0);
-			boxList.getChildren().add(new ConfirmChangeHeader(type, sampleEffect.prevAttValue, sampleEffect.nextAttValue));
-			for (SetAttributeValueEffect effect : effectsMap.get(type)) {
-				boxList.getChildren().add(new ConfirmChangeItem(effect));
-			}
+		for (SetAttributeValueEffect effect : effects) {
+			boxList.getChildren().add(new ConfirmChangeItem(effect));
 		}
 
 

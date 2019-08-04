@@ -448,7 +448,7 @@ public class TaskLogic {
 
 	/**
 	 * @return a copy of the given {@link Task}
-	 * */
+	 */
 	public static TaskData copyTask(Task task, Project project) {
 		TaskData taskCopy = new TaskData(getTaskID(task), project);
 		taskCopy.getValues().clear();

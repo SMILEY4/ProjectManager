@@ -58,8 +58,8 @@ public class ConfirmChangeItem extends AnchorPane {
 		String strDescr = TaskLogic.getTaskDescription(effect.task);
 
 		labelTask.setText(strID + (strDescr.isEmpty() ? "" : " - " + strDescr));
-		labelValuePrev.setText(TaskValue.valueToString(effect.prevTaskValue));
-		labelValueNext.setText(TaskValue.valueToString(effect.nextTaskValue));
+		labelValuePrev.setText(TaskValue.valueToString(effect.prevTaskValue) + (effect.isPrevDefault ? " (D)" : ""));
+		labelValueNext.setText(TaskValue.valueToString(effect.nextTaskValue) + (effect.isNextDefault ? " (D)" : ""));
 
 	}
 

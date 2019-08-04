@@ -10,7 +10,7 @@ import javafx.scene.layout.AnchorPane;
 public abstract class AttributeContentNode extends AnchorPane {
 
 
-	public final TaskAttribute attribute;
+	private final TaskAttribute attribute;
 	protected AttributeNode parent;
 	public SimpleBooleanProperty changedProperty = new SimpleBooleanProperty(false);
 
@@ -29,6 +29,13 @@ public abstract class AttributeContentNode extends AnchorPane {
 	 */
 	void setParentNode(AttributeNode parent) {
 		this.parent = parent;
+	}
+
+
+
+
+	public TaskAttribute getAttribute() {
+		return this.attribute;
 	}
 
 
