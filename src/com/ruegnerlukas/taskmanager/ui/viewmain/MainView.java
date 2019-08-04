@@ -11,7 +11,6 @@ import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.TaskView;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
-import com.ruegnerlukas.taskmanager.utils.uielements.Alerts;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MenuFunction;
 import javafx.beans.value.ObservableValue;
@@ -25,53 +24,6 @@ import java.io.File;
 import java.io.IOException;
 
 
-/**
- * MAIN-VIEW
- * <p>
- * <p>
- * 1. Responsible for:
- * - managing Menu-Functions (file:save,openNew,close;Preferences;About;...)
- * - Open,Close tabs
- * <p>
- * <p>
- * <p>
- * 2. Details:
- * <p>
- * <p>
- * 2.2. Menu Functions:
- * <p>
- * - File
- * - New Project
- * Creates a new Project.
- * If a project is already openNew, the user has the choice to save and/or close that project
- * <p>
- * - Open Project
- * Opens a Project that was selected in the FileChooser.
- * If a project is already openNew, the user has the choice to save and/or close that project
- * <p>
- * - Open Recent
- * Opens a recently used Project.
- * If a project is already openNew, the user has the choice to save and/or close that project
- * <p>
- * - Save
- * Saves the current Project to its specified Location.
- * If no Location was specified or the file is missing, the user can choose a location
- * <p>
- * - Close
- * Closes the current project. The user can choose to save or cancel before closing.
- * <p>
- * - Exit
- * Exits the application
- * If a project is currently openNew, the user has the choice to save and/or close that project
- * <p>
- * - Preferences
- * - Settings
- * - Key Bindings
- * <p>
- * - Help
- * - Help
- * - About
- */
 public class MainView extends AnchorPane {
 
 
@@ -81,16 +33,10 @@ public class MainView extends AnchorPane {
 	@FXML private AnchorPane paneInfobar;
 	@FXML private Label labelInfobar;
 
-	private MenuFunction functionNewProject;
-	private MenuFunction functionOpenProjectLocal;
 	private MenuFunction functionCloseProject;
-
-	private MenuFunction functionOpenConsole;
 
 	private MainViewModule moduleProjectSettings;
 	private MainViewModule moduleTabs;
-
-	private MenuFunction functionDebug;
 
 
 
@@ -112,51 +58,35 @@ public class MainView extends AnchorPane {
 
 	private void create() {
 
-		// Create new empty Project
-		functionNewProject = new MenuFunction("File", "New Local Project") {
+		// Create new local Project
+		MenuFunction functionNewProject = new MenuFunction("File", "New Local Project") {
 			@Override
 			public void onAction() {
 				if (Data.projectProperty.get() != null) {
-					if (handleOpenProject()) {
-						DirectoryChooser dirChooser = new DirectoryChooser();
-						dirChooser.setTitle("Choose Project Directory");
-						File selectedDir = dirChooser.showDialog(TaskManager.getPrimaryStage());
-						if (selectedDir != null && selectedDir.exists()) {
-							ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject(selectedDir, selectedDir.getName()));
-						}
-					}
-				} else {
-					DirectoryChooser dirChooser = new DirectoryChooser();
-					dirChooser.setTitle("Choose Project Directory");
-					File selectedDir = dirChooser.showDialog(TaskManager.getPrimaryStage());
-					if (selectedDir != null && selectedDir.exists()) {
-						ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject(selectedDir, selectedDir.getName()));
-					}
+					ProjectLogic.closeCurrentProject();
+				}
+				DirectoryChooser dirChooser = new DirectoryChooser();
+				dirChooser.setTitle("Choose Project Directory");
+				File selectedDir = dirChooser.showDialog(TaskManager.getPrimaryStage());
+				if (selectedDir != null && selectedDir.exists()) {
+					ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject(selectedDir, selectedDir.getName()));
 				}
 			}
 		}.addToMenuBar(menuBar);
 
 
-		// open project
-		functionOpenProjectLocal = new MenuFunction("File", "Open Project", "Local") {
+		// open local project
+		MenuFunction functionOpenProjectLocal = new MenuFunction("File", "Open Local Project") {
 			@Override
 			public void onAction() {
 				if (Data.projectProperty.get() != null) {
-					if (handleOpenProject()) {
-						DirectoryChooser dirChooser = new DirectoryChooser();
-						dirChooser.setTitle("Choose Project Directory");
-						File selectedDir = dirChooser.showDialog(TaskManager.getPrimaryStage());
-						if (selectedDir != null && selectedDir.exists()) {
-							ProjectLogic.setCurrentProject(ProjectLogic.loadLocalProject(selectedDir));
-						}
-					}
-				} else {
-					DirectoryChooser dirChooser = new DirectoryChooser();
-					dirChooser.setTitle("Choose Project Directory");
-					File selectedDir = dirChooser.showDialog(TaskManager.getPrimaryStage());
-					if (selectedDir != null && selectedDir.exists()) {
-						ProjectLogic.setCurrentProject(ProjectLogic.loadLocalProject(selectedDir));
-					}
+					ProjectLogic.closeCurrentProject();
+				}
+				DirectoryChooser dirChooser = new DirectoryChooser();
+				dirChooser.setTitle("Choose Project Directory");
+				File selectedDir = dirChooser.showDialog(TaskManager.getPrimaryStage());
+				if (selectedDir != null && selectedDir.exists()) {
+					ProjectLogic.setCurrentProject(ProjectLogic.loadLocalProject(selectedDir));
 				}
 			}
 		}.addToMenuBar(menuBar);
@@ -167,13 +97,45 @@ public class MainView extends AnchorPane {
 			@Override
 			public void onAction() {
 				if (Data.projectProperty.get() != null) {
-					handleOpenProject();
+					ProjectLogic.closeCurrentProject();
 				}
+			}
+		}.addToMenuBar(menuBar);
+		functionCloseProject.setDisable(true);
+
+
+		// separator
+		menuBar.getMenus().get(0).getItems().add(new SeparatorMenuItem());
+
+
+		// openNew console
+		MenuFunction functionOpenConsole = new MenuFunction("File", "Open console") {
+			@Override
+			public void onAction() {
+				ConsoleWindowHandler.openNew();
 			}
 		}.addToMenuBar(menuBar);
 
 
-		functionCloseProject.setDisable(true);
+		// Used for various debug purposes
+		MenuFunction functionDebug = new MenuFunction("Dev", "Debug") {
+			@Override
+			public void onAction() {
+				System.out.println("Debug");
+			}
+		}.addToMenuBar(menuBar);
+
+
+		// listen for tab selection
+		new FXChangeListener<Tab>(tabPane.getSelectionModel().selectedItemProperty()) {
+			@Override
+			public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+				onTabSelected(oldValue, newValue);
+			}
+		};
+
+
+		// listen project property
 		new FXChangeListener<Project>(Data.projectProperty) {
 			@Override
 			public void changed(ObservableValue<? extends Project> observable, Project oldValue, Project newValue) {
@@ -186,75 +148,6 @@ public class MainView extends AnchorPane {
 				}
 			}
 		};
-
-
-		// seperator
-		menuBar.getMenus().get(0).getItems().add(new SeparatorMenuItem());
-
-
-		// openNew console
-		functionOpenConsole = new MenuFunction("File", "Open console") {
-			@Override
-			public void onAction() {
-				ConsoleWindowHandler.openNew();
-			}
-		}.addToMenuBar(menuBar);
-
-
-		new FXChangeListener<Tab>(tabPane.getSelectionModel().selectedItemProperty()) {
-			@Override
-			public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
-				onTabSelected(oldValue, newValue);
-			}
-		};
-
-
-		// Used for various debug purposes
-		functionNewProject = new MenuFunction("Dev", "Debug") {
-			@Override
-			public void onAction() {
-				System.out.println("Debug");
-			}
-		}.addToMenuBar(menuBar);
-
-	}
-
-
-
-
-	/**
-	 * shows a dialog and asks user if he wants to save the current project before closing it.
-	 *
-	 * @return true, if the project was closed (with or without saving it); false, if the user cancelled the action
-	 */
-	private boolean handleOpenProject() {
-
-		// get project
-		if (Data.projectProperty.get() == null) {
-			return false;
-		}
-		Project project = Data.projectProperty.get();
-
-		// handle project
-		ButtonType alertSaveResult = Alerts.confirmation("Save current Project before closing?",
-				"Current project: " + project.settings.name);
-
-		if (alertSaveResult == ButtonType.YES) {
-//			ProjectLogic.saveProject(project);
-			ProjectLogic.closeCurrentProject();
-			return true;
-		}
-
-		if (alertSaveResult == ButtonType.NO) {
-			ProjectLogic.closeCurrentProject();
-			return true;
-		}
-
-		if (alertSaveResult == ButtonType.CANCEL) {
-			return false;
-		}
-
-		return false;
 	}
 
 
@@ -292,7 +185,7 @@ public class MainView extends AnchorPane {
 		this.moduleProjectSettings = viewProjectSettings;
 		this.moduleProjectSettings.onModuleOpen();
 
-		// projectdata
+		// project data
 		TaskView viewTasks = new TaskView();
 		AnchorUtils.setAnchors(viewTasks, 0, 0, 0, 0);
 		Tab tabTaskView = new Tab(TaskView.TITLE);
@@ -301,7 +194,6 @@ public class MainView extends AnchorPane {
 
 		this.moduleTabs = viewTasks;
 		this.moduleTabs.onModuleOpen();
-
 	}
 
 

@@ -155,7 +155,7 @@ public class TextAttributeLogic implements AttributeLogicModule {
 					if (valueTask.getAttType() == null) {
 						return false;
 					} else {
-						return ((TextValue) valueTask).getValue().equals((String) filterValues.get(0));
+						return ((TextValue) valueTask).getValue().equals(filterValues.get(0));
 					}
 				} else {
 					return false;
@@ -179,7 +179,7 @@ public class TextAttributeLogic implements AttributeLogicModule {
 					if (valueTask.getAttType() == null) {
 						return false;
 					} else {
-						return !((TextValue) valueTask).getValue().equals((String) filterValues.get(0));
+						return !((TextValue) valueTask).getValue().equals(filterValues.get(0));
 					}
 				} else {
 					return false;

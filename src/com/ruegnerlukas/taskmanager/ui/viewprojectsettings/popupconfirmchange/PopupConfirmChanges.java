@@ -87,7 +87,7 @@ public class PopupConfirmChanges extends PopupBase {
 
 		// button save filter
 		btnSaveFilter.setOnAction(event -> {
-			onSaveFilter();
+			onSaveFilter(fieldFilterName.getText().trim());
 		});
 
 		// button cancel
@@ -106,11 +106,13 @@ public class PopupConfirmChanges extends PopupBase {
 
 
 
-	private void onSaveFilter() {
-		final String strName = fieldFilterName.getText().trim();
-		final boolean saved = PresetLogic.saveFilterPreset(Data.projectProperty.get(), strName, buildFilter(effects));
+	/**
+	 * Saves a filter-preset with the given name matching only the displayed tasks.
+	 */
+	private void onSaveFilter(String name) {
+		final boolean saved = PresetLogic.saveFilterPreset(Data.projectProperty.get(), name, buildFilter(effects));
 		if (saved) {
-			fieldFilterName.setText(strName);
+			fieldFilterName.setText(name);
 			fieldFilterName.setDisable(true);
 			btnSaveFilter.setDisable(true);
 		}
@@ -119,6 +121,9 @@ public class PopupConfirmChanges extends PopupBase {
 
 
 
+	/**
+	 * @return a {@link FilterCriteria} matching only the tasks specified in the given list.
+	 */
 	private FilterCriteria buildFilter(List<SetAttributeValueEffect> effects) {
 		TaskAttribute idAttribute = AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID);
 		List<FilterCriteria> criteriaList = new ArrayList<>();
@@ -148,6 +153,9 @@ public class PopupConfirmChanges extends PopupBase {
 
 
 
+	/**
+	 * @return true, if the user closed this popup with the "accept"-button
+	 */
 	public boolean getResult() {
 		return result;
 	}

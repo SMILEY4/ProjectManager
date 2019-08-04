@@ -6,7 +6,7 @@ public abstract class DataChange {
 
 
 	public enum ChangeType {
-		VALUE, LIST, MAP, NESTED;
+		VALUE, LIST, MAP, NESTED
 	}
 
 

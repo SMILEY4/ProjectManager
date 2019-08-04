@@ -5,7 +5,6 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.data.raw.attributevalues.RawAttributeValue;
-import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 import java.util.HashMap;
 import java.util.Map;

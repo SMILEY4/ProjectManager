@@ -33,7 +33,7 @@ public class BreadcrumbBar extends AnchorPane {
 
 
 
-	public BreadcrumbBar() {
+	BreadcrumbBar() {
 
 		// button
 		btnBack = new Button();

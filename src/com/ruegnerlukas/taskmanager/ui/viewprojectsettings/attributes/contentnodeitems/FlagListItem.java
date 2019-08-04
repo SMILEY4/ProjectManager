@@ -7,7 +7,6 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.A
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.AttributeValueType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.attributevalues.FlagListValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
-import com.ruegnerlukas.taskmanager.logic.utils.SetAttributeValueEffect;
 import com.ruegnerlukas.taskmanager.utils.CustomProperty;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXMapEntryChangeListener;
@@ -33,8 +32,6 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Random;
 
 public class FlagListItem extends ContentNodeItem {

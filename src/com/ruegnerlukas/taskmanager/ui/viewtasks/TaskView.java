@@ -50,7 +50,7 @@ public class TaskView extends AnchorPane implements MainViewModule {
 	private void create() {
 
 		// header
-		header = new TasksHeader(this);
+		header = new TasksHeader();
 		AnchorUtils.setAnchors(header.getAnchorPane(), 0, 0, 0, 0);
 		paneHeader.getChildren().add(header.getAnchorPane());
 

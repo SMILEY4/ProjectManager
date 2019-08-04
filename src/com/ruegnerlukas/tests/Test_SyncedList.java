@@ -172,11 +172,11 @@ public class Test_SyncedList {
 
 		SyncedList<String> list = new SyncedList<>("test.list", null, handler);
 
-		handler.onExternalChange(DataChange.createListChangeAdd("test.list", (Object) "element 1"));
+		handler.onExternalChange(DataChange.createListChangeAdd("test.list", "element 1"));
 		Assertions.assertEquals(1, list.size(), "Wrong list size after first add");
 		Assertions.assertEquals(list.get(0), "element 1", "Wrong element @0 after first add");
 
-		handler.onExternalChange(DataChange.createListChangeAdd("test.list", (Object) "element 2"));
+		handler.onExternalChange(DataChange.createListChangeAdd("test.list", "element 2"));
 		Assertions.assertEquals(2, list.size(), "Wrong list size after second add");
 		Assertions.assertEquals(list.get(0), "element 1", "Wrong element @0 after second add");
 		Assertions.assertEquals(list.get(1), "element 2", "Wrong element @1 after second add");

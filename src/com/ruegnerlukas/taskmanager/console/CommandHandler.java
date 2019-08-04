@@ -30,7 +30,6 @@ import java.util.Map;
 public class CommandHandler {
 
 
-	private static Grammar grammar;
 	private static StringParser parser;
 	private static Map<CommandIdentifier, Command> commandMap;
 
@@ -39,7 +38,7 @@ public class CommandHandler {
 
 	public static void create() {
 		List<Command> commands = createCommandList();
-		grammar = createGrammar(commands);
+		Grammar grammar = createGrammar(commands);
 		parser = new StringParser(grammar);
 
 		commandMap = new HashMap<>();

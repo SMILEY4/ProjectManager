@@ -4,7 +4,6 @@ import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.utils.TestProjectFactory;
 
-@SuppressWarnings ("Duplicates")
 public class DataTest {
 
 

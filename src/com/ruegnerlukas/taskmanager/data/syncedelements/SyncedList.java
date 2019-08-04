@@ -43,7 +43,6 @@ public class SyncedList<E> extends ObservableListWrapper<E> implements SyncedEle
 
 
 
-	@SuppressWarnings ("Duplicates")
 	@Override
 	public void applyChange(DataChange change) {
 		if (change instanceof NestedChange) {

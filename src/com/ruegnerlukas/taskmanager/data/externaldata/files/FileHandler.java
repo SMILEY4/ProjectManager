@@ -255,6 +255,7 @@ public class FileHandler {
 
 
 
+
 	static class FileComparator implements Comparator<File> {
 
 
@@ -270,11 +271,10 @@ public class FileHandler {
 				int ia = Integer.parseInt(nameA);
 				int ib = Integer.parseInt(nameB);
 				areNumbers = true;
-			}catch (Exception e) {
-				areNumbers = false;
+			} catch (Exception ignored) {
 			}
 
-			if(areNumbers) {
+			if (areNumbers) {
 				return Integer.compare(Integer.parseInt(nameA), Integer.parseInt(nameB));
 			} else {
 				return nameA.compareTo(nameB);

@@ -33,9 +33,7 @@ public abstract class MenuFunction {
 		if (path.length > 1) {
 			this.text = path[path.length - 1];
 			this.path = new String[path.length - 1];
-			for (int i = 0; i < this.path.length; i++) {
-				this.path[i] = path[i];
-			}
+			System.arraycopy(path, 0, this.path, 0, this.path.length);
 		}
 	}
 

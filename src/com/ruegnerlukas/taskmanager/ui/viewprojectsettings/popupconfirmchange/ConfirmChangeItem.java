@@ -17,7 +17,6 @@ public class ConfirmChangeItem extends AnchorPane {
 		this.setMinSize(32, 32);
 		this.setPrefSize(10000, 32);
 		this.setMaxSize(10000, 32);
-		this.setStyle("-fx-border-color: #aaaaaa; -fx-border-radius: 5;"); // todo tmp
 
 		HBox box = new HBox();
 		box.setAlignment(Pos.CENTER_LEFT);
@@ -56,8 +55,8 @@ public class ConfirmChangeItem extends AnchorPane {
 
 		String strID = "T-" + TaskLogic.getTaskID(effect.task);
 		String strDescr = TaskLogic.getTaskDescription(effect.task);
-
 		labelTask.setText(strID + (strDescr.isEmpty() ? "" : " - " + strDescr));
+
 		labelValuePrev.setText(TaskValue.valueToString(effect.prevTaskValue) + (effect.isPrevDefault ? " (D)" : ""));
 		labelValueNext.setText(TaskValue.valueToString(effect.nextTaskValue) + (effect.isNextDefault ? " (D)" : ""));
 

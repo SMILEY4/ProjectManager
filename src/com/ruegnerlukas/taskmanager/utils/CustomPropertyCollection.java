@@ -11,18 +11,17 @@ import java.util.List;
 public class CustomPropertyCollection implements ObservableValue {
 
 
-	private final CustomProperty[] properties;
 	private final List<ChangeListener> listeners = new ArrayList<>();
 
 
 
 
 	public CustomPropertyCollection(CustomProperty... properties) {
-		this.properties = new CustomProperty[properties.length];
+		CustomProperty[] properties1 = new CustomProperty[properties.length];
 		for (int i = 0; i < properties.length; i++) {
 			CustomProperty property = properties[i];
 			property.addListener(((observable, oldValue, newValue) -> fireValueChangedEvent(property, oldValue, newValue)));
-			this.properties[i] = property;
+			properties1[i] = property;
 		}
 	}
 

@@ -1,6 +1,5 @@
 package com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodes;
 
-import com.ruegnerlukas.taskmanager.TaskManager;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
@@ -12,20 +11,15 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.TaskVa
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.utils.SetAttributeValueEffect;
-import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.AttributeContentNode;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.ContentNodeUtils;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.attributes.contentnodeitems.ContentNodeItem;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.popupconfirmchange.PopupConfirmChanges;
+import com.ruegnerlukas.taskmanager.utils.PopupBase;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +114,7 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 
 
 	/**
-	 * @return a list of all effect resulting from saving the current changes
+	 * @return a list of all effects resulting from saving the current changes
 	 */
 	private List<SetAttributeValueEffect> getValueEffects() {
 		List<SetAttributeValueEffect> effects = new ArrayList<>();
@@ -134,7 +128,7 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 
 		// find all affected tasks
 		for (Task task : Data.projectProperty.get().data.tasks) {
-			SetAttributeValueEffect effect = getValueEffects(task, getAttribute(), copyAttribute, true);
+			SetAttributeValueEffect effect = getValueEffects(task, getAttribute(), copyAttribute);
 			if (effect != null) {
 				effects.add(effect);
 			}
@@ -146,7 +140,10 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 
 
 
-	private SetAttributeValueEffect getValueEffects(Task task, TaskAttribute attribute, TaskAttributeData copyAttribute, boolean preferNoValue) {
+	/**
+	 * @return an effect to the given {@link Task} resulting from saving the changes to the given {@link TaskAttribute}
+	 */
+	private SetAttributeValueEffect getValueEffects(Task task, TaskAttribute attribute, TaskAttributeData copyAttribute) {
 
 		TaskData copyTask = TaskLogic.copyTask(task, Data.projectProperty.get());
 
@@ -169,7 +166,7 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 			// has own value
 			if (!AttributeLogic.LOGIC_MODULES.get(copyAttribute.getType().get()).isValidTaskValue(copyAttribute, prevTaskValue)) {
 				// value is invalid -> get new valid value
-				TaskValue<?> validValue = AttributeLogic.LOGIC_MODULES.get(copyAttribute.getType().get()).generateValidTaskValue(prevTaskValue, copyAttribute, preferNoValue);
+				TaskValue<?> validValue = AttributeLogic.LOGIC_MODULES.get(copyAttribute.getType().get()).generateValidTaskValue(prevTaskValue, copyAttribute, true);
 				if (validValue == null || validValue instanceof NoValue) {
 					copyTask.getValues().remove(copyAttribute);
 				} else {
@@ -208,20 +205,7 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 			return true;
 		}
 		PopupConfirmChanges popup = new PopupConfirmChanges(effects);
-		Stage stage = new Stage();
-		popup.setStage(stage);
-		popup.create();
-		stage.initModality(Modality.WINDOW_MODAL);
-		stage.initOwner(TaskManager.getPrimaryStage());
-		Scene scene = new Scene(popup, popup.getPopupWidth(), popup.getPopupHeight());
-		scene.addEventFilter(KeyEvent.KEY_PRESSED, ke -> {
-			if (ke.getCode() == KeyCode.R) {
-				UIDataHandler.styleReloadAll();
-				ke.consume();
-			}
-		});
-		stage.setScene(scene);
-		stage.showAndWait();
+		PopupBase.openPopup(popup, true);
 		return popup.getResult();
 	}
 

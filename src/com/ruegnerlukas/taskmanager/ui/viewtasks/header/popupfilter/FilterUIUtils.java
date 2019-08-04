@@ -52,16 +52,16 @@ public class FilterUIUtils {
 	 * Adds the givne {@link EventHandler} to the created node.
 	 */
 	public static CriteriaNode createFilterNode(FilterCriteria criteria, EventHandler<ActionEvent> handerModified) {
-		if (criteria.type == FilterCriteria.CriteriaType.AND) {
-			return new AndNode(criteria, handerModified);
+		switch (criteria.type) {
+			case TERMINAL:
+				return new TerminalNode(criteria, handerModified);
+			case AND:
+				return new AndNode(criteria, handerModified);
+			case OR:
+				return new OrNode(criteria, handerModified);
+			default:
+				return null;
 		}
-		if (criteria.type == FilterCriteria.CriteriaType.OR) {
-			return new OrNode(criteria, handerModified);
-		}
-		if (criteria.type == FilterCriteria.CriteriaType.TERMINAL) {
-			return new TerminalNode(criteria, handerModified);
-		}
-		return null;
 	}
 
 

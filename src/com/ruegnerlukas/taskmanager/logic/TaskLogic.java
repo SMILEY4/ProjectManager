@@ -72,8 +72,7 @@ public class TaskLogic {
 									for (int i = 0; i < newProject.data.sortData.get().sortElements.size(); i++) {
 										SortElement element = newProject.data.sortData.get().sortElements.get(i);
 										if (element.attribute.get() == attribute) {
-											List<SortElement> newList = new ArrayList<>();
-											newList.addAll(newProject.data.sortData.get().sortElements);
+											List<SortElement> newList = new ArrayList<>(newProject.data.sortData.get().sortElements);
 											newList.remove(element);
 											SortData newData = new SortData(newList);
 											if (newData.sortElements.isEmpty()) {
@@ -623,8 +622,7 @@ public class TaskLogic {
 					}
 				}
 				if (!toRemove.isEmpty()) {
-					List<SortElement> newList = new ArrayList<>();
-					newList.addAll(sortData.sortElements);
+					List<SortElement> newList = new ArrayList<>(sortData.sortElements);
 					newList.removeAll(toRemove);
 					sortData = new SortData(newList);
 				}

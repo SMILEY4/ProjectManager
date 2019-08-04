@@ -367,7 +367,6 @@ class Tag extends HBox {
 	public final SimpleBooleanProperty removed = new SimpleBooleanProperty(false);
 
 	private Label label;
-	private Button btnRemove;
 
 
 
@@ -401,7 +400,7 @@ class Tag extends HBox {
 		});
 
 		// button
-		btnRemove = new Button();
+		Button btnRemove = new Button();
 		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CANCEL, 1.2);
 		this.getChildren().add(btnRemove);
 

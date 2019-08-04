@@ -36,7 +36,6 @@ public class ItemDependency extends SidebarItem {
 
 	private VBox boxDep;
 	private VBox boxPrereq;
-	private Button btnManage;
 
 	private EventHandler<TaskValueChangeEvent> listenerDependency;
 
@@ -83,12 +82,12 @@ public class ItemDependency extends SidebarItem {
 		boxDep.setPadding(new Insets(0, 0, 0, 30));
 		box.getChildren().add(boxDep);
 
-		btnManage = new Button("Change");
-		btnManage.setMinSize(10, 32);
-		btnManage.setPrefSize(150, 32);
-		btnManage.setMaxSize(150, 32);
-		VBox.setMargin(btnManage, new Insets(0, 0, 0, 30));
-		btnManage.setOnAction(e -> {
+		Button btnChange = new Button("Change");
+		btnChange.setMinSize(10, 32);
+		btnChange.setPrefSize(150, 32);
+		btnChange.setMaxSize(150, 32);
+		VBox.setMargin(btnChange, new Insets(0, 0, 0, 30));
+		btnChange.setOnAction(e -> {
 			PopupDependency popup = new PopupDependency(getTask(), getAttribute());
 			Stage stage = new Stage();
 			popup.setStage(stage);
@@ -105,7 +104,7 @@ public class ItemDependency extends SidebarItem {
 			stage.setScene(scene);
 			stage.show();
 		});
-		box.getChildren().add(btnManage);
+		box.getChildren().add(btnChange);
 
 		Label labelPreq = new Label("Prerequisite for:");
 		labelPreq.setMinWidth(0);
