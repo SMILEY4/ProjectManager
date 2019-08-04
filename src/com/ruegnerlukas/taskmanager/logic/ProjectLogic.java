@@ -13,6 +13,8 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGro
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.IDValue;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
+import java.io.File;
+
 public class ProjectLogic {
 
 
@@ -47,10 +49,11 @@ public class ProjectLogic {
 
 
 
-	public static Project loadLocalProject() {
-		// TODO set root directory
-		final String pathRootDir = "D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\SimpleTaskManager\\data\\Test_Project_1";
-		ExternalFileHandler handler = new ExternalFileHandler(pathRootDir);
+	/**
+	 * @return the local project with the given {@link File} as the root directory.
+	 */
+	public static Project loadLocalProject(File directory) {
+		ExternalFileHandler handler = new ExternalFileHandler(directory.getAbsolutePath());
 		return handler.loadProject();
 	}
 
@@ -58,21 +61,20 @@ public class ProjectLogic {
 
 
 	/**
-	 * @return a new {@link Project} with a generic name and an {@link ExternalFileHandler}
+	 * @return a new {@link Project} in the given directory with a generic name and an {@link ExternalFileHandler}
 	 */
-	public static Project createNewLocalProject() {
-		return createNewLocalProject("New Project");
+	public static Project createNewLocalProject(File directory) {
+		return createNewLocalProject(directory, "New Project");
 	}
 
 
 
 
 	/**
-	 * @return a new {@link Project} with the given name and an {@link ExternalFileHandler}.
+	 * @return a new {@link Project} in the given directory with the given name and an {@link ExternalFileHandler}.
 	 */
-	public static Project createNewLocalProject(String name) {
-		// TODO set root directory
-		Project project = new Project(new ExternalFileHandler("D:\\LukasRuegner\\Programmieren\\Java\\Workspace\\SimpleTaskManager\\data\\Test_Project_1"));
+	public static Project createNewLocalProject(File directory, String name) {
+		Project project = new Project(new ExternalFileHandler(directory.getAbsolutePath()));
 		project.settings.name.set(name);
 		project.settings.attributesLocked.set(false);
 		project.settings.taskIDCounter.set(0);
@@ -81,16 +83,6 @@ public class ProjectLogic {
 			project.data.attributes.add(AttributeLogic.createTaskAttribute(type, type.display + " Attribute", project));
 		}
 		return project;
-	}
-
-
-
-
-	/**
-	 * TODO
-	 */
-	public static void saveProject(Project project) {
-		System.out.println("TODO: save current project."); // TODO
 	}
 
 

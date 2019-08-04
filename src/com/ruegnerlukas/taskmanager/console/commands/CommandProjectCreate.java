@@ -3,9 +3,6 @@ package com.ruegnerlukas.taskmanager.console.commands;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.Command;
 import com.ruegnerlukas.taskmanager.console.commandbuilder.CommandBuilder;
 import com.ruegnerlukas.taskmanager.console.commandresults.SuccessfulCommandResult;
-import com.ruegnerlukas.taskmanager.data.localdata.Data;
-import com.ruegnerlukas.taskmanager.data.localdata.Project;
-import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 
 public class CommandProjectCreate {
 
@@ -26,15 +23,16 @@ public class CommandProjectCreate {
 
 	private static void onCommand(SuccessfulCommandResult result) {
 
-		final String name = result.getValueOrDefault("name", "New Project");
-		final boolean useLogic = result.hasValue("use-logic");
-
-		Project project = ProjectLogic.createNewLocalProject(name);
-		if(useLogic) {
-			ProjectLogic.setCurrentProject(project);
-		} else {
-			Data.projectProperty.set(project);
-		}
+		// TODO
+//		final String name = result.getValueOrDefault("name", "New Project");
+//		final boolean useLogic = result.hasValue("use-logic");
+//
+//		Project project = ProjectLogic.createNewLocalProject(name);
+//		if(useLogic) {
+//			ProjectLogic.setCurrentProject(project);
+//		} else {
+//			Data.projectProperty.set(project);
+//		}
 
 	}
 

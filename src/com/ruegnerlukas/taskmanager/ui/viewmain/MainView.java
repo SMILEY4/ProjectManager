@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.ui.viewmain;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+import com.ruegnerlukas.taskmanager.TaskManager;
 import com.ruegnerlukas.taskmanager.console.ConsoleWindowHandler;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
@@ -18,7 +19,9 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.DirectoryChooser;
 
+import java.io.File;
 import java.io.IOException;
 
 
@@ -79,7 +82,7 @@ public class MainView extends AnchorPane {
 	@FXML private Label labelInfobar;
 
 	private MenuFunction functionNewProject;
-	private MenuFunction functionSaveProject;
+	private MenuFunction functionOpenProjectLocal;
 	private MenuFunction functionCloseProject;
 
 	private MenuFunction functionOpenConsole;
@@ -115,23 +118,45 @@ public class MainView extends AnchorPane {
 			public void onAction() {
 				if (Data.projectProperty.get() != null) {
 					if (handleOpenProject()) {
-//						ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject()); // todo temp
-						ProjectLogic.setCurrentProject(ProjectLogic.loadLocalProject()); // todo temp
+						DirectoryChooser dirChooser = new DirectoryChooser();
+						dirChooser.setTitle("Choose Project Directory");
+						File selectedDir = dirChooser.showDialog(TaskManager.getPrimaryStage());
+						if (selectedDir != null && selectedDir.exists()) {
+							ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject(selectedDir, selectedDir.getName()));
+						}
 					}
 				} else {
-//					ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject()); // todo temp
-					ProjectLogic.setCurrentProject(ProjectLogic.loadLocalProject()); // todo temp
+					DirectoryChooser dirChooser = new DirectoryChooser();
+					dirChooser.setTitle("Choose Project Directory");
+					File selectedDir = dirChooser.showDialog(TaskManager.getPrimaryStage());
+					if (selectedDir != null && selectedDir.exists()) {
+						ProjectLogic.setCurrentProject(ProjectLogic.createNewLocalProject(selectedDir, selectedDir.getName()));
+					}
 				}
 			}
 		}.addToMenuBar(menuBar);
 
 
-		// save project
-		functionSaveProject = new MenuFunction("File", "Save") {
+		// open project
+		functionOpenProjectLocal = new MenuFunction("File", "Open Project", "Local") {
 			@Override
 			public void onAction() {
 				if (Data.projectProperty.get() != null) {
-					ProjectLogic.saveProject(Data.projectProperty.get());
+					if (handleOpenProject()) {
+						DirectoryChooser dirChooser = new DirectoryChooser();
+						dirChooser.setTitle("Choose Project Directory");
+						File selectedDir = dirChooser.showDialog(TaskManager.getPrimaryStage());
+						if (selectedDir != null && selectedDir.exists()) {
+							ProjectLogic.setCurrentProject(ProjectLogic.loadLocalProject(selectedDir));
+						}
+					}
+				} else {
+					DirectoryChooser dirChooser = new DirectoryChooser();
+					dirChooser.setTitle("Choose Project Directory");
+					File selectedDir = dirChooser.showDialog(TaskManager.getPrimaryStage());
+					if (selectedDir != null && selectedDir.exists()) {
+						ProjectLogic.setCurrentProject(ProjectLogic.loadLocalProject(selectedDir));
+					}
 				}
 			}
 		}.addToMenuBar(menuBar);
@@ -149,16 +174,13 @@ public class MainView extends AnchorPane {
 
 
 		functionCloseProject.setDisable(true);
-		functionSaveProject.setDisable(true);
 		new FXChangeListener<Project>(Data.projectProperty) {
 			@Override
 			public void changed(ObservableValue<? extends Project> observable, Project oldValue, Project newValue) {
 				if (newValue == null) {
-					functionSaveProject.setDisable(true);
 					functionCloseProject.setDisable(true);
 					closeTabs();
 				} else {
-					functionSaveProject.setDisable(false);
 					functionCloseProject.setDisable(false);
 					openTabs();
 				}
@@ -218,7 +240,7 @@ public class MainView extends AnchorPane {
 				"Current project: " + project.settings.name);
 
 		if (alertSaveResult == ButtonType.YES) {
-			ProjectLogic.saveProject(project);
+//			ProjectLogic.saveProject(project);
 			ProjectLogic.closeCurrentProject();
 			return true;
 		}

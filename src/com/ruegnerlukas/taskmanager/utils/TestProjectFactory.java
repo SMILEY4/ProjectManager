@@ -2,18 +2,12 @@ package com.ruegnerlukas.taskmanager.utils;
 
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
-import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskvalues.*;
-import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
-import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
 public class TestProjectFactory {
 
@@ -27,50 +21,51 @@ public class TestProjectFactory {
 	 * @param timeBetweenTasks how many milliseconds to wait between the creation of the tasks
 	 */
 	public static Project build(String name, AttributeType[] attTypes, String[] attNames, int nTasks, boolean randomValues, long timeBetweenTasks) {
-
-		Project project = ProjectLogic.createNewLocalProject(name);
-
-		// values
-		for (int i = 0; i < attTypes.length; i++) {
-			TaskAttribute attribute = AttributeLogic.createTaskAttribute(attTypes[i], attNames[i], project);
-			ProjectLogic.addAttributeToProject(project, attribute);
-
-			if (attTypes[i] == AttributeType.CHOICE) {
-				Set<String> choices = new HashSet<>(Arrays.asList(LoremIpsum.get(3, 7, true).split(" ")));
-				choices.add("SomeValue");
-				String[] array = new String[choices.size()];
-				int j = 0;
-				for (String choice : choices) {
-					array[j++] = choice;
-				}
-				AttributeLogic.CHOICE_LOGIC.setValueList(attribute, array);
-			}
-
-		}
-
-		// tasks
-		for (int i = 0; i < nTasks; i++) {
-			Task task = TaskLogic.createTask(project);
-			ProjectLogic.addTaskToProject(project, task);
-
-			for (TaskAttribute attribute : project.data.attributes) {
-				if (!attribute.type.get().fixed) {
-					TaskValue<?> randomValue = createRandomValue(attribute);
-					if (randomValue != null) {
-						TaskLogic.setValue(project, task, attribute, randomValue);
-					}
-				}
-			}
-
-			try {
-				Thread.sleep(timeBetweenTasks);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-
-		}
-
-		return project;
+		return null; // TODO
+//
+//		Project project = ProjectLogic.createNewLocalProject(name);
+//
+//		// values
+//		for (int i = 0; i < attTypes.length; i++) {
+//			TaskAttribute attribute = AttributeLogic.createTaskAttribute(attTypes[i], attNames[i], project);
+//			ProjectLogic.addAttributeToProject(project, attribute);
+//
+//			if (attTypes[i] == AttributeType.CHOICE) {
+//				Set<String> choices = new HashSet<>(Arrays.asList(LoremIpsum.get(3, 7, true).split(" ")));
+//				choices.add("SomeValue");
+//				String[] array = new String[choices.size()];
+//				int j = 0;
+//				for (String choice : choices) {
+//					array[j++] = choice;
+//				}
+//				AttributeLogic.CHOICE_LOGIC.setValueList(attribute, array);
+//			}
+//
+//		}
+//
+//		// tasks
+//		for (int i = 0; i < nTasks; i++) {
+//			Task task = TaskLogic.createTask(project);
+//			ProjectLogic.addTaskToProject(project, task);
+//
+//			for (TaskAttribute attribute : project.data.attributes) {
+//				if (!attribute.type.get().fixed) {
+//					TaskValue<?> randomValue = createRandomValue(attribute);
+//					if (randomValue != null) {
+//						TaskLogic.setValue(project, task, attribute, randomValue);
+//					}
+//				}
+//			}
+//
+//			try {
+//				Thread.sleep(timeBetweenTasks);
+//			} catch (InterruptedException e) {
+//				e.printStackTrace();
+//			}
+//
+//		}
+//
+//		return project;
 	}
 
 
