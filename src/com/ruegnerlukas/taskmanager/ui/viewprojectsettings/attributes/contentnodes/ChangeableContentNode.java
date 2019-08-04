@@ -134,56 +134,67 @@ public abstract class ChangeableContentNode extends AttributeContentNode {
 
 		// find all affected tasks
 		for (Task task : Data.projectProperty.get().data.tasks) {
-			TaskData copyTask = TaskLogic.copyTask(task, Data.projectProperty.get());
-
-			boolean isAffected = false;
-			TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, getAttribute());
-			TaskValue<?> nextTaskValue = null;
-
-			boolean isPrevDefault = !task.getValues().containsKey(getAttribute()) && AttributeLogic.getUsesDefault(getAttribute());
-			boolean isNextDefault = false;
-
-
-			if (isPrevDefault) {
-				nextTaskValue = TaskLogic.getValueOrDefault(task, copyAttribute);
-				if (prevTaskValue.compare(nextTaskValue) != 0) {
-					isAffected = true;
-					isNextDefault = !task.getValues().containsKey(getAttribute()) && AttributeLogic.getUsesDefault(copyAttribute);
-				}
-
-			} else {
-				// has own value
-				if (!AttributeLogic.LOGIC_MODULES.get(copyAttribute.getType().get()).isValidTaskValue(copyAttribute, prevTaskValue)) {
-					// value is invalid -> get new valid value
-					TaskValue<?> validValue = AttributeLogic.LOGIC_MODULES.get(copyAttribute.getType().get()).generateValidTaskValue(prevTaskValue, copyAttribute, true);
-					if (validValue == null || validValue instanceof NoValue) {
-						copyTask.getValues().remove(copyAttribute);
-					} else {
-						copyTask.getValues().put(copyAttribute, validValue);
-					}
-					nextTaskValue = TaskLogic.getValueOrDefault(copyTask, copyAttribute);
-					isAffected = true;
-					isNextDefault = !copyTask.getValues().containsKey(copyAttribute) && AttributeLogic.getUsesDefault(copyAttribute);
-				}
+			SetAttributeValueEffect effect = getValueEffects(task, getAttribute(), copyAttribute, true);
+			if (effect != null) {
+				effects.add(effect);
 			}
-
-
-			if (isAffected) {
-				effects.add(
-						new SetAttributeValueEffect(
-								getAttribute(),
-								task,
-								isPrevDefault,
-								isNextDefault,
-								prevTaskValue,
-								nextTaskValue
-						)
-				);
-			}
-
 		}
 
 		return effects;
+	}
+
+
+
+
+	private SetAttributeValueEffect getValueEffects(Task task, TaskAttribute attribute, TaskAttributeData copyAttribute, boolean preferNoValue) {
+
+		TaskData copyTask = TaskLogic.copyTask(task, Data.projectProperty.get());
+
+		boolean isAffected = false;
+		TaskValue<?> prevTaskValue = TaskLogic.getValueOrDefault(task, attribute);
+		TaskValue<?> nextTaskValue = null;
+
+		boolean isPrevDefault = !task.getValues().containsKey(attribute) && AttributeLogic.getUsesDefault(attribute);
+		boolean isNextDefault = false;
+
+
+		if (isPrevDefault) {
+			nextTaskValue = TaskLogic.getValueOrDefault(task, copyAttribute);
+			if (prevTaskValue.compare(nextTaskValue) != 0) {
+				isAffected = true;
+				isNextDefault = !task.getValues().containsKey(attribute) && AttributeLogic.getUsesDefault(copyAttribute);
+			}
+
+		} else {
+			// has own value
+			if (!AttributeLogic.LOGIC_MODULES.get(copyAttribute.getType().get()).isValidTaskValue(copyAttribute, prevTaskValue)) {
+				// value is invalid -> get new valid value
+				TaskValue<?> validValue = AttributeLogic.LOGIC_MODULES.get(copyAttribute.getType().get()).generateValidTaskValue(prevTaskValue, copyAttribute, preferNoValue);
+				if (validValue == null || validValue instanceof NoValue) {
+					copyTask.getValues().remove(copyAttribute);
+				} else {
+					copyTask.getValues().put(copyAttribute, validValue);
+				}
+				nextTaskValue = TaskLogic.getValueOrDefault(copyTask, copyAttribute);
+				isAffected = true;
+				isNextDefault = !copyTask.getValues().containsKey(copyAttribute) && AttributeLogic.getUsesDefault(copyAttribute);
+			}
+		}
+
+
+		if (isAffected) {
+			return new SetAttributeValueEffect(
+					getAttribute(),
+					task,
+					isPrevDefault,
+					isNextDefault,
+					prevTaskValue,
+					nextTaskValue
+			);
+		} else {
+			return null;
+		}
+
 	}
 
 

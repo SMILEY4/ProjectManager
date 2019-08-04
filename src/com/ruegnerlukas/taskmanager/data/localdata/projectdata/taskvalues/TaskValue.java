@@ -23,6 +23,17 @@ public abstract class TaskValue<T> {
 
 
 
+	public static int compare(TaskValue<?> a, TaskValue<?> b) {
+		if (a == b) {
+			return 0;
+		} else {
+			return a == null ? -1 : a.compare(b);
+		}
+	}
+
+
+
+
 	public AttributeType getAttType() {
 		return type;
 	}
