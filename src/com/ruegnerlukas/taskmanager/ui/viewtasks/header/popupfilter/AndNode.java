@@ -42,7 +42,7 @@ public class AndNode extends CriteriaNode {
 		btnRemove.setMinSize(22, 22);
 		btnRemove.setPrefSize(22, 22);
 		btnRemove.setMaxSize(22, 22);
-		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.);
+		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7);
 		AnchorUtils.setAnchors(btnRemove, 0, 0, null, null);
 		this.getChildren().add(btnRemove);
 
