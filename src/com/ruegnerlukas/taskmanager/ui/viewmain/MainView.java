@@ -8,8 +8,11 @@ import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
+import com.ruegnerlukas.taskmanager.ui.viewmain.notifications.Notification;
+import com.ruegnerlukas.taskmanager.ui.viewmain.notifications.NotificationArea;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.TaskView;
+import com.ruegnerlukas.taskmanager.utils.LoremIpsum;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MenuFunction;
@@ -18,10 +21,12 @@ import javafx.fxml.FXML;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 
 public class MainView extends AnchorPane {
@@ -32,6 +37,14 @@ public class MainView extends AnchorPane {
 
 	@FXML private AnchorPane paneInfobar;
 	@FXML private Label labelInfobar;
+	@FXML private Button btnExpandNotifications;
+
+	@FXML private AnchorPane paneNotifications;
+	@FXML private ScrollPane scrollNotifications;
+	@FXML private VBox boxNotifications;
+
+
+	private NotificationArea notificationArea;
 
 	private MenuFunction functionCloseProject;
 
@@ -57,6 +70,8 @@ public class MainView extends AnchorPane {
 
 
 	private void create() {
+
+		notificationArea = new NotificationArea(labelInfobar, btnExpandNotifications, paneNotifications, scrollNotifications, boxNotifications);
 
 		// Create new local Project
 		MenuFunction functionNewProject = new MenuFunction("File", "New Local Project") {
@@ -122,6 +137,16 @@ public class MainView extends AnchorPane {
 			@Override
 			public void onAction() {
 				System.out.println("Debug");
+				final Random random = new Random();
+				final StringBuilder builder = new StringBuilder();
+				final int n = random.nextInt(10) + 1;
+				for (int i = 0; i < n; i++) {
+					builder.append(LoremIpsum.get(1, 15, true));
+					if (i != n - 1) {
+						builder.append(System.lineSeparator());
+					}
+				}
+				notificationArea.addNotification(Notification.Type.values()[new Random().nextInt(Notification.Type.values().length)], builder.toString());
 			}
 		}.addToMenuBar(menuBar);
 

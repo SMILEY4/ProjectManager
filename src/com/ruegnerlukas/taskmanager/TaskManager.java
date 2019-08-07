@@ -25,16 +25,14 @@ public class TaskManager extends Application {
 
 		// setup logger
 		Logger.get().redirectStdOutput(LogLevel.DEBUG, LogLevel.ERROR);
-		((DefaultMessageBuilder) Logger.get().getMessageBuilder()).setSourceNameSizeMin(23);
-		Runtime.getRuntime().addShutdownHook(new Thread(new Runnable() {
-			public void run() {
-				Logger.get().info("=========================================");
-				Logger.get().blankLine();
-				Logger.get().blankLine();
-				Logger.get().blankLine();
-				Logger.get().blankLine();
-				Logger.get().close();
-			}
+		((DefaultMessageBuilder) Logger.get().getModule("DEFAULT").getBuilder()).setSourceNameSizeMin(23);
+		Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+			Logger.get().info("=========================================");
+			Logger.get().blankLine();
+			Logger.get().blankLine();
+			Logger.get().blankLine();
+			Logger.get().blankLine();
+			Logger.get().close();
 		}, "Shutdown-thread"));
 
 		Logger.get().blankLine();
