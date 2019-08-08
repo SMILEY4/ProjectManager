@@ -63,7 +63,7 @@ public class PopupFilter extends PopupBase {
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {
-			Logger.get().error("Error loading FilterPopup-FXML: " + e);
+			Logger.get().error("Error loading FilterPopup-FXML.", e);
 		}
 
 

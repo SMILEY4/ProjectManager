@@ -8,11 +8,9 @@ import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
-import com.ruegnerlukas.taskmanager.ui.viewmain.notifications.Notification;
 import com.ruegnerlukas.taskmanager.ui.viewmain.notifications.NotificationArea;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.TaskView;
-import com.ruegnerlukas.taskmanager.utils.LoremIpsum;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MenuFunction;
@@ -26,7 +24,6 @@ import javafx.stage.DirectoryChooser;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 
 public class MainView extends AnchorPane {
@@ -60,7 +57,7 @@ public class MainView extends AnchorPane {
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {
-			Logger.get().error("Error loading MainView-FXML: " + e);
+			Logger.get().error("Error loading MainView-FXML", e);
 		}
 
 		create();
@@ -136,17 +133,12 @@ public class MainView extends AnchorPane {
 		MenuFunction functionDebug = new MenuFunction("Dev", "Debug") {
 			@Override
 			public void onAction() {
-				System.out.println("Debug");
-				final Random random = new Random();
-				final StringBuilder builder = new StringBuilder();
-				final int n = random.nextInt(10) + 1;
-				for (int i = 0; i < n; i++) {
-					builder.append(LoremIpsum.get(1, 15, true));
-					if (i != n - 1) {
-						builder.append(System.lineSeparator());
-					}
+				System.out.println("Debug " + System.currentTimeMillis());
+				try {
+					throw new IllegalArgumentException("test exception");
+				} catch (Exception e) {
+					Logger.get().error("Exception Description", e);
 				}
-				notificationArea.addNotification(Notification.Type.values()[new Random().nextInt(Notification.Type.values().length)], builder.toString());
 			}
 		}.addToMenuBar(menuBar);
 

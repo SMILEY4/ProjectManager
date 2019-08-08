@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.data.externaldata.files.actions.write;
 
 import com.google.gson.Gson;
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.ListChange;
 import com.ruegnerlukas.taskmanager.data.change.NestedChange;
@@ -51,7 +52,7 @@ public class WriteActionListAttributes extends WriteFileAction {
 					writer.flush();
 					writer.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.get().error("Error while writing attributes to file.", e);
 				}
 
 			}
@@ -83,7 +84,7 @@ public class WriteActionListAttributes extends WriteFileAction {
 					writer.flush();
 					writer.close();
 				} catch (IOException e) {
-					e.printStackTrace();
+					Logger.get().error("Error while writing Attributes to file.", e);
 				}
 
 

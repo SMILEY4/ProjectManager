@@ -76,7 +76,7 @@ public class PopupMasterPreset extends PopupBase {
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {
-			Logger.get().error("Error loading PresetsPopup-FXML: " + e);
+			Logger.get().error("Error loading PresetsPopup-FXML.", e);
 		}
 
 

@@ -72,18 +72,35 @@ public class NotificationArea {
 		builder.setDisplayMethodName(false);
 		builder.setUseSimpleClassName(true);
 
+		final StringBuilder stringBuilder = new StringBuilder();
+
 		LogTarget target = new LogTarget() {
 			@Override
 			public boolean write(LogLevel logLevel, String message) {
+				String summary;
+				if (message.contains(System.lineSeparator())) {
+					String[] lines = message.split(System.lineSeparator());
+					summary = lines[0];
+				} else {
+					summary = message;
+				}
 				switch (logLevel) {
-					case INFO:
-						NotificationArea.this.addNotification(Notification.Type.MESSAGE, message);
-					case WARN:
-						NotificationArea.this.addNotification(Notification.Type.WARN, message);
-					case ERROR:
-						NotificationArea.this.addNotification(Notification.Type.ERROR, message);
-					case FATAL:
-						NotificationArea.this.addNotification(Notification.Type.ERROR, message);
+					case INFO: {
+						NotificationArea.this.addNotification(Notification.Type.MESSAGE, summary, message);
+						break;
+					}
+					case WARN: {
+						NotificationArea.this.addNotification(Notification.Type.WARN, summary, message);
+						break;
+					}
+					case ERROR: {
+						NotificationArea.this.addNotification(Notification.Type.ERROR, summary, message);
+						break;
+					}
+					case FATAL: {
+						NotificationArea.this.addNotification(Notification.Type.ERROR, summary, message);
+						break;
+					}
 				}
 				return true;
 			}
@@ -113,8 +130,8 @@ public class NotificationArea {
 
 
 
-	public void addNotification(Notification.Type type, String text) {
-		Notification notification = new Notification(type, text);
+	public void addNotification(Notification.Type type, String summary, String text) {
+		Notification notification = new Notification(type, text, summary);
 		boxNotifications.getChildren().add(notification);
 		labelInfobar.setText(notification.summary);
 	}

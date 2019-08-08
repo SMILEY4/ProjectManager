@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.data.externaldata.files;
 
 import com.google.gson.Gson;
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.Identifiers;
 import com.ruegnerlukas.taskmanager.data.change.DataChange;
 import com.ruegnerlukas.taskmanager.data.change.DataChangeListener;
@@ -75,6 +76,7 @@ public class ExternalFileHandler implements ExternalDataHandler {
 
 		// stop, no settings-file found
 		if (fileSettings == null) {
+			Logger.get().error("Could not load Project from file." + System.lineSeparator() + "No Settings-File found in " + this.handler.rootDirectory.getAbsolutePath());
 			return null;
 		}
 
@@ -126,13 +128,11 @@ public class ExternalFileHandler implements ExternalDataHandler {
 				readerMaster.close();
 			}
 
-
 			return rawProject;
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.get().error("Error while loading project from file." + System.lineSeparator() + "Directory: " + this.handler.rootDirectory.getAbsolutePath(), e);
 		}
-
 
 		return null;
 	}

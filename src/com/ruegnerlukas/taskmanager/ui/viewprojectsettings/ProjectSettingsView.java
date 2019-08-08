@@ -61,7 +61,7 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {
-			Logger.get().error("Error loading ProjectSettings-FXML: " + e);
+			Logger.get().error("Error loading ProjectSettings-FXML.", e);
 		}
 		create();
 	}

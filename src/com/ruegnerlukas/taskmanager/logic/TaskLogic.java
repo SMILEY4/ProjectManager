@@ -153,41 +153,6 @@ public class TaskLogic {
 	}
 
 
-//	@SuppressWarnings ("Duplicates")
-//	private static int removeAttributeFromFilterCriteria(FilterCriteria criteria, TaskAttribute attribute) {
-//		int nRemoved = 0;
-//		if (criteria.type == FilterCriteria.CriteriaType.AND) {
-//			AndFilterCriteria andCriteria = (AndFilterCriteria) criteria;
-//			List<FilterCriteria> toRemove = new ArrayList<>();
-//			for (int i = 0; i < andCriteria.subCriteria.size(); i++) {
-//				FilterCriteria child = andCriteria.subCriteria.get(i);
-//				if (child.type == FilterCriteria.CriteriaType.TERMINAL && ((TerminalFilterCriteria) child).attribute == attribute) {
-//					toRemove.add(child);
-//				} else if (child.type != FilterCriteria.CriteriaType.TERMINAL) {
-//					nRemoved += removeAttributeFromFilterCriteria(child, attribute);
-//				}
-//			}
-//			andCriteria.subCriteria.removeAll(toRemove);
-//			nRemoved += toRemove.size();
-//		}
-//		if (criteria.type == FilterCriteria.CriteriaType.OR) {
-//			OrFilterCriteria orCriteria = (OrFilterCriteria) criteria;
-//			List<FilterCriteria> toRemove = new ArrayList<>();
-//			for (int i = 0; i < orCriteria.subCriteria.size(); i++) {
-//				FilterCriteria child = orCriteria.subCriteria.get(i);
-//				if (child.type == FilterCriteria.CriteriaType.TERMINAL && ((TerminalFilterCriteria) child).attribute == attribute) {
-//					toRemove.add(child);
-//				} else if (child.type != FilterCriteria.CriteriaType.TERMINAL) {
-//					nRemoved += removeAttributeFromFilterCriteria(child, attribute);
-//				}
-//			}
-//			orCriteria.subCriteria.removeAll(toRemove);
-//			nRemoved += toRemove.size();
-//		}
-//		return nRemoved;
-//	}
-
-
 
 
 	/***

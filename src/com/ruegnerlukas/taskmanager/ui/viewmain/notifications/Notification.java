@@ -7,6 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.AnchorPane;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Notification extends AnchorPane {
 
 
@@ -38,13 +41,15 @@ public class Notification extends AnchorPane {
 
 	public Notification(Type type, String text, String summary) {
 
+		String strTimestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+		this.type = type;
+		this.text = (strTimestamp + System.lineSeparator() + text).trim();
+		this.summary = ("(" + strTimestamp + ")  " + summary).trim();
+
 		this.setMinSize(0, 0);
 		this.setPrefSize(10000, -1);
 		this.setMaxSize(10000, 10000);
-
-		this.type = type;
-		this.text = text;
-		this.summary = summary;
 		this.setStyle("-fx-border-color: #888888");
 
 		this.label = new Label();

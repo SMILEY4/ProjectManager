@@ -49,7 +49,7 @@ public class TasksSidebar {
 		try {
 			root = (AnchorPane) UIDataHandler.loadFXML(UIModule.VIEW_TASKS_SIDEBAR, this);
 		} catch (IOException e) {
-			Logger.get().error("Error loading TasksSidebar-FXML: " + e);
+			Logger.get().error("Error loading TasksSidebar-FXML.", e);
 		}
 		create();
 	}

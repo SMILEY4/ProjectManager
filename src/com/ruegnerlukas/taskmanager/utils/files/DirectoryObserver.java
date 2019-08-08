@@ -1,5 +1,7 @@
 package com.ruegnerlukas.taskmanager.utils.files;
 
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.*;
@@ -216,7 +218,7 @@ public class DirectoryObserver {
 
 
 			} catch (IOException | InterruptedException e) {
-				e.printStackTrace();
+				Logger.get().error(e);
 			}
 
 		}

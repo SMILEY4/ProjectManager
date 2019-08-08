@@ -27,7 +27,7 @@ public class FileHandler {
 	private static final String FILENAME_PRESETS_FILTER_DIRECTORY = "presets_filter";
 	private static final String FILENAME_BACKUP_DIRECTORY = "backup";
 
-	private final File rootDirectory;
+	public final File rootDirectory;
 
 
 
@@ -62,7 +62,7 @@ public class FileHandler {
 			out.close();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			Logger.get().error("Error while creating backup of project.", e);
 		}
 	}
 
@@ -227,7 +227,7 @@ public class FileHandler {
 				file.getParentFile().mkdirs();
 				file.createNewFile();
 			} catch (IOException e) {
-				Logger.get().error(e);
+				Logger.get().error("Error while creating file (" + pathFile + ").", e);
 			}
 		}
 		if (!file.exists()) {

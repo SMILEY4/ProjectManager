@@ -62,7 +62,7 @@ public class TasksHeader {
 		try {
 			Parent root = UIDataHandler.loadFXML(UIModule.VIEW_TASKS_HEADER, this);
 		} catch (IOException e) {
-			Logger.get().error("Error loading TasksHeader-FXML: " + e);
+			Logger.get().error("Error loading TasksHeader-FXML.", e);
 		}
 		create();
 	}

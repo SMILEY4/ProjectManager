@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.logic;
 
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.MasterPreset;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
@@ -29,7 +30,11 @@ public class PresetLogic {
 	 * Removes the filter-preset with the given name from the given {@link Project}
 	 */
 	public static boolean deleteFilterPreset(Project project, String name) {
-		return project.data.presetsFilter.remove(name.trim()) != null;
+		boolean removed = project.data.presetsFilter.remove(name.trim()) != null;
+		if (removed) {
+			Logger.get().info("Removed Filter-Preset (" + name + ").");
+		}
+		return removed;
 	}
 
 
@@ -43,8 +48,10 @@ public class PresetLogic {
 	public static boolean saveFilterPreset(Project project, String name, FilterCriteria criteria) {
 		if (!project.data.presetsFilter.containsKey(name.trim())) {
 			project.data.presetsFilter.put(name.trim(), criteria);
+			Logger.get().info("Saved Filter-Preset (" + name + ").");
 			return true;
 		} else {
+			Logger.get().info("Could not save Filter-Preset (" + name + "). Preset with name already exists.");
 			return false;
 		}
 	}
@@ -66,7 +73,11 @@ public class PresetLogic {
 	 * Removes the group-preset with the given name from the given {@link Project}
 	 */
 	public static boolean deleteTaskGroupPreset(Project project, String name) {
-		return project.data.presetsGroup.remove(name.trim()) != null;
+		boolean removed = project.data.presetsGroup.remove(name.trim()) != null;
+		if (removed) {
+			Logger.get().info("Removed Group-Preset (" + name + ").");
+		}
+		return removed;
 	}
 
 
@@ -80,8 +91,10 @@ public class PresetLogic {
 	public static boolean saveTaskGroupPreset(Project project, String name, TaskGroupData groupData) {
 		if (!project.data.presetsGroup.containsKey(name.trim())) {
 			project.data.presetsGroup.put(name.trim(), groupData);
+			Logger.get().info("Saved Group-Preset (" + name + ").");
 			return true;
 		} else {
+			Logger.get().info("Could not save Group-Preset (" + name + "). Preset with name already exists.");
 			return false;
 		}
 	}
@@ -103,7 +116,11 @@ public class PresetLogic {
 	 * Removes the sort-preset with the given name from the given {@link Project}
 	 */
 	public static boolean deleteSortPreset(Project project, String name) {
-		return project.data.presetsSort.remove(name.trim()) != null;
+		boolean removed = project.data.presetsSort.remove(name.trim()) != null;
+		if (removed) {
+			Logger.get().info("Removed Sort-Preset (" + name + ").");
+		}
+		return removed;
 	}
 
 
@@ -117,8 +134,10 @@ public class PresetLogic {
 	public static boolean saveSortPreset(Project project, String name, SortData sortData) {
 		if (!project.data.presetsSort.containsKey(name.trim())) {
 			project.data.presetsSort.put(name.trim(), sortData);
+			Logger.get().info("Saved Sort-Preset (" + name + ").");
 			return true;
 		} else {
+			Logger.get().info("Could not save Sort-Preset (" + name + "). Preset with name already exists.");
 			return false;
 		}
 	}
@@ -140,7 +159,11 @@ public class PresetLogic {
 	 * Removes the master-preset with the given name from the given {@link Project}
 	 */
 	public static boolean deleteMasterPreset(Project project, String name) {
-		return project.data.presetsMaster.remove(name.trim()) != null;
+		boolean removed = project.data.presetsMaster.remove(name.trim()) != null;
+		if (removed) {
+			Logger.get().info("Removed Master-Preset (" + name + ").");
+		}
+		return removed;
 	}
 
 
@@ -154,8 +177,10 @@ public class PresetLogic {
 	public static boolean saveMasterPreset(Project project, String name, MasterPreset preset) {
 		if (!project.data.presetsMaster.containsKey(name.trim())) {
 			project.data.presetsMaster.put(name.trim(), preset);
+			Logger.get().info("Saved Master-Preset (" + name + ").");
 			return true;
 		} else {
+			Logger.get().info("Could not save Master-Preset (" + name + "). Preset with name already exists.");
 			return false;
 		}
 	}

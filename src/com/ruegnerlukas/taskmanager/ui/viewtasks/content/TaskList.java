@@ -44,7 +44,7 @@ public class TaskList extends AnchorPane {
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {
-			Logger.get().error("Error loading TaskList-FXML: " + e);
+			Logger.get().error("Error loading TaskList-FXML.", e);
 		}
 		create();
 	}

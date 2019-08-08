@@ -49,7 +49,7 @@ public class TaskContent {
 			this.taskView = taskView;
 			root = (AnchorPane) UIDataHandler.loadFXML(UIModule.VIEW_TASKS_CONTENT, this);
 		} catch (IOException e) {
-			Logger.get().error("Error loading TaskContent-FXML: " + e);
+			Logger.get().error("Error loading TaskContent-FXML.", e);
 		}
 		create();
 	}

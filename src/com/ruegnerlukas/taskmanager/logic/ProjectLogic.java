@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.logic;
 
+import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.externaldata.files.ExternalFileHandler;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
@@ -54,7 +55,9 @@ public class ProjectLogic {
 	 */
 	public static Project loadLocalProject(File directory) {
 		ExternalFileHandler handler = new ExternalFileHandler(directory.getAbsolutePath());
-		return handler.loadProject();
+		Project project = handler.loadProject();
+		Logger.get().info("Local Project loaded (" + project.settings.name.get() + ")." + System.lineSeparator() + directory.getAbsolutePath());
+		return project;
 	}
 
 
@@ -82,6 +85,7 @@ public class ProjectLogic {
 		for (AttributeType type : AttributeType.getFixedTypes()) {
 			project.data.attributes.add(AttributeLogic.createTaskAttribute(type, type.display + " Attribute", project));
 		}
+		Logger.get().info("Local Project created (" + name + ")." + System.lineSeparator() + directory.getAbsolutePath());
 		return project;
 	}
 
@@ -130,6 +134,7 @@ public class ProjectLogic {
 		// check id
 		for (TaskAttribute att : project.data.attributes) {
 			if (att.id == attribute.id) {
+				Logger.get().warn("Could not add Attribute \"" + attribute.name.get() + "\". Attribute with same id already exists.");
 				return false;
 			}
 		}
@@ -137,6 +142,7 @@ public class ProjectLogic {
 		if (attribute.type.get().fixed) {
 			for (TaskAttribute att : project.data.attributes) {
 				if (att.type.get() == attribute.type.get()) {
+					Logger.get().warn("Could not add Attribute \"" + attribute.name.get() + "\". Attribute of same type already exists.");
 					return false;
 				}
 			}
@@ -158,6 +164,7 @@ public class ProjectLogic {
 	public static boolean removeAttributeFromProject(Project project, TaskAttribute attribute) {
 
 		if (!project.data.attributes.remove(attribute)) {
+			Logger.get().warn("Could not remove Attribute \"" + attribute.name.get() + "\". Attribute is fixed type.");
 			return false;
 		}
 

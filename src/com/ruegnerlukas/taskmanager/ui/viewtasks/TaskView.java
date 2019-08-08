@@ -39,7 +39,7 @@ public class TaskView extends AnchorPane implements MainViewModule {
 			AnchorUtils.setAnchors(root, 0, 0, 0, 0);
 			this.getChildren().add(root);
 		} catch (IOException e) {
-			Logger.get().error("Error loading TaskView-FXML: " + e);
+			Logger.get().error("Error loading TaskView-FXML.", e);
 		}
 		create();
 	}
