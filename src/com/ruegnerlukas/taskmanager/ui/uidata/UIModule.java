@@ -27,5 +27,6 @@ public enum UIModule {
 	CONTROL_EDITABLE_AREA,
 
 	STYLE_BASE,
+	STYLE_VARS
 
 }

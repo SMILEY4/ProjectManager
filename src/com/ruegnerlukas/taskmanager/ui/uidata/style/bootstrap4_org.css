@@ -1,4 +1,4 @@
-* {
+.root {
 	-fx-body-color : #F5F5F5;
 	-fx-outer-border : #cecece;
 	
@@ -192,6 +192,7 @@ VBox > .split-menu-button.last > .arrow-button {
 .color-picker:pressed,.color-picker:selected,
 .number-button:pressed,.number-button:selected,
 .date-picker:pressed > .arrow-button,
+.combo-box:pressed > .arrow-button,.combo-box:selected > .arrow-button,
 .choice-box:pressed > .arrow-button,.choice-box:selected > .arrow-button,
 .font-menu-button:pressed,.font-menu-button:selected,
 .left-arrow-button:pressed,.left-arrow-button:selected,
@@ -203,11 +204,6 @@ VBox > .split-menu-button.last > .arrow-button {
 	-fx-border-color: #acacac;
 	-fx-effect: innershadow(gaussian, #adadad, 10, 0, 0, 3);
 }
-
-.combo-box:pressed > .arrow-button > .arrow, .combo-box:selected > .arrow-button > .arrow {
-	-fx-background-color: #acacac;
-}
-
 
 	/*primary*/
 
@@ -354,21 +350,21 @@ VBox > .split-menu-button.last > .arrow-button {
 }
 
 .menu-item:focused {
-	-fx-background-color: #aebac3;
+	/*-fx-background-color: #f5f5f5;*/
 }
 
 .menu-item:focused > * {
-	-fx-text-fill: #262626;
+	/*-fx-text-fill: #262626;*/
 }
 .menu-item:focused .arrow {
-	-fx-background-color: #333333;
+	/*-fx-background-color: #333333;*/
 }
 
 .check-menu-item:checked:hover > .left-container > .check,
 .check-menu-item:checked:focused > .left-container > .check,
 .radio-menu-item:checked:hover > .left-container > .radio,
 .radio-menu-item:checked:focused > .left-container > .radio {
-	-fx-background-color: #333333;
+	/*-fx-background-color: #333333;*/
 }
 
 .context-menu {
@@ -841,7 +837,7 @@ VBox > .split-menu-button.last > .arrow-button {
 	-fx-background-radius: 3;
 	/*-fx-padding: 0.166667em 0.166667em 0.25em 0.25em; !* 2 2 3 3 *!*/
 	-fx-padding:0;
-	-fx-border-color: -fx-outer-border;
+	-fx-border-color: #56c0e0;
 	-fx-border-radius: 3;
 	-fx-background-color: white;
 }
@@ -860,7 +856,7 @@ VBox > .split-menu-button.last > .arrow-button {
 	-fx-padding: 0;
 }
 .check-box:selected > .box > .mark {
-	-fx-background-color: black;
+	-fx-background-color: linear-gradient(to bottom, #56c0e0, #40b8dc);
 }
 
 /*******************************************************************************
@@ -903,12 +899,12 @@ VBox > .split-menu-button.last > .arrow-button {
 .check-box:selected > .box,
 .radio-button:hover > .radio,
 .radio-button:selected > .radio {
-	-fx-background-color: linear-gradient(tobottom, white, #efefef);
+	-fx-background-color: linear-gradient(to bottom, white, #efefef);
 }
 
 .check-box:pressed > .box,
 .radio-button:pressed > .radio {
-	-fx-background-color: #cecece;
+	-fx-background-color: #50c0e2;
 }
 
 /*******************************************************************************
