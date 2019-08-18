@@ -136,11 +136,14 @@ public class MainView extends AnchorPane {
 				Logger.get().info("Info " + System.currentTimeMillis());
 				Logger.get().warn("Info " + System.currentTimeMillis());
 				Logger.get().error("Info " + System.currentTimeMillis());
-				try {
-					throw new IllegalArgumentException("test exception");
-				} catch (Exception e) {
-					Logger.get().error("Exception Description", e);
-				}
+				Object o = null;
+				String s = o.toString();
+//				try {
+//					throw new IllegalArgumentException("test exception");
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//					Logger.get().error("Exception Description", e);
+//				}
 			}
 		}.addToMenuBar(menuBar);
 

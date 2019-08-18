@@ -35,6 +35,8 @@ public class TaskManager extends Application {
 			Logger.get().close();
 		}, "Shutdown-thread"));
 
+		Thread.setDefaultUncaughtExceptionHandler((Thread t, Throwable e) -> Logger.get().error(e));
+
 		Logger.get().blankLine();
 
 		ProjectLogic.init();
@@ -55,6 +57,8 @@ public class TaskManager extends Application {
 
 	@Override
 	public void start(Stage primaryStage) {
+
+		Thread.setDefaultUncaughtExceptionHandler((Thread t, Throwable e) -> Logger.get().error(e));
 
 		TaskManager.setPrimaryStage(primaryStage);
 		primaryStage.setOnCloseRequest(event -> closeApplication());
