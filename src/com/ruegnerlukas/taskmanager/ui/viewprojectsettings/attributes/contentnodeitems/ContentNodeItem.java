@@ -20,6 +20,7 @@ public abstract class ContentNodeItem extends HBox {
 
 	public ContentNodeItem(TaskAttribute attribute) {
 		this.attribute = attribute;
+		this.getStyleClass().add("content_item");
 	}
 
 

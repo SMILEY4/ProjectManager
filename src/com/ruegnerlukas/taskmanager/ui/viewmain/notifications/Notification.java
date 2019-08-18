@@ -50,7 +50,6 @@ public class Notification extends AnchorPane {
 		this.setMinSize(0, 0);
 		this.setPrefSize(10000, -1);
 		this.setMaxSize(10000, 10000);
-		this.setStyle("-fx-border-color: #888888");
 
 		this.label = new Label();
 		this.label.setMinSize(0, 0);

@@ -72,12 +72,19 @@ public class TasksHeader {
 
 	private void create() {
 
+		rootHeader.getStyleClass().add("tasks-header");
+
 		// create badges
 		paneHeaderBadges.setMouseTransparent(true);
 		badgeFilter = createBadge(paneHeaderBadges, btnFilter);
 		badgeGroup = createBadge(paneHeaderBadges, btnGroup);
 		badgeSort = createBadge(paneHeaderBadges, btnSort);
 		badgePresets = createBadge(paneHeaderBadges, btnPresets);
+
+		badgeFilter.getStyleClass().addAll("label-badge", "badge-filter");
+		badgeGroup.getStyleClass().addAll("label-badge", "badge-group");
+		badgeSort.getStyleClass().addAll("label-badge", "badge-sort");
+		badgePresets.getStyleClass().addAll("label-badge", "badge-presets");
 
 
 		// badge filter
@@ -128,6 +135,7 @@ public class TasksHeader {
 
 
 		// label n tasks
+		labelNTasks.getStyleClass().add("label-num-tasks");
 		listenerNTasks = new FXEventAdapter() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -138,6 +146,7 @@ public class TasksHeader {
 
 
 		// TODO actions hamburger
+		btnActions.getStyleClass().add("actions-button");
 		ButtonUtils.makeIconButton(btnActions, SVGIcons.HAMBURGER, 0.7f);
 		btnActions.setOnAction(event -> {
 			ContextMenu popup = new ContextMenu();

@@ -22,6 +22,7 @@ public class TextMultilineItem extends SimpleContentNodeItem {
 
 	public TextMultilineItem(TaskAttribute attribute) {
 		super(attribute, "Multiline");
+		this.getStyleClass().add("text_multiline_item");
 
 		// create control
 		checkBox = new CheckBox("");

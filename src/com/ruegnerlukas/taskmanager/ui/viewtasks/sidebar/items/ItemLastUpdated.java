@@ -26,6 +26,7 @@ public class ItemLastUpdated extends SimpleSidebarItem {
 
 	public ItemLastUpdated(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		this.getStyleClass().add("sidebar-item-last-updated");
 	}
 
 
@@ -34,6 +35,7 @@ public class ItemLastUpdated extends SimpleSidebarItem {
 	@Override
 	protected void create() {
 		label = new Label();
+		label.getStyleClass().add("sidebar-item-value");
 		this.setValueNode(label);
 		this.setEmpty(false);
 		this.setShowButton(false);
@@ -51,8 +53,9 @@ public class ItemLastUpdated extends SimpleSidebarItem {
 	@Override
 	protected void refresh() {
 		final LocalDateTime lastUpdated = ((LastUpdatedValue) TaskLogic.getValueOrDefault(getTask(), getAttribute())).getValue();
-		label.setText(lastUpdated.format(DateTimeFormatter.ISO_DATE_TIME));
+		label.setText(lastUpdated.format(DateTimeFormatter.ofPattern("uuuu-MM-dd HH:mm")));
 	}
+
 
 
 

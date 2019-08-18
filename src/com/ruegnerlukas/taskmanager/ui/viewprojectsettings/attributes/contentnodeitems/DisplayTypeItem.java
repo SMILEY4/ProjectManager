@@ -21,6 +21,7 @@ public class DisplayTypeItem extends SimpleContentNodeItem {
 
 	public DisplayTypeItem(TaskAttribute attribute) {
 		super(attribute, "Show on Cards");
+		this.getStyleClass().add("display_type_item");
 
 		// create control
 		checkBox = new CheckBox("");

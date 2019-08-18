@@ -28,6 +28,7 @@ public class ItemText extends SidebarItem {
 
 	public ItemText(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		this.getStyleClass().add("sidebar-item-text");
 		create();
 		refresh();
 	}
@@ -49,9 +50,11 @@ public class ItemText extends SidebarItem {
 		this.getChildren().setAll(box);
 
 		Label label = new Label(getAttribute().name.get() + ":");
+		label.getStyleClass().add("sidebar-item-name");
 		box.getChildren().add(label);
 
 		area = new MultiTextField();
+		area.getStyleClass().add("sidebar-item-value");
 		area.setMultiline(AttributeLogic.TEXT_LOGIC.getMultiline(getAttribute()));
 		setValueHeight();
 		box.getChildren().add(area);

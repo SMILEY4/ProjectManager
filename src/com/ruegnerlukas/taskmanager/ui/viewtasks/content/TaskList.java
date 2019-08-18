@@ -57,6 +57,11 @@ public class TaskList extends AnchorPane {
 		this.setPrefWidth(330);
 		this.setMaxSize(Integer.MAX_VALUE, Integer.MAX_VALUE);
 
+		this.getStyleClass().add("task-list");
+		labelTitle.getStyleClass().add("task-list-title");
+		boxCards.getStyleClass().add("task-list-box");
+		scrollTasks.getStyleClass().add("task-list-scroll");
+
 
 		listenerTasks = new FXListChangeListener<Task>(taskGroup.tasks) {
 			@Override

@@ -26,6 +26,7 @@ public abstract class SimpleContentNodeItem extends ContentNodeItem {
 	 */
 	public SimpleContentNodeItem(TaskAttribute attribute, String name, Node node) {
 		this(attribute, name);
+		this.getStyleClass().add("simple_content_item");
 		setNode(node);
 	}
 

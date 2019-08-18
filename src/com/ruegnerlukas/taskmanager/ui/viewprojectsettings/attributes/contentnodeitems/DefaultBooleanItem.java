@@ -23,6 +23,7 @@ public class DefaultBooleanItem extends SimpleContentNodeItem {
 
 	public DefaultBooleanItem(TaskAttribute attribute) {
 		super(attribute, "Default Value");
+		this.getStyleClass().add("default_boolean_item");
 
 		// create control
 		checkBox = new CheckBox("");

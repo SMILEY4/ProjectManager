@@ -25,6 +25,7 @@ public class DefaultTextItem extends SimpleContentNodeItem {
 
 	public DefaultTextItem(TaskAttribute attribute) {
 		super(attribute, "Default Value");
+		this.getStyleClass().add("default_text_item");
 
 		// create control
 		textField = new MultiTextField();

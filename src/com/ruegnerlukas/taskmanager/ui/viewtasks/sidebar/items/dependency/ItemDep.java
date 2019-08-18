@@ -26,19 +26,23 @@ public class ItemDep extends HBox {
 	public ItemDep(ItemDependency parent, Task task) {
 		this.parent = parent;
 		this.task = task;
+		this.getStyleClass().add("dependency-item");
 
 		this.setMinSize(0, 22);
 		this.setMaxSize(100000, 22);
 		this.setSpacing(5);
 
 		Label label0 = new Label("-");
+		label0.getStyleClass().addAll("dependency-item-dash", "dependency-item-label");
 		this.getChildren().add(label0);
 
 		final IDValue valueID = (IDValue) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID));
 		Label labelTask = new Label("T-" + valueID.getValue());
+		labelTask.getStyleClass().addAll("dependency-item-id", "dependency-item-label");
 		this.getChildren().add(labelTask);
 
 		Button btnRemove = new Button("x");
+		btnRemove.getStyleClass().add("dependency-item-remove");
 		btnRemove.setMinSize(22, 22);
 		btnRemove.setMaxSize(22, 22);
 		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.5);

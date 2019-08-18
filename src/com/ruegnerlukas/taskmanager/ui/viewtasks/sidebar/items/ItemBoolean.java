@@ -21,6 +21,7 @@ public class ItemBoolean extends SimpleSidebarItem {
 
 	public ItemBoolean(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		super.getStyleClass().add("sidebar-item-boolean");
 	}
 
 
@@ -29,6 +30,7 @@ public class ItemBoolean extends SimpleSidebarItem {
 	@Override
 	protected void create() {
 		checkBox = new CheckBox();
+		checkBox.getStyleClass().add("sidebar-item-value");
 		checkBox.setText("");
 		checkBox.setOnAction(event -> {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new BoolValue(checkBox.isSelected()));

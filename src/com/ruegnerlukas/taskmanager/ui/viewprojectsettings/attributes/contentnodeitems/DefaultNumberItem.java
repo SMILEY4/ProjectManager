@@ -25,6 +25,7 @@ public class DefaultNumberItem extends SimpleContentNodeItem {
 
 	public DefaultNumberItem(TaskAttribute attribute) {
 		super(attribute, "Default Value");
+		this.getStyleClass().add("default_number_item");
 
 		// create control
 		spinner = new Spinner<>();

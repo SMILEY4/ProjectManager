@@ -1,37 +1,51 @@
 
-* {
-	-primary-0:      #29323c;
-	-primary-1:      #2f3c48;
-	-primary-2:      #3e4d59;
-
-	-secondary:      #6f7f8c;
-	-info:           #5c8f94;
-	-danger:         #cc330d;
-	-success:        #3e4d59;
-	-warning:        #6e9fa5;
-	-light:          #eceeec;
-	-dark:           #1e2b37;
-
-	-gray-dark:      #767676;
-	-gray-mid-1:     #b9b9b9;
-	-gray-mid-0:     #cccccc;
-	-gray-light:     #ededed;
-
-	-text-light-0:   #b9b9b9;
-	-text-light-1:   white;
-
-	-text-link:      #3366bb;
-
-	-selected-light: #50aaff;
-	-selected-dark:  #0084ff;
-
-
-	-mouse-over:     #787878;
-	-mouse-down:     #a4a4a4;
-
+.task-card > * {
+	-fx-background-color:  -border, -base;
+	-fx-background-insets: 0, 1;
+	-fx-effect:            dropshadow(gaussian, -dropshadow, 6, 0.0, 0, 4);
 }
 
 
-* {
-	-fx-border-color: #d6d6d6;
+.task-card:hover > * {
+	-fx-background-color: -border-hover, -base;
+}
+
+
+.task-card-id {
+	-fx-text-fill: -secondary;
+	-fx-underline: true;
+}
+
+
+.task-card-selected > * {
+	-fx-border-color: -primary-2;
+	-fx-border-width: 2;
+}
+
+
+.task-card-description {
+	-fx-text-fill: -text-base;
+}
+
+
+.task-card-attributes {
+	-fx-padding:           3;
+	-fx-background-color:  -border, -base;
+	-fx-background-insets: 0, 1;
+	-fx-background-radius: 4, 3;
+}
+
+
+.task-card-item {
+	-fx-background-color: transparent;
+}
+
+
+.task-card-item .task-card-item-key {
+	-fx-text-fill: -primary-2;
+}
+
+
+.task-card-item .task-card-item-value {
+	-fx-text-fill: -text-base;
 }

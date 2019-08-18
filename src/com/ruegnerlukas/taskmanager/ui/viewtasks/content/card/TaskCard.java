@@ -23,8 +23,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 
 import java.io.IOException;
 
@@ -69,6 +71,13 @@ public class TaskCard extends AnchorPane {
 	private void create() {
 		this.setPrefSize(320, 200);
 
+		this.getStyleClass().add("task-card");
+		paneFlag.getStyleClass().add("task-card-flag");
+		labelID.getStyleClass().add("task-card-id");
+		boxIcons.getStyleClass().add("task-card-box-icons");
+		labelDesc.getStyleClass().add("task-card-description");
+		boxAttribs.getStyleClass().add("task-card-attributes");
+
 		this.setOnMouseClicked(event -> {
 			if (!isSelected) {
 				parent.getTaskContent().selectTask(this.task, TaskContent.SELECTION_TASKCARD);
@@ -87,7 +96,6 @@ public class TaskCard extends AnchorPane {
 		labelID.setText("T-" + valueID.getValue());
 		labelDesc.setText((String) valueDescr.getValue());
 		paneFlag.setStyle("-fx-background-color: " + ((TaskFlag) valueFlag.getValue()).color.get().asHex());
-
 
 		buildAttributes();
 
@@ -149,7 +157,9 @@ public class TaskCard extends AnchorPane {
 	 */
 	public void select() {
 		this.isSelected = true;
-		this.borderProperty().set(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+//		this.borderProperty().set(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(3))));
+		this.getStyleClass().add("task-card-selected");
+		this.getStyleClass().remove("task-card-deselected");
 	}
 
 
@@ -160,7 +170,9 @@ public class TaskCard extends AnchorPane {
 	 */
 	public void deselect() {
 		this.isSelected = false;
-		this.borderProperty().set(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0))));
+//		this.borderProperty().set(new Border(new BorderStroke(Color.BLUE, BorderStrokeStyle.SOLID, CornerRadii.EMPTY, new BorderWidths(0))));
+		this.getStyleClass().remove("task-card-selected");
+		this.getStyleClass().add("task-card-deselected");
 	}
 
 

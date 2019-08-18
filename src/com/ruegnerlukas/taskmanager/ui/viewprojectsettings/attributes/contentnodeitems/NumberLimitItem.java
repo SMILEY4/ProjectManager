@@ -31,6 +31,8 @@ public class NumberLimitItem extends SimpleContentNodeItem {
 
 	public NumberLimitItem(TaskAttribute attribute, boolean isMax) {
 		super(attribute, isMax ? "Max Value" : "Min Value");
+		this.getStyleClass().add("number_limit_item");
+
 		this.isMax = isMax;
 
 		// create control

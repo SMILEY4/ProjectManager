@@ -28,6 +28,7 @@ public class NumberDecPlacesItem extends SimpleContentNodeItem {
 
 	public NumberDecPlacesItem(TaskAttribute attribute) {
 		super(attribute, "Decimal Places");
+		this.getStyleClass().add("number_dec_places_item");
 
 		// create control
 		spinner = new Spinner<>();

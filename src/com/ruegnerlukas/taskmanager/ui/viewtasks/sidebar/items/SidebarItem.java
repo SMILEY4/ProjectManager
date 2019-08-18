@@ -71,6 +71,7 @@ public abstract class SidebarItem extends AnchorPane {
 		this.sidebar = sidebar;
 		this.attribute = attribute;
 		this.task = task;
+		this.getStyleClass().add("sidebar-item");
 
 		listenerName = new FXChangeListener<String>(attribute.name) {
 			@Override

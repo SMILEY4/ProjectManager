@@ -12,6 +12,7 @@ import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
 import javafx.collections.ListChangeListener;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -35,9 +36,12 @@ public class BreadcrumbBar extends AnchorPane {
 
 	BreadcrumbBar() {
 
+		this.getStyleClass().add("breadcrumb-bar");
+
 		// button
 		btnBack = new Button();
 		ButtonUtils.makeIconButton(btnBack, SVGIcons.ARROW_LEFT, 0.6);
+		btnBack.getStyleClass().add("back-button");
 		btnBack.setMinSize(32, 32);
 		btnBack.setMaxSize(32, 32);
 		AnchorPane.setLeftAnchor(btnBack, 0.0);
@@ -54,6 +58,7 @@ public class BreadcrumbBar extends AnchorPane {
 
 		// content bar
 		content = new HBox();
+		content.setAlignment(Pos.CENTER_LEFT);
 		content.setSpacing(4);
 		content.setPadding(new Insets(0, 0, 0, 4));
 		AnchorUtils.setAnchors(content, 0, 0, 0, 32);
@@ -109,10 +114,12 @@ public class BreadcrumbBar extends AnchorPane {
 
 			// label
 			Label label = new Label();
+			label.getStyleClass().add("breadcrumb-item");
 			label.setText("T-" + valueID.getValue());
 			label.setMinHeight(32);
 			label.setMaxHeight(32);
 			if (i == queue.size() - 1) {
+				label.getStyleClass().add("breadcrumb-item-current");
 				label.setId("breadcrumb_current");
 			} else {
 				label.setId("breadcrumb_task");
@@ -129,7 +136,7 @@ public class BreadcrumbBar extends AnchorPane {
 			// arrow Label
 			if (i != queue.size() - 1) {
 				Label labelArrow = new Label(">");
-				labelArrow.setId("breadcrumb_seperator");
+				labelArrow.getStyleClass().add("breadcrumb-arrow");
 				labelArrow.setMinSize(13, 32);
 				labelArrow.setMaxSize(13, 32);
 				content.getChildren().add(labelArrow);

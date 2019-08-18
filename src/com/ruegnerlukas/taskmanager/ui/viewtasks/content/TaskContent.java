@@ -59,6 +59,10 @@ public class TaskContent {
 
 	private void create() {
 
+		root.getStyleClass().add("tasks-content");
+		labelHideSidebar.getStyleClass().add("hide-sidebar");
+		scrollTasks.getStyleClass().add("scrollbar-tasks");
+
 		// listener: task-groups changed
 		listenerLastTaskGroups = new FXListChangeListener<TaskGroup>(Data.projectProperty.get().temporaryData.lastTaskGroups) {
 			@Override

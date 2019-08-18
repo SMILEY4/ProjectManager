@@ -18,6 +18,7 @@ public class ItemID extends SimpleSidebarItem {
 
 	public ItemID(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		this.getStyleClass().add("sidebar-item-id");
 	}
 
 
@@ -26,6 +27,7 @@ public class ItemID extends SimpleSidebarItem {
 	@Override
 	protected void create() {
 		label = new Label();
+		label.getStyleClass().add("sidebar-item-value");
 		this.setValueNode(label);
 		this.setEmpty(false);
 		this.setShowButton(false);

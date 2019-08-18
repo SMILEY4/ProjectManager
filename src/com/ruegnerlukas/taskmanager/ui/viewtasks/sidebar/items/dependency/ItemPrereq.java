@@ -23,6 +23,7 @@ public class ItemPrereq extends HBox {
 	public ItemPrereq(ItemDependency parent, Task task) {
 		this.parent = parent;
 		this.task = task;
+		this.getStyleClass().add("dependency-item");
 
 		this.setMinSize(0, 22);
 		this.setMaxSize(100000, 22);
@@ -33,10 +34,12 @@ public class ItemPrereq extends HBox {
 		this.setSpacing(5);
 
 		Label label0 = new Label("-");
+		label0.getStyleClass().addAll("dependency-item-dash", "dependency-item-label");
 		this.getChildren().add(label0);
 
 		final IDValue valueID = (IDValue) TaskLogic.getValueOrDefault(task, AttributeLogic.findAttributeByType(Data.projectProperty.get(), AttributeType.ID));
 		Label labelTask = new Label("T-" + valueID.getValue());
+		labelTask.getStyleClass().addAll("dependency-item-id", "dependency-item-label");
 		this.getChildren().add(labelTask);
 
 		labelTask.setOnMouseClicked(e -> {

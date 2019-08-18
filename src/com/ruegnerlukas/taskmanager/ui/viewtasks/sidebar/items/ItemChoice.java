@@ -22,6 +22,7 @@ public class ItemChoice extends SimpleSidebarItem {
 
 	public ItemChoice(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		this.getStyleClass().add("sidebar-item-choice");
 	}
 
 
@@ -30,6 +31,7 @@ public class ItemChoice extends SimpleSidebarItem {
 	@Override
 	protected void create() {
 		choice = new ComboBox<>();
+		choice.getStyleClass().add("sidebar-item-value");
 		choice.getItems().addAll(AttributeLogic.CHOICE_LOGIC.getValueList(getAttribute()));
 		choice.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new ChoiceValue(newValue));

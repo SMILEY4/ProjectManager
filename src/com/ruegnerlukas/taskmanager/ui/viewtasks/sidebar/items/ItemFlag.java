@@ -24,6 +24,7 @@ public class ItemFlag extends SimpleSidebarItem {
 
 	public ItemFlag(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		this.getStyleClass().add("sidebar-item-flag");
 	}
 
 
@@ -32,6 +33,7 @@ public class ItemFlag extends SimpleSidebarItem {
 	@Override
 	protected void create() {
 		choiceFlag = new MutableCombobox<>();
+		choiceFlag.getStyleClass().add("sidebar-item-value");
 		choiceFlag.setButtonCell(ComboboxUtils.createListCellFlag());
 		choiceFlag.setCellFactory(param -> ComboboxUtils.createListCellFlag());
 		choiceFlag.getItems().addAll(AttributeLogic.FLAG_LOGIC.getFlagList(getAttribute()));

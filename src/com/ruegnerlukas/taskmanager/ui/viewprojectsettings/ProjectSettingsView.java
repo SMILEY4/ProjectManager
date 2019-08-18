@@ -140,6 +140,7 @@ public class ProjectSettingsView extends AnchorPane implements MainViewModule {
 
 		final boolean isLocked = project.settings.attributesLocked.get();
 		ButtonUtils.makeIconButton(btnLockAttributes, isLocked ? SVGIcons.LOCK_CLOSED : SVGIcons.LOCK_OPEN, 1);
+		btnLockAttributes.getStyleClass().add("lock-button");
 		btnLockAttributes.setOnAction(event -> {
 			onLockAttributes();
 		});

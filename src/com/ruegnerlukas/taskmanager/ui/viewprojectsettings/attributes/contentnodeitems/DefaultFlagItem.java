@@ -24,6 +24,7 @@ public class DefaultFlagItem extends SimpleContentNodeItem {
 
 	public DefaultFlagItem(TaskAttribute attribute) {
 		super(attribute, "Default Flag");
+		this.getStyleClass().add("default_flag_item");
 
 		// create control
 		choice = new ComboBox<>();

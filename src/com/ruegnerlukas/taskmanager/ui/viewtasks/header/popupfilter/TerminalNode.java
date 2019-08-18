@@ -84,6 +84,7 @@ public class TerminalNode extends CriteriaNode {
 		// value
 		boxValues = new HBox();
 		boxValues.setSpacing(5);
+		boxValues.setAlignment(Pos.CENTER_LEFT);
 		box.getChildren().add(boxValues);
 
 		Class<?>[] dataTypes = AttributeLogic.LOGIC_MODULES.get(terminalCriteria.attribute.type.get()).getFilterData()

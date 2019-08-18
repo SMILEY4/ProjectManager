@@ -48,6 +48,7 @@ public class FlagListItem extends ContentNodeItem {
 
 	public FlagListItem(TaskAttribute attribute) {
 		super(attribute);
+		this.getStyleClass().add("flag_list_item");
 
 
 		// create scroll pane
@@ -315,6 +316,7 @@ class FlagItem extends HBox {
 
 
 	public FlagItem(TaskFlag taskFlag) {
+		this.getStyleClass().add("flag_item");
 
 		if (taskFlag == null) {
 			this.flag = new TaskFlag("Flag " + Integer.toHexString(("Flag-" + (new Random(System.nanoTime()).nextInt())).hashCode()), TaskFlag.FlagColor.GRAY);
@@ -331,11 +333,11 @@ class FlagItem extends HBox {
 		this.setMinSize(0, 38);
 		this.setPrefSize(10000, 38);
 		this.setMaxSize(10000, 38);
-		this.setStyle("-fx-border-color: #aaaaaa; -fx-border-radius: 5;");
 
 
 		// button remove
 		btnRemove = new Button();
+		btnRemove.getStyleClass().add("button-remove");
 		btnRemove.setMinSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
 		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7f);
@@ -347,6 +349,7 @@ class FlagItem extends HBox {
 
 		// flag color
 		paneColor = new Pane();
+		paneColor.getStyleClass().add("flag-color");
 		paneColor.setStyle("-fx-background-color: " + flag.color.get().asHex() + ";");
 		paneColor.setMinSize(22, 22);
 		paneColor.setMaxSize(22, 22);
@@ -363,6 +366,7 @@ class FlagItem extends HBox {
 
 		// flag name
 		EditableLabel labelName = new EditableLabel(flag.name.get());
+		labelName.getStyleClass().add("label-name");
 		labelName.setMinWidth(300);
 		labelName.setPrefWidth(100000);
 		labelName.setMaxWidth(100000);
@@ -372,6 +376,7 @@ class FlagItem extends HBox {
 
 		// button up
 		Button btnUp = new Button();
+		btnUp.getStyleClass().add("button-up");
 		ButtonUtils.makeIconButton(btnUp, SVGIcons.LONG_ARROW_UP, 0.7f);
 		btnUp.setMinSize(32, 32);
 		btnUp.setPrefSize(32, 32);
@@ -384,6 +389,7 @@ class FlagItem extends HBox {
 
 		// button down
 		Button btnDown = new Button();
+		btnDown.getStyleClass().add("button-down");
 		ButtonUtils.makeIconButton(btnDown, SVGIcons.LONG_ARROW_DOWN, 0.7f);
 		btnDown.setMinSize(32, 32);
 		btnDown.setPrefSize(32, 32);

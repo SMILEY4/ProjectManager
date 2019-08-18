@@ -6,6 +6,8 @@ import com.ruegnerlukas.simpleutils.logging.filter.LogFilter;
 import com.ruegnerlukas.simpleutils.logging.logger.LogModule;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogTarget;
+import com.ruegnerlukas.taskmanager.utils.SVGIcons;
+import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -42,6 +44,7 @@ public class NotificationArea {
 		});
 
 		boxNotifications.heightProperty().addListener(observable -> scrollNotifications.setVvalue(1.0));
+
 
 		onCollapse();
 		btnExpandNotifications.setOnAction(e -> {
@@ -132,6 +135,7 @@ public class NotificationArea {
 
 	public void addNotification(Notification.Type type, String summary, String text) {
 		Notification notification = new Notification(type, text, summary);
+		notification.getStyleClass().add("notification-"+type.toString().toLowerCase());
 		boxNotifications.getChildren().add(notification);
 		labelInfobar.setText(notification.summary);
 	}
@@ -140,7 +144,7 @@ public class NotificationArea {
 
 
 	private void onExpand() {
-		btnExpandNotifications.setText("<");
+		ButtonUtils.makeIconButton(btnExpandNotifications, SVGIcons.ARROW_DOWN, 0.4);
 		paneNotifications.setDisable(false);
 		paneNotifications.setVisible(true);
 		this.isExpanded = true;
@@ -150,7 +154,7 @@ public class NotificationArea {
 
 
 	private void onCollapse() {
-		btnExpandNotifications.setText(">");
+		ButtonUtils.makeIconButton(btnExpandNotifications, SVGIcons.ARROW_UP, 0.4);
 		paneNotifications.setDisable(true);
 		paneNotifications.setVisible(false);
 		this.isExpanded = false;

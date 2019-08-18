@@ -24,6 +24,7 @@ public class ItemNumber extends SimpleSidebarItem {
 
 	public ItemNumber(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		this.getStyleClass().add("sidebar-item-number");
 	}
 
 
@@ -32,6 +33,7 @@ public class ItemNumber extends SimpleSidebarItem {
 	@Override
 	protected void create() {
 		spinner = new MutableSpinner<>();
+		spinner.getStyleClass().add("sidebar-item-value");
 		spinner.setEditable(true);
 		spinner.addMutableValueListener(((observable, oldValue, newValue) -> {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new NumberValue(newValue));

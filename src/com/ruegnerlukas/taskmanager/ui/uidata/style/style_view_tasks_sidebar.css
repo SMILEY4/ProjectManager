@@ -1,137 +1,155 @@
-/*
-
-- TaskView
-	- AnchorPane #rootTaskView
-		- AnchorPane #paneHeader
-			- HBox
-				- Hbox
-					- Button #btnFilter
-					- Button #btnGroup
-					- Button #btnSort
-					- Button #btnPresets
-					- Label #labelNTasks
-					- Button #btnActions
-			- AnchorPane #paneHeaderBadges
-				- Label
-				- Label
-				- Label
-		- SplitPane #splitContent
-			- ... AnchorPane #paneContent
-				- ScrollPane #scollTasks
-					- ... AnchorPane #paneTasks
-						- HBox #boxTasks
-							- TaskList
-							- TaskList
-							- ...
-				- Label #labelHideSidebar
-			- ... AnchorPane #paneSidebar
-				- Sidebar
-
-
- */
-
-
-* {
-	-primary-0:      #29323c;
-	-primary-1:      #2f3c48;
-	-primary-2:      #3e4d59;
-
-	-secondary:      #6f7f8c;
-	-info:           #5c8f94;
-	-danger:         #cc330d;
-	-success:        #3e4d59;
-	-warning:        #6e9fa5;
-	-light:          #eceeec;
-	-dark:           #1e2b37;
-
-	-gray-dark:      #767676;
-	-gray-mid-1:     #b9b9b9;
-	-gray-mid-0:     #cccccc;
-	-gray-light:     #ededed;
-
-	-text-light-0:   #b9b9b9;
-	-text-light-1:   white;
-
-	-text-link:      #3366bb;
-
-	-selected-light: #50aaff;
-	-selected-dark:  #0084ff;
-
-
-	-mouse-over:     #787878;
-	-mouse-down:     #a4a4a4;
-
+.breadcrumb-bar {
 }
 
 
-
-#paneHeader {
-	-fx-background-color: -primary-2;
-}
-
-
-#paneHeader .button {
-	-fx-border-color:     transparent;
+.breadcrumb-bar .back-button {
 	-fx-background-color: transparent;
-	-fx-text-fill:        -text-light-1;
 }
 
 
-#paneHeader #labelNTasks {
-	-fx-text-fill: -text-light-0;
+.breadcrumb-bar .back-button > SVGPath {
+	-fx-fill: -icon;
 }
 
 
-#paneHeader .button:hover {
-	-fx-border-color:     transparent;
+.breadcrumb-bar .back-button:hover > SVGPath,
+.breadcrumb-bar .back-button:pressed > SVGPath {
+	-fx-fill: -icon-hover;
+}
+
+
+.breadcrumb-bar .breadcrumb-item {
+	-fx-font-size: 16;
+	-fx-text-fill: -secondary;
+}
+
+
+.breadcrumb-bar .breadcrumb-item:hover {
+	-fx-underline: true;
+	-fx-cursor:    hand;
+}
+
+
+.breadcrumb-bar .breadcrumb-item-current {
+	-fx-font-weight: bold;
+}
+
+
+.breadcrumb-bar .breadcrumb-arrow {
+	-fx-text-fill: -text-background;
+}
+
+
+
+.tasks-sidebar {
+	-fx-background-color: -background;
+}
+
+
+.tasks-sidebar .scroll-pane {
+	-fx-background-color:  -border, -background;
+	-fx-background-insets: 0, 1 0 1 0;
+}
+
+
+.attribute-box {
+	-fx-background-color: -background;
+}
+
+
+.sidebar-item {
+	-fx-background-color:  -border, -background;
+	-fx-background-insets: 0, 1;
+	-fx-background-radius: 4, 3;
+	-fx-padding:           2 8 2 8;
+}
+
+
+.sidebar-item:hover {
+	-fx-background-color: -border-hover, -base;
+}
+
+
+.sidebar-item-name {
+	-fx-text-fill: -primary-2;
+}
+
+
+
+.sidebar-item-clear,
+.sidebar-item-clear:hover,
+.sidebar-item-clear:pressed {
 	-fx-background-color: transparent;
-	-fx-text-fill:        -text-light-0;
 }
 
 
-#paneHeader .button > SVGPath {
-	-fx-fill: -text-light-1;
+.sidebar-item-clear > SVGPath {
+	-fx-fill: -icon;
 }
 
 
-#paneHeader .button:hover > SVGPath {
-	-fx-fill: -text-light-0;
+.sidebar-item-clear:hover > SVGPath,
+.sidebar-item-clear:pressed > SVGPath {
+	-fx-fill: -icon-hover;
+}
+
+
+.sidebar-item-description > * {
+	-fx-padding: 4 2 4 2;
+}
+
+
+.sidebar-item-description > * > * > * {
+	-fx-background-radius: 4;
+}
+
+
+.sidebar-item-text {
+	-fx-padding: 7;
+}
+
+
+.sidebar-item-dependency {
+	-fx-padding: 7;
+}
+
+
+.sidebar-item-dependency .dependency-item-dash {
+	-fx-text-fill: -secondary;
+}
+
+
+.sidebar-item-dependency .dependency-item-id {
+	-fx-text-fill: -secondary;
+	-fx-underline: true;
+}
+
+
+.sidebar-item-dependency .dependency-item-id:hover {
+	-fx-cursor: hand;
 }
 
 
 
-#paneHeaderBadges > .label {
-	-fx-background-color:  -warning;
-	-fx-background-radius: 7;
-	-fx-text-fill:         -text-light-1;
-	-fx-alignment:         center;
-	-fx-font-size:         11;
-	-fx-font-weight:       bold;
+.sidebar-item-dependency .dependency-item-remove,
+.sidebar-item-dependency .dependency-item-remove:hover,
+.sidebar-item-dependency .dependency-item-remove:pressed {
+	-fx-background-color: transparent;
 }
 
 
-
-/* removes border between header and content */
-#rootTaskView > SplitPane > * > AnchorPane > ScrollPane {
-	-fx-padding: 0;
+.sidebar-item-dependency .dependency-item-remove > SVGPath {
+	-fx-fill: -icon;
 }
 
 
-#splitContent {
-	-fx-padding: 0;
+.sidebar-item-dependency .dependency-item-remove:hover > SVGPath,
+.sidebar-item-dependency .dependency-item-remove:pressed > SVGPath {
+	-fx-fill: -icon-hover;
 }
 
 
-#paneContent > ScrollPane > .viewport {
-	-fx-background-color: -gray-light;
-}
-
-
-#labelHideSidebar {
-	-fx-background-color: -gray-mid-1;
-}
-
-
-#labelHideSidebar:hover {
-	-fx-background-color: #a6a6a6;
+.delete-button:hover {
+	-fx-background-color: -danger-tooltip-2, -danger-tooltip-1;
+	-fx-text-fill:        -text-base;
 }

@@ -1,71 +1,3 @@
-/*
-
-- GroupBy-Popup
-	- AnchorPane
-		- VBox #boxContent
-			- HBox #boxHeader
-				- Label // title
-				- Button #btnReset
-			- HBox #boxPresets
-				- Label // "Presets"
-				- ComboBox #choiceSaved
-				- Button #btnDeleteSaved
-				- HBox
-					- TextField #fieldSave
-					- Button #btnSave
-			- Scrollpane
-				- ... VBox
-					- Vbox #boxAttributes
-						- GroupByAttributeNode
-							- Button // delete
-							- Combobox // select attrib
-							- Button // up
-							- Button // down
-					- Button #btnAdd
-			- VBox #boxHeaderString
-				- CheckBox #cbUseHeaderString
-				- TextField #fieldHeaderText
-				- Label // header string info
-			- HBox
-				- Button #btnCancel
-				- Button #btnAccept
-
- */
-
-
-* {
-	-primary-0:      #29323c;
-	-primary-1:      #2f3c48;
-	-primary-2:      #3e4d59;
-
-	-secondary:      #6f7f8c;
-	-info:           #5c8f94;
-	-danger:         #cc330d;
-	-success:        #3e4d59;
-	-warning:        #6e9fa5;
-	-light:          #eceeec;
-	-dark:           #1e2b37;
-
-	-gray-dark:      #767676;
-	-gray-mid-1:     #b9b9b9;
-	-gray-mid-0:     #cccccc;
-	-gray-light:     #ededed;
-
-	-text-light-0:   #b9b9b9;
-	-text-light-1:   white;
-
-	-text-link:      #3366bb;
-
-	-selected-light: #50aaff;
-	-selected-dark:  #0084ff;
-
-
-	-mouse-over:     #787878;
-	-mouse-down:     #a4a4a4;
-
-}
-
-
 
 #boxContent {
 	-fx-spacing: 15;
@@ -80,11 +12,10 @@
 
 #boxPresets {
 	-fx-spacing:           5;
-	-fx-padding:           3 3 3 10;
-	-fx-background-color:  white;
-	-fx-background-radius: 5;
-	-fx-border-radius:     5;
-	-fx-border-color:      -gray-mid-0;
+	-fx-padding:           10;
+	-fx-background-color:  -border, -base;
+	-fx-background-insets: 0, 1;
+	-fx-background-radius: 5, 4;
 }
 
 
@@ -94,33 +25,27 @@
 }
 
 
-#boxPresets > .combo-box {
-	-fx-background-color:  transparent;
-	-fx-background-insets: 0 0 5 0;
-	-fx-border-color:      -gray-mid-0;
-	-fx-border-radius:     0;
-	-fx-border-width:      0 0 1 0;
-	-fx-border-insets:     0 0 3 0;
+#boxContent > .scroll-pane {
+	-fx-background-radius: 5, 4;
+	-fx-border-color:      -border;
+	-fx-border-radius:     5;
 }
 
 
-#boxContent > .scroll-pane {
-	-fx-background-radius: 5;
-	-fx-border-radius:     5;
-	-fx-border-color:      -gray-mid-0;
+#boxContent > .scroll-pane .viewport {
+	-fx-border-radius: 5;
 }
 
 
 #boxAttributes > * {
-	-fx-background-color:  white;
-	-fx-background-radius: 5;
-	-fx-border-radius:     5;
-	-fx-border-color:      -gray-mid-0;
+	-fx-background-color:  -border, -base;
+	-fx-background-insets: 0, 1;
+	-fx-background-radius: 5, 4;
 }
 
 
 #boxAttributes > *:hover {
-	-fx-border-color: -gray-dark;
+	-fx-background-color: -border-hover, -base;
 }
 
 
@@ -131,32 +56,39 @@
 }
 
 
-#boxAttributes > * > .button:hover > SVGPath {
-	-fx-fill: -mouse-over;
+#boxAttributes > * > .button > SVGPath {
+	-fx-fill: -icon;
+
 }
 
 
+#boxAttributes > * > .button:hover > SVGPath,
 #boxAttributes > * > .button:pressed > SVGPath {
-	-fx-fill: -mouse-down;
+	-fx-fill: -icon-hover;
 }
+
 
 
 #boxAttributes > * > .combo-box {
 	-fx-background-color:  transparent;
 	-fx-background-insets: 0 0 5 0;
-	-fx-border-color:      -gray-mid-0;
+	-fx-border-color:      -border;
 	-fx-border-radius:     0;
 	-fx-border-width:      0 0 1 0;
 	-fx-border-insets:     0 0 5 0;
 }
 
 
+#boxAttributes > * > .combo-box:hover {
+	-fx-border-color: -border-hover;
+
+}
+
 
 #boxHeaderString {
 	-fx-spacing:           5;
 	-fx-padding:           3 3 3 10;
-	-fx-background-color:  white;
-	-fx-background-radius: 5;
-	-fx-border-radius:     5;
-	-fx-border-color:      -gray-mid-0;
+	-fx-background-color:  -border, -base;
+	-fx-background-insets: 0, 1;
+	-fx-background-radius: 5, 4;
 }

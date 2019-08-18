@@ -22,6 +22,7 @@ public class UseDefaultItem extends SimpleContentNodeItem {
 
 	public UseDefaultItem(TaskAttribute attribute) {
 		super(attribute, "Use Default");
+		this.getStyleClass().add("use_default_item");
 
 		// create control
 		checkBox = new CheckBox("");

@@ -59,6 +59,11 @@ public class TasksSidebar {
 
 	private void create() {
 
+		root.getStyleClass().add("tasks-sidebar");
+		boxAttributes.getStyleClass().add("attribute-box");
+		btnDeleteTask.getStyleClass().add("delete-button");
+
+
 		// BREADCRUMB
 		breadcrumbBar = new BreadcrumbBar() {
 			@Override

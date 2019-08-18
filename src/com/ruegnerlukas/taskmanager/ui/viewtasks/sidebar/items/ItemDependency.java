@@ -44,6 +44,7 @@ public class ItemDependency extends SidebarItem {
 
 	public ItemDependency(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		this.getStyleClass().add("sidebar-item-dependency");
 		create();
 		refresh();
 	}
@@ -68,6 +69,7 @@ public class ItemDependency extends SidebarItem {
 		this.getChildren().setAll(box);
 
 		Label labelName = new Label(getAttribute().name.get() + ":");
+		labelName.getStyleClass().add("sidebar-item-name");
 		labelName.setMinWidth(0);
 		box.getChildren().add(labelName);
 

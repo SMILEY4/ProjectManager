@@ -30,6 +30,7 @@ public class ChoiceListItem extends SimpleContentNodeItem {
 
 	public ChoiceListItem(TaskAttribute attribute) {
 		super(attribute, "Values");
+		this.getStyleClass().add("choice_list_item");
 
 		// create control
 		tagbar = new TagBar();

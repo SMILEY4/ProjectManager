@@ -27,6 +27,7 @@ public class DefaultChoiceItem extends SimpleContentNodeItem {
 
 	public DefaultChoiceItem(TaskAttribute attribute) {
 		super(attribute, "Default Value");
+		this.getStyleClass().add("default_choice_item");
 
 		// create control
 		choice = new ComboBox<>();

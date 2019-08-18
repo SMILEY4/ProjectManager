@@ -31,7 +31,7 @@ import javafx.scene.layout.HBox;
 public class AttributeNode extends AnchorPane {
 
 
-	private static final double HEADER_HEIGHT = 35;
+	private static final double HEADER_HEIGHT = 36;
 
 	private Button btnExpand;
 	private Label labelUnsafed;
@@ -50,10 +50,9 @@ public class AttributeNode extends AnchorPane {
 
 	public AttributeNode(TaskAttribute attribute) {
 		this.attribute = attribute;
-
+		this.getStyleClass().add("attribute-node");
 
 		// this / root
-		this.setId("attribute");
 		this.setMinSize(100, HEADER_HEIGHT);
 		this.setPrefSize(10000, HEADER_HEIGHT);
 		this.setMaxSize(10000, HEADER_HEIGHT);
@@ -61,29 +60,16 @@ public class AttributeNode extends AnchorPane {
 
 		// header pane
 		AnchorPane headerPane = new AnchorPane();
-		headerPane.setId("pane_header");
 		headerPane.setMinSize(100, HEADER_HEIGHT);
 		headerPane.setPrefSize(10000, HEADER_HEIGHT);
 		headerPane.setMaxSize(10000, HEADER_HEIGHT);
-		AnchorUtils.setAnchors(headerPane, 0, 0, 0, 0);
+		AnchorUtils.setAnchors(headerPane, 0, 0, null, 0);
 		this.getChildren().add(headerPane);
-
-
-		// badge unsafed-changes
-		labelUnsafed = new Label("!");
-		labelUnsafed.setVisible(false);
-		labelUnsafed.setAlignment(Pos.TOP_CENTER);
-		labelUnsafed.setId("unsafed_changes_header");
-		labelUnsafed.setMinSize(18, 18);
-		labelUnsafed.setPrefSize(18, 18);
-		labelUnsafed.setMaxSize(18, 18);
-		AnchorUtils.setAnchors(labelUnsafed, -9, -9, null, null);
-		headerPane.getChildren().add(labelUnsafed);
-		labelUnsafed.setTooltip(new Tooltip("Unsafed Changes!"));
-
 
 		// box header
 		HBox headerBox = new HBox();
+		headerBox.setAlignment(Pos.CENTER_LEFT);
+		headerBox.getStyleClass().add("box-header");
 		headerBox.setMinSize(100, HEADER_HEIGHT);
 		headerBox.setPrefSize(10000, HEADER_HEIGHT);
 		headerBox.setMaxSize(10000, HEADER_HEIGHT);
@@ -92,8 +78,22 @@ public class AttributeNode extends AnchorPane {
 		headerPane.getChildren().add(headerBox);
 
 
+		// badge unsafed-changes
+		labelUnsafed = new Label("!");
+		labelUnsafed.setVisible(false);
+		labelUnsafed.setAlignment(Pos.TOP_CENTER);
+		labelUnsafed.getStyleClass().add("warning-unsafed-changes");
+		labelUnsafed.setMinSize(18, 18);
+		labelUnsafed.setPrefSize(18, 18);
+		labelUnsafed.setMaxSize(18, 18);
+		AnchorUtils.setAnchors(labelUnsafed, -9, -9, null, null);
+		headerPane.getChildren().add(labelUnsafed);
+		labelUnsafed.setTooltip(new Tooltip("Unsafed Changes!"));
+
+
 		// remove-button
 		Button btnRemove = new Button();
+		btnRemove.getStyleClass().add("button-remove");
 		btnRemove.setMinSize(32, 32);
 		btnRemove.setPrefSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
@@ -105,6 +105,7 @@ public class AttributeNode extends AnchorPane {
 
 		// choice attribute-type
 		ComboBox<AttributeType> choiceType = new ComboBox<>();
+		choiceType.getStyleClass().add("choice-type");
 		choiceType.setButtonCell(ComboboxUtils.createListCellAttributeType());
 		choiceType.setCellFactory(param -> ComboboxUtils.createListCellAttributeType());
 		if (attribute.type.getValue().fixed) {
@@ -133,6 +134,7 @@ public class AttributeNode extends AnchorPane {
 
 		// attribute name
 		EditableLabel labelName = new EditableLabel(attribute.name.getValue());
+		labelName.getStyleClass().add("label-name");
 		labelName.setMinSize(32, 32);
 		labelName.setPrefSize(10000, 32);
 		labelName.setMaxSize(10000, 32);
@@ -149,6 +151,7 @@ public class AttributeNode extends AnchorPane {
 
 		// expand-button
 		btnExpand = new Button();
+		btnExpand.getStyleClass().add("button-expand");
 		btnExpand.setMinSize(32, 32);
 		btnExpand.setPrefSize(32, 32);
 		btnExpand.setMaxSize(32, 32);
@@ -171,7 +174,7 @@ public class AttributeNode extends AnchorPane {
 		// content pane
 		contentPane = new AnchorPane();
 		contentPane.setPadding(new Insets(0, 10, 0, 10));
-		contentPane.setId("pane_content");
+		contentPane.getStyleClass().add("pane-content");
 		contentPane.setVisible(isExpanded);
 		contentPane.setMinSize(0, 0);
 		contentPane.setPrefSize(10000, 10000);
@@ -227,6 +230,8 @@ public class AttributeNode extends AnchorPane {
 			}
 			AttributeLogic.setTaskAttributeType(Data.projectProperty.get(), getAttribute(), newValue);
 			setAttributeContent();
+			this.getStyleClass().remove("attribute-node-"+oldValue.toString().toLowerCase());
+			this.getStyleClass().add("attribute-node-"+newValue.toString().toLowerCase());
 		}
 	}
 

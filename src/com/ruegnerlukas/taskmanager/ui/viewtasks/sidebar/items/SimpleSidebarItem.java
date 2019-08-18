@@ -38,6 +38,7 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 	public SimpleSidebarItem(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		this.getStyleClass().add("sidebar-item-simple");
 
 		// root box
 		HBox root = new HBox();
@@ -52,6 +53,7 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 		// left - label
 		label = new Label("Attribute");
+		label.getStyleClass().add("sidebar-item-name");
 		label.setAlignment(Pos.CENTER_RIGHT);
 		label.setMinWidth(0);
 		label.setPrefSize(100000, 34);
@@ -67,6 +69,7 @@ public abstract class SimpleSidebarItem extends SidebarItem {
 
 		// button - add / clear
 		button = new Button();
+		button.getStyleClass().add("sidebar-item-clear");
 		ButtonUtils.makeIconButton(button, SVGIcons.CROSS, 0.4);
 		button.setMinSize(34, 34);
 		button.setMaxSize(34, 34);

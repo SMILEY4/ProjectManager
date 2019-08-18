@@ -1,0 +1,114 @@
+* {
+
+
+	-primary-0:        #29323c;
+	-primary-1:        #2f3c48;
+	-primary-2:        #3e4d59;
+
+	-secondary:        #6f7f8c;
+	-secondary-hover:  #808f9c;
+
+
+	-text-primary:     #b9b9b9;
+	-text-primary-alt: #f1f1f1;
+
+	-warning:          #6e9fa5;
+	-text-warning:     -text-primary-alt;
+
+
+	-danger0-primary:   #d9534f;
+	-danger0-effect:    #d43f3a;
+	-danger1-primary:   #c9302c;
+	-danger1-effect:    #ac2925;
+
+	-info0-primary:     #5bc0de;
+	-info0-effect:      #46b8da;
+	-info1-primary:     #31b0d5;
+	-info1-effect:      #269abc;
+
+	-success0-primary:  #5cb85c;
+	-success0-effect:   #4cae4c;
+	-success1-primary:  #449d44;
+	-success1-effect:   #398439;
+
+	-warning0-primary:  #f0ad4e;
+	-warning0-effect:   #eea236;
+	-warning1-primary:  #ec971f;
+	-warning1-effect:   #d58512;
+
+	-danger-tooltip-0:  #f2dede;
+	-danger-tooltip-1:  #ebccd1;
+	-danger-tooltip-2:  #a94442;
+
+	-info-tooltip-0:    #d8ecf6;
+	-info-tooltip-1:    #bce8f1;
+	-info-tooltip-2:    #31708f;
+
+	-success-tooltip-0: #dff0d8;
+	-success-tooltip-1: #d6e9c6;
+	-success-tooltip-2: #99bb96;
+
+	-warning-tooltip-0: #fcf8e3;
+	-warning-tooltip-1: #faebcc;
+	-warning-tooltip-2: #8a6e3c;
+
+
+	/* Used as background of windows */
+	-background:       #f5f5f5;
+
+	/* Mostly used as background for cells */
+	-background-alt:   #dddddd;
+
+	/* Used as base color for most object */
+	-base:             #ffffff;
+
+	/* Used as base color for most object */
+	-base-alt:         #f8f8f8;
+
+	/* Used as base color for "hovered" and "pressed" state */
+	-base-hover:       #ebebeb;
+
+	/* Used as border color for most object */
+	-border:           #cecece;
+
+	/* Mostly used as border around cells*/
+	-border-alt:       #ececec;
+
+	/* Used as border color for "hovered" and "pressed" state */
+	-border-hover:     #ababab;
+
+	/* Used for arrows and other icons*/
+	-icon:             #404040;
+
+	/* Used for arrows and other icons for "hovered" and "pressed" state*/
+	-icon-hover:       #686868;
+
+	/* For highlighting objects */
+	-accent:           #7f8b94;
+
+	/* For highlighting objects */
+	-accent-alt:       #d5dcde;
+
+	/* For the border for highlighting objects */
+	-border-accent:    #616a73;
+
+	/* Used for text on top of -base */
+	-text-base:        #333333;
+
+	/* Used for text on top of -accent */
+	-text-base-faint:  #919191;
+
+	/* Used for text on top of -background */
+	-text-background:  -text-base;
+
+	/* Used for text on top of -accent */
+	-text-accent:      #ffffff;
+
+	/* Used for text on top of -accent */
+	-text-accent-alt:  -text-base;
+
+	-dropshadow:       rgba(0, 0, 0, 0.2);
+
+	-chart-lines:      #c2c2c2;
+
+}

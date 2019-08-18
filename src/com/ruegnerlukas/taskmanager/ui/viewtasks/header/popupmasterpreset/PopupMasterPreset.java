@@ -63,7 +63,7 @@ public class PopupMasterPreset extends PopupBase {
 
 
 	public PopupMasterPreset() {
-		super(800, 600);
+		super(800, 400);
 	}
 
 

@@ -27,6 +27,7 @@ public class ItemDescription extends SidebarItem {
 
 	public ItemDescription(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		this.getStyleClass().add("sidebar-item-description");
 		create();
 		refresh();
 	}
@@ -48,9 +49,11 @@ public class ItemDescription extends SidebarItem {
 		this.getChildren().setAll(box);
 
 		Label label = new Label("Description:");
+		label.getStyleClass().add("sidebar-item-name");
 		box.getChildren().add(label);
 
 		area = new TextArea();
+		area.getStyleClass().add("sidebar-item-value");
 		area.setMinSize(0, 40);
 		area.setPrefSize(10000, 200);
 		box.getChildren().add(area);

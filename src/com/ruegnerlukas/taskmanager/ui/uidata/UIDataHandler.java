@@ -21,8 +21,8 @@ public class UIDataHandler {
 	static {
 
 		// stylsheets
-		stylesheetPaths.put(UIModule.STYLE_BASE, "style/bootstrap4.css");
-		stylesheetPaths.put(UIModule.STYLE_VARS, "style/vars.css");
+		stylesheetPaths.put(UIModule.STYLE_BASE, "style/style.css");
+		stylesheetPaths.put(UIModule.STYLE_VARS, "style/style_vars.css");
 
 		stylesheetPaths.put(UIModule.VIEW_MAIN, "style/style_view_main.css");
 		stylesheetPaths.put(UIModule.VIEW_PROJECTSETTINGS, "style/style_view_projectsettings.css");
@@ -86,7 +86,6 @@ public class UIDataHandler {
 	 * Loads and sets the style of the given {@link UIModule} and root. (Used to reload style)
 	 */
 	public static void setStyle(Parent root, UIModule module) {
-//		System.out.println("set style: " + module);
 		root.getStylesheets().clear();
 //		root.getStylesheets().add(getStylesheetAsURL(UIModule.STYLE_BASE).toExternalForm());
 //		root.getStylesheets().add(getStylesheetAsURL(module).toExternalForm());
@@ -94,7 +93,6 @@ public class UIDataHandler {
 		root.getStylesheets().add("file:D:/LukasRuegner/Programmieren/Java/Workspace/SimpleTaskManager/src/com/ruegnerlukas/taskmanager/ui/uidata/" + getStylesheetAsPath(UIModule.STYLE_VARS));
 		root.getStylesheets().add("file:D:/LukasRuegner/Programmieren/Java/Workspace/SimpleTaskManager/src/com/ruegnerlukas/taskmanager/ui/uidata/" + getStylesheetAsPath(UIModule.STYLE_BASE));
 		root.getStylesheets().add("file:D:/LukasRuegner/Programmieren/Java/Workspace/SimpleTaskManager/src/com/ruegnerlukas/taskmanager/ui/uidata/" + getStylesheetAsPath(module));
-
 	}
 
 

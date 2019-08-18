@@ -49,6 +49,8 @@ public class TaskView extends AnchorPane implements MainViewModule {
 
 	private void create() {
 
+		rootTaskView.getStyleClass().add("view-tasks");
+
 		// header
 		header = new TasksHeader();
 		AnchorUtils.setAnchors(header.getAnchorPane(), 0, 0, 0, 0);
@@ -65,6 +67,7 @@ public class TaskView extends AnchorPane implements MainViewModule {
 		paneSidebar.getChildren().add(sidebar.getAnchorPane());
 
 		// show / hide sidebar
+		splitContent.getStyleClass().add("tasks-split-pane");
 		content.getSidebarControlArea().setOnMouseClicked(e -> {
 			if (!isSidebarShown()) {
 				splitContent.setDividerPositions(0.8);

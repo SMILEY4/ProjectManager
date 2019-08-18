@@ -1,0 +1,22 @@
+
+.task-list .task-list-title {
+	-fx-background-color:  -primary-2, -secondary;
+	-fx-background-insets: 0, 0 1 0 1;
+	-fx-text-fill:         -text-primary-alt;
+	-fx-font-weight:       bold;
+}
+
+
+.task-list:hover .task-list-title {
+	-fx-background-color: -primary-2, -secondary-hover;
+}
+
+
+.task-list-scroll {
+	-fx-border-color: -border;
+}
+
+
+.task-list-scroll .viewport {
+	-fx-background-color: -background;
+}

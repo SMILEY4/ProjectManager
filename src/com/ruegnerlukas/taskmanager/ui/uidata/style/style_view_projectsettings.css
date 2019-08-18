@@ -1,143 +1,37 @@
-/*
 
-- AnchorPane #rootProjectSettingsView
-	- AnchorPane ... // project name
-	- ScrollPane
-		- ... VBox
-			- HBox
-				- Button #btnLockAttributes
-			- VBox
-				- VBox #box_attributes
-					- SortElementNode #attribute
-						- AnchorPane #pane_header
-							- HBox
-								- Button // remove
-								- ComboBox // type
-								- EditableLabel // name
-								- Button // expand/collapse
-						- AnchorPane #pane_content
-							- XYZDataNode
-							- HBox [opt]
-								- Button // discard
-								- Button // save
-				- Button // add attribute
+.button-remove,
+.button-remove:hover,
+.button-remove:pressed,
+.button-expand,
+.button-expand:hover,
+.button-expand:pressed,
+.button-up,
+.button-up:hover,
+.button-up:pressed,
+.button-down,
+.button-down:hover,
+.button-down:pressed {
+	-fx-background-color: transparent;
+}
 
 
-EmptyLabelItem #item_empty
-	- Label // "this attribute can not be changed"
+.button-remove > SVGPath,
+.button-expand > SVGPath,
+.button-up > SVGPath,
+.button-down > SVGPath {
+	-fx-fill: -icon;
+}
 
 
-FlagListValueItem #item_flaglist
-	- AnchorPane
-		- Label // "Flags:"
-		- ScrollPane
-		- ... VBox
-			- FlagValueItem
-				- HBox
-					- Button // remove
-					- Pane // FlagColor
-					- EditableLabel // flag name
-					- Button // up
-					- Button // down
-
-
-FlagValueItem #item_flag
-	- HBox
-		- Button // remove
-		- Pane // FlagColor
-		- EditableLabel // flag name
-		- Button // up
-		- Button // down
-
-
-ChoiceValueItem #item_choice
-	- HBox
-		- VBox
-			- Label
-		- VBox
-			- ComboBox
-
-
-IntegerValueItem #item_integer
-	- HBox
-		- VBox
-			- Label
-		- VBox
-			- Spinner
-
-
-FloatValueItem #item_float
-	- HBox
-		- VBox
-			- Label
-		- VBox
-			- Spinner
-
-
-BoolValueItem #item_boolean
-	- HBox
-		- VBox
-			- Label
-		- VBox
-			- CheckBox
-
-
-MLTextValueItem #item_mltext
-	- HBox
-		- VBox
-			- Label
-		- VBox
-			- TextArea
-
-
-TextValueItem #item_text
-	- HBox
-		- VBox
-			- Label
-		- VBox
-			- TextField
-
-
-ChoiceValueItem #item_choice
-	- HBox
-		- VBox
-			- Label
-		- VBox
-			- ComboBox
-
- */
-
-
-* {
-	-primary-0:      #29323c;
-	-primary-1:      #2f3c48;
-	-primary-2:      #3e4d59;
-
-	-secondary:      #6f7f8c;
-	-info:           #5c8f94;
-	-danger:         #cc330d;
-	-success:        #3e4d59;
-	-warning:        #6e9fa5;
-	-light:          #eceeec;
-	-dark:           #1e2b37;
-
-	-gray-dark:      #767676;
-	-gray-mid-1:     #b9b9b9;
-	-gray-mid-0:     #cccccc;
-	-gray-light:     #ededed;
-
-	-text-light-0:   #b9b9b9;
-	-text-light-1:   white;
-
-	-text-link:      #3366bb;
-
-	-selected-light: #50aaff;
-	-selected-dark:  #0084ff;
-
-
-	-mouse-over:     #787878;
-	-mouse-down:     #a4a4a4;
-
+.button-remove:hover > SVGPath,
+.button-remove:pressed > SVGPath,
+.button-expand:hover > SVGPath,
+.button-expand:pressed > SVGPath,
+.button-up:hover > SVGPath,
+.button-up:pressed > SVGPath,
+.button-down:hover > SVGPath,
+.button-down:pressed > SVGPath {
+	-fx-fill: -icon-hover;
 }
 
 
@@ -146,150 +40,86 @@ ChoiceValueItem #item_choice
 }
 
 
-#btnLockAttributes {
+.lock-button {
 	-fx-background-color: transparent;
 	-fx-border-color:     transparent;
 }
 
 
-#btnLockAttributes:hover > SVGPath {
-	-fx-fill: -mouse-over;
+.lock-button > SVGPath {
+	-fx-fill: -icon;
 }
 
 
-#btnLockAttributes:pressed > SVGPath {
-	-fx-fill: -mouse-down;
+.lock-button:hover > SVGPath,
+.lock-button:pressed > SVGPath {
+	-fx-fill: -icon-hover;
 }
 
 
-#attribute {
-	-fx-background-color:  white;
-	-fx-background-radius: 5;
-	-fx-border-color:      -gray-mid-0;
-	-fx-border-radius:     5;
+.attribute-node {
+	-fx-background-color:  -border, -base;
+	-fx-background-insets: 0, 1;
+	-fx-background-radius: 5, 4;
 }
 
 
-#attribute:hover {
-	-fx-border-color: -gray-dark;
+.attribute-node:hover {
+	-fx-background-color: -border-hover, -base;
 }
 
 
-#pane_header > * > .button {
-	-fx-background-color: transparent;
-	-fx-border-color:     transparent;
-}
-
-
-#pane_header > * > .button:hover > SVGPath {
-	-fx-fill: -mouse-over;
-}
-
-
-#pane_header > * > .button:pressed > SVGPath {
-	-fx-fill: -mouse-down;
-}
-
-
-#pane_header > * > .combo-box {
+.choice-type {
 	-fx-background-color:  transparent;
 	-fx-background-insets: 0 0 5 0;
-	-fx-border-color:      -gray-mid-0;
+	-fx-border-color:      -border;
 	-fx-border-radius:     0;
 	-fx-border-width:      0 0 1 0;
 	-fx-border-insets:     0 0 5 0;
 }
 
 
-#unsafed_changes_header {
+.choice-type:hover {
+	-fx-background-color: transparent;
+	-fx-border-color:     -border-hover;
+}
+
+
+.warning-unsafed-changes {
 	-fx-border-color:      transparent;
 	-fx-background-color:  -warning;
 	-fx-border-radius:     9;
 	-fx-background-radius: 9;
-	-fx-text-fill:         white;
+	-fx-text-fill:         -text-warning;
 	-fx-font-weight:       bold;
 	-fx-font-size:         80%;
 }
 
 
-#pane_content {
-}
 
-
-
-#item_boolean {
-}
-
-
-#item_choice {
-}
-
-
-#item_empty {
-}
-
-
-#item_flaglist > * > .scroll-pane {
+.flag_list_item .scroll-pane {
 	-fx-background-radius: 5;
 }
 
 
-#item_flaglist > * > .scroll-pane > * {
+.flag_list_item .scroll-pane > * {
 	-fx-background-radius: 5;
 }
 
 
+.flag_item {
+	-fx-background-color:  -border, -base;
+	-fx-background-insets: 0, 1;
+	-fx-background-radius: 5, 4;
+}
 
-#item_flag {
-	-fx-background-color:  white;
+
+.flag_item:hover {
+	-fx-background-color: -border-hover, -base;
+}
+
+
+.flag-color {
 	-fx-background-radius: 5;
-	-fx-border-color:      -gray-mid-0;
-	-fx-border-radius:     5;
 }
 
-
-#item_flag:hover {
-	-fx-border-color: -gray-dark;
-}
-
-
-#item_flag > * > Button {
-	-fx-background-color: transparent;
-	-fx-border-color:     transparent;
-}
-
-
-#item_flag > * > Button:hover > SVGPath {
-	-fx-fill: -mouse-over;
-}
-
-
-#item_flag > * > Button:pressed > SVGPath {
-	-fx-fill: -mouse-down;
-}
-
-
-#item_flag > * > Pane {
-	-fx-background-radius: 6;
-}
-
-
-#item_float {
-}
-
-
-#item_integer {
-}
-
-
-#item_mltext {
-}
-
-
-#item_text {
-}
-
-
-
-#pane_header {
-}

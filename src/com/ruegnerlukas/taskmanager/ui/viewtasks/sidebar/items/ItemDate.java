@@ -23,6 +23,7 @@ public class ItemDate extends SimpleSidebarItem {
 
 	public ItemDate(TasksSidebar sidebar, TaskAttribute attribute, Task task) {
 		super(sidebar, attribute, task);
+		this.getStyleClass().add("sidebar-item-date");
 	}
 
 
@@ -31,6 +32,7 @@ public class ItemDate extends SimpleSidebarItem {
 	@Override
 	protected void create() {
 		picker = new DatePicker();
+		picker.getStyleClass().add("sidebar-item-value");
 		picker.setValue(LocalDate.now());
 		picker.setOnAction(event -> {
 			TaskLogic.setValue(Data.projectProperty.get(), getTask(), getAttribute(), new DateValue(picker.getValue()));

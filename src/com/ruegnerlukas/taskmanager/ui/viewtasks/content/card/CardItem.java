@@ -29,6 +29,7 @@ public class CardItem extends HBox {
 	public CardItem(TaskCard card, TaskAttribute attribute) {
 		this.card = card;
 		this.attribute = attribute;
+		this.getStyleClass().add("task-card-item");
 
 		this.setMinSize(0, 22);
 		this.setPrefSize(100000, 22);
@@ -36,6 +37,7 @@ public class CardItem extends HBox {
 		this.setSpacing(15);
 
 		labelName = new Label(attribute.name.get() + ":");
+		labelName.getStyleClass().add("task-card-item-key");
 		labelName.setMinSize(0, 22);
 		labelName.setPrefSize(10000, 22);
 		labelName.setMaxSize(10000, 22);
@@ -43,6 +45,7 @@ public class CardItem extends HBox {
 		this.getChildren().add(labelName);
 
 		labelValue = new Label();
+		labelValue.getStyleClass().add("task-card-item-value");
 		labelValue.setMinSize(0, 22);
 		labelValue.setPrefSize(10000, 22);
 		labelValue.setMaxSize(10000, 22);

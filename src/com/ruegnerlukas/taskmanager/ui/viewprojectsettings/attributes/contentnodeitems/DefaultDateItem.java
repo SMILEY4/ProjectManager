@@ -25,6 +25,7 @@ public class DefaultDateItem extends SimpleContentNodeItem {
 
 	public DefaultDateItem(TaskAttribute attribute) {
 		super(attribute, "Default Value");
+		this.getStyleClass().add("default_date_item");
 
 		// create control
 		datePicker = new DatePicker();

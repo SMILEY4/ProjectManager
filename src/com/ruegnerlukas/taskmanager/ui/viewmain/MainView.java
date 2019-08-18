@@ -133,7 +133,9 @@ public class MainView extends AnchorPane {
 		MenuFunction functionDebug = new MenuFunction("Dev", "Debug") {
 			@Override
 			public void onAction() {
-				System.out.println("Debug " + System.currentTimeMillis());
+				Logger.get().info("Info " + System.currentTimeMillis());
+				Logger.get().warn("Info " + System.currentTimeMillis());
+				Logger.get().error("Info " + System.currentTimeMillis());
 				try {
 					throw new IllegalArgumentException("test exception");
 				} catch (Exception e) {
