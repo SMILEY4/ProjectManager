@@ -41,7 +41,7 @@ public class UIDataHandler {
 		stylesheetPaths.put(UIModule.CONTROL_EDITABLE_AREA, "style/style_control_editablearea.css");
 		stylesheetPaths.put(UIModule.CONTROL_EDITABLE_LABEL, "style/style_control_editablelabel.css");
 		stylesheetPaths.put(UIModule.POPUP_DEPENDENCY, "style/style_popup_dependency.css");
-
+		stylesheetPaths.put(UIModule.VIEW_DOCUMENTATION, "style/style_view_documentation.css");
 
 		// fxml-files
 		fxmlPaths.put(UIModule.VIEW_MAIN, "fxml/layout_view_main.fxml");
@@ -59,6 +59,7 @@ public class UIDataHandler {
 		fxmlPaths.put(UIModule.POPUP_PRESETS, "fxml/layout_popup_presets.fxml");
 		fxmlPaths.put(UIModule.POPUP_FILTER, "fxml/layout_popup_filter.fxml");
 		fxmlPaths.put(UIModule.POPUP_DEPENDENCY, "fxml/layout_popup_dependency.fxml");
+		fxmlPaths.put(UIModule.VIEW_DOCUMENTATION, "fxml/layout_view_documentation.fxml");
 
 	}
 

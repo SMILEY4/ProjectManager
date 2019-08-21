@@ -8,6 +8,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
+import com.ruegnerlukas.taskmanager.ui.viewdocumentation.DocumentationView;
 import com.ruegnerlukas.taskmanager.ui.viewmain.notifications.NotificationArea;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.TaskView;
@@ -46,7 +47,8 @@ public class MainView extends AnchorPane {
 	private MenuFunction functionCloseProject;
 
 	private MainViewModule moduleProjectSettings;
-	private MainViewModule moduleTabs;
+	private MainViewModule moduleTasks;
+	private MainViewModule moduleDoc;
 
 
 
@@ -137,13 +139,7 @@ public class MainView extends AnchorPane {
 				Logger.get().warn("Info " + System.currentTimeMillis());
 				Logger.get().error("Info " + System.currentTimeMillis());
 				Object o = null;
-				String s = o.toString();
-//				try {
-//					throw new IllegalArgumentException("test exception");
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//					Logger.get().error("Exception Description", e);
-//				}
+				String s = o.toString(); // results in nullpointer-exception
 			}
 		}.addToMenuBar(menuBar);
 
@@ -207,15 +203,25 @@ public class MainView extends AnchorPane {
 		this.moduleProjectSettings = viewProjectSettings;
 		this.moduleProjectSettings.onModuleOpen();
 
-		// project data
+		// tasks
 		TaskView viewTasks = new TaskView();
 		AnchorUtils.setAnchors(viewTasks, 0, 0, 0, 0);
 		Tab tabTaskView = new Tab(TaskView.TITLE);
 		tabTaskView.setContent(viewTasks);
 		tabPane.getTabs().add(tabTaskView);
 
-		this.moduleTabs = viewTasks;
-		this.moduleTabs.onModuleOpen();
+		this.moduleTasks = viewTasks;
+		this.moduleTasks.onModuleOpen();
+
+		// documentation
+		DocumentationView viewDoc = new DocumentationView();
+		AnchorUtils.setAnchors(viewDoc, 0, 0, 0, 0);
+		Tab tabDocView = new Tab(DocumentationView.TITLE);
+		tabDocView.setContent(viewDoc);
+		tabPane.getTabs().add(tabDocView);
+
+		this.moduleDoc = viewDoc;
+		this.moduleDoc.onModuleOpen();
 	}
 
 
@@ -228,8 +234,8 @@ public class MainView extends AnchorPane {
 		if (moduleProjectSettings != null) {
 			moduleProjectSettings.onModuleClose();
 		}
-		if (moduleTabs != null) {
-			moduleTabs.onModuleClose();
+		if (moduleTasks != null) {
+			moduleTasks.onModuleClose();
 		}
 		tabPane.getTabs().clear();
 	}

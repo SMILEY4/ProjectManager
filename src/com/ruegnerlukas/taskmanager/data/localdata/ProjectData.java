@@ -1,6 +1,7 @@
 package com.ruegnerlukas.taskmanager.data.localdata;
 
 import com.ruegnerlukas.taskmanager.data.Identifiers;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.DocumentationFile;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.MasterPreset;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
@@ -16,6 +17,7 @@ public class ProjectData {
 
 	public final SyncedList<TaskAttribute> attributes;
 	public final SyncedList<Task> tasks;
+	public final SyncedList<DocumentationFile> docFiles;
 
 	public final CustomProperty<FilterCriteria> filterData;
 	public final CustomProperty<TaskGroupData> groupData;
@@ -38,6 +40,7 @@ public class ProjectData {
 
 		attributes = new SyncedList<>(Identifiers.DATA_ATTRIBUTE_LIST, null, project.dataHandler);
 		tasks = new SyncedList<>(Identifiers.DATA_TASK_LIST, null, project.dataHandler);
+		docFiles = new SyncedList<>(Identifiers.DATA_DOC_FILE_LIST, null, project.dataHandler);
 
 		filterData = new CustomProperty<>();
 		groupData = new CustomProperty<>();
@@ -61,6 +64,7 @@ public class ProjectData {
 	public void dispose() {
 		attributes.dispose();
 		tasks.dispose();
+		docFiles.dispose();
 		presetsFilter.dispose();
 		presetsGroup.dispose();
 		presetsSort.dispose();

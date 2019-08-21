@@ -6,7 +6,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.MasterPreset;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGroupData;
-import com.ruegnerlukas.taskmanager.logic.PresetLogic;
+import com.ruegnerlukas.taskmanager.logic.MiscLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
@@ -221,7 +221,7 @@ public class PopupMasterPreset extends PopupBase {
 	 * Loads the {@link MasterPreset} with the given name and selects it.
 	 */
 	private void onLoadMasterPreset(String name) {
-		MasterPreset preset = PresetLogic.getMasterPreset(Data.projectProperty.get(), name.trim());
+		MasterPreset preset = MiscLogic.getMasterPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
 			onClearAllData();
 		} else {
@@ -237,7 +237,7 @@ public class PopupMasterPreset extends PopupBase {
 	 * Deletes the {@link MasterPreset} with the given name and deselects it.
 	 */
 	private void onDeleteMasterPreset(String name) {
-		boolean deleted = PresetLogic.deleteMasterPreset(Data.projectProperty.get(), name);
+		boolean deleted = MiscLogic.deleteMasterPreset(Data.projectProperty.get(), name);
 		if (deleted) {
 			choicePreset.getItems().clear();
 			choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsMaster.keySet());
@@ -254,7 +254,7 @@ public class PopupMasterPreset extends PopupBase {
 	 */
 	private void onSaveMasterPreset(String name) {
 		String strName = name.trim();
-		boolean saved = PresetLogic.saveMasterPreset(Data.projectProperty.get(), strName, buildMasterPreset());
+		boolean saved = MiscLogic.saveMasterPreset(Data.projectProperty.get(), strName, buildMasterPreset());
 		if (saved) {
 			fieldPresetName.setText("");
 			choicePreset.getItems().clear();
@@ -296,7 +296,7 @@ public class PopupMasterPreset extends PopupBase {
 	 * Loads a {@link FilterCriteria} with the given name and selects it.
 	 */
 	private void onLoadFilterPreset(String name) {
-		FilterCriteria preset = PresetLogic.getFilterPreset(Data.projectProperty.get(), name.trim());
+		FilterCriteria preset = MiscLogic.getFilterPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
 			onClearFilterData();
 		} else {
@@ -312,7 +312,7 @@ public class PopupMasterPreset extends PopupBase {
 	 * Loads a {@link TaskGroupData} with the given name and selects it.
 	 */
 	private void onLoadGroupPreset(String name) {
-		TaskGroupData preset = PresetLogic.getTaskGroupPreset(Data.projectProperty.get(), name.trim());
+		TaskGroupData preset = MiscLogic.getTaskGroupPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
 			onClearGroupData();
 		} else {
@@ -328,7 +328,7 @@ public class PopupMasterPreset extends PopupBase {
 	 * Loads a {@link SortData} with the given name and selects it.
 	 */
 	private void onLoadSortPreset(String name) {
-		SortData preset = PresetLogic.getSortPreset(Data.projectProperty.get(), name.trim());
+		SortData preset = MiscLogic.getSortPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
 			onClearSortData();
 		} else {

@@ -4,7 +4,7 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
-import com.ruegnerlukas.taskmanager.logic.PresetLogic;
+import com.ruegnerlukas.taskmanager.logic.MiscLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIModule;
@@ -153,7 +153,7 @@ public class PopupFilter extends PopupBase {
 	 * Loads the preset with the given name and selects it. This replaces the previous elements.
 	 */
 	private void onLoadPreset(String name) {
-		FilterCriteria preset = PresetLogic.getFilterPreset(Data.projectProperty.get(), name.trim());
+		FilterCriteria preset = MiscLogic.getFilterPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
 			onClearRootCriteria();
 		} else {
@@ -169,7 +169,7 @@ public class PopupFilter extends PopupBase {
 	 * Deletes the preset with the given name and deselects it.
 	 */
 	private void onDeletePreset(String name) {
-		boolean deleted = PresetLogic.deleteFilterPreset(Data.projectProperty.get(), name);
+		boolean deleted = MiscLogic.deleteFilterPreset(Data.projectProperty.get(), name);
 		if (deleted) {
 			choicePreset.getItems().clear();
 			choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsFilter.keySet());
@@ -186,7 +186,7 @@ public class PopupFilter extends PopupBase {
 	 */
 	private void onSavePreset(String name) {
 		String strName = name.trim();
-		boolean saved = PresetLogic.saveFilterPreset(Data.projectProperty.get(), strName, criteriaNode.get() == null ? null : criteriaNode.get().buildCriteriaTree());
+		boolean saved = MiscLogic.saveFilterPreset(Data.projectProperty.get(), strName, criteriaNode.get() == null ? null : criteriaNode.get().buildCriteriaTree());
 		if (saved) {
 			fieldPresetName.setText("");
 			choicePreset.getItems().clear();

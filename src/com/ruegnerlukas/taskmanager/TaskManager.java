@@ -6,7 +6,7 @@ import com.ruegnerlukas.simpleutils.logging.LogLevel;
 import com.ruegnerlukas.simpleutils.logging.builder.DefaultMessageBuilder;
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.console.CommandHandler;
-import com.ruegnerlukas.taskmanager.logic.PresetLogic;
+import com.ruegnerlukas.taskmanager.logic.MiscLogic;
 import com.ruegnerlukas.taskmanager.logic.ProjectLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskDisplayLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
@@ -40,7 +40,7 @@ public class TaskManager extends Application {
 		Logger.get().blankLine();
 
 		ProjectLogic.init();
-		PresetLogic.init();
+		MiscLogic.init();
 		TaskLogic.init();
 		TaskDisplayLogic.init();
 		CommandHandler.create();

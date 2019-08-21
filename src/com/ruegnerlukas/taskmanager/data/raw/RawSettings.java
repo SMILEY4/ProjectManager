@@ -9,6 +9,7 @@ public class RawSettings {
 	public boolean attributesLocked;
 	public int idCounterAttributes;
 	public int idCounterTasks;
+	public int idCounterDoc;
 
 
 
@@ -19,6 +20,7 @@ public class RawSettings {
 		raw.attributesLocked = settings.attributesLocked.get();
 		raw.idCounterAttributes = settings.attIDCounter.get();
 		raw.idCounterTasks = settings.taskIDCounter.get();
+		raw.idCounterDoc = settings.docIDCounter.get();
 		return raw;
 	}
 

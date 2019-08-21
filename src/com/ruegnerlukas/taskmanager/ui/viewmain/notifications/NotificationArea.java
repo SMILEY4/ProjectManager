@@ -8,6 +8,7 @@ import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.simpleutils.logging.target.LogTarget;
 import com.ruegnerlukas.taskmanager.utils.SVGIcons;
 import com.ruegnerlukas.taskmanager.utils.uielements.ButtonUtils;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
@@ -135,9 +136,11 @@ public class NotificationArea {
 
 	public void addNotification(Notification.Type type, String summary, String text) {
 		Notification notification = new Notification(type, text, summary);
-		notification.getStyleClass().add("notification-"+type.toString().toLowerCase());
-		boxNotifications.getChildren().add(notification);
-		labelInfobar.setText(notification.summary);
+		notification.getStyleClass().add("notification-" + type.toString().toLowerCase());
+		Platform.runLater(() -> {
+			boxNotifications.getChildren().add(notification);
+			labelInfobar.setText(notification.summary);
+		});
 	}
 
 

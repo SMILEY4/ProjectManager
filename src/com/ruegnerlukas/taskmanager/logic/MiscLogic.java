@@ -2,12 +2,13 @@ package com.ruegnerlukas.taskmanager.logic;
 
 import com.ruegnerlukas.simpleutils.logging.logger.Logger;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.DocumentationFile;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.MasterPreset;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGroupData;
 
-public class PresetLogic {
+public class MiscLogic {
 
 
 	public static void init() {
@@ -183,6 +184,33 @@ public class PresetLogic {
 			Logger.get().info("Could not save Master-Preset (" + name + "). Preset with name already exists.");
 			return false;
 		}
+	}
+
+
+
+
+	/**
+	 * Creates a new valid {@link DocumentationFile} for the given {@link Project}. The new {@link DocumentationFile} will not be added to the given {@link Project}.
+	 *
+	 * @return the created {@link DocumentationFile}
+	 */
+	public static DocumentationFile createDocFile(Project project, String name) {
+		final int id = project.settings.docIDCounter.get();
+		System.out.println("CREATE DOC " + id);
+		project.settings.docIDCounter.set(id + 1);
+		return new DocumentationFile(id, name, project);
+	}
+
+
+
+
+	public static DocumentationFile findDocByID(Project project, int id) {
+		for (DocumentationFile docFile : project.data.docFiles) {
+			if (docFile.id.get() == id) {
+				return docFile;
+			}
+		}
+		return null;
 	}
 
 }

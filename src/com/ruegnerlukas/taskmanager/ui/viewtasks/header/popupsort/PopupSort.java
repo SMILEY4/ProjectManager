@@ -7,7 +7,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortData;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.sort.SortElement;
-import com.ruegnerlukas.taskmanager.logic.PresetLogic;
+import com.ruegnerlukas.taskmanager.logic.MiscLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
@@ -164,7 +164,7 @@ public class PopupSort extends PopupBase {
 	 * Loads the preset with the given name and selects it. This replaces the previous elements.
 	 */
 	private void onLoadPreset(String name) {
-		SortData preset = PresetLogic.getSortPreset(Data.projectProperty.get(), name.trim());
+		SortData preset = MiscLogic.getSortPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
 			onClearSortData();
 		} else {
@@ -180,7 +180,7 @@ public class PopupSort extends PopupBase {
 	 * Deletes the preset with the given name and deselects it.
 	 */
 	private void onDeletePreset(String name) {
-		boolean deleted = PresetLogic.deleteSortPreset(Data.projectProperty.get(), name);
+		boolean deleted = MiscLogic.deleteSortPreset(Data.projectProperty.get(), name);
 		if (deleted) {
 			choicePreset.getItems().clear();
 			choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsSort.keySet());
@@ -197,7 +197,7 @@ public class PopupSort extends PopupBase {
 	 */
 	private void onSavePreset(String name) {
 		String strName = name.trim();
-		boolean saved = PresetLogic.saveSortPreset(Data.projectProperty.get(), strName, buildSortData());
+		boolean saved = MiscLogic.saveSortPreset(Data.projectProperty.get(), strName, buildSortData());
 		if (saved) {
 			fieldPresetName.setText("");
 			choicePreset.getItems().clear();

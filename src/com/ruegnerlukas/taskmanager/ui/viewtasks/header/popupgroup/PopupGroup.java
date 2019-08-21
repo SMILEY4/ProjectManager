@@ -6,7 +6,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.taskgroup.TaskGroupData;
-import com.ruegnerlukas.taskmanager.logic.PresetLogic;
+import com.ruegnerlukas.taskmanager.logic.MiscLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.ui.uidata.UIDataHandler;
@@ -177,7 +177,7 @@ public class PopupGroup extends PopupBase {
 	 * Loads the preset with the given name and selects it. This replaces the previous elements.
 	 */
 	private void onLoadPreset(String name) {
-		TaskGroupData preset = PresetLogic.getTaskGroupPreset(Data.projectProperty.get(), name.trim());
+		TaskGroupData preset = MiscLogic.getTaskGroupPreset(Data.projectProperty.get(), name.trim());
 		if (preset == null) {
 			onClearGroupData();
 		} else {
@@ -193,7 +193,7 @@ public class PopupGroup extends PopupBase {
 	 * Deletes the preset with the given name and deselects it.
 	 */
 	private void onDeletePreset(String name) {
-		boolean deleted = PresetLogic.deleteTaskGroupPreset(Data.projectProperty.get(), name);
+		boolean deleted = MiscLogic.deleteTaskGroupPreset(Data.projectProperty.get(), name);
 		if (deleted) {
 			choicePreset.getItems().clear();
 			choicePreset.getItems().addAll(Data.projectProperty.get().data.presetsGroup.keySet());
@@ -210,7 +210,7 @@ public class PopupGroup extends PopupBase {
 	 */
 	private void onSavePreset(String name) {
 		String strName = name.trim();
-		boolean saved = PresetLogic.saveTaskGroupPreset(Data.projectProperty.get(), strName, buildGroupData());
+		boolean saved = MiscLogic.saveTaskGroupPreset(Data.projectProperty.get(), strName, buildGroupData());
 		if (saved) {
 			fieldPresetName.setText("");
 			choicePreset.getItems().clear();

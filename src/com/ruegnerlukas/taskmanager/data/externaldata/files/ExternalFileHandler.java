@@ -34,6 +34,7 @@ public class ExternalFileHandler implements ExternalDataHandler {
 		fileActionMap.put(Identifiers.SETTINGS_PROJECT_NAME, new WriteActionSettings());
 		fileActionMap.put(Identifiers.SETTINGS_ATTRIBUTES_LOCKED, new WriteActionSettings());
 		fileActionMap.put(Identifiers.SETTINGS_TASK_IDCOUNTER, new WriteActionSettings());
+		fileActionMap.put(Identifiers.SETTINGS_DOC_IDCOUNTER, new WriteActionSettings());
 		fileActionMap.put(Identifiers.SETTINGS_ATTRIBUTE_IDCOUNTER, new WriteActionSettings());
 		fileActionMap.put(Identifiers.DATA_ATTRIBUTE_LIST, new WriteActionListAttributes());
 		fileActionMap.put(Identifiers.DATA_TASK_LIST, new WriteActionListTasks());
@@ -41,7 +42,7 @@ public class ExternalFileHandler implements ExternalDataHandler {
 		fileActionMap.put(Identifiers.DATA_PRESETS_GROUP, new WriteActionPresetsGroup());
 		fileActionMap.put(Identifiers.DATA_PRESETS_MASTER, new WriteActionPresetsMaster());
 		fileActionMap.put(Identifiers.DATA_PRESETS_FILTER, new WriteActionPresetsFilter());
-
+		fileActionMap.put(Identifiers.DATA_DOC_FILE_LIST, new WriteActionListDocumentation());
 	}
 
 
@@ -69,6 +70,7 @@ public class ExternalFileHandler implements ExternalDataHandler {
 		File fileSettings = handler.getSettingsFile(false);
 		List<File> filesAttributes = handler.getAttributeFiles();
 		List<File> filesTasks = handler.getTaskFiles();
+		List<File> filesDoc = handler.getDocFiles();
 		List<File> filesPresetFilter = handler.getPresetFilterFiles();
 		List<File> filesPresetGroup = handler.getPresetGroupFiles();
 		List<File> filesPresetSort = handler.getPresetSortFiles();
@@ -104,6 +106,13 @@ public class ExternalFileHandler implements ExternalDataHandler {
 				FileReader readerTask = new FileReader(fileTask);
 				rawProject.tasks.add(gson.fromJson(readerTask, RawTask.class));
 				readerTask.close();
+			}
+
+			// docs
+			for (File fileDoc : filesDoc) {
+				FileReader readerDoc = new FileReader(fileDoc);
+				rawProject.docFiles.add(gson.fromJson(readerDoc, RawDocumentationFile.class));
+				readerDoc.close();
 			}
 
 			// presets
@@ -143,6 +152,7 @@ public class ExternalFileHandler implements ExternalDataHandler {
 	@Override
 	public void applyChange(DataChange change, Project project) {
 		WriteFileAction action = fileActionMap.get(change.getIdentifier());
+		System.out.println("ACTION " + change.getIdentifier() + "  " + action);
 		if (action != null) {
 			action.onChange(change, project, handler);
 		}

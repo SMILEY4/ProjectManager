@@ -21,6 +21,7 @@ public class FileHandler {
 	private static final String FILENAME_SETTINGS = "settings.json";
 	private static final String FILENAME_ATTRIBUTE_DIRECTORY = "attributes";
 	private static final String FILENAME_TASK_DIRECTORY = "tasks";
+	private static final String FILENAME_DOC_DIRECTORY = "doc";
 	private static final String FILENAME_PRESETS_SORT_DIRECTORY = "presets_sort";
 	private static final String FILENAME_PRESETS_GROUP_DIRECTORY = "presets_group";
 	private static final String FILENAME_PRESETS_MASTER_DIRECTORY = "presets_master";
@@ -137,6 +138,20 @@ public class FileHandler {
 
 	public List<File> getTaskFiles() {
 		return getFiles(FILENAME_TASK_DIRECTORY);
+	}
+
+
+
+
+	public File getDocFile(String docID, boolean createIfNeccessary) {
+		return getFile(FILENAME_DOC_DIRECTORY + "/" + docID + ".json", createIfNeccessary);
+	}
+
+
+
+
+	public List<File> getDocFiles() {
+		return getFiles(FILENAME_DOC_DIRECTORY);
 	}
 
 

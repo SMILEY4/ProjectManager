@@ -105,6 +105,7 @@ public class DataHandler {
 			return;
 		}
 		if (getExternalDataHandler() != null && change != null) {
+			System.out.println("CHANGE " + change);
 			getExternalDataHandler().applyChange(change, project);
 		}
 	}

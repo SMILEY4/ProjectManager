@@ -12,6 +12,7 @@ public class ProjectSettings {
 
 	public final SyncedProperty<Integer> attIDCounter;
 	public final SyncedProperty<Integer> taskIDCounter;
+	public final SyncedProperty<Integer> docIDCounter;
 
 
 
@@ -21,6 +22,7 @@ public class ProjectSettings {
 		attributesLocked = new SyncedProperty<>(Identifiers.SETTINGS_ATTRIBUTES_LOCKED, null, project.dataHandler, false);
 		attIDCounter = new SyncedProperty<>(Identifiers.SETTINGS_ATTRIBUTE_IDCOUNTER, null, project.dataHandler, 0);
 		taskIDCounter = new SyncedProperty<>(Identifiers.SETTINGS_TASK_IDCOUNTER, null, project.dataHandler, 0);
+		docIDCounter = new SyncedProperty<>(Identifiers.SETTINGS_DOC_IDCOUNTER, null, project.dataHandler, 0);
 	}
 
 
@@ -31,6 +33,7 @@ public class ProjectSettings {
 		attributesLocked.dispose();
 		attIDCounter.dispose();
 		taskIDCounter.dispose();
+		docIDCounter.dispose();
 	}
 
 }

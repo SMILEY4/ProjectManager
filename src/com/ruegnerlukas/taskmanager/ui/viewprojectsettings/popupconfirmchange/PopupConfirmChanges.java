@@ -8,7 +8,7 @@ import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCrit
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterOperation;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.OrFilterCriteria;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.TerminalFilterCriteria;
-import com.ruegnerlukas.taskmanager.logic.PresetLogic;
+import com.ruegnerlukas.taskmanager.logic.MiscLogic;
 import com.ruegnerlukas.taskmanager.logic.TaskLogic;
 import com.ruegnerlukas.taskmanager.logic.attributes.AttributeLogic;
 import com.ruegnerlukas.taskmanager.logic.utils.SetAttributeValueEffect;
@@ -110,7 +110,7 @@ public class PopupConfirmChanges extends PopupBase {
 	 * Saves a filter-preset with the given name matching only the displayed tasks.
 	 */
 	private void onSaveFilter(String name) {
-		final boolean saved = PresetLogic.saveFilterPreset(Data.projectProperty.get(), name, buildFilter(effects));
+		final boolean saved = MiscLogic.saveFilterPreset(Data.projectProperty.get(), name, buildFilter(effects));
 		if (saved) {
 			fieldFilterName.setText(name);
 			fieldFilterName.setDisable(true);

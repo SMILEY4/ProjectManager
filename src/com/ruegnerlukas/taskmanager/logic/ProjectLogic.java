@@ -5,6 +5,7 @@ import com.ruegnerlukas.taskmanager.data.externaldata.files.ExternalFileHandler;
 import com.ruegnerlukas.taskmanager.data.localdata.Data;
 import com.ruegnerlukas.taskmanager.data.localdata.Project;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.AttributeType;
+import com.ruegnerlukas.taskmanager.data.localdata.projectdata.DocumentationFile;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.Task;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.TaskAttribute;
 import com.ruegnerlukas.taskmanager.data.localdata.projectdata.filter.FilterCriteria;
@@ -234,5 +235,27 @@ public class ProjectLogic {
 		return project.data.tasks.remove(task);
 	}
 
+
+
+
+	/**
+	 * Adds the given {@link DocumentationFile} to the given {@link Project}.
+	 */
+	public static boolean addDocumentationToProject(Project project, DocumentationFile doc) {
+		project.data.docFiles.add(doc);
+		return true;
+	}
+
+
+
+
+	/**
+	 * Removes the given {@link DocumentationFile} from the given {@link Project}.
+	 *
+	 * @return true, if the doc file was successfully removed
+	 */
+	public static boolean removeDocumentationFromProject(Project project, DocumentationFile doc) {
+		return project.data.docFiles.remove(doc);
+	}
 
 }
