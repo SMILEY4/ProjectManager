@@ -1,1 +1,73 @@
-/* todo */
+
+.root-doc-view {
+
+}
+
+
+.box-files {
+
+}
+
+
+.button-create {
+
+}
+
+
+.pane-title {
+
+}
+
+
+.label-title > * {
+	-fx-font-weight: bold;
+}
+
+
+.area-doc {
+	-fx-font-family: Consolas;
+	-fx-font-size: 16;
+}
+
+
+
+.file-entry {
+	-fx-background-color:  -border, -base;
+	-fx-background-insets: 0, 1;
+	-fx-background-radius: 5, 4;
+	-fx-padding:           0 0 0 10;
+}
+
+
+.file-entry:hover {
+	-fx-background-color: -border-hover, -base-hover;
+}
+
+
+.selected-file-entry {
+	-fx-border-color: -primary-2;
+	-fx-border-width: 1.5;
+	-fx-border-radius: 5;
+}
+
+
+.entry-name {
+}
+
+
+.entry-remove,
+.entry-remove:hover,
+.entry-remove:pressed {
+	-fx-background-color: transparent;
+}
+
+
+.entry-remove > SVGPath {
+	-fx-fill: -icon;
+}
+
+
+.entry-remove:hover > SVGPath,
+.entry-remove:pressed > SVGPath {
+	-fx-fill: -icon-hover;
+}

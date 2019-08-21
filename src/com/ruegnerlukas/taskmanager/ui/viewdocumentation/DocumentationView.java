@@ -58,6 +58,9 @@ public class DocumentationView extends AnchorPane implements MainViewModule {
 
 	private void create() {
 
+		rootDoc.getStyleClass().add("root-doc-view");
+		boxFiles.getStyleClass().add("box-files");
+
 		// btn create file
 		btnCreateFile.setOnAction(e -> {
 			DocumentationFile docFile = MiscLogic.createDocFile(Data.projectProperty.get(),
@@ -65,6 +68,8 @@ public class DocumentationView extends AnchorPane implements MainViewModule {
 			ProjectLogic.addDocumentationToProject(Data.projectProperty.get(), docFile);
 			addDocFile(docFile, true);
 		});
+		btnCreateFile.getStyleClass().add("button-create");
+
 
 		// title
 		labelTitle = new EditableLabel();
@@ -73,6 +78,10 @@ public class DocumentationView extends AnchorPane implements MainViewModule {
 		labelTitle.addListener(((observable, oldValue, newValue) -> {
 			onTitleChanged(newValue.trim());
 		}));
+
+		paneTitle.getStyleClass().add("pane-title");
+		labelTitle.getStyleClass().add("label-title");
+
 
 		// text area
 		timer = new Timer();
@@ -85,6 +94,8 @@ public class DocumentationView extends AnchorPane implements MainViewModule {
 				onTextChanged(file_area.getText());
 			}
 		}));
+		file_area.getStyleClass().add("area-doc");
+
 
 		// add all existing
 		for (DocumentationFile docFile : Data.projectProperty.get().data.docFiles) {
@@ -157,6 +168,14 @@ public class DocumentationView extends AnchorPane implements MainViewModule {
 
 
 	private void onSelectFile(FileEntry file) {
+
+		if(selectedEntry != null) {
+			selectedEntry.getStyleClass().remove("selected-file-entry");
+		}
+		if(file != null) {
+			file.getStyleClass().add("selected-file-entry");
+		}
+
 		selectedEntry = file;
 		if (selectedEntry != null) {
 			labelTitle.setEditable(true);

@@ -23,6 +23,7 @@ public class FileEntry extends AnchorPane {
 	public FileEntry(DocumentationFile docFile) {
 		this.docFile = docFile;
 
+		this.getStyleClass().add("file-entry");
 		this.setMinSize(0, 32);
 		this.setPrefSize(10000, 32);
 		this.setMaxSize(10000, 32);
@@ -31,6 +32,8 @@ public class FileEntry extends AnchorPane {
 		Label label = new Label(getName());
 		AnchorUtils.setAnchors(label, 0, 32, 0, 0);
 		this.getChildren().add(label);
+		label.getStyleClass().add("entry-name");
+
 
 		listener = new FXChangeListener<String>(docFile.name) {
 			@Override
@@ -45,9 +48,10 @@ public class FileEntry extends AnchorPane {
 		btnRemove.setPrefSize(32, 32);
 		btnRemove.setMaxSize(32, 32);
 		ButtonUtils.makeIconButton(btnRemove, SVGIcons.CROSS, 0.7);
-		AnchorUtils.setAnchors(btnRemove, 0, 32, 0, null);
+		AnchorUtils.setAnchors(btnRemove, 0, 0, 0, null);
 		this.getChildren().add(btnRemove);
 		btnRemove.setOnAction(e -> onRemove());
+		btnRemove.getStyleClass().add("entry-remove");
 
 		// select
 		this.setOnMouseClicked(e -> onSelect());
