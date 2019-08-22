@@ -1,5 +1,6 @@
 package com.ruegnerlukas.taskmanager.ui.uidata;
 
+import com.ruegnerlukas.taskmanager.TaskManager;
 import javafx.scene.Parent;
 
 import java.io.IOException;
@@ -42,6 +43,7 @@ public class UIDataHandler {
 		stylesheetPaths.put(UIModule.CONTROL_EDITABLE_LABEL, "style/style_control_editablelabel.css");
 		stylesheetPaths.put(UIModule.POPUP_DEPENDENCY, "style/style_popup_dependency.css");
 		stylesheetPaths.put(UIModule.VIEW_DOCUMENTATION, "style/style_view_documentation.css");
+		stylesheetPaths.put(UIModule.POPUP_ABOUT, "style/style_popup_about.css");
 
 		// fxml-files
 		fxmlPaths.put(UIModule.VIEW_MAIN, "fxml/layout_view_main.fxml");
@@ -60,6 +62,7 @@ public class UIDataHandler {
 		fxmlPaths.put(UIModule.POPUP_FILTER, "fxml/layout_popup_filter.fxml");
 		fxmlPaths.put(UIModule.POPUP_DEPENDENCY, "fxml/layout_popup_dependency.fxml");
 		fxmlPaths.put(UIModule.VIEW_DOCUMENTATION, "fxml/layout_view_documentation.fxml");
+		fxmlPaths.put(UIModule.POPUP_ABOUT, "fxml/layout_about.fxml");
 
 	}
 
@@ -88,12 +91,17 @@ public class UIDataHandler {
 	 */
 	public static void setStyle(Parent root, UIModule module) {
 		root.getStylesheets().clear();
-//		root.getStylesheets().add(getStylesheetAsURL(UIModule.STYLE_BASE).toExternalForm());
-//		root.getStylesheets().add(getStylesheetAsURL(module).toExternalForm());
-		// use this for hot-reload
-		root.getStylesheets().add("file:D:/LukasRuegner/Programmieren/Java/Workspace/SimpleTaskManager/src/com/ruegnerlukas/taskmanager/ui/uidata/" + getStylesheetAsPath(UIModule.STYLE_VARS));
-		root.getStylesheets().add("file:D:/LukasRuegner/Programmieren/Java/Workspace/SimpleTaskManager/src/com/ruegnerlukas/taskmanager/ui/uidata/" + getStylesheetAsPath(UIModule.STYLE_BASE));
-		root.getStylesheets().add("file:D:/LukasRuegner/Programmieren/Java/Workspace/SimpleTaskManager/src/com/ruegnerlukas/taskmanager/ui/uidata/" + getStylesheetAsPath(module));
+		if (TaskManager.ENABLE_DEV_FEATURES) {
+			// use this for hot-reload
+			root.getStylesheets().add("file:D:/LukasRuegner/Programmieren/Java/Workspace/SimpleTaskManager/src/com/ruegnerlukas/taskmanager/ui/uidata/" + getStylesheetAsPath(UIModule.STYLE_VARS));
+			root.getStylesheets().add("file:D:/LukasRuegner/Programmieren/Java/Workspace/SimpleTaskManager/src/com/ruegnerlukas/taskmanager/ui/uidata/" + getStylesheetAsPath(UIModule.STYLE_BASE));
+			root.getStylesheets().add("file:D:/LukasRuegner/Programmieren/Java/Workspace/SimpleTaskManager/src/com/ruegnerlukas/taskmanager/ui/uidata/" + getStylesheetAsPath(module));
+
+		} else {
+			root.getStylesheets().add(getStylesheetAsURL(UIModule.STYLE_VARS).toExternalForm());
+			root.getStylesheets().add(getStylesheetAsURL(UIModule.STYLE_BASE).toExternalForm());
+			root.getStylesheets().add(getStylesheetAsURL(module).toExternalForm());
+		}
 	}
 
 
@@ -123,8 +131,10 @@ public class UIDataHandler {
 	 * Reloads the style of all registered root nodes.
 	 */
 	public static void styleReloadAll() {
-		for (Parent root : roots.keySet()) {
-			setStyle(root, roots.get(root));
+		if (TaskManager.ENABLE_DEV_FEATURES) {
+			for (Parent root : roots.keySet()) {
+				setStyle(root, roots.get(root));
+			}
 		}
 	}
 

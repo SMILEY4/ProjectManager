@@ -188,6 +188,8 @@ public class DocumentationView extends AnchorPane implements MainViewModule {
 			file_area.setText("");
 			file_area.setDisable(true);
 		}
+
+
 	}
 
 

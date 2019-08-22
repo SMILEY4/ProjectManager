@@ -12,6 +12,7 @@ import com.ruegnerlukas.taskmanager.ui.viewdocumentation.DocumentationView;
 import com.ruegnerlukas.taskmanager.ui.viewmain.notifications.NotificationArea;
 import com.ruegnerlukas.taskmanager.ui.viewprojectsettings.ProjectSettingsView;
 import com.ruegnerlukas.taskmanager.ui.viewtasks.TaskView;
+import com.ruegnerlukas.taskmanager.utils.PopupBase;
 import com.ruegnerlukas.taskmanager.utils.listeners.FXChangeListener;
 import com.ruegnerlukas.taskmanager.utils.uielements.AnchorUtils;
 import com.ruegnerlukas.taskmanager.utils.uielements.customelements.MenuFunction;
@@ -131,17 +132,26 @@ public class MainView extends AnchorPane {
 		}.addToMenuBar(menuBar);
 
 
-		// Used for various debug purposes
-		MenuFunction functionDebug = new MenuFunction("Dev", "Debug") {
+		// more
+		MenuFunction functionAbout = new MenuFunction("More", "About") {
 			@Override
 			public void onAction() {
-				Logger.get().info("Info " + System.currentTimeMillis());
-				Logger.get().warn("Info " + System.currentTimeMillis());
-				Logger.get().error("Info " + System.currentTimeMillis());
-				Object o = null;
-				String s = o.toString(); // results in nullpointer-exception
+				PopupBase.openPopup(new PopupAbout(), true);
 			}
 		}.addToMenuBar(menuBar);
+
+		if (TaskManager.ENABLE_DEV_FEATURES) {
+			MenuFunction functionDebug = new MenuFunction("More", "Debug Message") {
+				@Override
+				public void onAction() {
+					Logger.get().info("Info " + System.currentTimeMillis());
+					Logger.get().warn("Info " + System.currentTimeMillis());
+					Logger.get().error("Info " + System.currentTimeMillis());
+					Object o = null;
+					String s = o.toString(); // results in nullpointer-exception
+				}
+			}.addToMenuBar(menuBar);
+		}
 
 
 		// listen for tab selection

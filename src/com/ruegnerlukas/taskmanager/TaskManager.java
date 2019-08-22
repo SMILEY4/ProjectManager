@@ -20,6 +20,12 @@ import javafx.stage.Stage;
 
 public class TaskManager extends Application {
 
+	public static final String APP_TITLE = "Project Manager";
+	public static final String BUILD_VERSION = "0.1";
+	public static final String BUILD_DATE = "22.08.2019";
+	public static final boolean ENABLE_DEV_FEATURES = false;
+
+
 
 	public static void main(String[] args) {
 
@@ -48,6 +54,11 @@ public class TaskManager extends Application {
 		// start application
 		Logger.get().info("Starting Application (" + JarLocation.getJarLocation(TaskManager.class));
 		Logger.get().info("System information:   JAVA = " + SystemUtils.getJavaRuntimeName() + " " + SystemUtils.getJavaVersion() + ",   OS = " + SystemUtils.getOSName());
+
+		if(ENABLE_DEV_FEATURES) {
+			Logger.get().info("Launching with dev-features enabled.");
+		}
+
 		launch(args);
 
 	}
@@ -73,7 +84,7 @@ public class TaskManager extends Application {
 			}
 		});
 
-
+		primaryStage.setTitle(APP_TITLE);
 		primaryStage.setScene(scene);
 		primaryStage.show();
 
